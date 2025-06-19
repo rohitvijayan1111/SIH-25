@@ -1,4 +1,3 @@
-// services/inventoryService.js
 const productModel = require('../models/productModel');
 const priceListModel = require('../models/priceListModel');
 
@@ -18,7 +17,16 @@ exports.getAvailableProducts = async () => {
           new Date(pr.valid_from) <= today &&
           new Date(pr.valid_to) >= today
       );
-      return price ? { ...product, price_per_unit: price.price_per_unit } : null;
+      return price 
+        ? {
+            id: product.id,
+            name: product.name,
+            stock: product.stock,
+            unit: product.unit,                     // ✅ Include unit
+            price_per_unit: price.price_per_unit,
+            organic: product.organic                // ✅ Include organic flag
+          }
+        : null;
     })
-    .filter(Boolean); // Remove nulls
+    .filter(Boolean); 
 };
