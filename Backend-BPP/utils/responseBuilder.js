@@ -11,7 +11,14 @@ exports.buildOnSearchResponse = (products) => {
         items: products.map(prod => ({
           id: prod.id.toString(),
           name: prod.name,
-          quantity: { available: { count: prod.stock } },
+          quantity: { available: { count: prod.stock } ,
+           unitized: {
+              measure: {
+                unit: prod.unit || 'unit' // fallback if unit is null
+              }
+            }
+        },
+          
           price: { currency: 'INR', value: prod.price_per_unit.toString() },
           tags: { organic: prod.organic }
         }))
