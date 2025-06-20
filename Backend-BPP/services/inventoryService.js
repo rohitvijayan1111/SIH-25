@@ -1,9 +1,6 @@
-// services/inventoryService.js
 const db = require('../config/db'); // ✅ Adjusted path to PostgreSQL client
 
-/**
- * Fetch products with metadata needed for ONDC on_search response
- */
+
 exports.getAvailableProductsWithMeta = async () => {
   const query = `
     SELECT 
@@ -24,6 +21,8 @@ exports.getAvailableProductsWithMeta = async () => {
       cf.fulfillment_code,
       cf.gps AS fulfillment_gps,
       cf.address AS fulfillment_address,
+      cf.type AS fulfillment_type,
+      cf.estimated_delivery,
       
       pl.price_per_unit
       
@@ -39,7 +38,14 @@ exports.getAvailableProductsWithMeta = async () => {
 
   try {
     const { rows } = await db.query(query);
-    return rows;
+
+    // 🔁 Add ISO 8601 formatting to estimated_delivery
+    return rows.map(row => ({
+      ...row,
+      estimated_delivery: row.estimated_delivery
+        ? new Date(row.estimated_delivery).toISOString()
+        : null
+    }));
   } catch (error) {
     console.error('Error fetching products with meta:', error);
     throw error;

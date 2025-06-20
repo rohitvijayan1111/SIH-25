@@ -17,16 +17,28 @@ exports.buildOnSearchResponse = (products) => {
     };
 
     // Track unique fulfillment
-    uniqueFulfillments[prod.fulfillment_code] = {
-      id: prod.fulfillment_code,
-      type: 'Self-Pickup',
-      start: {
-        location: {
-          gps: prod.fulfillment_gps,
-          address: prod.fulfillment_address
+uniqueFulfillments[prod.fulfillment_code] = {
+  id: prod.fulfillment_code,
+  type: prod.fulfillment_type || 'Self-Pickup', // Use type from DB, fallback to Self-Pickup
+  start: {
+    location: {
+      gps: prod.fulfillment_gps,
+      address: prod.fulfillment_address
+    }
+  },
+  ...(prod.estimated_delivery && prod.fulfillment_type === 'Delivery'
+    ? {
+        end: {
+          time: {
+            range: {
+              end: prod.estimated_delivery // ISO string already formatted in service
+            }
+          }
         }
       }
-    };
+    : {})
+};
+
 
     return {
       id: prod.product_id.toString(),
@@ -72,3 +84,6 @@ exports.buildOnSearchResponse = (products) => {
     }
   };
 };
+
+
+
