@@ -1,64 +1,86 @@
-const db = require('../config/db'); // PG Client setup
+const db = require('../config/db'); 
 
-// Handle /on_select request
 exports.handleSelect = async (req, res) => {
   try {
-    const { items } = req.body.message.catalog; // selected items from BAP
+    const { items } = req.body.message.catalog;
 
-    // Collect product IDs from request
     const productIds = items.map(item => item.id);
 
-    // Query product availability and price
     const query = `
       SELECT 
         p.id AS product_id,
         p.name AS product_name,
-        p.stock,
+        p.type AS category_id,
         p.unit,
+        p.stock,
+        p.organic,
         pl.price_per_unit,
-        pl.valid_from,
-        pl.valid_to,
         cf.fulfillment_code,
+          cf.type AS fulfillment_type,  
         cf.gps AS fulfillment_gps,
-        cf.address AS fulfillment_address
+        cf.address AS fulfillment_address,
+        l.location_code AS location_id
       FROM products p
       INNER JOIN price_list pl ON p.id = pl.product_id
       INNER JOIN catalog_fulfillments cf ON p.farmer_id = cf.farmer_id
+      INNER JOIN locations l ON p.farmer_id = l.farmer_id
       WHERE p.id = ANY($1)
         AND CURRENT_DATE BETWEEN pl.valid_from AND pl.valid_to
     `;
 
     const { rows } = await db.query(query, [productIds]);
 
-    // Validate stock and prepare items response
-    const responseItems = rows.map(row => ({
-      id: row.product_id,
-      descriptor: {
-        name: row.product_name
-      },
-     quantity: {
-  available: { count: row.stock },
-  unitized: {
-    measure: {
-      unit: row.unit || 'unit'
-    }
-  }
-},
-price: {
-  currency: 'INR',
-  value: Number(row.price_per_unit).toFixed(2)
-}
-,
-      fulfillment: {
-        fulfillment_id: row.fulfillment_code,
-        location: {
-          gps: row.fulfillment_gps,
-          address: row.fulfillment_address
-        }
-      }
-    }));
+   
+    const fulfillmentMap = new Map();
+    const responseItems = [];
 
-    // Build ONDC /on_select response
+    rows.forEach(row => {
+      // Track fulfillment by code
+      if (!fulfillmentMap.has(row.fulfillment_code)) {
+        fulfillmentMap.set(row.fulfillment_code, {
+          id: row.fulfillment_code,
+           type: row.fulfillment_type || 'Self-Pickup', // or Delivery, if applicable
+          location: {
+            gps: row.fulfillment_gps,
+            address: row.fulfillment_address
+          }
+        });
+      }
+
+      // Add item referencing fulfillment_id
+      responseItems.push({
+        id: row.product_id,
+        descriptor: {
+          name: row.product_name,
+          code: row.product_id.slice(0, 12)
+        },
+        category_id: row.category_id,
+        location_id: row.location_id,
+        quantity: {
+          available: { count: row.stock },
+          unitized: {
+            measure: {
+              unit: row.unit || 'unit'
+            }
+          }
+        },
+        price: {
+          currency: 'INR',
+          value: Number(row.price_per_unit).toFixed(2)
+        },
+        tags: [
+          {
+            code: 'organic',
+            value: row.organic ? 'true' : 'false'
+          }
+        ],
+        fulfillment_id: row.fulfillment_code,
+        matched: true,
+        ttl: 'PT1H'
+      });
+    });
+
+    // Final ONDC response
     const response = {
       context: {
         domain: 'agri.bpp',
@@ -69,7 +91,8 @@ price: {
       },
       message: {
         catalog: {
-          items: responseItems
+          items: responseItems,
+          fulfillments: Array.from(fulfillmentMap.values())
         }
       }
     };
