@@ -1,4 +1,6 @@
 
+---
+
 # 📦 Backend Use Cases for BPP (Beckn Protocol Provider)
 
 This document outlines how the **BPP (Beckn Protocol Provider)** backend interacts with the **Beckn network** APIs and internal systems. It details each use case, its purpose, backend logic, and the associated database tables.
@@ -13,55 +15,61 @@ Respond to `/search` calls from a BAP (Buyer App Provider) with a list of availa
 **✅ Backend Responsibilities**:
 
 * Fetch products from `products` table.
-* Fetch latest pricing from `price_list`.
-* Ensure:
+* Fetch latest valid pricing from `price_list` where current date is between `valid_from` and `valid_to`.
+* Include metadata from:
 
-  * `stock > 0`
-  * Current date is within `valid_from` and `valid_to`.
+  * `farmers` (provider info),
+  * `locations` (location\_id and address),
+  * `catalog_fulfillments` (fulfillment info).
+* Ensure stock is greater than 0.
 * Return products in a Beckn-compliant JSON format.
 
 **🧩 Tables Involved**:
 
 * `products`
 * `price_list`
+* `farmers`
+* `locations`
+* `catalog_fulfillments`
 
 ---
 
 ## 🛒 2. Respond to Selection (`/on_select`)
 
 **📌 Goal**:
-Confirm the availability and pricing of selected items before order placement.
+Confirm availability and pricing of selected items before order placement.
 
 **✅ Backend Responsibilities**:
 
-* Validate each product’s availability using `products`.
-* Verify pricing with the `price_list`.
-* Optionally check historical inventory movements from `inventory_logs`.
-* Send a fulfillment response including delivery info and product details.
+* Validate product availability (`products.stock`).
+* Verify price validity (`price_list`).
+* Optionally check historical inventory changes (`inventory_logs`).
+* Provide fulfillment details from `catalog_fulfillments`.
 
 **🧩 Tables Involved**:
 
 * `products`
 * `price_list`
 * `inventory_logs` *(optional)*
+* `catalog_fulfillments`
 
 ---
 
 ## ✅ 3. Handle Order Confirmation (`/on_confirm`)
 
 **📌 Goal**:
-Confirm the order, deduct stock, and initiate the fulfillment process.
+Confirm order, deduct stock, and initiate fulfillment tracking.
 
 **✅ Backend Responsibilities**:
 
 * Deduct ordered quantity from `products.stock`.
-* Add a new entry to `fulfillments` to track the order.
-* Record the stock reduction in `inventory_logs`.
+* Insert a new row in `order_fulfillments` to track order status and link to `products` and `farmers`.
+* Record stock deduction in `inventory_logs`.
 
 **🧩 Tables Involved**:
 
 * `products`
-* `fulfillments`
+* `order_fulfillments`
 * `inventory_logs`
 
 ---
@@ -73,12 +81,8 @@ Identify the best available logistics provider for delivery.
 
 **✅ Backend Responsibilities**:
 
-* Search `logistics_providers` for available vehicles.
-* Match based on:
-
-  * Vehicle availability
-  * Proximity to delivery location
-  * Weight capacity
+* Query `logistics_providers` for available providers.
+* Filter based on availability, capacity, proximity, and vehicle type.
 
 **🧩 Tables Involved**:
 
@@ -89,31 +93,28 @@ Identify the best available logistics provider for delivery.
 ## 📦 5. Update Order Status (`/on_status`)
 
 **📌 Goal**:
-Provide real-time order status to the BAP.
+Provide real-time order status updates to BAP.
 
 **✅ Backend Responsibilities**:
 
-* Retrieve the current `status` from `fulfillments`.
-* Return `estimated_delivery` and current progress.
+* Retrieve current `status` and `estimated_delivery` from `order_fulfillments`.
+* Return status and progress info to caller.
 
 **🧩 Tables Involved**:
 
-* `fulfillments`
+* `order_fulfillments`
 
 ---
 
 ## 📈 6. Track Inventory Changes *(Internal)*
 
 **📌 Goal**:
-Maintain a transparent history of stock movements.
+Maintain history of stock movements for audit and inventory management.
 
 **✅ Backend Responsibilities**:
 
-* Record all stock changes in `inventory_logs`:
-
-  * Sale → `OUT`
-  * Restock → `IN`
-  * Cancellation → `IN`
+* Log all stock changes (`IN` or `OUT`) in `inventory_logs`.
+* Changes triggered by sales, restocks, or cancellations.
 
 **🧩 Tables Involved**:
 
@@ -125,30 +126,30 @@ Maintain a transparent history of stock movements.
 ## 🧾 7. Issue Final Bill (`/on_bill`)
 
 **📌 Goal**:
-Generate the final bill with product and delivery pricing.
+Generate the final bill including product prices and delivery charges.
 
 **✅ Backend Responsibilities**:
 
-* Multiply unit price (from `price_list`) with quantity.
-* Add logistics/delivery charges if applicable.
-* Return total amount in a bill payload.
+* Calculate total product price (unit price × quantity) using `price_list`.
+* Add logistics/delivery fees if applicable.
+* Provide full billing details.
 
 **🧩 Tables Involved**:
 
 * `price_list`
 * `products`
-* `fulfillments` *(for delivery info, if needed)*
+* `order_fulfillments` *(for delivery info)*
 
 ---
 
 ## ✍️ 8. Accept and Store Ratings (`/on_rating`)
 
 **📌 Goal**:
-Capture post-order feedback and ratings from the buyer.
+Capture feedback and ratings post-delivery.
 
 **✅ Backend Responsibilities**:
 
-* Store `rating`, `review`, and associated `product_id` or `bpp_id` in `ratings`.
+* Store ratings, reviews, user IDs, and product or BPP IDs in `ratings`.
 
 **🧩 Tables Involved**:
 
@@ -159,17 +160,17 @@ Capture post-order feedback and ratings from the buyer.
 ## ❌ 9. Handle Cancellations (`/on_cancel`)
 
 **📌 Goal**:
-Handle a cancelled order by rolling back stock and fulfillment info.
+Process order cancellations, revert stock, and update fulfillment status.
 
 **✅ Backend Responsibilities**:
 
-* Update `fulfillments.status` to `'CANCELLED'`.
-* Increase product stock back in `products.stock`.
-* Record restock event in `inventory_logs` with `change_type = IN`.
+* Update `order_fulfillments.status` to `'CANCELLED'`.
+* Revert stock in `products.stock`.
+* Log stock revert in `inventory_logs` (`change_type = 'IN'`).
 
 **🧩 Tables Involved**:
 
-* `fulfillments`
+* `order_fulfillments`
 * `products`
 * `inventory_logs`
 
@@ -177,16 +178,17 @@ Handle a cancelled order by rolling back stock and fulfillment info.
 
 ## 📘 Summary Table
 
-| Use Case             | API Endpoint  | Involved Tables                              |
-| -------------------- | ------------- | -------------------------------------------- |
-| Respond to Search    | `/on_search`  | `products`, `price_list`                     |
-| Handle Selection     | `/on_select`  | `products`, `price_list`, `inventory_logs`   |
-| Confirm Order        | `/on_confirm` | `fulfillments`, `inventory_logs`, `products` |
-| Fulfillment Tracking | `/on_status`  | `fulfillments`                               |
-| Logistics Matching   | Internal      | `logistics_providers`                        |
-| Inventory Management | Internal      | `inventory_logs`, `products`                 |
-| Accept Feedback      | `/on_rating`  | `ratings`                                    |
-| Cancel Order         | `/on_cancel`  | `fulfillments`, `products`, `inventory_logs` |
+| Use Case             | API Endpoint  | Involved Tables                                                          |
+| -------------------- | ------------- | ------------------------------------------------------------------------ |
+| Respond to Search    | `/on_search`  | `products`, `price_list`, `farmers`, `locations`, `catalog_fulfillments` |
+| Handle Selection     | `/on_select`  | `products`, `price_list`, `inventory_logs`, `catalog_fulfillments`       |
+| Confirm Order        | `/on_confirm` | `products`, `order_fulfillments`, `inventory_logs`                       |
+| Fulfillment Tracking | `/on_status`  | `order_fulfillments`                                                     |
+| Logistics Matching   | Internal      | `logistics_providers`                                                    |
+| Inventory Management | Internal      | `inventory_logs`, `products`                                             |
+| Accept Feedback      | `/on_rating`  | `ratings`                                                                |
+| Cancel Order         | `/on_cancel`  | `order_fulfillments`, `products`, `inventory_logs`                       |
 
 ---
 
+If you want, I can also help with example **API request/response payloads**, or the **Node.js service/controller code** implementing these use cases!
