@@ -54,6 +54,63 @@ Confirm availability and pricing of selected items before order placement.
 * `catalog_fulfillments`
 
 ---
+Absolutely! Here's a **short and great version** of the **`/on_init` use case** along with the **tables used** on the **BPP side**:
+
+---
+
+## 2.5 ✅ `/on_init` Use Case (BPP Side)
+
+### 🔹 Purpose:
+
+Lock final **price, items, stock, and delivery info** before BAP collects payment.
+
+---
+
+### 🔁 When It Happens:
+
+After `/init` from BAP → BPP responds with `/on_init`.
+
+---
+
+### 📦 What BPP Includes in `/on_init`:
+
+| Field         | Description                       |
+| ------------- | --------------------------------- |
+| `items[]`     | Product IDs, quantity, unit price |
+| `quote`       | Final total + item-wise breakup   |
+| `fulfillment` | Delivery/pickup info + ETA        |
+| `payment`     | Type, status = `NOT-PAID`, TTL    |
+
+---
+
+### 🧠 Real World Analogy:
+
+> Like freezing your cart price and stock before paying on Amazon.
+
+---
+
+### 🗃️ BPP Tables Used:
+
+| Table                  | Used For                                 |
+| ---------------------- | ---------------------------------------- |
+| `products`             | Get current stock and product info       |
+| `price_list`           | Fetch latest valid price per unit        |
+| `catalog_fulfillments` | Provide delivery/pickup address and ETA  |
+| `inventory_logs` (opt) | Log/validate historical stock (optional) |
+
+---
+
+### ✅ After `/on_init`:
+
+1. BAP **shows quote to user**
+2. BAP **collects payment**
+3. BAP sends `/confirm` with `transaction_id`
+
+---
+
+Let me know if you want this as a PDF or diagram!
+
+
 
 ## ✅ 3. Handle Order Confirmation (`/on_confirm`)
 
