@@ -42,6 +42,7 @@ uniqueFulfillments[prod.fulfillment_code] = {
 
     return {
       id: prod.product_id.toString(),
+      category_id: prod.type.toUpperCase(), 
       descriptor: {
         name: prod.product_name,
         images: [prod.image_url]

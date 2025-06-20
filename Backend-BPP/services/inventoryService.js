@@ -6,6 +6,7 @@ exports.getAvailableProductsWithMeta = async () => {
     SELECT 
       p.id AS product_id,
       p.name AS product_name,
+      p.type,
       p.unit,
       p.stock,
       p.organic,
