@@ -1,4 +1,3 @@
-// models/productModel.js
 const db = require('../config/db');
 
 exports.getAll = async () => {
