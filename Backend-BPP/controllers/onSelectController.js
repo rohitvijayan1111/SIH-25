@@ -1,9 +1,8 @@
-const db = require('../config/db'); 
+const db = require('../config/db');
 
 exports.handleSelect = async (req, res) => {
   try {
     const { items } = req.body.message.catalog;
-
     const productIds = items.map(item => item.id);
 
     const query = `
@@ -16,30 +15,34 @@ exports.handleSelect = async (req, res) => {
         p.organic,
         pl.price_per_unit,
         cf.fulfillment_code,
-          cf.type AS fulfillment_type,  
+        cf.type AS fulfillment_type,
         cf.gps AS fulfillment_gps,
         cf.address AS fulfillment_address,
-        l.location_code AS location_id
+        l.location_code AS location_id,
+        l.gps AS location_gps,
+        l.address AS location_address,
+        f.id AS provider_id,
+        f.name AS provider_name
       FROM products p
       INNER JOIN price_list pl ON p.id = pl.product_id
       INNER JOIN catalog_fulfillments cf ON p.farmer_id = cf.farmer_id
       INNER JOIN locations l ON p.farmer_id = l.farmer_id
+      INNER JOIN farmers f ON p.farmer_id = f.id
       WHERE p.id = ANY($1)
         AND CURRENT_DATE BETWEEN pl.valid_from AND pl.valid_to
     `;
 
     const { rows } = await db.query(query, [productIds]);
 
-   
+    const providersMap = new Map();
     const fulfillmentMap = new Map();
-    const responseItems = [];
 
-    rows.forEach(row => {
-      // Track fulfillment by code
+    for (const row of rows) {
+      // ✅ Group fulfillments
       if (!fulfillmentMap.has(row.fulfillment_code)) {
         fulfillmentMap.set(row.fulfillment_code, {
           id: row.fulfillment_code,
-           type: row.fulfillment_type || 'Self-Pickup', // or Delivery, if applicable
+          type: row.fulfillment_type || 'Self-Pickup',
           location: {
             gps: row.fulfillment_gps,
             address: row.fulfillment_address
@@ -47,8 +50,8 @@ exports.handleSelect = async (req, res) => {
         });
       }
 
-      // Add item referencing fulfillment_id
-      responseItems.push({
+      // ✅ Prepare item
+      const item = {
         id: row.product_id,
         descriptor: {
           name: row.product_name,
@@ -77,10 +80,30 @@ exports.handleSelect = async (req, res) => {
         fulfillment_id: row.fulfillment_code,
         matched: true,
         ttl: 'PT1H'
-      });
-    });
+      };
 
-    // Final ONDC response
+      // ✅ Group by provider
+      if (!providersMap.has(row.provider_id)) {
+        providersMap.set(row.provider_id, {
+          id: row.provider_id,
+          descriptor: {
+            name: row.provider_name
+          },
+          locations: [
+            {
+              id: row.location_id,
+              gps: row.location_gps,
+              address: row.location_address
+            }
+          ],
+          items: [item]
+        });
+      } else {
+        providersMap.get(row.provider_id).items.push(item);
+      }
+    }
+
+    // ✅ Construct ONDC response
     const response = {
       context: {
         domain: 'agri.bpp',
@@ -91,7 +114,7 @@ exports.handleSelect = async (req, res) => {
       },
       message: {
         catalog: {
-          items: responseItems,
+          providers: Array.from(providersMap.values()),
           fulfillments: Array.from(fulfillmentMap.values())
         }
       }

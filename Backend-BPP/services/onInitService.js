@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const pool = require('../config/db'); 
 const { v4: uuidv4 } = require('uuid');
 
 async function handleOnInit({ items, transaction_id, customer_location }) {
@@ -29,12 +29,11 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
 
       if (product.stock < item.quantity) throw new Error(`Insufficient stock for product ${product.name}`);
 
-      // Save provider info (assuming all items have the same provider)
+      // Save provider info once
       if (!providerId) {
         providerId = product.farmer_id;
         providerName = product.farmer_name;
 
-        // Fetch fulfillment info once per provider
         const fulfillQuery = `
           SELECT fulfillment_code, type, gps, address, estimated_delivery
           FROM catalog_fulfillments
@@ -51,26 +50,34 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
 
       ordersItems.push({
         id: product.id,
-        quantity: { count: item.quantity },
+        quantity: {
+          count: item.quantity,
+          unitized: {
+            measure: {
+              unit: product.unit
+            }
+          }
+        },
         price: { currency: 'INR', value: unitPrice.toFixed(2) },
         descriptor: {
           name: product.name,
-          images: [product.image_url],
-          unit: product.unit
+          images: [product.image_url]
         },
-        tags: {
-          organic: product.organic
-        }
+        fulfillment_id: fulfillment.fulfillment_code,
+        tags: [
+          {
+            code: 'organic',
+            value: String(product.organic)
+          }
+        ]
       });
     }
 
-    // Generate locked order ID and message ID
     const order_id = `order-locked-${uuidv4()}`;
     const message_id = `msg-${Date.now()}`;
 
     await client.query('COMMIT');
 
-    // Build and return ONDC /on_init response
     return {
       context: {
         domain: 'agri.bpp',
@@ -90,20 +97,18 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
           },
           items: ordersItems,
           quote: {
-  price: { currency: 'INR', value: totalPrice.toFixed(2) },
-  breakup: ordersItems.map(item => ({
-    title: `${item.descriptor.name} (${item.quantity.count} ${item.descriptor.unit || 'unit'})`,
-    price: {
-      currency: 'INR',
-      // Multiply unit price by quantity here:
-      value: (parseFloat(item.price.value) * item.quantity.count).toFixed(2)
-    }
-  }))
-},
-
+            price: { currency: 'INR', value: totalPrice.toFixed(2) },
+            breakup: ordersItems.map(item => ({
+              title: `${item.descriptor.name} (${item.quantity.count} ${item.quantity.unitized.measure.unit})`,
+              price: {
+                currency: 'INR',
+                value: (parseFloat(item.price.value) * item.quantity.count).toFixed(2)
+              }
+            }))
+          },
           fulfillment: {
             id: fulfillment.fulfillment_code,
-            type: fulfillment.type || 'Self-Pickup',  // use DB value or fallback
+            type: fulfillment.type || 'Self-Pickup',
             start: {
               location: {
                 gps: fulfillment.gps,
