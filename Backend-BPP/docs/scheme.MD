@@ -125,6 +125,18 @@ CREATE TABLE inventory_logs (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
+CREATE TABLE orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    bap_order_id TEXT UNIQUE,
+    farmer_id UUID NOT NULL,
+    total_price DECIMAL(10,2),
+    payment_status VARCHAR(20),
+    delivery_address TEXT,
+    buyer_contact TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (farmer_id) REFERENCES farmers(id)
+);
+
 -- 9. Ratings Table
 CREATE TABLE ratings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
