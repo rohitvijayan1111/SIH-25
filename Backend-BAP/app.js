@@ -1,25 +1,18 @@
-// app.js
 
-require('dotenv').config(); // Load .env config first
+require('dotenv').config();
 const express = require('express');
-const pool = require('./config/db'); // Your pg Pool setup
+const pool = require('./config/db');
+const attachTransactionId = require('./middlewares/transactionMiddleware'); 
 const app = express();
 
 // Middleware to parse JSON
 app.use(express.json());
 
-// Basic route to check server and DB
-app.get('/', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT NOW()');
-    res.send(`✅ BAP Server is running. DB time is: ${result.rows[0].now}`);
-  } catch (error) {
-    console.error('DB error:', error.message);
-    res.status(500).send('❌ BAP Database connection failed');
-  }
-});
+app.use(attachTransactionId);
 
 
+const becknRoutes = require('./routes/becknRoutes');
+app.use('/bap', becknRoutes);
 
 // Start server
 const PORT = process.env.PORT;
