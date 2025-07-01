@@ -88,3 +88,21 @@ uniqueFulfillments[prod.fulfillment_code] = {
 
 
 
+exports.buildOnRatingResponse = (context) => {
+  return {
+    context: {
+      ...contextFromReq,
+      action: "on_rating",
+      timestamp: new Date().toISOString(),
+      // message_id: `msg-${Math.random().toString(36).substring(2, 12)}`,
+    },
+    message: {
+      ack: {
+        status: "ACK",
+      },
+    },
+  };
+};
+
+
+
