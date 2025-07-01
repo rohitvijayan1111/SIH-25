@@ -5,10 +5,10 @@ exports.handleSelect = async (req, res) => {
     const txnId = req.transaction_id;
     const { items } = req.body;
 
-    if (!Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ error: "Items list required" });
+    if (!Array.isArray(items) || items.length !== 1) {
+      return res.status(400).json({ error: "Exactly one item must be provided in 'items' array" });
     }
-
+     const selectedItem = items[0]; 
     const selectPayload = {
       context: {
         domain: "ondc:agri",
@@ -24,7 +24,7 @@ exports.handleSelect = async (req, res) => {
       },
       message: {
         catalog: {
-          items
+          items:[selectedItem]
         }
       }
     };

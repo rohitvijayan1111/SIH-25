@@ -136,17 +136,23 @@ CREATE TABLE notifications (
 );
 
 -- 10. User Cart (Pre-/on_select Phase)
+
 CREATE TABLE user_cart (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
     bpp_id VARCHAR(100) NOT NULL,
     bpp_product_id UUID NOT NULL,
+    provider_id UUID NOT NULL,              -- ✅ Group items by provider
+    provider_name TEXT,                     -- Optional: for UI display
+    provider_address TEXT,                  -- ✅ New: helpful for cart/order summary UI
+    fulfillment_id VARCHAR(100),            -- Required in /init
     item_name TEXT,
     quantity INT NOT NULL CHECK (quantity > 0),
     unit_price DECIMAL(10,2) NOT NULL,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
 ```
 
 ---
