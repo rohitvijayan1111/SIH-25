@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const pool = require('./config/db');
 const attachTransactionId = require('./middlewares/transactionMiddleware'); 
+const cartRoutes = require('./cart/cartRoutes');
 const app = express();
 
 // Middleware to parse JSON
@@ -13,6 +14,7 @@ app.use(attachTransactionId);
 
 const becknRoutes = require('./routes/becknRoutes');
 app.use('/bap', becknRoutes);
+app.use('/cart', cartRoutes);
 
 // Start server
 const PORT = process.env.PORT;
