@@ -1,4 +1,4 @@
-const db = require("../db");
+const db = require("../config/db");
 const { v4: uuidv4 } = require("uuid");
 const { buildOnRatingResponse } = require("../utils/responseBuilder");
 const { ratingModel } = require("../models/ratingModel");
@@ -40,7 +40,7 @@ exports.saveRating = async (req, res) => {
     });
 
     const res = buildOnRatingResponse({
-      context:context
+      context: context,
     });
 
     res.status(200).json(res);
