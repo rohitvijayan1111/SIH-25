@@ -73,7 +73,7 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
       });
     }
 
-    const order_id = `order-locked-${uuidv4()}`;
+    const order_id = uuidv4();
     const message_id = `msg-${Date.now()}`;
 
     await client.query('COMMIT');
