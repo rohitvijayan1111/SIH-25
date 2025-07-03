@@ -14,12 +14,11 @@ exports.handleInit = async (req, res) => {
       return res.status(400).json({ error: "Invalid delivery address" });
     }
 
-    // Build ONDC-compatible `/init` request
+    
     const initPayload = {
       context: {
         domain: "ondc:agri",
         country: "IND",
-        city: "std:080", // optional
         action: "init",
         core_version: "1.2.0",
         bap_id: "bap.agri.app",

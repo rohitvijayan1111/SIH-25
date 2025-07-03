@@ -1,21 +1,32 @@
 const inventoryService = require('../services/inventoryService');
 const responseBuilder = require('../utils/responseBuilder');
-const geolib = require('geolib');
+
 exports.handleSearch = async (req, res) => {
   try {
-      const { productName = '', lat, lon, radius } = req.body;
-       // Validate latitude, longitude, and radius
-    if (lat === undefined || lon === undefined) {
-      return res.status(400).json({ error: 'Missing user latitude or longitude' });
+    const {
+      item = {},
+      category = {},
+      fulfillment = {}
+    } = req.body.intent || {};
+
+    const productName = item?.descriptor?.name || '';
+    const categoryId = category?.id || '';
+    const lat = fulfillment?.end?.location?.gps?.split(',')[0];
+    const lon = fulfillment?.end?.location?.gps?.split(',')[1];
+    const radius = req.body.radius || 50;
+
+    if (!lat || !lon) {
+      return res.status(400).json({ error: 'Missing user latitude or longitude in intent' });
     }
-      const userLocation = {
+
+    const userLocation = {
       latitude: parseFloat(lat),
       longitude: parseFloat(lon),
     };
 
-     const radiusKm = radius ? parseFloat(radius) : 50; 
+    const radiusKm = parseFloat(radius);
 
-     if (
+    if (
       isNaN(userLocation.latitude) ||
       isNaN(userLocation.longitude) ||
       isNaN(radiusKm)
@@ -24,16 +35,19 @@ exports.handleSearch = async (req, res) => {
         .status(400)
         .json({ error: 'Invalid latitude, longitude, or radius value' });
     }
+
+    // Call updated inventory service
     const filteredCatalog = await inventoryService.getAvailableProductsWithMeta({
-      productName,
+      keyword: productName,
+      category: categoryId,
       userLocation,
       radiusKm
     });
-    
-    const response = responseBuilder.buildOnSearchResponse(filteredCatalog);       // uses full product meta
+
+    const response = responseBuilder.buildOnSearchResponse(filteredCatalog);
     res.json(response);
   } catch (error) {
-    console.error('on_search error:', error);
+    console.error('🔴 on_search error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

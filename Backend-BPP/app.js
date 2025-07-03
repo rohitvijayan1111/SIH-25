@@ -3,7 +3,7 @@ const express = require('express');
 const db = require('./config/db');
 require('dotenv').config();
 const becknRoutes = require('./routes/becknRoutes');
-
+const cors = require('cors');
 const app = express();
 app.use(express.json());
 
@@ -17,8 +17,17 @@ app.get('/test-db', async (req, res) => {
     res.status(500).send('Database connection failed');
   }
 });
+app.use(cors({
+  origin: '*',  // or use specific origin like 'http://localhost:8081'
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 app.use('/', becknRoutes);
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+const PORT = process.env.PORT;
+const HOST = '0.0.0.0'; // Allow external access via LAN IP
+
+app.listen(PORT, HOST, () => {
+  console.log(`🚀 Server running at http://0.0.0.0:${PORT}`);
 });
+

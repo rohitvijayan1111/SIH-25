@@ -24,7 +24,6 @@ exports.handleConfirm = async (req, res) => {
       return res.status(400).json({ error: "Missing required order fields" });
     }
 
-    // 🔐 Get user_id from DB (assumes mapping via phone)
     const userRes = await db.query(
       `SELECT id FROM users WHERE phone = $1 LIMIT 1`,
       [buyerContact]
@@ -37,7 +36,6 @@ exports.handleConfirm = async (req, res) => {
     const newOrderId = uuidv4();
     const fulfillmentId = order.fulfillment?.id || uuidv4();
 
-    // ✅ Insert into orders
     await db.query(
       `INSERT INTO orders (
         id, user_id, bpp_id, farmer_id, fulfillment_id, status,
@@ -46,7 +44,6 @@ exports.handleConfirm = async (req, res) => {
       [bapOrderId, userId, context.domain, farmerId, fulfillmentId, totalAmount, deliveryAddress]
     );
 
-    // ✅ Insert payment transaction
     await db.query(
       `INSERT INTO payment_transactions (
         id, order_id, method, amount, payment_status, transaction_ref
@@ -63,14 +60,13 @@ exports.handleConfirm = async (req, res) => {
         return res.status(400).json({ error: "Missing item id or quantity" });
       }
 
-      // ❓ You may skip price lookup if already trusted
       const unitPrice = parseFloat(order.quote.breakup.find(b => b.title.includes(productId))?.price?.value) / quantity || 70.00;
       const itemTotal = unitPrice * quantity;
 
       await db.query(
         `INSERT INTO order_items (id, order_id, bpp_product_id, item_name, quantity, unit_price)
          VALUES ($1, $2, $3, $4, $5, $6)`,
-        [uuidv4(), newOrderId, productId, item.id, quantity, unitPrice]
+        [uuidv4(), bapOrderId, productId, item.id, quantity, unitPrice]
       );
 
       breakup.push({
