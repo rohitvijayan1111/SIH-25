@@ -214,4 +214,12 @@ Would you like the following next?
 * Backend controller structure in Node.js (Express)
 * Visual flowcharts of use cases
 
-Let me know how deep you want to go 🚀
+
+
+| 🖥️ **Screen**             | 🔗 **Source of Data** | 💡 **Explanation**                                                                                                                                                                                                                                                                                       |
+| -------------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🛒 **Product Listing**     | `/search` + local UI  | This is when the user first browses products. You call the **Beckn `/search` API**, and render the response in your frontend (React, Vue, etc.). You can style/sort/filter results locally.                                                                                                              |
+| 🧾 **Product Detail Page** | `/on_select`          | When the user clicks on a product, you send a **`/select`** to the BPP with the product ID. The BPP responds with **`/on_select`**, which contains **complete product details** (description, pricing, available packs, etc.). This powers your **product details page**.                                |
+| 📥 **My Cart Page**        | *Local DB or Session* | The ONDC protocol does **not handle cart logic**. You must **store cart items locally**: either in your backend database (`db_cart`) for logged-in users or in frontend/session storage for guest users. The **cart page** uses this local data to render added products.                                |
+| 🧾 **Final Checkout**      | `/init → /on_init`    | When a user clicks **"Place Order"** for one product, you send an **`/init`** request to the BPP. The BPP responds with **`/on_init`**, which contains locked order info like **final price, taxes, delivery address, and estimated delivery time**. You show this on your final review/checkout screen. |
+| ✅ **Confirm Order**        | `/confirm`            | After the user reviews everything and clicks **"Confirm Order"**, you send a **`/confirm`** API to the BPP. This places the order and completes the ONDC protocol flow. You may redirect the user to payment or order success page.                                                                      |
