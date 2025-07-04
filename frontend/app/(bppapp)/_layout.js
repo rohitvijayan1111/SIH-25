@@ -31,6 +31,17 @@ const bapappLayout = () => {
     <View className="flex-1 bg-white">
       <Tabs ScreenOptions={{ tabBarShowLabel: false }}>
         <Tabs.Screen
+          name="Login"
+          options={{
+            title: "Login",
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <TabIcon focused={focused} icon={icons.home} title="Login" />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
           name="browse"
           options={{
             title: "Browse",
@@ -56,11 +67,7 @@ const bapappLayout = () => {
             title: "Favourites",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon
-                focused={focused}
-                icon={icons.heart}
-                title="Favourites"
-              />
+              <TabIcon focused={focused} icon={icons.home} title="Favourites" />
             ),
           }}
         />

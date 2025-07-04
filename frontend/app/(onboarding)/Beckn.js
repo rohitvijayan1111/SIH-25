@@ -7,16 +7,16 @@ const Beckn = () => {
   return (
     <View className="flex-1 items-center justify-center">
       <TouchableOpacity
-        className="bg-[-6CC51D] px-4 py-2 rounded-lg mb-4"
+        className="bg-[#6CC51D] px-4 py-2 rounded-lg mb-4"
         onPress={() => router.push("/bap")}
       >
-        <Text>Go to BAP</Text>
+        <Text className="text-white">Go to BAP</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        className="bg-[-6CC51D] px-4 py-2 rounded-lg mb-4"
-        onPress={() => router.push("/bpp")}
+        className="bg-[#6CC51D] px-4 py-2 rounded-lg mb-4"
+        onPress={() => router.push("/(bpp)/Login")}
       >
-        <Text>Go to BPP</Text>
+        <Text className="text-white">Go to BPP</Text>
       </TouchableOpacity>
     </View>
   );
