@@ -1,11 +1,8 @@
 import { Stack } from "expo-router";
 const RootLayout = () => {
   return (
-    // <Stack>
-    // {/* <Stack.Screen name="(tabs)" /> */}
-    // {/* <Stack.Screen name="profile" /> */}
-    // {/* </Stack> */}
     <Stack>
+      <Stack.Screen name="(onboarding)" />
       <Stack.Screen name="(tabs)" />
     </Stack>
   );
