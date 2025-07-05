@@ -9,7 +9,7 @@ const home = () => {
       <TouchableOpacity
         className="bg-green-600 px-4 py-2 rounded"
         onPress={() =>
-          router.push("/screens/ProductDetailsScreen", {
+          router.push("/screens/mineProductList", {
             item_id: "01f2f512-ad91-41d2-91c1-57a26ab3b14d",
           })
         }
