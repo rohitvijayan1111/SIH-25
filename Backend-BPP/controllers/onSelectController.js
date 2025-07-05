@@ -17,6 +17,7 @@ exports.handleSelect = async (req, res) => {
         p.stock,
         p.organic,
         p.description,
+        p.image_url,
         pl.price_per_unit,
         cf.fulfillment_code,
         cf.type AS fulfillment_type,
@@ -61,6 +62,7 @@ exports.handleSelect = async (req, res) => {
           descriptor: {
             name: row.product_name,
             description:row.description,
+            image:row.image_url,
             code: row.product_id.slice(0, 12)
           },
           category_id: row.category_id,
