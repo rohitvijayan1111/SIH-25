@@ -30,5 +30,5 @@ const PORT = process.env.PORT;
 const HOST = "0.0.0.0"; // Allow external access via LAN IP
 
 app.listen(PORT, HOST, () => {
-  console.log(`🚀 Server running at https://0.0.0.0:${PORT}`);
+  console.log(`🚀 Server running at http://0.0.0.0:${PORT}`);
 });
