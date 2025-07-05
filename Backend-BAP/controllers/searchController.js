@@ -28,6 +28,8 @@ exports.handleSearch = async (req, res) => {
 
     const txnId = req.transaction_id || uuidv4();
 
+    console.log(txnId); //for using in postman
+
     const bppUrl = 'http://localhost:3000/bpp/on_search';
 
     const payload = {
