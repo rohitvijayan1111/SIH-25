@@ -21,6 +21,16 @@ const becknRoutes = require('./routes/becknRoutes');
 app.use('/bap', becknRoutes);
 app.use('/cart', cartRoutes);
 
+app.get('/test-db', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.send(`✅ DB Connected: ${result.rows[0].now}`);
+  } catch (err) {
+    console.error('❌ DB Connection Error:', err);
+    res.status(500).send('Database connection failed');
+  }
+});
+
 // Start server
 const PORT = process.env.PORT;
 const HOST = '0.0.0.0'; // Allow external access via LAN IP
