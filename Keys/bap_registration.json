@@ -1,0 +1,12 @@
+{
+  "subscriber_id": "mybap.farmNfresh",
+  "type": "BAP",
+  "domain": "nic2004:60232",
+  "country": "IND",
+  "city": "std:080",
+  "signing_public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtBFHZWPq6R4VVwlPuweW\nntysbd4Z0e5dxt3WvJH7AklWFNAVQTAEBC1in/jrGxGAM3HuX71bOPYMrY/NWAXZ\n45kBulyN/gV5m2XoTEaQbPbMwJq2eVtMDYoImB5kyZQA5/sU1lTt6aKpnWl7LyMg\ngtWnEyOcW8oQMkLap529YbKskdMZSk7Frr0b3IWojt5BvMwSPuEAfVcqhNIGNvN4\nVpWic5P+EyWdB1J/q/80fVVGZgEPhXbmSZjMVUSI6g0y7KTgJIFR4YzUApiMgLuU\nWOqdepBmpmaT8sdkBj05Dxd9vMciX/AeOSMZfCAWdHE0QGBrqqxb4w42STGjmtUa\nnwIDAQAB\n-----END PUBLIC KEY-----\n",
+  "encr_public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtBFHZWPq6R4VVwlPuweW\nntysbd4Z0e5dxt3WvJH7AklWFNAVQTAEBC1in/jrGxGAM3HuX71bOPYMrY/NWAXZ\n45kBulyN/gV5m2XoTEaQbPbMwJq2eVtMDYoImB5kyZQA5/sU1lTt6aKpnWl7LyMg\ngtWnEyOcW8oQMkLap529YbKskdMZSk7Frr0b3IWojt5BvMwSPuEAfVcqhNIGNvN4\nVpWic5P+EyWdB1J/q/80fVVGZgEPhXbmSZjMVUSI6g0y7KTgJIFR4YzUApiMgLuU\nWOqdepBmpmaT8sdkBj05Dxd9vMciX/AeOSMZfCAWdHE0QGBrqqxb4w42STGjmtUa\nnwIDAQAB\n-----END PUBLIC KEY-----\n",
+  "url": "http://localhost:5000",
+  "status": "SUBSCRIBED",
+  "unique_key_id": "1"
+}
