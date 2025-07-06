@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 import { TouchableOpacity, Image } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
-
-
+import CategorySection from '../components/CategorySection';
+import Constants from 'expo-constants';
+const BASE_URL = Constants.expoConfig.extra.EXPO_PUBLIC_API_URL;
 
 
 const categoryList = [
@@ -25,7 +26,7 @@ const categoryList = [
 ];
 
 
-const HomePage = () => {
+const HomePage = ({navigation}) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -84,7 +85,7 @@ const HomePage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/bap/search', {
+      const response = await fetch('http://192.168.199.249:5000/bap/search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -149,60 +150,7 @@ const HomePage = () => {
     setLoading(false);
   }
 };
-
-
-
-  const renderProduct = ({ item, providers }) => {
-    const provider = providers.find(p => p.id === item.provider.id);
-    return (
-      <View style={tw`w-44 mr-4 bg-white rounded-xl p-3 shadow-sm border border-gray-100`}>
-        <Image
-          source={{ uri: item.descriptor.images?.[0] || 'https://via.placeholder.com/150' }}
-          style={tw`w-full h-36 rounded-lg mb-2`}
-          resizeMode="contain"
-        />
-        <Text style={tw`text-base font-semibold mt-1`} numberOfLines={2}>
-          {item.descriptor.name}
-        </Text>
-        <Text style={tw`text-blue-600 font-medium text-sm my-1`}>
-          ₹{item.price.value} / {item.quantity.unitized.measure.unit}
-        </Text>
-        {provider && (
-          <>
-            <Text style={tw`text-green-600 text-xs`} numberOfLines={1}>
-              Seller: {provider.descriptor?.name}
-            </Text>
-            <Text style={tw`text-gray-400 text-xs mt-1`} numberOfLines={1}>
-              {provider.locations?.[0]?.address.split(',')[0]}
-            </Text>
-          </>
-        )}
-      </View>
-    );
-  };
-
-  const renderCategorySection = ({ category, items, providers }) => (
-    <View style={tw`mb-6`}>
-      <Text style={tw`text-xl font-bold px-4 mb-3 text-gray-800`}>
-        {category === 'CROP' ? 'Grains & Pulses' : 
-         category === 'DAIRY' ? 'Dairy Products' : 
-         category}
-      </Text>
-      <FlatList
-        horizontal
-        data={items}
-        renderItem={({ item }) => renderProduct({ item, providers })}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={tw`px-4`}
-        showsHorizontalScrollIndicator={false}
-        ListEmptyComponent={
-          <View style={tw`w-full h-32 justify-center items-center`}>
-            <Text style={tw`text-gray-500`}>No products available</Text>
-          </View>
-        }
-      />
-    </View>
-  );
+  
 
   if (loading) {
     return (
@@ -260,7 +208,12 @@ const HomePage = () => {
       <ScrollView contentContainerStyle={tw`pb-8`}>
         {categories.map((section, index) => (
           <React.Fragment key={index}>
-            {renderCategorySection(section)}
+            <CategorySection
+              category={section.category}
+              items={section.items}
+              providers={section.providers}
+              navigation={navigation}
+            />
             {index < categories.length - 1 && (
               <View style={tw`h-0.5 bg-gray-200 mx-4`} />
             )}

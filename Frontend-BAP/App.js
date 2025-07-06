@@ -4,6 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import tw from 'tailwind-react-native-classnames';
 import HomePage from './screens/HomePage'; // Make sure path is correct
+import ProductDetailsScreen from './screens/ProductDetails'; // adjust path if needed
+
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +29,11 @@ export default function App() {
       <Stack.Navigator initialRouteName="Welcome">
         <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={HomePage} />
+         <Stack.Screen
+          name="ProductDetails"
+          component={ProductDetailsScreen}
+          options={{ title: "Product Details" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
