@@ -9,4 +9,13 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
+// Just check connection status here (optional)
+pool.connect((err, client, release) => {
+  if (err) {
+    console.error("❌ Database connection failed:", err.message);
+  } else {
+    console.log("✅ Connected to database");
+    release(); // release connection back to pool
+  }
+});
 module.exports = pool;
