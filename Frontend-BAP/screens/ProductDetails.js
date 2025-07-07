@@ -123,8 +123,26 @@ export default function ProductDetailsScreen({ route, navigation }) {
     (f) => f.id === item.fulfillment_id
   );
 
-  const handleAddToCart = () => {
-    Alert.alert("Added to Cart", `${item.descriptor.name} x ${quantity}`);
+  const handleAddToCart = async (item) => {
+    try {
+      const response = await fetch("http://localhost:5000/cart/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(item),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("✅ Cart added successfully:", data);
+      } else {
+        console.error("❌ Failed to add to cart:", data.message || data);
+      }
+    } catch (error) {
+      console.error("⚠️ Error in API call:", error);
+    }
   };
 
   return (
@@ -207,11 +225,25 @@ export default function ProductDetailsScreen({ route, navigation }) {
 
       {/* Add to Cart */}
       <TouchableOpacity
-        style={tw`bg-green-600 py-3 rounded mt-6 items-center`}
-        onPress={handleAddToCart}
-      >
-        <Text style={tw`text-white font-semibold`}>Add to Cart</Text>
-      </TouchableOpacity>
+  style={tw`bg-green-600 py-3 rounded mt-6 items-center`}
+  onPress={() =>
+    handleAddToCart({
+      user_id: "d7c6b53e-9472-4c23-bc76-e8c29718383e", // 🔁 Replace with dynamic user ID if available
+      bpp_id: productData.bpp_id || "agri.bpp",
+      bpp_product_id: item.id,
+      provider_id: provider.id,
+      provider_name: provider.descriptor.name,
+      provider_address: fulfillment?.location?.address || "",
+      fulfillment_id: fulfillment?.id || "",
+      item_name: item.descriptor.name,
+      quantity: quantity,
+      unit_price: parseFloat(item.price.value),
+    })
+  }
+>
+  <Text style={tw`text-white font-semibold`}>Add to Cart</Text>
+</TouchableOpacity>
+
 
       {/* SIMILAR PRODUCTS*/}
        <SimilarProducts relatedItems={relatedItems} navigation={navigation} />

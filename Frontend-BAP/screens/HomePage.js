@@ -10,8 +10,7 @@ import {
 import { TouchableOpacity, Image } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import CategorySection from '../components/CategorySection';
-import Constants from 'expo-constants';
-const BASE_URL = Constants.expoConfig.extra.EXPO_PUBLIC_API_URL;
+
 
 
 const categoryList = [
