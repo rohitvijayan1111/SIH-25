@@ -7,4 +7,5 @@
 // the environment is set up appropriately
 // registerRootComponent(RootLayout);
 
+//this is added temp
 import "expo-router/entry";
