@@ -5,10 +5,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import tw from 'tailwind-react-native-classnames';
 import HomePage from './screens/HomePage'; // Make sure path is correct
 import ProductDetailsScreen from './screens/ProductDetails'; // adjust path if needed
-
+import ViewCartScreen from "./screens/ViewCartScreen";
+import ProviderItemsScreen from "./screens/ProviderItemsScreen";
 
 const Stack = createNativeStackNavigator();
-
+const CartStack = createNativeStackNavigator();
 const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={tw`flex-1 justify-center items-center bg-white`}>
@@ -19,9 +20,24 @@ const WelcomeScreen = ({ navigation }) => {
       >
         <Text style={tw`text-white text-lg`}>Go to Home Page</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Cart')} // 👈 this navigates to ViewCart
+        style={tw`bg-blue-600 px-6 py-3 rounded-lg`}
+      >
+        <Text style={tw`text-white text-lg`}>View My Cart</Text>
+      </TouchableOpacity>
     </View>
   );
 };
+
+function CartStackScreen() {
+  return (
+    <CartStack.Navigator>
+      <CartStack.Screen name="ViewCart" component={ViewCartScreen} />
+      <CartStack.Screen name="ProviderItems" component={ProviderItemsScreen} />
+    </CartStack.Navigator>
+  );
+}
 
 export default function App() {
   return (
@@ -33,6 +49,11 @@ export default function App() {
           name="ProductDetails"
           component={ProductDetailsScreen}
           options={{ title: "Product Details" }}
+        />
+         <Stack.Screen
+          name="Cart"
+          component={CartStackScreen}
+          options={{ headerShown: false }} // hides nested headers
         />
       </Stack.Navigator>
     </NavigationContainer>
