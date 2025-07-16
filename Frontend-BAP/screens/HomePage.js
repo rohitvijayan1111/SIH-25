@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { SERVER_URL } from '@env';
 import {
   View,
   Text,
@@ -34,6 +35,10 @@ const HomePage = ({navigation}) => {
     loadInitialCategories();
   }, []);
 
+  useEffect(() => {
+  console.log('SERVER_URL:', SERVER_URL);
+}, []);
+
   const loadInitialCategories = async () => {
     setLoading(true);
     Promise.all([fetchCategoryProducts('crop'), fetchCategoryProducts('dairy')])
@@ -43,7 +48,7 @@ const HomePage = ({navigation}) => {
 
   const fetchCategoryProducts = async (category) => {
     try {
-      const response = await fetch('http://localhost:5000/bap/search', {
+      const response = await fetch(`${SERVER_URL}/bap/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +89,7 @@ const HomePage = ({navigation}) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://192.168.199.249:5000/bap/search', {
+      const response = await fetch(`${SERVER_URL}/bap/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,7 +124,7 @@ const HomePage = ({navigation}) => {
   setLoading(true);
 
   try {
-    const response = await fetch('http://localhost:5000/bap/search', {
+    const response = await fetch(`${SERVER_URL}/bap/search`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
