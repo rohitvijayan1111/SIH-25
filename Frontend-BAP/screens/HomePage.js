@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { SERVER_URL } from '@env';
 import {
   View,
   Text,
@@ -33,6 +34,10 @@ const HomePage = ({navigation}) => {
   useEffect(() => {
     loadInitialCategories();
   }, []);
+
+  useEffect(() => {
+  console.log('SERVER_URL:', SERVER_URL);
+}, []);
 
   const loadInitialCategories = async () => {
     setLoading(true);
