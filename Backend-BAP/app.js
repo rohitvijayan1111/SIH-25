@@ -13,7 +13,7 @@ app.use(attachTransactionId);
 app.use(
   cors({
     origin: "*", // or use specific origin like 'http://localhost:8081'
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST","PUT","OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );

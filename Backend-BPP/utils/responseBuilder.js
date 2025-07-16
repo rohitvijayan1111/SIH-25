@@ -1,9 +1,11 @@
 exports.buildOnSearchResponse = (products) => {
   const uniqueProviders = {};
   const uniqueFulfillments = {};
+  const itemMap = {};
 
-  const items = products.map(prod => {
+  for (const prod of products) {
     // Track unique provider
+    //  console.log(prod);
     uniqueProviders[prod.farmer_id] = {
       id: `farmer-${prod.farmer_id}`,
       descriptor: { name: prod.farmer_name },
@@ -17,58 +19,67 @@ exports.buildOnSearchResponse = (products) => {
     };
 
     // Track unique fulfillment
-uniqueFulfillments[prod.fulfillment_code] = {
-  id: prod.fulfillment_code,
-  type: prod.fulfillment_type || 'Self-Pickup', // Use type from DB, fallback to Self-Pickup
-  start: {
-    location: {
-      gps: prod.fulfillment_gps,
-      address: prod.fulfillment_address
-    }
-  },
-  ...(prod.estimated_delivery && prod.fulfillment_type === 'Delivery'
-    ? {
-        end: {
-          time: {
-            range: {
-              end: prod.estimated_delivery // ISO string already formatted in service
+    uniqueFulfillments[prod.fulfillment_code] = {
+      id: prod.fulfillment_code,
+      type: prod.fulfillment_type || 'Self-Pickup',
+      start: {
+        location: {
+          gps: prod.fulfillment_gps,
+          address: prod.fulfillment_address
+        }
+      },
+      ...(prod.estimated_delivery && prod.fulfillment_type === 'Delivery'
+        ? {
+            end: {
+              time: {
+                range: {
+                  end: prod.estimated_delivery
+                }
+              }
             }
           }
-        }
-      }
-    : {})
-};
+        : {})
+    };
 
-
-    return {
-      id: prod.product_id.toString(),
-      category_id: prod.type.toUpperCase(), 
-      descriptor: {
-        name: prod.product_name,
-        images: [prod.image_url]
-      },
-      provider: {
-        id: `farmer-${prod.farmer_id}`
-      },
-      location_id: prod.location_code,
-      fulfillment_id: prod.fulfillment_code,
-      quantity: {
-        available: {
-          count: prod.stock
+    // Group batches under product
+    if (!itemMap[prod.product_id]) {
+      itemMap[prod.product_id] = {
+        id: prod.product_id.toString(),
+        category_id: prod.type.toUpperCase(),
+        descriptor: {
+          name: prod.product_name,
+          images: [prod.image_url]
         },
-        unitized: {
-          measure: {
-            unit: prod.unit || 'unit'
+        provider: {
+          id: `farmer-${prod.farmer_id}`
+        },
+        location_id: prod.location_code,
+        fulfillment_id: prod.fulfillment_code,
+        quantity: {
+          available: {
+    count: prod.available_quantity || 0  // Use prod.stock directly
+  },
+          unitized: {
+            measure: {
+              unit: prod.unit || 'unit'
+            }
           }
-        }
-      },
+        },
+        batches: [],
+        tags: prod.organic ? ['organic'] : []
+      };
+    }
+
+    // Add batch
+    itemMap[prod.product_id].batches.push({
       price: {
         currency: 'INR',
         value: Number(prod.price_per_unit).toFixed(2)
       },
-      tags: prod.organic ? ['organic'] : []
-    };
-  });
+      available_quantity: prod.quantity,
+      expiry_date: prod.expiry_date
+    });
+  }
 
   return {
     context: {
@@ -78,14 +89,13 @@ uniqueFulfillments[prod.fulfillment_code] = {
     },
     message: {
       catalog: {
-        items,
+        items: Object.values(itemMap),
         providers: Object.values(uniqueProviders),
         fulfillments: Object.values(uniqueFulfillments)
       }
     }
   };
 };
-
 
 
 exports.buildOnRatingResponse = (context) => {
