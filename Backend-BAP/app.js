@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const pool = require("./config/db");
+const sequelize  = require("./config/db");
 const attachTransactionId = require("./middlewares/transactionMiddleware");
 const cartRoutes = require("./cart/cartRoutes");
 const app = express();
@@ -24,8 +24,8 @@ app.use("/cart", cartRoutes);
 
 app.get('/test-db', async (req, res) => {
   try {
-    const result = await pool.query('SELECT NOW()');
-    res.send(`✅ DB Connected: ${result.rows[0].now}`);
+  const [result] = await sequelize.query('SELECT NOW()');
+res.send(`✅ DB Connected: ${result[0].now}`);
   } catch (err) {
     console.error('❌ DB Connection Error:', err);
     res.status(500).send('Database connection failed');

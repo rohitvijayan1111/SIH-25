@@ -17,7 +17,7 @@ export default function ProviderItemsScreen({ navigation, route }) {
   
   const updateCartQuantity = async (item, newQty) => {
   try {
-    const response = await fetch("http://192.168.199.249:5000/cart/update", {
+    const response = await fetch("http://localhost:5000/cart/update", {
       method: "PUT", // ✅ Use PUT
       headers: {
         "Content-Type": "application/json",

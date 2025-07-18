@@ -19,6 +19,9 @@ export default function ProductDetailsScreen({ route, navigation }) {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [relatedItems, setRelatedItems] = useState([]);
+   const [selectedBatchIndex, setSelectedBatchIndex] = useState(null);
+  const [selectedPrice, setSelectedPrice] = useState(null);
+
 
   // ✅ Use your backend BAP IP here
   const API_URL = "http://localhost:5000/bap/select";
@@ -43,6 +46,7 @@ export default function ProductDetailsScreen({ route, navigation }) {
 
     const catalog = json.catalog?.message?.catalog || {};
     const items = catalog.items || [];
+    console.log("items",items);
     const providers = catalog.providers || [];
     const fulfillments = catalog.fulfillments || [];
 
@@ -137,17 +141,18 @@ export default function ProductDetailsScreen({ route, navigation }) {
 
   const handleAddToCart = async (item) => {
     try {
-      const response = await fetch("http://192.168.199.249:5000/cart/add", {
+      const response = await fetch("http://localhost:5000/cart/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(item),
       });
-
+      
       const data = await response.json();
-
+      
       if (response.ok) {
+        console.log("cart",item);
         console.log("✅ Cart added successfully:", data);
       } else {
         console.error("❌ Failed to add to cart:", data.message || data);
@@ -155,6 +160,14 @@ export default function ProductDetailsScreen({ route, navigation }) {
     } catch (error) {
       console.error("⚠️ Error in API call:", error);
     }
+  };
+
+   const handleBatchSelect = (index) => {
+    setSelectedBatchIndex(index);
+
+    const priceValue = parseFloat(item?.batches?.[index]?.price?.value || 0);
+    // console.log("price value",priceValue);
+    setSelectedPrice(priceValue);
   };
 
  return (
@@ -221,22 +234,42 @@ export default function ProductDetailsScreen({ route, navigation }) {
       </View>
     )}
 
-    {/* Batches Info */}
-    {item?.batches?.length > 0 && (
-      <View style={tw`mt-6`}>
-        <Text style={tw`text-base font-semibold text-gray-800 mb-2`}>Available Batches:</Text>
-        {item.batches.map((batch, index) => (
-          <View key={index} style={tw`bg-white p-3 rounded-lg mb-2 shadow-sm`}>
-            <Text style={tw`text-green-800 font-semibold`}>
-              ₹{batch.price?.value || 'N/A'}
-            </Text>
-            <Text style={tw`text-gray-600 text-sm`}>
-              Expiry: {batch.expiry_date ? new Date(batch.expiry_date).toLocaleDateString() : 'N/A'}
-            </Text>
-          </View>
-        ))}
-      </View>
-    )}
+     {/* Batches Info */}
+      {item?.batches?.length > 0 && (
+        <View style={tw`mt-6`}>
+          <Text style={tw`text-base font-semibold text-gray-800 mb-2`}>
+            Available Batches:
+          </Text>
+
+          {item.batches.map((batch, index) => {
+            const isSelected = selectedBatchIndex === index;
+
+            return (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleBatchSelect(index)}
+                style={tw.style(
+                  'p-3 rounded-lg mb-2 shadow-sm border',
+                  isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'
+                )}
+              >
+                <Text style={tw`text-green-800 font-semibold`}>
+                  ₹{batch.price?.value || 'N/A'}
+                </Text>
+                <Text style={tw`text-gray-600 text-sm`}>
+                  Expiry:{' '}
+                  {batch.expiry_date
+                    ? new Date(batch.expiry_date).toLocaleDateString()
+                    : 'N/A'}
+                </Text>
+                {isSelected && (
+                  <Text style={tw`text-blue-600 mt-1`}>✔ Selected</Text>
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      )}
 
     {/* Fulfillment Info */}
     {fulfillment && (
@@ -265,7 +298,8 @@ export default function ProductDetailsScreen({ route, navigation }) {
           fulfillment_id: fulfillment?.id || "",
           item_name: item?.descriptor?.name,
           quantity: quantity,
-          unit_price: parseFloat(item?.batches?.[0]?.price?.value || 0),
+          unit_price: selectedPrice|| 0,
+          image_url: item?.descriptor?.image|| "" ,
         })
       }
       activeOpacity={0.85}
