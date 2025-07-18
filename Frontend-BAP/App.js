@@ -8,8 +8,13 @@ import ProductDetailsScreen from "./screens/ProductDetails"; // adjust path if n
 import ViewCartScreen from "./screens/ViewCartScreen";
 import ProviderItemsScreen from "./screens/ProviderItemsScreen";
 import "./global.css";
+import PaymentDetails from "./screens/PaymentDetails";
 const Stack = createNativeStackNavigator();
 const CartStack = createNativeStackNavigator();
+import ProcurementDetails from "./screens/ProcurementDetails";
+
+
+import ProcurementsScreen from "./screens/ProcurementsScreen";
 const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={tw`flex-1 justify-center items-center bg-white`}>
@@ -27,6 +32,12 @@ const WelcomeScreen = ({ navigation }) => {
         style={tw`bg-blue-600 px-6 py-3 rounded-lg`}
       >
         <Text style={tw`text-white text-lg`}>View My Cart</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Procurements")} // 👈 this navigates to ViewCart
+        style={tw`bg-blue-600 px-6 py-3 rounded-lg`}
+      >
+        <Text style={tw`text-white text-lg`}>Procurements</Text>
       </TouchableOpacity>
     </View>
   );
@@ -59,6 +70,21 @@ export default function App() {
         <Stack.Screen
           name="Cart"
           component={CartStackScreen}
+          options={{ headerShown: false }} // hides nested headers
+        />
+        <Stack.Screen
+          name="Procurements"
+          component={ProcurementsScreen}
+          options={{ headerShown: false }} // hides nested headers
+        />
+        <Stack.Screen
+          name="PaymentDetails"
+          component={PaymentDetails}
+          options={{ headerShown: false }} // hides nested headers
+        />
+        <Stack.Screen
+          name="ProcurementDetails"
+          component={ProcurementDetails}
           options={{ headerShown: false }} // hides nested headers
         />
       </Stack.Navigator>
