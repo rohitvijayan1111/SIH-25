@@ -5,6 +5,7 @@ import tw from 'tailwind-react-native-classnames';
 import ProductCard from './ProductCard';
 
 export default function CategorySection({ category, items, providers, navigation }) {
+  
   const renderItem = ({ item }) => {
     const provider = providers.find(p => p.id === item.provider.id);
     return (

@@ -13,19 +13,27 @@ exports.addToCart = async (req, res) => {
       fulfillment_id,
       item_name,
       quantity,
-      unit_price
+      unit_price,
+      image_url
     } = req.body;
 
+    // ✅ Validate required fields
+    const requiredFields = [user_id, bpp_id, bpp_product_id, provider_id, item_name, quantity, unit_price];
+    if (requiredFields.some(field => field === undefined || field === null)) {
+      return res.status(400).json({ error: 'Missing required fields in request body' });
+    }
+
+    // ✅ SQL INSERT with ON CONFLICT
     const insertQuery = `
       INSERT INTO user_cart (
         id, user_id, bpp_id, bpp_product_id, provider_id, provider_name,
         provider_address, fulfillment_id, item_name,
-        quantity, unit_price
+        quantity, unit_price, image_url
       )
       VALUES (
         $1, $2, $3, $4, $5, $6,
         $7, $8, $9,
-        $10, $11
+        $10, $11, $12
       )
       ON CONFLICT (user_id, bpp_product_id, provider_id)
       DO UPDATE SET
@@ -35,21 +43,22 @@ exports.addToCart = async (req, res) => {
         provider_address = EXCLUDED.provider_address,
         fulfillment_id = EXCLUDED.fulfillment_id,
         item_name = EXCLUDED.item_name,
-        added_at = CURRENT_TIMESTAMP;
+        image_url = EXCLUDED.image_url,
+        added_at = CURRENT_TIMESTAMP
     `;
 
     const values = [
       uuidv4(), user_id, bpp_id, bpp_product_id, provider_id, provider_name,
       provider_address, fulfillment_id, item_name,
-      quantity, unit_price
+      quantity, unit_price, image_url
     ];
 
     await db.query(insertQuery, values);
 
-    res.status(201).json({ message: 'Item added or updated in cart' });
+    res.status(201).json({ message: '✅ Item added or updated in cart' });
   } catch (error) {
-    console.error('Add to Cart Error:', error);
-    res.status(500).json({ error: 'Failed to add/update item in cart' });
+    console.error('❌ Add to Cart Error:', error.message);
+    res.status(500).json({ error: 'Failed to add or update item in cart' });
   }
 };
 
@@ -57,6 +66,7 @@ exports.addToCart = async (req, res) => {
 
 exports.updateCartItem = async (req, res) => {
   try {
+    console.log("Update");
     const {
       user_id,
       bpp_product_id,
@@ -64,33 +74,45 @@ exports.updateCartItem = async (req, res) => {
       quantity
     } = req.body;
 
+    // Basic validation
+    if (!user_id || !bpp_product_id || !provider_id) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
     if (quantity <= 0) {
       await db.query(
         `DELETE FROM user_cart WHERE user_id = $1 AND bpp_product_id = $2 AND provider_id = $3`,
         [user_id, bpp_product_id, provider_id]
       );
-      return res.status(200).json({ message: 'Item removed from cart' });
+      return res.status(200).json({ message: '🗑️ Item removed from cart' });
     }
 
     const updateQuery = `
       UPDATE user_cart
-      SET quantity = $1
+      SET quantity = $1, added_at = CURRENT_TIMESTAMP
       WHERE user_id = $2 AND bpp_product_id = $3 AND provider_id = $4
     `;
 
-    await db.query(updateQuery, [quantity, user_id, bpp_product_id, provider_id]);
+    const result = await db.query(updateQuery, [quantity, user_id, bpp_product_id, provider_id]);
 
-    res.status(200).json({ message: 'Cart updated successfully' });
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Item not found in cart' });
+    }
+
+    res.status(200).json({ message: '🛒 Cart item updated successfully' });
   } catch (error) {
-    console.error('Update Cart Error:', error);
+    console.error('Update Cart Error:', error.message);
     res.status(500).json({ error: 'Failed to update cart' });
   }
 };
 
-
 exports.viewCart = async (req, res) => {
   try {
     const { user_id } = req.params;
+
+    if (!user_id) {
+      return res.status(400).json({ error: 'user_id is required in params' });
+    }
 
     const query = `
       SELECT 
@@ -103,6 +125,7 @@ exports.viewCart = async (req, res) => {
         item_name,
         quantity,
         unit_price,
+         image_url,
         (quantity * unit_price) AS total_price
       FROM user_cart
       WHERE user_id = $1
@@ -111,7 +134,7 @@ exports.viewCart = async (req, res) => {
 
     const { rows } = await db.query(query, [user_id]);
 
-    // ✅ Group by provider_id
+    // Group cart items by provider_id
     const groupedCart = {};
     for (const row of rows) {
       const {
@@ -124,7 +147,8 @@ exports.viewCart = async (req, res) => {
         item_name,
         quantity,
         unit_price,
-        total_price
+        total_price,
+        image_url // ✅ Include this field
       } = row;
 
       if (!groupedCart[provider_id]) {
@@ -143,7 +167,8 @@ exports.viewCart = async (req, res) => {
         item_name,
         quantity,
         unit_price: parseFloat(unit_price),
-        total_price: parseFloat(total_price)
+        total_price: parseFloat(total_price),
+        image_url // ✅ Include this field
       });
     }
 
@@ -153,11 +178,10 @@ exports.viewCart = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('View Cart Error:', error);
+    console.error('View Cart Error:', error.message);
     res.status(500).json({ error: 'Failed to fetch cart' });
   }
 };
-
 
 exports.clearCart = async (req, res) => {
   try {
@@ -168,7 +192,7 @@ exports.clearCart = async (req, res) => {
     }
 
     if (provider_id) {
-      // Clear cart items for specific provider
+      // Clear only the provider's items
       await db.query(
         `DELETE FROM user_cart WHERE user_id = $1 AND provider_id = $2`,
         [user_id, provider_id]
@@ -178,7 +202,8 @@ exports.clearCart = async (req, res) => {
       });
     }
 
-    // Clear entire cart for user
+    // Clear all items for the user'
+    console.log(user_id);
     await db.query(
       `DELETE FROM user_cart WHERE user_id = $1`,
       [user_id]
@@ -186,7 +211,7 @@ exports.clearCart = async (req, res) => {
 
     res.status(200).json({ message: '🧹 Entire cart cleared successfully' });
   } catch (error) {
-    console.error('Clear Cart Error:', error);
+    console.error('Clear Cart Error:', error.message);
     res.status(500).json({ error: 'Failed to clear cart' });
   }
 };

@@ -13,31 +13,42 @@ const SimilarProducts = ({ relatedItems, navigation }) => {
     return null;
   }
 
-
   const renderProductCard = ({ item }) => {
-    const providerName = item.provider?.descriptor?.name || 'Unknown Seller';
+    const providerName = item.providerName || item.provider?.descriptor?.name || 'Unknown Seller';
+    const imageUrl = item.image || item.descriptor?.images?.[0] || 'https://via.placeholder.com/150';
+    const priceValue = item.price?.value || '0.00';
+    const currency = item.price?.currency || 'INR';
+    const unit = item.quantity?.unitized?.measure?.unit || '';
 
     return (
       <TouchableOpacity
         onPress={() =>
           navigation.navigate('ProductDetails', { item_id: item.id })
         }
-        style={tw`w-44 mr-4 bg-white rounded-xl p-3 shadow-sm border border-gray-100`}
+        style={tw`w-44 mr-4 bg-green-50 rounded-xl p-4 shadow-md border border-green-100`}
       >
+        {/* Product Image */}
         <Image
-          source={{
-            uri: item.descriptor?.images?.[0] || 'https://via.placeholder.com/150',
-          }}
-          style={tw`w-full h-36 rounded-lg mb-2`}
+          source={{ uri: imageUrl }}
+          style={tw`w-full h-36 rounded-lg mb-3`}
           resizeMode="contain"
         />
-        <Text style={tw`text-base font-semibold`} numberOfLines={2}>
-          {item.descriptor?.name}
+
+        {/* Product Name */}
+        <Text
+          style={tw`text-sm font-semibold text-gray-800 mb-1`}
+          numberOfLines={2}
+        >
+          {item.descriptor?.name || 'Unnamed Product'}
         </Text>
-        <Text style={tw`text-blue-600 font-medium text-sm my-1`}>
-          ₹{item.price?.value} / {item.quantity?.unitized?.measure?.unit}
+
+        {/* Price */}
+        <Text style={tw`text-green-600 font-bold text-sm mb-1`}>
+          ₹{priceValue} / {unit}
         </Text>
-        <Text style={tw`text-green-600 text-xs`} numberOfLines={1}>
+
+        {/* Seller Info */}
+        <Text style={tw`text-green-700 text-xs font-medium`} numberOfLines={1}>
           Seller: {providerName}
         </Text>
       </TouchableOpacity>
@@ -46,7 +57,9 @@ const SimilarProducts = ({ relatedItems, navigation }) => {
 
   return (
     <View style={tw`mt-8`}>
-      <Text style={tw`text-xl font-bold px-2 mb-3`}>Similar Products</Text>
+      <Text style={tw`text-xl font-bold px-2 mb-3 text-gray-800`}>
+        Similar Products
+      </Text>
       <FlatList
         horizontal
         data={relatedItems}
