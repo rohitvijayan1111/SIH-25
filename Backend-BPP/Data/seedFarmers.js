@@ -1,6 +1,6 @@
 // seedFarmers.js
 const sequelize = require('../config/sequelize'); // fix path if needed
-
+const { DataTypes } = require('sequelize'); 
 const Farmer = require('../model/farmer')(sequelize, DataTypes);        // fix path if needed
 
 const farmersData = [
