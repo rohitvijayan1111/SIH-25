@@ -35,9 +35,6 @@ const HomePage = ({navigation}) => {
     loadInitialCategories();
   }, []);
 
-  useEffect(() => {
-  console.log('SERVER_URL:', SERVER_URL);
-}, []);
 
   const loadInitialCategories = async () => {
     setLoading(true);
@@ -47,26 +44,24 @@ const HomePage = ({navigation}) => {
   };
 
   const fetchCategoryProducts = async (category) => {
-  try {
-    const response = await fetch('http://localhost:5000/bap/search', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        productName: '',
-        category: category,
-        lat: '13.0827',
-        lon: '80.2707',
-        radius: 300,
-      }),
-    });
-
-    // Ensure response is OK
-    if (!response.ok) {
+    try {
+      console.log(SERVER_URL);
+      const response = await fetch(`${SERVER_URL}/bap/search`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productName: '',
+          category: category,
+          lat: '13.0827',
+          lon: '80.2707',
+          radius: 300,
+        }),
+      });
+     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
+    }  
     const json = await response.json();
 
     // Check response structure
@@ -101,7 +96,7 @@ const HomePage = ({navigation}) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/bap/search', {
+      const response = await fetch(`${SERVER_URL}/bap/search`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
@@ -138,7 +133,7 @@ const HomePage = ({navigation}) => {
   // console.log("categriy if",categoryID);
  
     try {
-      const response = await fetch('http://localhost:5000/bap/search', {
+      const response = await fetch(`${SERVER_URL}/bap/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

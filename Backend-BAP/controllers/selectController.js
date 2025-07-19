@@ -29,7 +29,7 @@ exports.handleSelect = async (req, res) => {
       }
     };
 
-    const bppEndpoint = "http://localhost:3000/bpp/on_select";
+    const bppEndpoint = `${process.env.SERVER_URL}/bpp/on_select`;
     const bppResponse = await axios.post(bppEndpoint, selectPayload, {
       headers: {
         'x-transaction-id': txnId,

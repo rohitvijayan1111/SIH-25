@@ -16,7 +16,7 @@ export default function ViewCartScreen({ navigation }) {
   const fetchCartData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/cart/view/d7c6b53e-9472-4c23-bc76-e8c29718383e"
+        `${SERVER_URL}/cart/view/d7c6b53e-9472-4c23-bc76-e8c29718383e`
       );
       const json = await response.json();
       setCartData(json.cart || []);

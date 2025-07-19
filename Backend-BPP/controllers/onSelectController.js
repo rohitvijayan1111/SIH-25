@@ -8,48 +8,52 @@ exports.handleSelect = async (req, res) => {
     if (!productId) {
       return res.status(400).json({ error: 'Product ID missing in request' });
     }
-    const query = `
-     SELECT 
-  p.id AS product_id,
-  p.name AS product_name,
-  p.type AS category_id,
-  p.unit,
-  p.organic,
-  p.description,
-  p.image_url,
-  pb.batch_code,
-  pb.price_per_unit,
-  pb.quantity,
-  pb.manufactured_on,
-  pb.expiry_date,
+  const query = ` 
+  SELECT 
+    p.id AS product_id,
+    p.name AS product_name,
+    p.type AS category_id,
+    p.unit,
+    p.organic,
+    p.description,
+    p.image_url,
 
-  cf.fulfillment_code,
-  cf.type AS fulfillment_type,
-  cf.gps AS fulfillment_gps,
-  cf.address AS fulfillment_address,
+    pb.id AS batch_id,
+    pb.price_per_unit,
+    pb.quantity,
+    pb.manufactured_on,
+    pb.expiry_date,
 
-  l.location_code AS location_id,
-  l.gps AS location_gps,
-  l.address AS location_address,
+    cf.fulfillment_code,
+    cf.type AS fulfillment_type,
+    cf.gps AS fulfillment_gps,
+    cf.address AS fulfillment_address,
 
-  f.id AS provider_id,
-  f.name AS provider_name
+    l.location_code AS location_id,
+    l.gps AS location_gps,
+    l.address AS location_address,
 
-FROM products p
-INNER JOIN product_batches pb 
-  ON p.id = pb.product_id
-INNER JOIN catalog_fulfillments cf 
-  ON p.farmer_id = cf.farmer_id
-INNER JOIN locations l 
-  ON p.farmer_id = l.farmer_id
-INNER JOIN farmers f 
-  ON p.farmer_id = f.id
- WHERE p.id = $1
-  AND (pb.expiry_date IS NULL OR pb.expiry_date > CURRENT_DATE)
-  AND pb.quantity > 0
-ORDER BY pb.manufactured_on DESC
-LIMIT 5;
-    `;
+    f.id AS provider_id,
+    f.name AS provider_name
+
+  FROM products p
+  INNER JOIN product_batches pb 
+    ON p.id = pb.product_id
+  INNER JOIN catalog_fulfillments cf 
+    ON p.farmer_id = cf.farmer_id
+  INNER JOIN locations l 
+    ON p.farmer_id = l.farmer_id
+  INNER JOIN farmers f 
+    ON p.farmer_id = f.id
+
+  WHERE p.id = $1
+    AND (pb.expiry_date IS NULL OR pb.expiry_date > CURRENT_DATE)
+    AND pb.quantity > 0
+
+  ORDER BY pb.manufactured_on DESC
+  LIMIT 5;
+`;
+
 
     const { rows } = await db.query(query, [productId]);
     console.log(rows);
