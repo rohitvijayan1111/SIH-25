@@ -1,4 +1,4 @@
-const pool = require('../config/db'); 
+const pool = require('../config/db');
 const { v4: uuidv4 } = require('uuid');
 
 async function handleOnInit({ items, transaction_id, customer_location }) {
@@ -13,23 +13,39 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
     let fulfillment = null;
 
     for (const item of items) {
+      if (!item.id || !item.quantity || item.quantity <= 0) {
+        throw new Error(`Invalid item data: id=${item.id}, quantity=${item.quantity}`);
+      }
+
+      // STEP 1: Fetch product + batch info using batch_id (item.id assumed to be batch_id)
       const productQuery = `
-        SELECT p.id, p.name, p.unit, p.stock, p.image_url, p.organic,
-               pl.price_per_unit,
-               f.id as farmer_id, f.name as farmer_name
-        FROM products p
-        JOIN price_list pl ON p.id = pl.product_id
-        JOIN farmers f ON p.farmer_id = f.id
-        WHERE p.id = $1 AND pl.valid_from <= CURRENT_DATE AND pl.valid_to >= CURRENT_DATE
+        SELECT 
+          p.id AS product_id,
+          p.name,
+          p.unit,
+          p.image_url,
+          p.organic,
+          pb.id AS batch_id,
+          pb.price_per_unit,
+          pb.quantity,
+          f.id AS farmer_id,
+          f.name AS farmer_name
+        FROM product_batches pb
+        INNER JOIN products p ON pb.product_id = p.id
+        INNER JOIN farmers f ON p.farmer_id = f.id
+        WHERE pb.id = $1
+          AND pb.quantity >= $2
+          AND (pb.expiry_date IS NULL OR pb.expiry_date > CURRENT_DATE)
       `;
-      const productRes = await client.query(productQuery, [item.id]);
-      if (productRes.rows.length === 0) throw new Error(`Product or valid price not found for product id ${item.id}`);
+      const productRes = await client.query(productQuery, [item.id, item.quantity]);
+
+      if (productRes.rows.length === 0) {
+        throw new Error(`No available product batch found for batch_id ${item.id} with required quantity ${item.quantity}`);
+      }
 
       const product = productRes.rows[0];
 
-      if (product.stock < item.quantity) throw new Error(`Insufficient stock for product ${product.name}`);
-
-      // Save provider info once
+      // STEP 2: Save provider and fulfillment info once
       if (!providerId) {
         providerId = product.farmer_id;
         providerName = product.farmer_name;
@@ -37,19 +53,27 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
         const fulfillQuery = `
           SELECT fulfillment_code, type, gps, address, estimated_delivery
           FROM catalog_fulfillments
-          WHERE farmer_id = $1 LIMIT 1
+          WHERE farmer_id = $1
+          LIMIT 1
         `;
         const fulfillRes = await client.query(fulfillQuery, [providerId]);
-        if (fulfillRes.rows.length === 0) throw new Error('Fulfillment info not available');
+
+        if (fulfillRes.rows.length === 0) {
+          throw new Error(`Fulfillment info not found for farmer_id ${providerId}`);
+        }
         fulfillment = fulfillRes.rows[0];
       }
 
       const unitPrice = parseFloat(product.price_per_unit);
+      if (isNaN(unitPrice)) {
+        throw new Error(`Invalid price for batch_id ${product.batch_id}`);
+      }
       const itemTotalPrice = unitPrice * item.quantity;
       totalPrice += itemTotalPrice;
 
+      // STEP 3: Prepare order item object
       ordersItems.push({
-        id: product.id,
+        id: product.product_id,
         quantity: {
           count: item.quantity,
           unitized: {
@@ -58,10 +82,13 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
             }
           }
         },
-        price: { currency: 'INR', value: unitPrice.toFixed(2) },
+        price: {
+          currency: 'INR',
+          value: unitPrice.toFixed(2)
+        },
         descriptor: {
           name: product.name,
-          images: [product.image_url]
+          images: product.image_url ? [product.image_url] : []
         },
         fulfillment_id: fulfillment.fulfillment_code,
         tags: [
@@ -139,6 +166,7 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
 
   } catch (err) {
     await client.query('ROLLBACK');
+    console.error('❌ Error in handleOnInit:', err.message);
     throw err;
   } finally {
     client.release();

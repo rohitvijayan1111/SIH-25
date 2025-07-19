@@ -52,7 +52,7 @@ exports.handleInit = async (req, res) => {
     };
 
     // Send to BPP
-    const bppEndpoint = "http://localhost:3000/bpp/on_init";
+    const bppEndpoint = `${process.env.SERVER_URL}/bpp/on_init`;
     const bppResponse = await axios.post(bppEndpoint, initPayload, {
       headers: {
         'x-transaction-id': txnId,

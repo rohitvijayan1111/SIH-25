@@ -9,3 +9,5 @@ router.delete('/batch/:id', batchController.deleteBatch);
 router.get('/quantity/:productId', batchController.getAvailableQuantity);
 
 module.exports = router;
+
+
