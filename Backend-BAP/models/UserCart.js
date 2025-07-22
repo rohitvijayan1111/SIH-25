@@ -43,6 +43,22 @@ const UserCart = sequelize.define('UserCart', {
       min: 1,
     },
   },
+  category: {
+  type: DataTypes.ENUM(
+    'crop',
+    'dairy',
+    'livestock',
+    'tool',
+    'fertilizer',
+    'seed',
+    'micro_nutrient',
+    'fungicide',
+    'growth_promoter',
+    'growth_regulator',
+    'herbicide'
+  ),
+  allowNull: false
+},
   unit_price: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
