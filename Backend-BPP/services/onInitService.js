@@ -6,6 +6,8 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
   try {
     await client.query('BEGIN');
 
+    const order_id = uuidv4();
+    const message_id = `msg-${Date.now()}`;
     const ordersItems = [];
     let totalPrice = 0;
     let providerId = null;
@@ -14,11 +16,11 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
 
     for (const item of items) {
       if (!item.id || !item.quantity || item.quantity <= 0) {
-        throw new Error(`Invalid item data: id=${item.id}, quantity=${item.quantity}`);
+        console.warn(`⚠️ Skipping invalid item: id=${item.id}, quantity=${item.quantity}`);
+        continue;
       }
 
-      // STEP 1: Fetch product + batch info using batch_id (item.id assumed to be batch_id)
-      const productQuery = `
+      const batchQuery = `
         SELECT 
           p.id AS product_id,
           p.name,
@@ -27,59 +29,59 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
           p.organic,
           pb.id AS batch_id,
           pb.price_per_unit,
-          pb.quantity,
+          pb.quantity AS available_qty,
           f.id AS farmer_id,
           f.name AS farmer_name
         FROM product_batches pb
         INNER JOIN products p ON pb.product_id = p.id
         INNER JOIN farmers f ON p.farmer_id = f.id
-        WHERE pb.id = $1
-          AND pb.quantity >= $2
+        WHERE p.id = $1
+          AND pb.quantity > 0
           AND (pb.expiry_date IS NULL OR pb.expiry_date > CURRENT_DATE)
+        ORDER BY pb.expiry_date ASC NULLS LAST
+        LIMIT 1
       `;
-      const productRes = await client.query(productQuery, [item.id, item.quantity]);
 
-      if (productRes.rows.length === 0) {
-        throw new Error(`No available product batch found for batch_id ${item.id} with required quantity ${item.quantity}`);
+      const res = await client.query(batchQuery, [item.id]);
+
+      if (res.rows.length === 0) {
+        console.warn(`⚠️ Skipping unavailable product: product_id ${item.id}`);
+        continue;
       }
 
-      const product = productRes.rows[0];
+      const product = res.rows[0];
 
-      // STEP 2: Save provider and fulfillment info once
+      const fulfillQuery = `
+        SELECT fulfillment_code, type, gps, address, estimated_delivery
+        FROM catalog_fulfillments
+        WHERE farmer_id = $1
+        LIMIT 1
+      `;
+
       if (!providerId) {
         providerId = product.farmer_id;
         providerName = product.farmer_name;
 
-        const fulfillQuery = `
-          SELECT fulfillment_code, type, gps, address, estimated_delivery
-          FROM catalog_fulfillments
-          WHERE farmer_id = $1
-          LIMIT 1
-        `;
         const fulfillRes = await client.query(fulfillQuery, [providerId]);
-
         if (fulfillRes.rows.length === 0) {
-          throw new Error(`Fulfillment info not found for farmer_id ${providerId}`);
+          throw new Error(`No fulfillment config found for farmer_id ${providerId}`);
         }
         fulfillment = fulfillRes.rows[0];
       }
 
+      const availableQty = product.available_qty;
+      const servedQty = Math.min(availableQty, item.quantity);
+
       const unitPrice = parseFloat(product.price_per_unit);
-      if (isNaN(unitPrice)) {
-        throw new Error(`Invalid price for batch_id ${product.batch_id}`);
-      }
-      const itemTotalPrice = unitPrice * item.quantity;
+      const itemTotalPrice = unitPrice * servedQty;
       totalPrice += itemTotalPrice;
 
-      // STEP 3: Prepare order item object
       ordersItems.push({
         id: product.product_id,
         quantity: {
-          count: item.quantity,
+          count: servedQty,
           unitized: {
-            measure: {
-              unit: product.unit
-            }
+            measure: { unit: product.unit }
           }
         },
         price: {
@@ -99,9 +101,6 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
         ]
       });
     }
-
-    const order_id = uuidv4();
-    const message_id = `msg-${Date.now()}`;
 
     await client.query('COMMIT');
 
@@ -124,7 +123,10 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
           },
           items: ordersItems,
           quote: {
-            price: { currency: 'INR', value: totalPrice.toFixed(2) },
+            price: {
+              currency: 'INR',
+              value: totalPrice.toFixed(2)
+            },
             breakup: ordersItems.map(item => ({
               title: `${item.descriptor.name} (${item.quantity.count} ${item.quantity.unitized.measure.unit})`,
               price: {
@@ -163,7 +165,6 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
         }
       }
     };
-
   } catch (err) {
     await client.query('ROLLBACK');
     console.error('❌ Error in handleOnInit:', err.message);
