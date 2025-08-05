@@ -1,0 +1,28 @@
+
+
+###
+POST http://192.168.67.186:3000/bpp/on_select
+Content-Type: application/json
+
+{
+
+  "context": {
+        "domain": "ondc:agri",
+        "action": "select",
+        "core_version": "1.2.0",
+        "country": "IND",
+        "city": "std:080",
+        "transaction_id": "txnId",
+        "message_id": "txnId",
+        "timestamp": "2024-07-11T15:30:00.000Z",
+        "bap_id": "bap.agri.app",
+        "bap_uri": "https://bap.agri.app"
+      },
+  "message": {
+    "catalog": {
+      "items": [
+          {"id": "775dad08-704f-4313-978c-3303b91f02f6"}
+      ]
+    }
+  }
+}

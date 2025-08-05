@@ -1,0 +1,11 @@
+
+POST http://localhost:5000/bap/select
+Content-Type: application/json
+
+{
+    "items": [
+      {
+        "id": "775dad08-704f-4313-978c-3303b91f02f6"
+      }
+    ]
+}

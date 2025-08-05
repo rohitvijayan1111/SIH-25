@@ -1,0 +1,12 @@
+
+
+POST http://localhost:5000/bap/search
+Content-Type: application/json
+
+{
+    "productName":"",
+    "category":"",
+    "lat":23.0225,
+    "lon":72.5714,
+    "radius":100
+}
