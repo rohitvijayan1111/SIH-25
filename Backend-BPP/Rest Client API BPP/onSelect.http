@@ -1,7 +1,4 @@
-
-
-###
-POST http://192.168.67.186:3000/bpp/on_select
+POST http://localhost:3000/bpp/on_select
 Content-Type: application/json
 
 {

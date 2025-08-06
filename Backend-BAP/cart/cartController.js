@@ -13,6 +13,7 @@ exports.addToCart = async (req, res) => {
       fulfillment_id,
       item_name,
       quantity,
+      category,
       unit_price,
       image_url,
     } = req.body;
@@ -38,12 +39,12 @@ exports.addToCart = async (req, res) => {
       INSERT INTO user_cart (
         id, user_id, bpp_id, bpp_product_id, provider_id, provider_name,
         provider_address, fulfillment_id, item_name,
-        quantity, unit_price, image_url
+        quantity, unit_price, image_url,category,added_at
       )
       VALUES (
         $1, $2, $3, $4, $5, $6,
         $7, $8, $9,
-        $10, $11, $12
+        $10, $11, $12,$13,$14
       )
       ON CONFLICT (user_id, bpp_product_id, provider_id)
       DO UPDATE SET
@@ -70,6 +71,8 @@ exports.addToCart = async (req, res) => {
       quantity,
       unit_price,
       image_url,
+      category,
+      new Date().toISOString(),
     ];
 
     await db.query(insertQuery, values);
@@ -202,7 +205,7 @@ exports.viewCart = async (req, res) => {
 exports.clearCart = async (req, res) => {
   try {
     const { user_id, provider_id } = req.body;
-
+    console.log('Clear Cart:', user_id, provider_id);
     if (!user_id) {
       return res.status(400).json({ error: 'user_id is required' });
     }
@@ -231,7 +234,8 @@ exports.clearCart = async (req, res) => {
 
 exports.getTopCategories = async (req, res) => {
   try {
-    const { user_id } = req.params;
+    // const { user_id } = req.params;
+    const { user_id } = req.body;
 
     if (!user_id) {
       return res.status(400).json({ error: 'user_id is required in params' });
