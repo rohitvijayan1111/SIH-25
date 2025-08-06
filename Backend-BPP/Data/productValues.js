@@ -1,8 +1,8 @@
 // seedFarmers.js
 // const sequelize = require('../config/sequelize'); // fix path if needed
-const { DataTypes } = require('sequelize'); 
-const sequelize= require('../config/sequelize');
-const product = require('../model/product')(sequelize,DataTypes);
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/sequelize');
+const product = require('../model/product')(sequelize, DataTypes);
 const products = [
   {
     id: '8620b9d9-2c8d-4309-a6dc-77d34d0d324c',
@@ -282,7 +282,7 @@ const products = [
   },
   {
     id: '9f1f66d6-5b86-43d0-926b-3e31d3425889',
-    farmer_id: 'dbd62bb4-618d-454a-9a90-523317ab3734', 
+    farmer_id: 'dbd62bb4-618d-454a-9a90-523317ab3734',
     name: 'NAA (Naphthaleneacetic Acid)',
     type: 'growth_regulator',
     unit: 'gm',
@@ -474,9 +474,149 @@ const products = [
       'https://cdn.shopify.com/s/files/1/0722/2059/files/iris-polymer-mulch-film-file-10938.jpg?v=1737444877',
     created_at: '2025-07-05 09:05:47+05:30',
   },
+
+  //Seeds
+  {
+    id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+    farmer_id: '690c54df-470f-4508-89de-db2648d7d260',
+    name: 'Hybrid Corn Seed',
+    type: 'seed',
+    unit: 'kg',
+    organic: false,
+    description: 'High-yield hybrid corn seed suitable for various climates.',
+    image_url: 'https://example.com/images/hybrid-corn-seed.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+  {
+    id: 'f1e2d3c4-b5a6-7890-fedc-ba9876543210',
+    farmer_id: '690c54df-470f-4508-89de-db2648d7d260',
+    name: 'Organic Tomato Seeds',
+    type: 'seed',
+    unit: 'packet',
+    organic: true,
+    description:
+      'Certified organic tomato seeds for garden and greenhouse cultivation.',
+    image_url: 'https://example.com/images/organic-tomato-seeds.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+  {
+    id: 'e9f7d1ef-6cb5-4ce3-a167-ee657c90a822',
+    farmer_id: '690c54df-470f-4508-89de-db2648d7d260',
+    name: 'Basmati Rice Paddy Seeds',
+    type: 'seed',
+    unit: 'kg',
+    organic: false,
+    description: 'Premium paddy seeds with high grain quality and yield.',
+    image_url: 'https://example.com/images/basmati-rice-seed.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+  {
+    id: 'deca4e55-53a1-4fcb-b4b5-b88c75aa12da',
+    farmer_id: 'dbd62bb4-618d-454a-9a90-523317ab3734',
+    name: 'Okra Seeds',
+    type: 'seed',
+    unit: 'packet',
+    organic: false,
+    description: 'High yielding okra seeds, disease resistant variety.',
+    image_url: 'https://example.com/images/okra-seeds.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+  {
+    id: 'bcf3e7df-de42-42c7-838e-22e607954fd3',
+    farmer_id: 'dbd62bb4-618d-454a-9a90-523317ab3734',
+    name: 'Hybrid Sunflower Seeds',
+    type: 'seed',
+    unit: 'kg',
+    organic: false,
+    description: 'High oil content sunflower seeds for commercial cultivation.',
+    image_url: 'https://example.com/images/hybrid-sunflower-seeds.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+  {
+    id: '452dcd34-d277-434b-bbc1-39a0a9bc6a29',
+    farmer_id: 'dbd62bb4-618d-454a-9a90-523317ab3734',
+    name: 'Spinach Seeds',
+    type: 'seed',
+    unit: 'packet',
+    organic: true,
+    description: 'Fast-growing spinach seeds rich in vitamins and minerals.',
+    image_url: 'https://example.com/images/spinach-seeds.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+
+  //micronutrients
+  {
+    id: 'd4c3b2a1-e6f5-0987-dcba-fe6543210987',
+    farmer_id: '910d34a9-b9c0-489a-b7e1-73657d0e4503',
+    name: 'Zinc Sulphate',
+    type: 'micro_nutrient',
+    unit: 'kg',
+    organic: false,
+    description: 'Essential for enzyme activation and healthy plant growth.',
+    image_url:
+      'https://www.agrifert.com.my/wp-content/uploads/2020/03/ZincSulphate.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+  {
+    id: 'c839ff45-9271-46ca-9831-34cb4b053b2d',
+    farmer_id: '910d34a9-b9c0-489a-b7e1-73657d0e4503',
+    name: 'Copper Chelate',
+    type: 'micro_nutrient',
+    unit: 'kg',
+    organic: false,
+    description: 'Improves plant metabolism and disease resistance.',
+    image_url:
+      'https://www.gubbagroup.com/admin/assets/product/Copper-Chelate-EDTA-372.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+  {
+    id: '85be0df2-2115-4b66-ad76-403f7625c83b',
+    farmer_id: '910d34a9-b9c0-489a-b7e1-73657d0e4503',
+    name: 'Iron EDTA',
+    type: 'micro_nutrient',
+    unit: 'kg',
+    organic: false,
+    description: 'Prevents chlorosis and ensures lush, green foliage.',
+    image_url: 'https://www.balajiagro.com/image/Fe-EDTA-12.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+  {
+    id: 'b0e027d2-9d82-4181-9790-d7a2fcdb2b22',
+    farmer_id: '690c54df-470f-4508-89de-db2648d7d260',
+    name: 'Manganese Sulphate',
+    type: 'micro_nutrient',
+    unit: 'kg',
+    organic: false,
+    description: 'Aids in photosynthesis and overall plant vigor.',
+    image_url:
+      'https://cdn11.bigcommerce.com/s-qnz5l7b/images/stencil/1280x1280/products/344/530/ManganeseSulphate__47421.1501182822.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+  {
+    id: '4a3853b2-6e64-45ae-963b-6ee458b6a31c',
+    farmer_id: 'dbd62bb4-618d-454a-9a90-523317ab3734',
+    name: 'Magnesium Chelate',
+    type: 'micro_nutrient',
+    unit: 'kg',
+    organic: false,
+    description: 'Promotes chlorophyll production and crop yield.',
+    image_url:
+      'https://www.plantnutrition.in/admin/assets/product/large/magnesium%20edta%20.jpg',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
+  {
+    id: '2ce93c67-ae7a-4736-9872-97142a2b1fbd',
+    farmer_id: 'dbd62bb4-618d-454a-9a90-523317ab3734',
+    name: 'Boronated Micronutrient Mix',
+    type: 'micro_nutrient',
+    unit: 'kg',
+    organic: true,
+    description: 'Boron-rich formula for flowering and fruit setting.',
+    image_url:
+      'https://www.iffco.in/images/articleImages/boron_logo1600931816.png',
+    created_at: '2025-07-05 09:05:47+05:30',
+  },
 ];
-
-
 
 async function seed() {
   try {

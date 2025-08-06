@@ -1,0 +1,56 @@
+POST http://localhost:3000/bpp/on_init
+Content-Type: application/json
+
+{
+  "context": {
+    "domain": "ondc:agri",
+    "country": "IND",
+    "action": "init",
+    "core_version": "1.2.0",
+    "bap_id": "bap.agri.app",
+    "bap_uri": "https://bap.agri.app",
+    "transaction_id": "REPLACE_WITH_TXN_ID",
+    "message_id": "REPLACE_WITH_TXN_ID",
+    "timestamp": "2025-08-06T12:00:00.000Z"
+  },
+  "message": {
+    "order": {
+      "provider": {
+        "id": "910d34a9-b9c0-489a-b7e1-73657d0e4503"
+      },
+      "items": [
+        {
+          "id": "40cdf86b-e1f9-4a87-8c90-16554b251234",
+          "quantity": {
+            "count": 1
+          },
+          "fulfillment_id": "d2c6b0c9-5a5c-44de-8c3f-75875100a6f2"
+        },
+        {
+          "id": "34799eb9-d699-4433-875b-a8bd4bc0a12a",
+          "quantity": {
+            "count": 2
+          },
+          "fulfillment_id": "d2c6b0c9-5a5c-44de-8c3f-75875100a6f2"
+        },
+        {
+          "id": "22739a34-cf88-4331-8b50-dc0333e083a7",
+          "quantity": {
+            "count": 3
+          },
+          "fulfillment_id": "d2c6b0c9-5a5c-44de-8c3f-75875100a6f2"
+        }
+
+        // Add more items as needed
+      ],
+      "fulfillment": {
+        "end": {
+          "location": {
+            "gps": "17.3850,78.4867",
+            "address": "Sector 14, Lucknow"
+          }
+        }
+      }
+    }
+  }
+}
