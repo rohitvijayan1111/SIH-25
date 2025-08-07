@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import {
   View,
   Text,
@@ -13,6 +14,42 @@ import tw from "tailwind-react-native-classnames";
 
 export default function ProviderItemsScreen({ navigation, route }) {
   const [provider, setProvider] = useState(route.params?.provider);
+  // console.log(provider);
+ const handleInit = async () => {
+  try {
+    const response = await axios.post(
+      'http://localhost:5000/bap/init',
+      {
+        provider_id: provider.provider_id, // ✅ Fix: use provider_id instead of provider.id
+        items: provider.items.map(item => ({
+          id: item.bpp_product_id, // ✅ Use correct key
+          quantity: item.quantity,
+          fulfillment_id: item.fulfillment_id
+        })),
+        delivery_address: {
+          gps: "23.0225,72.5714",
+          address: "Plot 12, SG Road, Ahmedabad, Gujarat"
+        }
+      },
+      {
+        headers: {
+          'x-transaction-id': 'txn-' + Date.now()
+        }
+      }
+    );
+
+    const bpp_response = response.data.bpp_response;
+    console.log("✅ BPP Response:", bpp_response);
+    
+    navigation.navigate("VerifyProductsScreen", { bpp_response });
+
+  } catch (error) {
+    console.error("❌ Init API failed:", error.message);
+    Alert.alert("Failed to verify products. Please try again.");
+  }
+};
+
+
 
   
   const updateCartQuantity = async (item, newQty) => {
@@ -54,7 +91,7 @@ export default function ProviderItemsScreen({ navigation, route }) {
             ? {
                 ...i,
                 quantity: newQty,
-                total_price: newQty * (i.unit_price || 0),
+                total_price: parseFloat((newQty * (i.unit_price || 0)).toFixed(2)),
               }
             : i
         );
@@ -171,14 +208,10 @@ export default function ProviderItemsScreen({ navigation, route }) {
           <Text style={tw`text-xs text-gray-500`}>Includes ₹40 shipping</Text>
         </View>
 
-        <TouchableOpacity
-          style={tw`bg-green-600 py-4 rounded-xl items-center shadow`}
-          onPress={() =>
-            Alert.alert("✅ Order Placed", "Thank you for ordering!")
-          }
-        >
-          <Text style={tw`text-white font-bold text-base`}>Place Order</Text>
-        </TouchableOpacity>
+        <TouchableOpacity onPress={handleInit} style={tw`bg-blue-600 p-4 rounded-xl`}>
+  <Text style={tw`text-white font-bold text-center`}>Verify Products & Continue</Text>
+</TouchableOpacity>
+
       </View>
     </KeyboardAvoidingView>
   );

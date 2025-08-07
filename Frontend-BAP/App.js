@@ -13,6 +13,7 @@ const Stack = createNativeStackNavigator();
 const CartStack = createNativeStackNavigator();
 import ProcurementDetails from './screens/ProcurementDetails';
 import CompletedProcurementDetails from './screens/CompletedProcurementDetails';
+import VerifyProductsScreen from './screens/VerifyProductsScreen';
 
 import ProcurementsScreen from './screens/ProcurementsScreen';
 import CreateProcurementScreen from './screens/CreateProcurementScreen';
@@ -98,6 +99,11 @@ export default function App() {
           component={CreateProcurementScreen}
           options={{ headerShown: false }} // hides nested headers
         />
+          <Stack.Screen
+    name='VerifyProductsScreen'
+    component={VerifyProductsScreen}
+    options={{ title: 'Verify Products' }}
+  />
       </Stack.Navigator>
     </NavigationContainer>
   );
