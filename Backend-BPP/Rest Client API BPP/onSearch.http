@@ -1,7 +1,5 @@
-
-
 ### Search inventory
-POST http://192.168.67.186:3000/bpp/on_search
+POST http://localhost:3000/bpp/on_search
 Content-Type: application/json
 # Authorization: Bearer YOUR_TOKEN_HERE
 

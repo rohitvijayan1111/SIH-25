@@ -82,6 +82,8 @@ exports.addToCart = async (req, res) => {
   }
 };
 
+
+
 exports.updateCartItem = async (req, res) => {
   try {
     const { user_id, bpp_product_id, provider_id, quantity } = req.body;
@@ -104,12 +106,7 @@ exports.updateCartItem = async (req, res) => {
       WHERE user_id = $2 AND bpp_product_id = $3 AND provider_id = $4
     `;
 
-    const result = await db.query(updateQuery, [
-      quantity,
-      user_id,
-      bpp_product_id,
-      provider_id,
-    ]);
+    const result = await db.query(updateQuery, [quantity, user_id, bpp_product_id, provider_id]);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ error: 'Item not found in cart' });
@@ -173,7 +170,7 @@ exports.viewCart = async (req, res) => {
           provider_id,
           provider_name,
           provider_address,
-          items: [],
+          items: []
         };
       }
 
@@ -192,8 +189,9 @@ exports.viewCart = async (req, res) => {
 
     res.status(200).json({
       user_id,
-      cart: Object.values(groupedCart),
+      cart: Object.values(groupedCart)
     });
+
   } catch (error) {
     console.error('View Cart Error:', error.message);
     res.status(500).json({ error: 'Failed to fetch cart' });

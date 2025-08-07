@@ -1,0 +1,49 @@
+
+### Get Top 3 Categories to Cart
+GET http://localhost:5000/cart/getcategories
+Content-Type: application/json
+
+{
+  "user_id": "9ce67171-03a3-4329-9f69-5b9d2c898c95"
+}
+
+### View Cart
+Get http://localhost:5000/cart/view/9ce67171-03a3-4329-9f69-5b9d2c898c95
+Content-Type: application/json'
+
+### Add Item to Cart
+POST http://localhost:5000/cart/add
+Content-Type: application/json
+
+{
+  "user_id": "9ce67171-03a3-4329-9f69-5b9d2c898c95",
+  "bpp_id": "bpp-sample-6",
+  "bpp_product_id": "9aec7171-c03a-4329-98e9-59bd2c8986c2",
+  "provider_id": "2b67a3cf-0ae5-4d77-a9b0-03ec81a646a3",
+  "provider_name": "Provider A",
+  "provider_address": "Provider Address A",
+  "fulfillment_id": null,
+  "item_name": "Copper Sulphate",
+  "quantity": 5,
+  "unit_price": 120.0,
+  "category": "micro_nutrient",
+  "image_url": null
+}
+### delete Item from Cart
+DELETE http://localhost:5000/cart/clear
+Content-Type:application/json
+
+{
+  "user_id": "6696ef79-85e0-4a26-b16d-fc187ae4c629"
+}
+
+### Update Item in Cart
+PUT http://localhost:5000/cart/update
+Content-Type: application/json
+
+{
+  "user_id": "9ce67171-03a3-4329-9f69-5b9d2c898c95",
+  "bpp_product_id": "9aec7171-c03a-4329-98e9-59bd2c8986c2",
+  "provider_id": "2b67a3cf-0ae5-4d77-a9b0-03ec81a646a3",
+  "quantity": 10
+}
