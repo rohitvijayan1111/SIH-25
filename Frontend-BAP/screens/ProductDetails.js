@@ -36,9 +36,9 @@ export default function ProductDetailsScreen({ route, navigation }) {
       body: JSON.stringify({
         productName: "",
         category: categoryName,
-        lat: 10.7867,
-        lon: 79.1378,
-        radius: 300,
+        lat:23.2599,
+        lon:79.0882,
+        radius:1000,
       }),
     });
 
@@ -142,7 +142,7 @@ export default function ProductDetailsScreen({ route, navigation }) {
   const handleAddToCart = async (item) => {
     try {
        if (item.unit_price == 0) {
-    Alert.alert("Missing Price", "This item has no price. Please select a batch or try another product.");
+    console.log("Missing Price", "This item has no price. Please select a batch or try another product.");
     return;
   }
       const response = await fetch("http://localhost:5000/cart/add", {

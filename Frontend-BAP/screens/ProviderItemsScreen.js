@@ -23,7 +23,7 @@ export default function ProviderItemsScreen({ navigation, route }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id: "d7c6b53e-9472-4c23-bc76-e8c29718383e",
+        user_id: "a985baac-9028-4dc1-bbd9-a6f3aae49ef5",
         bpp_product_id: item.bpp_product_id,
         provider_id: provider.provider_id,
         quantity: newQty,
