@@ -19,8 +19,8 @@ const categoryList = [
   { id: 'micro', name: 'Micro Nutrient' },
   { id: 'fertilizer', name: 'Fertilizer' },
   { id: 'fungicide', name: 'Fungicide' },
-  { id: 'growth-promoter', name: 'Growth Promoter' },
-  { id: 'growth-regulators', name: 'Growth Regulators' },
+  { id: 'growth_promoter', name: 'Growth Promoter' },
+  { id: 'growth_regulator', name: 'Growth Regulators' },
   { id: 'herbicide', name: 'Herbicide' },
   { id: 'land', name: 'Land Lease & Sale' },
 ];
@@ -30,7 +30,7 @@ const HomePage = ({navigation}) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-
+  console.log(SERVER_URL);
   useEffect(() => {
     loadInitialCategories();
   }, []);
@@ -45,7 +45,7 @@ const HomePage = ({navigation}) => {
 
   const fetchCategoryProducts = async (category) => {
     try {
-      console.log(SERVER_URL);
+      
       const response = await fetch(`${SERVER_URL}/bap/search`, {
         method: 'POST',
         headers: {
@@ -54,9 +54,9 @@ const HomePage = ({navigation}) => {
         body: JSON.stringify({
           productName: '',
           category: category,
-          lat: '13.0827',
-          lon: '80.2707',
-          radius: 300,
+          lat: '23.2599',
+          lon: '79.0882',
+          radius: 1000,
         }),
       });
      if (!response.ok) {
@@ -104,9 +104,9 @@ const HomePage = ({navigation}) => {
         body: JSON.stringify({
           productName: name,
           category: "",
-          lat: "13.0827",
-          lon: "80.2707",
-          radius: 300,
+          lat: "23.2599",
+          lon: "79.0882",
+          radius: 1000,
         }),
       });
 
@@ -141,9 +141,9 @@ const HomePage = ({navigation}) => {
        body: JSON.stringify({
   productName: '',
   category: categoryID.toLowerCase(), // ✅ Fixed casing
-  lat: '13.0827',
-  lon: '80.2707',
-  radius: 300,
+  lat: '23.2599',
+  lon: '79.0882',
+  radius: 1000,
 })
 ,
       });

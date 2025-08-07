@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
+import { SERVER_URL } from '@env';
 import tw from "tailwind-react-native-classnames";
 
 export default function ViewCartScreen({ navigation }) {
@@ -16,7 +17,7 @@ export default function ViewCartScreen({ navigation }) {
   const fetchCartData = async () => {
     try {
       const response = await fetch(
-        `${SERVER_URL}/cart/view/d7c6b53e-9472-4c23-bc76-e8c29718383e`
+        `${SERVER_URL}/cart/view/a985baac-9028-4dc1-bbd9-a6f3aae49ef5`
       );
       const json = await response.json();
       setCartData(json.cart || []);

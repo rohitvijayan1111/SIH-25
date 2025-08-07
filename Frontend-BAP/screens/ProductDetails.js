@@ -90,12 +90,12 @@ export default function ProductDetailsScreen({ route, navigation }) {
       });
 
       const json = await res.json();
-     console.log(json);
+    //  console.log(json);
       // ✅ Safe access to nested response
       if (json?.bpp_response?.message?.catalog) {
         setProductData(json.bpp_response.message.catalog);
         const mainItem =json.bpp_response.message.catalog.providers[0].items[0];
-      
+        // console.log("mainItem",mainItem);
         await fetchSimilarProducts(mainItem.category_id);
       } else {
         throw new Error("Invalid response format from BAP");
@@ -134,13 +134,17 @@ export default function ProductDetailsScreen({ route, navigation }) {
 
   const provider = productData.providers[0];
   const item = provider.items[0];
-  // console.log("items",item);
+  // console.log("items",item.category_id);
   const fulfillment = productData.fulfillments.find(
     (f) => f.id === item.fulfillment_id
   );
 
   const handleAddToCart = async (item) => {
     try {
+       if (item.unit_price == 0) {
+    Alert.alert("Missing Price", "This item has no price. Please select a batch or try another product.");
+    return;
+  }
       const response = await fetch("http://localhost:5000/cart/add", {
         method: "POST",
         headers: {
@@ -150,7 +154,7 @@ export default function ProductDetailsScreen({ route, navigation }) {
       });
       
       const data = await response.json();
-      
+      console.log("cart",item);
       if (response.ok) {
         console.log("cart",item);
         console.log("✅ Cart added successfully:", data);
@@ -289,7 +293,7 @@ export default function ProductDetailsScreen({ route, navigation }) {
       style={tw`bg-green-600 py-4 rounded-2xl mt-8 items-center shadow-md`}
       onPress={() =>
         handleAddToCart({
-          user_id: "d7c6b53e-9472-4c23-bc76-e8c29718383e", // Replace dynamically
+          user_id: "a985baac-9028-4dc1-bbd9-a6f3aae49ef5", // Replace dynamically
           bpp_id: productData?.bpp_id || "agri.bpp",
           bpp_product_id: item?.id,
           provider_id: provider?.id,
@@ -300,6 +304,7 @@ export default function ProductDetailsScreen({ route, navigation }) {
           quantity: quantity,
           unit_price: selectedPrice|| 0,
           image_url: item?.descriptor?.image|| "" ,
+          category:item?.category_id,
         })
       }
       activeOpacity={0.85}

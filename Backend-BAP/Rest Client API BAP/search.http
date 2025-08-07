@@ -5,8 +5,8 @@ Content-Type: application/json
 
 {
     "productName":"",
-    "category":"",
-    "lat":23.0225,
-    "lon":72.5714,
-    "radius":100
+    "category":" herbicide",
+    "lat":23.2599,
+    "lon":79.0882,
+    "radius":1000
 }
