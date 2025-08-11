@@ -7,6 +7,8 @@ import HomePage from './screens/HomePage'; // Make sure path is correct
 import ProductDetailsScreen from './screens/ProductDetails'; // adjust path if needed
 import ViewCartScreen from './screens/ViewCartScreen';
 import ProviderItemsScreen from './screens/ProviderItemsScreen';
+import PaymentScreen from './screens/PaymentScreen';
+// import ConfirmOrderScreen from './ConfirmOrderScreen';
 import './global.css';
 import PaymentDetails from './screens/PaymentDetails';
 const Stack = createNativeStackNavigator();
@@ -74,6 +76,7 @@ export default function App() {
           component={CartStackScreen}
           options={{ headerShown: false }} // hides nested headers
         />
+        <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
         <Stack.Screen
           name='Procurements'
           component={ProcurementsScreen}

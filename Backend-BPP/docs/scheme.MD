@@ -3,7 +3,7 @@ Great! Since you now want to **create the database and use UUIDs** (instead of `
 ---
 
 ## ✅ Final SQL Schema with UUIDs for `bpp_agri_supplier_db`
-
+i ne
 > 🔐 Uses `gen_random_uuid()` from the `pgcrypto` extension.
 
 ### 🔹 STEP 1: Create Database and Enable UUID Support

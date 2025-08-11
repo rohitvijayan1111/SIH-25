@@ -14,7 +14,8 @@ import tw from "tailwind-react-native-classnames";
 
 export default function ProviderItemsScreen({ navigation, route }) {
   const [provider, setProvider] = useState(route.params?.provider);
-  // console.log(provider);
+  const isOrganic=true;
+  console.log(provider);
  const handleInit = async () => {
   try {
     const response = await axios.post(
@@ -122,97 +123,137 @@ export default function ProviderItemsScreen({ navigation, route }) {
     0
   );
 
-  return (
-    <KeyboardAvoidingView
-      style={tw`flex-1`}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+ return (
+  <KeyboardAvoidingView
+    style={tw`flex-1 bg-green-50`}
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+  >
+    <ScrollView style={tw`p-4`} contentContainerStyle={{ paddingBottom: 140 }}>
+      {/* Header */}
+      <View style={tw`bg-green-100 p-5 rounded-2xl mb-6 shadow-sm`}>
+        <Text style={tw`text-xl font-bold text-green-800 mb-1`}>
+          {provider.provider_name}
+        </Text>
+        <Text style={tw`text-sm text-green-700`}>
+          {provider.provider_address}
+        </Text>
+      </View>
+
+      {/* Product List */}
+      {(provider.items || []).map((item, index) => (
+        <TouchableOpacity
+          key={index}
+          activeOpacity={0.85}
+          style={[
+            tw`bg-white p-4 mb-4 rounded-2xl border border-green-100 shadow-sm`,
+          ]}
+          onPress={() =>
+            navigation.navigate("ProductDetails", {
+              item_id: item.bpp_product_id,
+            })
+          }
+        >
+          <View style={tw`flex-row items-center`}>
+            {/* Thumbnail */}
+           <View style={tw`relative mr-4`}>
+  <Image
+    source={{ uri: item.image_url || "https://via.placeholder.com/60" }}
+    style={tw`w-16 h-16 rounded-xl`}
+  />
+  {isOrganic && (
+    <View
+      style={[
+        tw`absolute bg-green-200`,
+        {
+          top: -8,           // move up outside image
+          right: -10,        // move right outside image
+          paddingHorizontal: 10,
+          paddingVertical: 4,
+          borderRadius: 20,  // pill shape
+          shadowColor: '#000',
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 3,
+        },
+      ]}
     >
-      <ScrollView style={tw`p-4 bg-gray-50`}>
-        {/* Header */}
-        <View style={tw`bg-green-100 p-4 rounded-lg mb-4 shadow`}>
-          <Text style={tw`text-xl font-bold text-green-800 mb-1`}>
-            {provider.provider_name}
-          </Text>
-          <Text style={tw`text-sm text-green-700`}>
-            {provider.provider_address}
-          </Text>
-        </View>
-
-        {(provider.items || []).map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={tw`bg-white p-4 mb-3 rounded-xl shadow-md border border-gray-200`}
-            onPress={() =>
-              navigation.navigate("ProductDetails", {
-                item_id: item.bpp_product_id,
-              })
-            }
-          >
-            <View style={tw`flex-row`}>
-              <Image
-                source={{
-                  uri: item.image_url || "https://via.placeholder.com/60",
-                }}
-                style={tw`w-16 h-16 rounded-lg mr-4`}
-              />
-              <View style={tw`flex-1`}>
-                <Text style={tw`font-semibold text-gray-800`}>
-                  {item.item_name}
-                </Text>
-
-                {/* Quantity Controls */}
-<View style={tw`flex-row items-center mt-2 justify-start`}>
-  <TouchableOpacity
-    onPress={() => updateCartQuantity(item, item.quantity - 1)}
-    style={tw`w-10 h-10 rounded-full bg-gray-200 justify-center items-center shadow mr-3`}
-    activeOpacity={0.7}
-  >
-    <Text style={tw`text-2xl font-semibold text-gray-700`}>−</Text>
-  </TouchableOpacity>
-
-  <Text style={tw`text-lg font-bold text-gray-800 mx-2`}>
-    {item.quantity}
-  </Text>
-
-  <TouchableOpacity
-    onPress={() => updateCartQuantity(item, item.quantity + 1)}
-    style={tw`w-10 h-10 rounded-full bg-gray-200 justify-center items-center shadow ml-3`}
-    activeOpacity={0.7}
-  >
-    <Text style={tw`text-2xl font-semibold text-gray-700`}>+</Text>
-  </TouchableOpacity>
+      <Text style={tw`text-green-800 text-xs font-semibold`}>Organic</Text>
+    </View>
+  )}
 </View>
 
 
-                <Text style={tw`text-sm text-gray-500`}>
+            {/* Product Info and Controls */}
+            <View style={tw`flex-1`}>
+              <Text style={tw`font-semibold text-gray-800 text-lg`}>
+                {item.item_name}
+              </Text>
+
+              {/* Quantity Controls */}
+              <View style={tw`flex-row items-center mt-3`}>
+                <TouchableOpacity
+                  onPress={() => updateCartQuantity(item,item.quantity - 1)}
+                  style={tw`w-10 h-10 rounded-full bg-gray-200 justify-center items-center shadow mr-4`}
+                  activeOpacity={0.7}
+                >
+                  <Text style={tw`text-2xl font-semibold text-gray-700`}>−</Text>
+                </TouchableOpacity>
+
+                <Text style={tw`text-lg font-bold text-gray-800 mx-2`}>
+                  {item.quantity}
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() => updateCartQuantity(item, item.quantity + 1)}
+                  style={tw`w-10 h-10 rounded-full bg-gray-200 justify-center items-center shadow ml-4`}
+                  activeOpacity={0.7}
+                >
+                  <Text style={tw`text-2xl font-semibold text-gray-700`}>+</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={tw`flex-row justify-between mt-2 items-center`}>
+                <Text style={tw`text-sm text-green-700`}>
                   Unit Price: ₹{item.unit_price}
                 </Text>
-                <Text style={tw`text-green-700 font-bold mt-1`}>
+                <Text style={tw`text-green-800 font-bold text-lg`}>
                   ₹{item.total_price}
                 </Text>
               </View>
             </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+          </View>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
 
-      {/* Sticky Footer */}
-      <View
-        style={tw`absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3`}
-      >
-        <View style={tw`bg-gray-100 p-4 rounded-lg shadow-sm mb-3`}>
-          <Text style={tw`font-semibold text-gray-800`}>
-            Total Amount: ₹{totalMRP + 10}
-          </Text>
-          <Text style={tw`text-xs text-gray-500`}>Includes ₹40 shipping</Text>
-        </View>
-
-        <TouchableOpacity onPress={handleInit} style={tw`bg-blue-600 p-4 rounded-xl`}>
-  <Text style={tw`text-white font-bold text-center`}>Verify Products & Continue</Text>
-</TouchableOpacity>
-
+    {/* Sticky Footer */}
+    <View
+      style={[
+        tw`absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-5 py-4`,
+        { shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 8, elevation: 10 }
+      ]}
+    >
+      <View style={tw`bg-gray-100 p-4 rounded-xl shadow-sm mb-4`}>
+        <Text style={tw`font-semibold text-gray-800 text-lg`}>
+          Total Amount: ₹{totalMRP + 10}
+        </Text>
+        <Text style={tw`text-xs text-gray-500`}>
+          Includes ₹40 shipping
+        </Text>
       </View>
-    </KeyboardAvoidingView>
-  );
+
+      <TouchableOpacity
+        onPress={handleInit}
+        activeOpacity={0.9}
+        style={tw`bg-green-600 p-4 rounded-full shadow-lg`}
+      >
+        <Text style={tw`text-white font-bold text-center text-lg`}>
+          Verify Products & Continue
+        </Text>
+      </TouchableOpacity>
+    </View>
+  </KeyboardAvoidingView>
+);
+
 }

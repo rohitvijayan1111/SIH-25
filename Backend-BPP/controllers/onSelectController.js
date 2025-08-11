@@ -2,75 +2,87 @@ const db = require('../config/db');
 
 exports.handleSelect = async (req, res) => {
   try {
-   const item = req.body.message?.catalog?.items?.[0];
-
+    const item = req.body.message?.catalog?.items?.[0];
     const productId = item?.id;
     if (!productId) {
       return res.status(400).json({ error: 'Product ID missing in request' });
     }
-  const query = ` 
-  SELECT 
-    p.id AS product_id,
-    p.name AS product_name,
-    p.type AS category_id,
-    p.unit,
-    p.organic,
-    p.description,
-    p.image_url,
 
-    pb.id AS batch_id,
-    pb.price_per_unit,
-    pb.quantity,
-    pb.manufactured_on,
-    pb.expiry_date,
+    const query = `
+      SELECT 
+        p.id AS product_id,
+        p.name AS product_name,
+        p.type AS category_id,
+        p.unit,
+        p.organic,
+        p.description,
+        p.image_url,
 
-    cf.fulfillment_code,
-    cf.type AS fulfillment_type,
-    cf.gps AS fulfillment_gps,
-    cf.address AS fulfillment_address,
+        pb.id AS batch_id,
+        pb.price_per_unit,
+        pb.quantity AS batch_quantity,
+        pb.manufactured_on,
+        pb.expiry_date,
 
-    l.location_code AS location_id,
-    l.gps AS location_gps,
-    l.address AS location_address,
+        SUM(pb.quantity) OVER (PARTITION BY p.id) AS total_quantity, -- ✅ total for the product
 
-    f.id AS provider_id,
-    f.name AS provider_name
+        cf.fulfillment_code,
+        cf.type AS fulfillment_type,
+        cf.gps AS fulfillment_gps,
+        cf.address AS fulfillment_address,
 
-  FROM products p
-  INNER JOIN product_batches pb 
-    ON p.id = pb.product_id
-  INNER JOIN catalog_fulfillments cf 
-    ON p.farmer_id = cf.farmer_id
-  INNER JOIN locations l 
-    ON p.farmer_id = l.farmer_id
-  INNER JOIN farmers f 
-    ON p.farmer_id = f.id
+        l.location_code AS location_id,
+        l.gps AS location_gps,
+        l.address AS location_address,
 
-  WHERE p.id = $1
-    AND (pb.expiry_date IS NULL OR pb.expiry_date > CURRENT_DATE)
-    AND pb.quantity > 0
+        f.id AS provider_id,
+        f.name AS provider_name
 
-  ORDER BY pb.manufactured_on DESC
-  LIMIT 5;
-`;
+      FROM products p
+      INNER JOIN product_batches pb 
+        ON p.id = pb.product_id
+      INNER JOIN catalog_fulfillments cf 
+        ON p.farmer_id = cf.farmer_id
+      INNER JOIN locations l 
+        ON p.farmer_id = l.farmer_id
+      INNER JOIN farmers f 
+        ON p.farmer_id = f.id
 
+      WHERE p.id = $1
+        AND (pb.expiry_date IS NULL OR pb.expiry_date > CURRENT_DATE)
+        AND pb.quantity > 0
+
+      ORDER BY pb.manufactured_on DESC
+      LIMIT 5;
+    `;
 
     const { rows } = await db.query(query, [productId]);
-    console.log(rows);
     if (rows.length === 0) {
       return res.status(404).json({ error: 'Product not found or not available' });
     }
 
-   const firstRow = rows[0];
+    const firstRow = rows[0];
 
-    // 🔁 Collect batches from all rows
-    const batches = rows.map(row => ({
-      price: {
-        currency: 'INR',
-        value: Number(row.price_per_unit).toFixed(2)
-      },
-      expiry_date: row.expiry_date
-    }));
+   // 🔁 Collect batches from all rows, each with its own quantity
+const batches = rows.map(row => ({
+  id: row.batch_id,
+  price: {
+    currency: 'INR',
+    value: Number(row.price_per_unit).toFixed(2)
+  },
+  quantity: {
+    available: {
+      count: Number(row.batch_quantity) // ✅ per-batch quantity
+    },
+    unitized: {
+      measure: {
+        unit: firstRow.unit || 'unit'
+      }
+    }
+  },
+  expiry_date: row.expiry_date ? new Date(row.expiry_date).toISOString() : null
+}));
+
 
     const itemData = {
       id: firstRow.product_id,
@@ -83,25 +95,19 @@ exports.handleSelect = async (req, res) => {
       category_id: firstRow.category_id,
       location_id: firstRow.location_id,
       quantity: {
-        available: {
-          count: rows.reduce((sum, r) => sum + Number(r.quantity), 0)
-        },
-        unitized: {
-          measure: {
-            unit: firstRow.unit || 'unit'
-          }
-        }
-      },
-      // price: {
-      //   currency: 'INR',
-      //   value: Number(firstRow.price_per_unit).toFixed(2) // main price
-      // },
-      batches, // ✅ include all batches
+  available: {
+    count: rows.reduce((sum, r) => sum + Number(r.batch_quantity), 0)
+  },
+  unitized: {
+    measure: {
+      unit: firstRow.unit || 'unit'
+    }
+  }
+}
+,
+      batches,
       tags: [
-        {
-          code: 'organic',
-          value: firstRow.organic ? 'true' : 'false'
-        }
+        { code: 'organic', value: firstRow.organic ? 'true' : 'false' }
       ],
       fulfillment_id: firstRow.fulfillment_code,
       matched: true,
@@ -110,9 +116,7 @@ exports.handleSelect = async (req, res) => {
 
     const provider = {
       id: firstRow.provider_id,
-      descriptor: {
-        name: firstRow.provider_name
-      },
+      descriptor: { name: firstRow.provider_name },
       locations: [
         {
           id: firstRow.location_id,
