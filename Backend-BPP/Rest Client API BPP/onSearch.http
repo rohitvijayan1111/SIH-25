@@ -1,0 +1,31 @@
+### Search inventory
+POST http://localhost:3000/bpp/on_search
+Content-Type: application/json
+# Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "intent": {
+    "item": {
+      "descriptor": {
+        "name": ""
+      }
+    },
+    "category": {
+    "id": "herbicide"
+    },
+    "fulfillment": {
+      "end": {
+        "location": {
+          "gps": "23.0225,72.5714"
+        }
+      }
+    }
+  },
+  "radius": 100
+}
+
+
+
+
+
+

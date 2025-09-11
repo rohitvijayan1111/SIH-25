@@ -1,0 +1,109 @@
+Here's the **fully fixed and cleaned all-in-one `curl` code block** using **real values** from your `/on_search` response. All headers, syntax, and JSON payloads are properly formatted and ready to execute.
+
+---
+
+### ✅ **1. Add to Cart** (Product: *Corn Gluten Meal*)
+
+```bash
+curl -X POST http://localhost:3000/cart/add \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "user123",
+    "bpp_id": "agri.bpp",
+    "bpp_product_id": "2dc41188-64b0-4b14-93de-f8121c774b88",
+    "provider_id": "farmer-dbd62bb4-618d-454a-9a90-523317ab3734",
+    "provider_name": "Raj Patel",
+    "provider_address": "Plot 12, SG Road, Ahmedabad, Gujarat",
+    "fulfillment_id": "FUL001",
+    "item_name": "Corn Gluten Meal",
+    "quantity": 2,
+    "unit_price": 22.20,
+    "image_url": "https://www.gulshanindia.com/images/corn_gulten_side.jpg",
+    "category": "HERBICIDE"
+}'
+```
+
+---
+
+### ✅ **2. Update Cart Item** (Increase quantity)
+
+```bash
+curl -X PATCH http://localhost:3000/cart/update \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "user123",
+    "bpp_product_id": "2dc41188-64b0-4b14-93de-f8121c774b88",
+    "provider_id": "farmer-dbd62bb4-618d-454a-9a90-523317ab3734",
+    "quantity": 3
+}'
+```
+
+---
+
+### ✅ **3. Remove Cart Item** (Set quantity to 0)
+
+```bash
+curl -X PATCH http://localhost:3000/cart/update \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "user123",
+    "bpp_product_id": "2dc41188-64b0-4b14-93de-f8121c774b88",
+    "provider_id": "farmer-dbd62bb4-618d-454a-9a90-523317ab3734",
+    "quantity": 0
+}'
+```
+
+---
+
+### ✅ **4. View Cart**
+
+```bash
+curl -X GET http://localhost:3000/cart/view/user123
+```
+
+---
+
+### ✅ **5. Clear Entire Cart**
+
+```bash
+curl -X DELETE http://localhost:3000/cart/clear \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "user123"
+}'
+```
+
+---
+
+### ✅ **6. Clear Cart for a Specific Provider**
+
+```bash
+curl -X DELETE http://localhost:3000/cart/clear \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "user123",
+    "provider_id": "farmer-dbd62bb4-618d-454a-9a90-523317ab3734"
+}'
+```
+
+---
+
+### ✅ **7. Get Top Categories**
+
+```bash
+curl -X GET http://localhost:3000/cart/top-categories/user123
+```
+
+---
+
+Would you like me to:
+
+* 🔁 Generate curl calls for more products from `/on_search` like:
+
+  * *Glyphosate 41% SL*
+  * *Pendimethalin 30% EC*
+  * *Paraquat 24% SL*
+* 📦 Export this as a **Postman Collection**
+* 📘 Provide a **Swagger/OpenAPI spec**
+
+Let me know what you'd like next!

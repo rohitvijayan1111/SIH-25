@@ -1,0 +1,12 @@
+
+
+POST http://localhost:5000/bap/search
+Content-Type: application/json
+
+{
+    "productName":"",
+    "category":" herbicide",
+    "lat":23.2599,
+    "lon":79.0882,
+    "radius":1000
+}
