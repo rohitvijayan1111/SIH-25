@@ -1,6 +1,6 @@
 
 
-POST http://localhost:5000/bap/search
+POST http://192.168.39.249:5000/bap/search
 Content-Type: application/json
 
 {

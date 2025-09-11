@@ -1,5 +1,5 @@
 
-POST http://localhost:5000/bap/select
+POST http://192.168.39.249:5000/bap/select
 Content-Type: application/json
 
 {

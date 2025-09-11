@@ -14,6 +14,7 @@ exports.handleSelect = async (req, res) => {
         p.name AS product_name,
         p.type AS category_id,
         p.unit,
+         p.weight AS weight_per_unit, -- ✅ added here
         p.organic,
         p.description,
         p.image_url,
@@ -70,16 +71,15 @@ const batches = rows.map(row => ({
     currency: 'INR',
     value: Number(row.price_per_unit).toFixed(2)
   },
-  quantity: {
-    available: {
-      count: Number(row.batch_quantity) // ✅ per-batch quantity
-    },
-    unitized: {
-      measure: {
-        unit: firstRow.unit || 'unit'
+   quantity: {
+      available: { count: row.batch_quantity },
+      unitized: {
+        measure: {
+          unit: row.unit || 'unit',
+          weight_per_unit: row.weight_per_unit  // ✅ Added here
+        }
       }
-    }
-  },
+    },
   expiry_date: row.expiry_date ? new Date(row.expiry_date).toISOString() : null
 }));
 
@@ -98,11 +98,13 @@ const batches = rows.map(row => ({
   available: {
     count: rows.reduce((sum, r) => sum + Number(r.batch_quantity), 0)
   },
-  unitized: {
-    measure: {
-      unit: firstRow.unit || 'unit'
-    }
+ unitized: {
+  measure: {
+    unit: firstRow.unit || 'unit',
+    weight_per_unit: firstRow.weight_per_unit || 0
   }
+}
+
 }
 ,
       batches,

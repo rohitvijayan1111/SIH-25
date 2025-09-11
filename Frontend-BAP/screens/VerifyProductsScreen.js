@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { Platform ,View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
+import { SERVER_URL,mobile_url } from '@env';
 
 const VerifyProductsScreen = ({ route, navigation }) => {
   const { bpp_response } = route.params;
@@ -50,7 +51,7 @@ const VerifyProductsScreen = ({ route, navigation }) => {
       weight_kg: 5
     };
 
-    const response = await fetch("http://localhost:5000/logistic/search", {
+    const response = await fetch(`${SERVER_URL}/logistic/search`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -70,37 +71,37 @@ const VerifyProductsScreen = ({ route, navigation }) => {
   
 
   return (
-  <View style={tw`flex-1 bg-gray-50 relative`}>
+  <View style={tw`flex-1 bg-green-50 relative`}>
     <ScrollView
-      style={tw`px-4 pt-4`}
-      contentContainerStyle={{ paddingBottom: 140 }}
+      style={tw`px-4 pt-5`}
+      contentContainerStyle={{ paddingBottom: 160 }}
       showsVerticalScrollIndicator={false}
     >
       {/* 🌾 Provider Info */}
-      <View style={tw`mb-5`}>
-        <Text style={tw`text-2xl font-bold text-green-800`}>
+      <View style={tw`mb-6 bg-green-100 p-5 rounded-2xl shadow-md border border-green-200`}>
+        <Text style={tw`text-2xl font-bold text-green-900`}>
           {provider.descriptor?.name || "Unknown Provider"}
         </Text>
-        <Text style={tw`text-sm text-gray-600 mt-1`} numberOfLines={2}>
+        <Text style={tw`text-sm text-green-800 mt-1`} numberOfLines={2}>
           📍 {fulfillment.start?.location?.address || "No address"}
         </Text>
       </View>
 
       {/* 🚚 Fulfillment Info */}
-      <View style={tw`bg-white p-4 rounded-2xl shadow-sm mb-5 border border-gray-100`}>
-        <Text style={tw`text-base font-semibold text-green-700 mb-2`}>
+      <View style={tw`bg-white p-5 rounded-2xl shadow-sm mb-6 border border-green-100`}>
+        <Text style={tw`text-lg font-semibold text-green-700 mb-3`}>
           🚚 Fulfillment Info
         </Text>
-        <Text style={tw`text-sm text-gray-700`}>Type: {fulfillment.type || 'N/A'}</Text>
-        <Text style={tw`text-sm text-gray-700`}>📍 Pickup: {fulfillment.start?.location?.address || 'N/A'}</Text>
-        <Text style={tw`text-sm text-gray-700`}>🏁 Delivery: {fulfillment.end?.location?.address || 'N/A'}</Text>
+        <Text style={tw`text-sm text-gray-700 mb-1`}>Type: {fulfillment.type || 'N/A'}</Text>
+        <Text style={tw`text-sm text-gray-700 mb-1`}>📍 Pickup: {fulfillment.start?.location?.address || 'N/A'}</Text>
+        <Text style={tw`text-sm text-gray-700 mb-1`}>🏁 Delivery: {fulfillment.end?.location?.address || 'N/A'}</Text>
         <Text style={tw`text-sm text-gray-700`}>
           ⏳ ETA: {fulfillment.estimated_delivery ? new Date(fulfillment.estimated_delivery).toLocaleString() : "N/A"}
         </Text>
       </View>
 
       {/* 🧾 Verified Products */}
-      <Text style={tw`text-lg font-semibold text-green-800 mb-3`}>
+      <Text style={tw`text-xl font-bold text-green-900 mb-4`}>
         🧾 Verified Products
       </Text>
       {items.map((item, idx) => {
@@ -110,7 +111,7 @@ const VerifyProductsScreen = ({ route, navigation }) => {
         const imageUrl = item.descriptor?.images?.[0] || "https://via.placeholder.com/60";
 
         return (
-          <View key={idx} style={tw`bg-white p-4 rounded-2xl shadow-sm mb-4 border border-gray-100`}>
+          <View key={idx} style={tw`bg-white p-4 rounded-2xl shadow-sm mb-4 border border-green-100`}>
             <View style={tw`flex-row`}>
               {/* 🖼 Image + Organic Badge */}
               <View style={tw`relative mr-4`}>
@@ -120,8 +121,8 @@ const VerifyProductsScreen = ({ route, navigation }) => {
                   resizeMode="cover"
                 />
                 {isOrganic && (
-                  <View style={tw`absolute -top-2 -right-2 bg-green-100 px-2 py-0.5 rounded-full shadow-sm`}>
-                    <Text style={tw`text-green-700 text-xs font-semibold`}>Organic</Text>
+                  <View style={tw`absolute -top-2 -right-2 bg-green-200 px-2 py-0.5 rounded-full shadow`}>
+                    <Text style={tw`text-green-900 text-xs font-semibold`}>Organic</Text>
                   </View>
                 )}
               </View>
@@ -131,13 +132,13 @@ const VerifyProductsScreen = ({ route, navigation }) => {
                 <Text style={tw`font-semibold text-gray-900 text-sm mb-1`}>
                   {item.descriptor?.name}
                 </Text>
-                <Text style={tw`text-xs text-gray-600`}>
+                <Text style={tw`text-xs text-gray-700 mb-1`}>
                   Qty: {item.quantity?.count} {unit}
                 </Text>
-                <Text style={tw`text-xs text-gray-600`}>
+                <Text style={tw`text-xs text-gray-700 mb-1`}>
                   Unit Price: ₹{parseFloat(item.price?.value || 0).toFixed(2)}
                 </Text>
-                <Text style={tw`text-sm text-green-700 font-semibold mt-1`}>
+                <Text style={tw`text-sm text-green-800 font-semibold mt-1`}>
                   Subtotal: ₹{subtotal}
                 </Text>
               </View>
@@ -147,8 +148,8 @@ const VerifyProductsScreen = ({ route, navigation }) => {
       })}
 
       {/* 💰 Price Summary */}
-      <View style={tw`bg-white p-4 rounded-2xl shadow-sm mb-5 border border-gray-100`}>
-        <Text style={tw`text-lg font-semibold text-green-800 mb-3`}>
+      <View style={tw`bg-white p-5 rounded-2xl shadow-md mb-6 border border-green-100`}>
+        <Text style={tw`text-lg font-bold text-green-900 mb-3`}>
           💰 Price Summary
         </Text>
         {(quote.breakup || []).map((entry, idx) => (
@@ -159,37 +160,24 @@ const VerifyProductsScreen = ({ route, navigation }) => {
             </Text>
           </View>
         ))}
-        <View style={tw`border-t border-gray-200 mt-3 pt-3 flex-row justify-between`}>
+        <View style={tw`border-t border-green-200 mt-3 pt-3 flex-row justify-between`}>
           <Text style={tw`text-base font-bold text-gray-800`}>Total</Text>
-          <Text style={tw`text-base font-bold text-green-700`}>
+          <Text style={tw`text-base font-bold text-green-900`}>
             ₹{parseFloat(quote.price?.value || 0).toFixed(2)}
           </Text>
         </View>
       </View>
 
-      {/* 💳 Payment Info */}
-      {/* <View style={tw`bg-white p-4 rounded-2xl shadow-sm mb-6 border border-gray-100`}>
-        <Text style={tw`text-lg font-semibold text-green-800 mb-3`}>
-          💳 Payment Details
-        </Text>
-        <Text style={tw`text-sm text-gray-700`}>Mode: {payment.type || 'N/A'}</Text>
-        <Text style={tw`text-sm text-gray-700`}>Collected By: {payment.collected_by || 'N/A'}</Text>
-        <Text style={tw`text-sm text-gray-700`}>Status: {payment.status || 'N/A'}</Text>
-        <Text style={tw`text-sm text-gray-700`}>
-          Time to Pay: {payment.ttl?.replace('PT', '').toLowerCase() || 'N/A'}
-        </Text>
-      </View> */}
-
-       {logisticsOptions.length > 0 && (
-        <View style={tw`bg-white p-5 rounded-2xl shadow-md mb-6 border border-gray-100`}>
-          <Text style={tw`text-xl font-bold text-gray-900 mb-4`}>
+      {/* 🚚 Delivery Options */}
+      {logisticsOptions.length > 0 && (
+        <View style={tw`bg-white p-5 rounded-2xl shadow-md mb-6 border border-green-100`}>
+          <Text style={tw`text-xl font-bold text-green-900 mb-4`}>
             Delivery Options
           </Text>
 
           {logisticsOptions.map((provider, idx) => (
             <View key={idx} style={tw`mb-5`}>
-              {/* Provider Card */}
-              <View style={tw`bg-white rounded-xl shadow-sm border border-gray-200 p-4`}>
+              <View style={tw`bg-white rounded-xl shadow-sm border border-green-200 p-4`}>
                 <Text style={tw`text-lg font-semibold text-gray-800 mb-2`}>
                   {provider.descriptor?.name}
                 </Text>
@@ -216,15 +204,13 @@ const VerifyProductsScreen = ({ route, navigation }) => {
                       style={tw`mt-3 rounded-xl p-4 shadow-sm border ${
                         isSelected
                           ? "bg-green-100 border-green-500"
-                          : "bg-gray-50 border-gray-200"
+                          : "bg-green-50 border-green-200"
                       }`}
                     >
-                      {/* Delivery Name */}
                       <Text style={tw`text-base font-medium text-gray-900`}>
                         {option.descriptor?.name}
                       </Text>
 
-                      {/* Price & ETA Row */}
                       <View style={tw`flex-row justify-between mt-2`}>
                         <Text style={tw`text-sm text-gray-700`}>
                           Price: ₹{parseFloat(option.price?.value || 0).toFixed(2)}
@@ -247,20 +233,19 @@ const VerifyProductsScreen = ({ route, navigation }) => {
     {/* ✅ Fixed Bottom CTA */}
     <View
       style={[
-        tw`absolute left-0 right-0 bg-white border-t border-gray-200 px-4 pt-2`,
-        { bottom: Platform.OS === 'ios' ? 28 : 0, paddingBottom: 16 }
+        tw`absolute left-0 right-0 bg-green-100 border-t border-green-200 px-4 pt-3`,
+        { bottom: Platform.OS === 'ios' ? 28 : 0, paddingBottom: 16, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 8, elevation: 8 }
       ]}
     >
       <TouchableOpacity
         style={tw`bg-green-700 py-4 rounded-full shadow-lg`}
-      onPress={() => {
-    if (selectedDelivery !== null) {
-      navigation.navigate('PaymentScreen', { order });
-    } else {
-      // Optionally show an alert or message to the user
-      console.log('Please select a delivery option before proceeding.');
-    }
-  }}
+        onPress={() => {
+          if (selectedDelivery !== null) {
+            navigation.navigate('PaymentScreen', { order });
+          } else {
+            console.log('Please select a delivery option before proceeding.');
+          }
+        }}
         activeOpacity={0.8}
       >
         <Text style={tw`text-white text-center font-bold text-base`}>
@@ -270,6 +255,7 @@ const VerifyProductsScreen = ({ route, navigation }) => {
     </View>
   </View>
 );
+
 
 
 };

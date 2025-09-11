@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import { SERVER_URL } from '@env';
+import { SERVER_URL,mobile_url } from '@env';
 import tw from "tailwind-react-native-classnames";
 
 export default function ViewCartScreen({ navigation }) {

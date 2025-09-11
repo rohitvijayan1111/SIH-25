@@ -10,7 +10,9 @@ export default function PaymentScreen({ route, navigation }) {
   const handlePayment = async () => {
     if (loading) return;
     setLoading(true);
-
+    console.log("runs");
+    navigation.navigate('PaymentSuccess');
+    return;
     try {
       if (paymentType === 'COD') {
         await confirmOrder('COD');
@@ -34,7 +36,7 @@ export default function PaymentScreen({ route, navigation }) {
   const confirmOrder = async (type) => {
     try {
       console.log('Calling BAP /confirm with type:', type);
-
+      
       // Replace this with your backend's confirm API URL
       const response = await fetch('https://your-bap-domain.com/confirm', {
         method: 'POST',

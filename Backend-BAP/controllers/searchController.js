@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
+// const logBlockchainEvent = require("../middlewares/blockchainLogger");
 
 exports.handleSearch = async (req, res) => {
   try {
@@ -66,15 +67,27 @@ exports.handleSearch = async (req, res) => {
         'x-transaction-id': txnId
       }
     });
+ // writing blockchain
+     // ✅ Call blockchain logger (store the search request on blockchain ledger)
+    // await logBlockchainEvent(
+    //   "SEARCH",     // entity type
+    //   txnId,        // entity id (transaction_id is unique)
+    //   "CREATE",     // action
+    //   payload       // full payload being hashed
+    // );
 
     res.json({
       message: '✅ BPP /on_search called successfully',
       transaction_id: txnId,
       catalog: bppResponse.data
     });
+    console.log("runnig");
 
   } catch (error) {
     console.error('❌ Error in handleSearch:', error.message);
+
+     // 🔗 Log failed attempt in blockchain ledger too
+    // await logBlockchainEvent("SEARCH", uuidv4(), "FAILED", { error: error.message });
     res.status(500).json({ error: 'Search failed' });
   }
 };

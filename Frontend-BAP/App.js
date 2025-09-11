@@ -16,32 +16,40 @@ const CartStack = createNativeStackNavigator();
 import ProcurementDetails from './screens/ProcurementDetails';
 import CompletedProcurementDetails from './screens/CompletedProcurementDetails';
 import VerifyProductsScreen from './screens/VerifyProductsScreen';
+import PaymentSuccessPage from './screens/PaymentCompletionScreen';
+
 
 import ProcurementsScreen from './screens/ProcurementsScreen';
 import CreateProcurementScreen from './screens/CreateProcurementScreen';
 const WelcomeScreen = ({ navigation }) => {
-  return (
-    <View style={tw`flex-1 justify-center items-center bg-white`}>
-      <Text style={tw`text-2xl font-bold mb-6`}>
+ return (
+    <View style={tw`flex-1 justify-center items-center bg-gray-50 p-6`}>
+      <Text style={tw`text-3xl font-extrabold mb-10 text-gray-800`}>
         Welcome to the Shopping App
       </Text>
+
+      {/* Home Button */}
       <TouchableOpacity
         onPress={() => navigation.navigate('Home')}
-        style={tw`bg-green-600 px-6 py-3 rounded-lg`}
+        style={tw`mb-4 w-full bg-green-600 py-4 rounded-xl items-center shadow-md`}
       >
-        <Text style={tw`text-white text-lg`}>Go to Home Page</Text>
+        <Text style={tw`text-white text-lg font-semibold`}>Go to Home Page</Text>
       </TouchableOpacity>
+
+      {/* Cart Button */}
       <TouchableOpacity
-        onPress={() => navigation.navigate('Cart')} // 👈 this navigates to ViewCart
-        style={tw`bg-blue-600 px-6 py-3 rounded-lg`}
+        onPress={() => navigation.navigate('Cart')}
+        style={tw`mb-4 w-full bg-blue-600 py-4 rounded-xl items-center shadow-md`}
       >
-        <Text style={tw`text-white text-lg`}>View My Cart</Text>
+        <Text style={tw`text-white text-lg font-semibold`}>View My Cart</Text>
       </TouchableOpacity>
+
+      {/* Procurements Button */}
       <TouchableOpacity
-        onPress={() => navigation.navigate('Procurements')} // 👈 this navigates to ViewCart
-        style={tw`bg-blue-600 px-6 py-3 rounded-lg`}
+        onPress={() => navigation.navigate('Procurements')}
+        style={tw`w-full bg-indigo-600 py-4 rounded-xl items-center shadow-md`}
       >
-        <Text style={tw`text-white text-lg`}>Procurements</Text>
+        <Text style={tw`text-white text-lg font-semibold`}>Procurements</Text>
       </TouchableOpacity>
     </View>
   );
@@ -106,7 +114,13 @@ export default function App() {
     name='VerifyProductsScreen'
     component={VerifyProductsScreen}
     options={{ title: 'Verify Products' }}
-  />
+  /> 
+  <Stack.Screen
+  name='PaymentSuccess'
+  component={PaymentSuccessPage}
+  options={{ headerShown: false }} // hides the top header
+/>
+
       </Stack.Navigator>
     </NavigationContainer>
   );

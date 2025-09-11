@@ -27,9 +27,12 @@ const categoryList = [
 
 
 const HomePage = ({navigation}) => {
+  const mobile="http://192.168.1.10:5000";
+  
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  
   console.log(SERVER_URL);
   useEffect(() => {
     loadInitialCategories();
@@ -38,10 +41,12 @@ const HomePage = ({navigation}) => {
 
   const loadInitialCategories = async () => {
     setLoading(true);
-    Promise.all([fetchCategoryProducts("crop"), fetchCategoryProducts("dairy")])
+    Promise.all([fetchCategoryProducts("seed"), fetchCategoryProducts("FERTILIZER")])
       .then((results) => setCategories(results))
       .finally(() => setLoading(false));
   };
+
+  
 
   const fetchCategoryProducts = async (category) => {
     try {
