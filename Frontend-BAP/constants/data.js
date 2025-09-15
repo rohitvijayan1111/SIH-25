@@ -1,0 +1,183 @@
+const procurementList = [
+  {
+    id: 'P001',
+    date: '28-Jan-2023',
+    farmerName: 'Rahul Kumar',
+    farmerMobile: '9999999999',
+    cropName: 'Wheat',
+    variety: 'Desi',
+    quantity: '67 Quintal',
+    pricePerQuintal: 1350,
+    totalAmount: 1350,
+    dueAmount: 135,
+    paymentStatus: 'Pending',
+    isCompleted: false,
+  },
+  {
+    id: 'P002',
+    date: '27-Jan-2023',
+    farmerName: 'Sachin Kumar',
+    farmerMobile: '8888888888',
+    cropName: 'Bajra',
+    variety: 'Hybrid',
+    quantity: '50 Quintal',
+    pricePerQuintal: 1200,
+    totalAmount: 60000,
+    dueAmount: 0,
+    paymentStatus: 'Completed',
+    isCompleted: true,
+  },
+  {
+    id: 'P003',
+    date: '25-Jan-2023',
+    farmerName: 'Rajat Kumar',
+    farmerMobile: '7777777777',
+    cropName: 'Sugarcane',
+    variety: 'CO 86032',
+    quantity: '80 Quintal',
+    pricePerQuintal: 1000,
+    totalAmount: 80000,
+    dueAmount: 20000,
+    paymentStatus: 'Partially Paid',
+    isCompleted: false,
+  },
+  {
+    id: 'P004',
+    date: '24-Jan-2023',
+    farmerName: 'Pawan Lalit',
+    farmerMobile: '6666666666',
+    cropName: 'Wheat',
+    variety: 'Desi',
+    quantity: '80 Quintal',
+    pricePerQuintal: 1000,
+    totalAmount: 80000,
+    dueAmount: 20000,
+    paymentStatus: 'Partially Paid',
+    isCompleted: false,
+  },
+  {
+    id: 'P005',
+    date: '23-Jan-2023',
+    farmerName: 'Parasuram',
+    farmerMobile: '5555555555',
+    cropName: 'Rice',
+    variety: 'Basmati',
+    quantity: '100 Quintal',
+    pricePerQuintal: 1000,
+    totalAmount: 100000,
+    dueAmount: 0,
+    paymentStatus: 'Completed',
+    isCompleted: true,
+  },
+];
+
+const paymentDetails = {
+  totalAmount: 13500,
+  paidAmount: 4000,
+  dueAmount: 9500,
+  transactions: [
+    {
+      method: 'UPI',
+      amount: 780.0,
+      date: '2024-02-28T00:03:00Z',
+    },
+    {
+      method: 'UPI',
+      amount: 780.0,
+      date: '2024-02-28T00:03:00Z',
+    },
+    {
+      method: 'Cash',
+      amount: 780.0,
+      date: '2024-02-28T00:03:00Z',
+    },
+    {
+      method: 'Cash',
+      amount: 780.0,
+      date: '2024-02-28T00:03:00Z',
+    },
+  ],
+};
+const farmers = [
+  {
+    id: 'F01',
+    name: 'Rajesh Sharma',
+    mobile: '9876543210',
+  },
+  {
+    id: 'F02',
+    name: 'Priya Devi',
+    mobile: '9988776655',
+  },
+  {
+    id: 'F03',
+    name: 'Suresh Yadav',
+    mobile: '9123456789',
+  },
+  {
+    id: 'F04',
+    name: 'Meena Kumari',
+    mobile: '9555544444',
+  },
+  {
+    id: 'F05',
+    name: 'Anil Singh',
+    mobile: '9321098765',
+  },
+  {
+    id: 'F06',
+    name: 'Kavita Rao',
+    mobile: '9765432109',
+  },
+  {
+    id: 'F07',
+    name: 'Deepak Patel',
+    mobile: '9234567890',
+  },
+  {
+    id: 'F08',
+    name: 'Shalini Gupta',
+    mobile: '9666655555',
+  },
+  {
+    id: 'F09',
+    name: 'Gopal Reddy',
+    mobile: '9432109876',
+  },
+  {
+    id: 'F10',
+    name: 'Leela Nair',
+    mobile: '9800099999',
+  },
+  {
+    id: 'F11',
+    name: 'Vikas Kumar',
+    mobile: '9111122222',
+  },
+  {
+    id: 'F12',
+    name: 'Sarita Das',
+    mobile: '9777788888',
+  },
+  {
+    id: 'F13',
+    name: 'Ravi Verma',
+    mobile: '9012345678',
+  },
+  {
+    id: 'F14',
+    name: 'Jyoti Khanna',
+    mobile: '9543210987',
+  },
+  {
+    id: 'F15',
+    name: 'Manoj Tiwari',
+    mobile: '9999900000',
+  },
+];
+
+export const data = {
+  procurementList,
+  paymentDetails,
+  farmers,
+};
