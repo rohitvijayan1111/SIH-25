@@ -9,8 +9,6 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-
-// import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react';
 import backArrow from '../assets/left-arrow.png';
 import ProcurementCard from '../components/ProcurementCard';
@@ -81,7 +79,7 @@ const ProcurementsScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
+    <SafeAreaView style={tw`flex-1 bg-white`}>
       <View
         style={tw`flex flex-row justify-start items-center p-1`}
         className='bg-[#B2FFB7]'
@@ -191,17 +189,7 @@ const ProcurementsScreen = () => {
                 <FlatList
                   data={farmers}
                   renderItem={({ item }) => (
-                    <TouchableOpacity
-                      className='flex-row justify-between bg-[#2B9846]/[0.08] p-2  rounded-lg my-1'
-                      onPress={() => {
-                        setSelectedFarmers((prev) =>
-                          prev.includes(item.name)
-                            ? prev.filter((f) => f !== item.name)
-                            : [...prev, item.name]
-                        );
-                        console.log(`Selected Farmers: ${selectedFarmers} `);
-                      }}
-                    >
+                    <View className='flex-row justify-between bg-[#2B9846]/[0.08] p-2  rounded-lg my-1'>
                       <View className='flex-row flex-1 gap-2'>
                         <View className='w-10 h-10 rounded-lg bg-[#2B9846] justify-center items-center'>
                           <Text className='text-white font-semibold text-xl'>
@@ -215,11 +203,9 @@ const ProcurementsScreen = () => {
                       </View>
 
                       <View className=' rounded-full border-1'>
-                        <Circle
-                          selected={selectedFarmers.includes(item.name)}
-                        />
+                        <Circle selected={false} />
                       </View>
-                    </TouchableOpacity>
+                    </View>
                   )}
                   key={(item) => item.id}
                 />

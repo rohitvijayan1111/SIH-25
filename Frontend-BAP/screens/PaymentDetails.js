@@ -24,7 +24,7 @@ const PaymentDetails = () => {
         style={tw`flex-row justify-start items-center p-1`}
         className='bg-[#B2FFB7]'
       >
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.navigate('Procurements')}>
           <Image source={backArrow} style={tw`w-6 h-6 p-1`} />
         </TouchableOpacity>
         <Text style={tw`text-xl font-semibold p-2`}>Payment Details</Text>
@@ -32,20 +32,36 @@ const PaymentDetails = () => {
       <ScrollView>
         <View style={tw`bg-white p-4 rounded-lg border-gray-300 border-2 m-2`}>
           <View style={tw`flex-row justify-between`}>
-            <Text className='text-gray-500'>Total Amount</Text>
-            <Text className='font-bold'>₹{paymentDetails.totalAmount}</Text>
+            <Text>Total Amount</Text>
+            <Text>₹{paymentDetails.totalAmount}</Text>
           </View>
           <View style={tw`flex-row justify-between`}>
-            <Text className='text-gray-500'>Paid Amount</Text>
-            <Text className='font-bold'>₹{paymentDetails.paidAmount}</Text>
+            <Text>Paid Amount</Text>
+            <Text>₹{paymentDetails.paidAmount}</Text>
           </View>
-          <View className='pb-2 flex-row justify-between item-center border-b border-gray-600'></View>
           <View style={tw`flex-row justify-between`}>
-            <Text className='text-gray-500'>Due Amount</Text>
-            <Text className='font-bold'>₹{paymentDetails.dueAmount}</Text>
+            <Text>Due Amount</Text>
+            <Text>₹{paymentDetails.dueAmount}</Text>
           </View>
         </View>
 
+        {/* <View>
+          <Text>Payment Details</Text>
+          <View>
+            <View>
+              <Text>
+
+            </Text>
+            <Text>
+
+            </Text>
+            </View>
+            <Text>
+
+            </Text>
+          </View>
+
+        </View> */}
         <View style={tw`bg-white p-4 rounded-lg border-gray-300 border-2 m-2`}>
           <View>
             <Text style={tw`font-bold text-xl`}>Transaction</Text>
@@ -59,7 +75,7 @@ const PaymentDetails = () => {
                   <Text className='text-base font-semibold'>
                     Pay By {item.method}
                   </Text>
-                  <Text className='text-sm text-gray-500'>
+                  <Text className='text-sm text-gray-600'>
                     {new Date(item.date).toLocaleDateString('en-GB', {
                       day: '2-digit',
                       month: 'short',

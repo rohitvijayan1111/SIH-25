@@ -5,7 +5,7 @@ Here's the **fully fixed and cleaned all-in-one `curl` code block** using **real
 ### ✅ **1. Add to Cart** (Product: *Corn Gluten Meal*)
 
 ```bash
-curl -X POST http://localhost:3000/cart/add \
+curl -X POST http://192.168.39.249:3000/cart/add \
   -H "Content-Type: application/json" \
   -d '{
     "user_id": "user123",

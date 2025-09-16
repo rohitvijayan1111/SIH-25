@@ -10,6 +10,8 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
     const message_id = `msg-${Date.now()}`;
     const ordersItems = [];
     let totalPrice = 0;
+    let totalQuantity = 0;
+    let totalWeightKg = 0;
     let providerId = null;
     let providerName = null;
     let fulfillment = null;
@@ -27,6 +29,7 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
           p.unit,
           p.image_url,
           p.organic,
+          p.weight,              -- weight per unit in kg
           pb.id AS batch_id,
           pb.price_per_unit,
           pb.quantity AS available_qty,
@@ -71,6 +74,12 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
 
       const availableQty = product.available_qty;
       const servedQty = Math.min(availableQty, item.quantity);
+
+      totalQuantity += servedQty;
+
+      // Calculate total weight in kg using product.weight (per unit kg)
+      const weightPerUnitKg = parseFloat(product.weight) || 0;
+      totalWeightKg += servedQty * weightPerUnitKg;
 
       const unitPrice = parseFloat(product.price_per_unit);
       const itemTotalPrice = unitPrice * servedQty;
@@ -122,6 +131,8 @@ async function handleOnInit({ items, transaction_id, customer_location }) {
             }
           },
           items: ordersItems,
+          total_quantity: totalQuantity,
+          total_weight_kg: parseFloat(totalWeightKg.toFixed(3)),  // total weight rounded to 3 decimals
           quote: {
             price: {
               currency: 'INR',

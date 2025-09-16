@@ -11,12 +11,37 @@ import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
 import backArrow from '../assets/left-arrow.png';
 import { images } from '../constants/images';
-import { procurementdata } from '../constants/procurementdetails';
 import { Dimensions } from 'react-native';
 const CompletedProcurementDetails = () => {
   const navigation = useNavigation();
   const windowHeight = Dimensions.get('window').height;
-  const item = procurementdata;
+  const completedprocurementdata = {
+    date: '05/03/2024',
+    farmerDetails: {
+      farmerName: 'Sunita Singh',
+      mobNo: '8493021573',
+      address: 'Sector 14, Lucknow',
+    },
+    cropDetails: {
+      batchNo: '#3942',
+      cropName: 'Barley',
+      variety: '846251',
+      quantity: '282 Quintal',
+      pricePerQuintal: '85924',
+      totalAmount: '392801',
+      paymentStatus: 'Completed',
+      cropPhoto: 'https://images.unsplash.com/photo-3',
+    },
+    receiptPhoto: 'receipt_placeholder.jpg',
+    deliveryPersonDetails: {
+      name: 'Sunita Singh',
+      mobNo: '8493021573',
+      tractorNo: 'Barley',
+      tractorPhoto: 'https://images.unsplash.com/tractor-1',
+    },
+  };
+
+  const item = completedprocurementdata;
 
   return (
     <SafeAreaView className='flex-1'>
@@ -25,7 +50,7 @@ const CompletedProcurementDetails = () => {
           style={tw`flex-row justify-start items-center p-1`}
           className='bg-[#B2FFB7]'
         >
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.navigate('Procurements')}>
             <Image source={backArrow} style={tw`w-6 h-6 p-1`} />
           </TouchableOpacity>
           <Text style={tw`text-xl font-semibold p-2`}>
@@ -136,6 +161,13 @@ const CompletedProcurementDetails = () => {
           <Text style={tw`text-sm text-gray-500 font-semibold py-2`}>
             Crop Photo
           </Text>
+          {/* <Text>Crop Photo</Text> */}
+          {/* <View style={tw`flex-row justify-center`}>
+            <Image source={crop} style={tw`w-full h-[30%]`} />
+          </View> */}
+          {/* <View style={tw`flex-row justify-center m-0 p-0 h-[30%]`}>
+            <Image source={images.crop} style={tw`w-full h-[30%]`} />
+          </View> */}
           <Image
             source={images.crop}
             resizeMode='contain'
@@ -148,31 +180,14 @@ const CompletedProcurementDetails = () => {
               borderRadius: 10,
             }}
           />
-          <Text style={tw`text-sm text-gray-500 font-semibold py-2`}>
-            Receipt Photo
-          </Text>
-          <Image
-            source={images.recpt}
-            resizeMode='contain'
-            // style={tw`w-full h-200`}
-
-            // style={{ width: '100%', height: 200, borderRadius: 10 }}
-            style={{
-              width: '100%',
-              height: windowHeight * 0.25,
-            }}
-          />
           <View className='border-b border-gray-300 w-full mt-2' />
-
           <Text className='text-md font-bold py-2'>
             Delivery Person Details
           </Text>
           <View style={tw`flex-row justify-between mb-2`}>
             <Text style={tw`text-sm text-gray-500`}>Delivery Person Name</Text>
             {/* <Text style={tw`text-lg font-bold`}>{item.farmerName}</Text> */}
-            <Text className='text-md font-bold'>
-              {item.deliveryPersonDetails.name}
-            </Text>
+            <Text className='text-md font-bold'>{item.deliveryPersonName}</Text>
           </View>
 
           <View style={tw`flex-row justify-between mb-2`}>
@@ -182,16 +197,14 @@ const CompletedProcurementDetails = () => {
             </Text>
             {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
             <Text className='text-md font-bold'>
-              {item.deliveryPersonDetails.mobNo}
+              {item.deliveryPersonMobile}
             </Text>
             {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
           </View>
 
           <View style={tw`flex-row justify-between mb-2`}>
             <Text style={tw`text-sm text-gray-500`}>Vehicle No.</Text>
-            <Text style={tw`text-sm font-bold`}>
-              {item.deliveryPersonDetails.tractorNo}
-            </Text>
+            <Text style={tw`text-sm font-bold`}>{item.tractorNo}</Text>
           </View>
 
           <Text style={tw`text-sm text-gray-500 font-semibold py-2`}>
@@ -204,7 +217,9 @@ const CompletedProcurementDetails = () => {
             <Image
               source={images.vehicle}
               resizeMode='contain'
+              // style={tw`w-full h-200`}
 
+              // style={{ width: '100%', height: 200, borderRadius: 10 }}
               style={{
                 width: '100%',
                 height: windowHeight * 0.25,

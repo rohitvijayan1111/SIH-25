@@ -3,6 +3,7 @@ const express = require("express");
 const sequelize  = require("./config/db");
 const attachTransactionId = require("./middlewares/transactionMiddleware");
 const cartRoutes = require("./cart/cartRoutes");
+const logisticsRoutes = require("./logistic/logisticsRoutes");
 const app = express();
 const cors = require("cors");
 // Middleware to parse JSON
@@ -21,6 +22,7 @@ app.use(
 const becknRoutes = require("./routes/becknRoutes");
 app.use("/bap", becknRoutes);
 app.use("/cart", cartRoutes);
+app.use("/logistic", logisticsRoutes);
 
 app.get('/test-db', async (req, res) => {
   try {
