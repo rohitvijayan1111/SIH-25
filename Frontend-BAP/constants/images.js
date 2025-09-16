@@ -10,7 +10,6 @@ import filterplus from '../assets/filterplus.png';
 import find from '../assets/find.png';
 import crop from '../assets/cropimage.webp';
 import vehicle from '../assets/tractorwithtrailer.jpg';
-import recpt from '../assets/recpt.png';
 export const images = {
   fertilizer,
   fungicide,
@@ -24,5 +23,4 @@ export const images = {
   filterplus,
   vehicle,
   crop,
-  recpt,
 };

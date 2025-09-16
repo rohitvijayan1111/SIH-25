@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const batchController = require('../controller/productBatchController');
+const batchController = require('../controllers/productBatchController');
 
 router.post('/batch', batchController.createProductBatch);
 router.get('/batches/:productId', batchController.getBatchesByProductId);

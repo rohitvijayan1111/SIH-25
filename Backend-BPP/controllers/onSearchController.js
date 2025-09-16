@@ -6,13 +6,13 @@ exports.handleSearch = async (req, res) => {
     const {
       item = {},
       category = {},
+      fulfillment = {}
     } = req.body.intent || {};
-    const {lat,lon}=req.body;
-    console.log(req.body);
+
     const productName = item?.descriptor?.name || '';
     const categoryId = category?.id || '';
-    // const lat = fulfillment?.end?.location?.gps?.split(',')[0];
-    // const lon = fulfillment?.end?.location?.gps?.split(',')[1];
+    const lat = fulfillment?.end?.location?.gps?.split(',')[0];
+    const lon = fulfillment?.end?.location?.gps?.split(',')[1];
     const radius = req.body.radius || 50;
 
     if (!lat || !lon) {

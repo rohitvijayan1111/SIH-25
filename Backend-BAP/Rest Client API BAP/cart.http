@@ -1,8 +1,11 @@
 
 ### Get Top 3 Categories to Cart
-GET http://localhost:5000/cart/getcategories/a985baac-9028-4dc1-bbd9-a6f3aae49ef5
+GET http://localhost:5000/cart/getcategories
 Content-Type: application/json
 
+{
+  "user_id": "9ce67171-03a3-4329-9f69-5b9d2c898c95"
+}
 
 ### View Cart
 Get http://localhost:5000/cart/view/9ce67171-03a3-4329-9f69-5b9d2c898c95

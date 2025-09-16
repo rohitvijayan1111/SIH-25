@@ -11,20 +11,9 @@ import backArrow from '../assets/left-arrow.png';
 import { CameraIcon } from 'react-native-heroicons/outline';
 import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
-
 const CreateProcurementScreen = () => {
   const navigation = useNavigation();
-
-  // State for input fields
-  const [farmerName, setFarmerName] = useState('');
-  const [farmerPhone, setFarmerPhone] = useState('');
-  const [cropName, setCropName] = useState('');
-  const [varietyName, setVarietyName] = useState('');
-  const [deliveryPersonName, setDeliveryPersonName] = useState('');
-  const [deliveryPersonMobile, setDeliveryPersonMobile] = useState('');
-  const [tractorNo, setTractorNo] = useState('');
   const [sameAsFarmer, setSameAsFarmer] = useState(false);
-
   return (
     <View className='flex-1 relative h-full bg-white'>
       <View
@@ -38,37 +27,29 @@ const CreateProcurementScreen = () => {
       </View>
 
       <ScrollView className='flex-col space-y-2 p-4'>
+        {/* <View className='flex-col space-y-2'> */}
         <Text className='font-bold'>Farmer Details</Text>
 
         <Text>Farmer Name</Text>
-        <TextInput
-          className='border-2 border-[#D9D9D9] rounded-lg p-2'
-          value={farmerName}
-          onChangeText={setFarmerName}
-        />
+        <TextInput className='border-2 border-[#D9D9D9] rounded-lg p-2' />
 
         <Text>Phone No.</Text>
-        <TextInput
-          className='border-2 border-[#D9D9D9] rounded-lg p-2'
-          value={farmerPhone}
-          onChangeText={setFarmerPhone}
-        />
+        <TextInput className='border-2 border-[#D9D9D9] rounded-lg p-2' />
 
         <Text className='font-bold'>Crop Details</Text>
         <TextInput
           className='border-2 border-[#D9D9D9] rounded-lg p-2'
           placeholder='Crop Name'
-          value={cropName}
-          onChangeText={setCropName}
         />
         <TextInput
           className='border-2 border-[#D9D9D9] rounded-lg p-2'
           placeholder='Variety Name'
-          value={varietyName}
-          onChangeText={setVarietyName}
         />
         <Text className='font-semibold'>Upload or Click Crop Photo</Text>
-        <TouchableOpacity className='flex  justify-center items-center h-[40%] bg-[#D9D9D9] rounded-lg '>
+        <TouchableOpacity
+          // style={tw`flex m-2 justify-center items-center bg-gray-400 rounded-lg p-4`}
+          className='flex  justify-center items-center h-[45%] bg-[#D9D9D9] rounded-lg '
+        >
           <CameraIcon />
         </TouchableOpacity>
 
@@ -78,28 +59,26 @@ const CreateProcurementScreen = () => {
             <TextInput
               className='border-2 border-[#D9D9D9] rounded-lg p-2'
               placeholder='Name'
-              value={deliveryPersonName}
-              onChangeText={setDeliveryPersonName}
             />
             <TextInput
               className='border-2 border-[#D9D9D9] rounded-lg p-2'
               placeholder='Mobile No.'
-              value={deliveryPersonMobile}
-              onChangeText={setDeliveryPersonMobile}
             />
             <TextInput
               className='border-2 border-[#D9D9D9] rounded-lg p-2'
               placeholder='Tractor No.'
-              value={tractorNo}
-              onChangeText={setTractorNo}
             />
 
             <Text className='font-semibold'>Upload or Click Tractor Photo</Text>
-            <TouchableOpacity className='flex justify-center items-center h-[40%] bg-[#D9D9D9] rounded-lg'>
+            <TouchableOpacity
+              // style={tw`flex m-2 justify-center items-center bg-gray-400 rounded-lg p-4`}
+              className='flex justify-center items-center h-[45%] bg-[#D9D9D9] rounded-lg'
+            >
               <CameraIcon />
             </TouchableOpacity>
           </View>
         )}
+        {/* </View> */}
       </ScrollView>
 
       <View className='bg-[#ecfcf4] w-full absolute bottom-0 justify-center items-center py-2 px-4'>

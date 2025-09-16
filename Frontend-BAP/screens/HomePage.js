@@ -6,12 +6,13 @@ import {
   FlatList,
   ActivityIndicator,
   ScrollView,
-  TextInput,
+  TextInput
 } from 'react-native';
 import { TouchableOpacity, Image } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import CategorySection from '../components/CategorySection';
 //changing
+
 
 const categoryList = [
   { id: 'seed', name: 'Seeds' },
@@ -24,52 +25,28 @@ const categoryList = [
   { id: 'land', name: 'Land Lease & Sale' },
 ];
 
-const HomePage = ({ navigation }) => {
+
+const HomePage = ({navigation}) => {
+  const mobile="http://192.168.1.10:5000";
+  
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  
   console.log(SERVER_URL);
   useEffect(() => {
-    loadTop3Categories();
-  }, []); // Runs once
+    loadInitialCategories();
+  }, []);
 
-  useEffect(() => {
-    const initializeData = async () => {
-      // ← Wait for this to finish first
-      console.log('Top categories loaded:', categories);
-      if (categories.length > 0) {
-        await loadInitialCategories(categories); // ← Then run this
-      }
-    };
-
-    initializeData();
-  }, [categories]);
-
-  const loadTop3Categories = async () => {
-    try {
-      const response = await fetch(
-        `${SERVER_URL}/cart/getcategories/a985baac-9028-4dc1-bbd9-a6f3aae49ef5`
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      setCategories(data.top_categories);
-    } catch (error) {
-      console.error('Error fetching top categories:', error.message);
-    }
-  };
 
   const loadInitialCategories = async () => {
     setLoading(true);
-    Promise.all([
-      fetchCategoryProducts(categories?.[0]),
-      fetchCategoryProducts(categories?.[1]),
-      fetchCategoryProducts(categories?.[2]),
-    ])
+    Promise.all([fetchCategoryProducts("seed"), fetchCategoryProducts("FERTILIZER")])
       .then((results) => setCategories(results))
       .finally(() => setLoading(false));
   };
+
+  
 
   const fetchCategoryProducts = async (category) => {
     try {

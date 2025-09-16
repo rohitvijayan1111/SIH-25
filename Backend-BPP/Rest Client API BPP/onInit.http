@@ -20,28 +20,26 @@ Content-Type: application/json
       },
       "items": [
         {
-          "id": "40cdf86b-e1f9-4a87-8c90-16554b251234",
+          "id": "8620b9d9-2c8d-4309-a6dc-77d34d0d324c",
           "quantity": {
             "count": 1
           },
           "fulfillment_id": "d2c6b0c9-5a5c-44de-8c3f-75875100a6f2"
         },
         {
-          "id": "34799eb9-d699-4433-875b-a8bd4bc0a12a",
+          "id": "fba521cd-15db-42fe-b3da-8deb336576ed",
           "quantity": {
             "count": 2
           },
           "fulfillment_id": "d2c6b0c9-5a5c-44de-8c3f-75875100a6f2"
         },
         {
-          "id": "22739a34-cf88-4331-8b50-dc0333e083a7",
+          "id": "fe3d48d4-099a-49e3-86d6-140f2e37d515",
           "quantity": {
             "count": 3
           },
           "fulfillment_id": "d2c6b0c9-5a5c-44de-8c3f-75875100a6f2"
         }
-
-        // Add more items as needed
       ],
       "fulfillment": {
         "end": {

@@ -28,12 +28,10 @@ const ProcurementDetails = () => {
           style={tw`flex-row justify-start items-center p-1`}
           className='bg-[#B2FFB7]'
         >
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.navigate('Procurements')}>
             <Image source={backArrow} style={tw`w-6 h-6 p-1`} />
           </TouchableOpacity>
-          <Text style={tw`text-xl font-semibold p-2`}>
-            {item.farmerDetails.farmerName}
-          </Text>
+          <Text style={tw`text-xl font-semibold p-2`}>{item.farmerName}</Text>
         </View>
         {/* <Header title={item.farmerName} page="Home"/> */}
         <View style={tw`bg-white p-4 rounded-lg border-gray-300 border-2 m-2`}>
@@ -58,96 +56,96 @@ const ProcurementDetails = () => {
               </Text>
             </TouchableOpacity>
           </View>
+          <View className='border-b border-gray-300 w-full mt-2' />
 
-          <Text className='text-md font-bold py-2'>Farmer Details</Text>
+          <Text className='text-md font-bold'>Farmer Details</Text>
           <View style={tw`flex-row justify-between mb-2`}>
             <Text style={tw`text-sm text-gray-500`}>Farmer Name</Text>
             {/* <Text style={tw`text-lg font-bold`}>{item.farmerName}</Text> */}
-            <Text className='text-md font-bold'>
-              {item.farmerDetails.farmerName}
-            </Text>
+            <Text className='text-md font-bold'>{item.farmerName}</Text>
           </View>
 
           <View style={tw`flex-row justify-between mb-2`}>
             <Text style={tw`text-sm text-gray-500`}>Farmer No.</Text>
             {/* <Text style={tw`text-lg font-bold`}>{item.farmerMobile}</Text> */}
-            <Text className='text-md font-bold'>
-              {item.farmerDetails.mobNo}
-            </Text>
-          </View>
-
-          <View style={tw`flex-row justify-between mb-2`}>
-            <Text style={tw`text-sm text-gray-500`}>Address</Text>
-            {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
-            <Text className='text-md font-bold'>
-              {item.farmerDetails.address}
-            </Text>
-            {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
-          </View>
-          <View className='border-b border-gray-300 w-full mt-2' />
-
-          <Text className='text-md font-bold py-2'>Crop Details</Text>
-          <View style={tw`flex-row justify-between mb-2`}>
-            <Text style={tw`text-sm text-gray-500`}>Batch No.</Text>
-            {/* <Text style={tw`text-lg font-bold`}>{item.farmerName}</Text> */}
-            <Text className='text-md font-bold'>
-              {item.cropDetails.batchNo}
-            </Text>
+            <Text className='text-md font-bold'>{item.farmerMobile}</Text>
           </View>
 
           <View style={tw`flex-row justify-between mb-2`}>
             <Text style={tw`text-sm text-gray-500`}>Crop Name</Text>
+            {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
+            <Text className='text-md font-bold'>{item.cropName}</Text>
+            {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
+          </View>
+          <View className='border-b border-gray-300 w-full mt-2' />
+
+          <Text className='text-md font-bold'>Crop Details</Text>
+          <View style={tw`flex-row justify-between mb-2`}>
+            <Text style={tw`text-sm text-gray-500`}>Farmer Name</Text>
+            {/* <Text style={tw`text-lg font-bold`}>{item.farmerName}</Text> */}
+            <Text className='text-md font-bold'>{item.cropName}</Text>
+          </View>
+
+          <View style={tw`flex-row justify-between mb-2`}>
+            <Text style={tw`text-sm text-gray-500`}>Farmer No.</Text>
             {/* <Text style={tw`text-lg font-bold`}>{item.farmerMobile}</Text> */}
-            <Text className='text-md font-bold'>
-              {item.cropDetails.cropName}
-            </Text>
+            <Text className='text-md font-bold'>{item.farmerMobile}</Text>
+          </View>
+
+          <View style={tw`flex-row justify-between mb-2`}>
+            <Text style={tw`text-sm text-gray-500`}>Crop Name</Text>
+            {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
+            <Text className='text-md font-bold'>{item.cropName}</Text>
+            {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
           </View>
 
           <View style={tw`flex-row justify-between mb-2`}>
             <Text style={tw`text-sm text-gray-500`}>Variety</Text>
-            {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
-            <Text className='text-md font-bold'>
-              {item.cropDetails.variety}
-            </Text>
-            {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
+            <Text style={tw`text-sm font-bold`}>{item.variety}</Text>
+          </View>
+          <Text style={tw`text-sm text-gray-500 font-semibold`}>
+            Crop Photo
+          </Text>
+
+          <Image
+            source={item.cropPhoto}
+            resizeMode='contain'
+
+            style={{
+              width: '100%',
+              height: windowHeight * 0.25,
+              borderRadius: 10,
+            }}
+          />
+
+          <View className='border-b border-gray-300 w-full mt-2' />
+          <Text className='text-md font-bold'>Delivery Person Details</Text>
+          <View style={tw`flex-row justify-between mb-2`}>
+            <Text style={tw`text-sm text-gray-500`}>Delivery Person Name</Text>
+            {/* <Text style={tw`text-lg font-bold`}>{item.farmerName}</Text> */}
+            <Text className='text-md font-bold'>{item.deliveryPersonName}</Text>
           </View>
 
           <View style={tw`flex-row justify-between mb-2`}>
-            <Text style={tw`text-sm text-gray-500`}>Quantity</Text>
-            <Text style={tw`text-sm font-bold`}>
-              {item.cropDetails.quantity}
+            <Text style={tw`text-sm text-gray-500`} className=''>
+              Delivery Person Mobile
+            </Text>
+            <Text className='text-md font-bold'>
+              {item.deliveryPersonMobile}
             </Text>
           </View>
+
           <View style={tw`flex-row justify-between mb-2`}>
-            <Text style={tw`text-sm text-gray-500`}>Price per Quintal</Text>
-            <Text style={tw`text-sm font-bold`}>
-              {item.cropDetails.pricePerQuintal}
-            </Text>
+            <Text style={tw`text-sm text-gray-500`}>Vehicle No.</Text>
+            <Text style={tw`text-sm font-bold`}>{item.tractorNo}</Text>
           </View>
-          <View style={tw`flex-row justify-between mb-2`}>
-            <Text style={tw`text-sm text-gray-500`}>Total Amount</Text>
-            <Text style={tw`text-sm font-bold`}>
-              {item.cropDetails.totalAmount}
-            </Text>
-          </View>
-          <View style={tw`flex-row justify-between mb-2`}>
-            <Text style={tw`text-sm text-gray-500`}>Payment Status</Text>
-            <Text style={tw`text-sm font-bold`}>
-              {item.cropDetails.paymentStatus}
-            </Text>
-          </View>
-          <Text style={tw`text-sm text-gray-500 font-semibold py-2`}>
-            Crop Photo
+
+          <Text style={tw`text-sm text-gray-500 font-semibold`}>
+            Vehicle Photo
           </Text>
-          {/* <Text>Crop Photo</Text> */}
-          {/* <View style={tw`flex-row justify-center`}>
-            <Image source={crop} style={tw`w-full h-[30%]`} />
-          </View> */}
-          {/* <View style={tw`flex-row justify-center m-0 p-0 h-[30%]`}>
-            <Image source={images.crop} style={tw`w-full h-[30%]`} />
-          </View> */}
-          <Image
-            source={images.crop}
+
+          {/* <Image
+            source={images.tractorPhoto}
             resizeMode='contain'
             // style={tw`w-full h-200`}
 
@@ -157,73 +155,17 @@ const ProcurementDetails = () => {
               height: windowHeight * 0.25,
               borderRadius: 10,
             }}
-          />
-          {/* <Text style={tw`text-sm text-gray-500 font-semibold py-2`}>
-            Receipt Photo
-          </Text> */}
-          {/* <Image
-            source={images.recpt}
+          /> */}
+          <Image
+            source={item.vehiclePhoto}
             resizeMode='contain'
-            // style={tw`w-full h-200`}
-
-            // style={{ width: '100%', height: 200, borderRadius: 10 }}
+           
             style={{
               width: '100%',
               height: windowHeight * 0.25,
+              borderRadius: 10,
             }}
-          /> */}
-          <View className='border-b border-gray-300 w-full mt-2' />
-
-          <Text className='text-md font-bold py-2'>
-            Delivery Person Details
-          </Text>
-          <View style={tw`flex-row justify-between mb-2`}>
-            <Text style={tw`text-sm text-gray-500`}>Delivery Person Name</Text>
-            {/* <Text style={tw`text-lg font-bold`}>{item.farmerName}</Text> */}
-            <Text className='text-md font-bold'>
-              {item.deliveryPersonDetails.name}
-            </Text>
-          </View>
-
-          <View style={tw`flex-row justify-between mb-2`}>
-            {/* <Text style={tw`text-sm text-gray-500`}>Delivery Person Mobile</Text> */}
-            <Text style={tw`text-sm text-gray-500`} className=''>
-              Delivery Person Mobile
-            </Text>
-            {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
-            <Text className='text-md font-bold'>
-              {item.deliveryPersonDetails.mobNo}
-            </Text>
-            {/* <Text style={tw`text-md font-bold`}>{item.cropName}</Text> */}
-          </View>
-
-          <View style={tw`flex-row justify-between mb-2`}>
-            <Text style={tw`text-sm text-gray-500`}>Vehicle No.</Text>
-            <Text style={tw`text-sm font-bold`}>
-              {item.deliveryPersonDetails.tractorNo}
-            </Text>
-          </View>
-
-          <Text style={tw`text-sm text-gray-500 font-semibold py-2`}>
-            Vehicle Photo
-          </Text>
-
-          <View style={tw`flex-row justify-center m-0 p-0 h-[30%]`}>
-            {/* <Image source={images.vehicle} resizeMode='cover' />
-             */}
-            <Image
-              source={images.vehicle}
-              resizeMode='contain'
-              // style={tw`w-full h-200`}
-
-              // style={{ width: '100%', height: 200, borderRadius: 10 }}
-              style={{
-                width: '100%',
-                height: windowHeight * 0.25,
-                borderRadius: 10,
-              }}
-            />
-          </View>
+          />
         </View>
 
         <View className='my-1'>
