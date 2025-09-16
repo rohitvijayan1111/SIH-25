@@ -4,7 +4,7 @@ node_modules/
 Backend-BAP/.env
 Backend-BPP/.env
 .env
-
+Frontend-BAP/node_modules/
 
 .env.*
 
