@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vegetable Price Finder</title>
+  <style>
+    body { font-family: Arial; background: #f4f6f8; display: flex; justify-content: center; align-items: center; flex-direction: column; min-height: 100vh; margin: 0; }
+    h1 { color: #333; margin-bottom: 20px; font-size: 2rem; }
+    .card { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 12px; padding: 30px; width: 350px; text-align: center; }
+    label { font-weight: bold; display: block; margin-top: 10px; text-align: left; }
+    select, input { width: 100%; padding: 10px; margin: 5px 0 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
+    button { background-color: #4CAF50; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 1rem; width: 100%; transition: background-color 0.3s ease; }
+    button:hover { background-color: #45a049; }
+    h2 { margin-top: 20px; font-size: 1.4rem; color: #333; }
+    pre { background: #f1f1f1; padding: 15px; border-radius: 8px; text-align: left; font-size: 0.9rem; white-space: pre-wrap; word-wrap: break-word; }
+  </style>
+</head>
+<body>
+  <h1>Vegetable Price Finder</h1>
+  <div class="card">
+    <form id="priceForm">
+      <label for="commodity">Commodity:</label>
+      <select id="commodity" name="commodity" required>
+        <option value="">-- Select Commodity --</option>
+        <option value="Onion">Onion</option>
+        <option value="Potato">Potato</option>
+        <option value="Tomato">Tomato</option>
+        <option value="Cabbage">Cabbage</option>
+        <option value="Cauliflower">Cauliflower</option>
+        <option value="Brinjal">Brinjal</option>
+        <option value="Green Chilli">Green Chilli</option>
+        <option value="Lady Finger">Lady Finger</option>
+        <option value="Peas">Peas</option>
+        <option value="Spinach">Spinach</option>
+      </select>
+
+      <label for="state">State:</label>
+      <select id="state" name="state">
+        <option value="">-- Select State --</option>
+        <option value="Andhra Pradesh">Andhra Pradesh</option>
+        <option value="Maharashtra">Maharashtra</option>
+        <option value="Tamil Nadu">Tamil Nadu</option>
+        <option value="Karnataka">Karnataka</option>
+        <option value="Uttar Pradesh">Uttar Pradesh</option>
+        <option value="Madhya Pradesh">Madhya Pradesh</option>
+        <option value="West Bengal">West Bengal</option>
+        <option value="Rajasthan">Rajasthan</option>
+        <option value="Gujarat">Gujarat</option>
+        <option value="Punjab">Punjab</option>
+        <option value="Haryana">Haryana</option>
+      </select>
+
+      <label for="season">Season:</label>
+      <select id="season" name="season" required>
+        <option value="">-- Select Season --</option>
+        <option value="winter">Winter</option>
+        <option value="summer">Summer</option>
+        <option value="rainy">Rainy</option>
+        <option value="autumn">Autumn</option>
+      </select>
+
+      <button type="submit">Get Price</button>
+    </form>
+
+    <div id="userInputSection" style="display:none;">
+      <label for="user_price">Enter your recent price per kg:</label>
+      <input type="number" id="user_price" placeholder="₹ per kg" step="0.01">
+      <button id="calculateBtn">Calculate Suggested Price</button>
+    </div>
+
+    <h2>Result</h2>
+    <pre id="result">Enter details above and click Get Price</pre>
+  </div>
+
+  <script>
+    document.getElementById("priceForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const commodity = document.getElementById("commodity").value;
+      const state = document.getElementById("state").value;
+      const season = document.getElementById("season").value;
+
+      const url = `/get_price?commodity=${commodity}&state=${state}&season=${season}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.require_user_input) {
+        document.getElementById("result").textContent = data.message;
+        document.getElementById("userInputSection").style.display = "block";
+      } else {
+        document.getElementById("result").textContent = data.message || data.error;
+        document.getElementById("userInputSection").style.display = "none";
+      }
+    });
+
+    document.getElementById("calculateBtn").addEventListener("click", async function() {
+      const user_price = document.getElementById("user_price").value;
+      const season = document.getElementById("season").value;
+
+      if(!user_price) {
+        alert("Please enter your recent price per kg");
+        return;
+      }
+
+      const response = await fetch("/calculate_custom_price", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_price, season })
+      });
+
+      const data = await response.json();
+      document.getElementById("result").textContent = data.message;
+    });
+  </script>
+</body>
+</html>
