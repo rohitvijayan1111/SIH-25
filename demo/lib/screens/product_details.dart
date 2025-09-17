@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,12 +7,20 @@ class ProductDetailsScreen extends StatefulWidget {
   final String itemId;
 
   const ProductDetailsScreen({super.key, required this.itemId});
+=======
+// TODO Implement this library.
+import 'package:flutter/material.dart';
+
+class ProductDetailsScreen extends StatefulWidget {
+  const ProductDetailsScreen({super.key});
+>>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+<<<<<<< HEAD
   bool loading = true;
   int quantity = 1;
   Map<String, dynamic>? productData;
@@ -243,6 +252,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
           ],
         ),
+=======
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Voice Page')),
+      body: const Center(
+        child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
+>>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
       ),
     );
   }

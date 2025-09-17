@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
 
 class PaymentDetailsScreen extends StatelessWidget {
@@ -202,4 +203,26 @@ class PaymentDetailsScreen extends StatelessWidget {
     ];
     return months[month - 1];
   }
+=======
+// TODO Implement this library.
+import 'package:flutter/material.dart';
+
+class PaymentDetails extends StatefulWidget {
+  const PaymentDetails({super.key});
+
+  @override
+  State<PaymentDetails> createState() => _PaymentDetailsState();
+}
+
+class _PaymentDetailsState extends State<PaymentDetails> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Voice Page')),
+      body: const Center(
+        child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
+      ),
+    );
+  }
+>>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 }

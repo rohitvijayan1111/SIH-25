@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+=======
+buildscript{
+    repositories{
+        google()
+        mavenCentral()
+    }
+    dependencies{
+        classpath("com.google.gms:google-services:4.3.15")
+    }
+}
+
+>>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 allprojects {
     repositories {
         google()
