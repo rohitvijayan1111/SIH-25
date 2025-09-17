@@ -27,7 +27,7 @@ const categoryList = [
 
 
 const HomePage = ({navigation}) => {
-  const mobile="http://192.168.1.10:5000";
+  const mobile="http://10.98.198.249:5000";
   
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,7 +51,7 @@ const HomePage = ({navigation}) => {
   const fetchCategoryProducts = async (category) => {
     try {
       
-      const response = await fetch(`${SERVER_URL}/bap/search`, {
+      const response = await fetch(`${mobile}/bap/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ const HomePage = ({navigation}) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${SERVER_URL}/bap/search`, {
+      const response = await fetch(`${mobile}/bap/search`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
@@ -138,7 +138,7 @@ const HomePage = ({navigation}) => {
   // console.log("categriy if",categoryID);
  
     try {
-      const response = await fetch(`${SERVER_URL}/bap/search`, {
+      const response = await fetch(`${mobile}/bap/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

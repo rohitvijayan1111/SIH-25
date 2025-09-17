@@ -4,6 +4,7 @@ import tw from 'tailwind-react-native-classnames';
 import { SERVER_URL,mobile_url } from '@env';
 
 const VerifyProductsScreen = ({ route, navigation }) => {
+  const mobile="http://10.98.198.249:5000";
   const { bpp_response } = route.params;
    console.log(bpp_response);
   if (!bpp_response?.message?.order) {
@@ -51,7 +52,7 @@ const VerifyProductsScreen = ({ route, navigation }) => {
       weight_kg: 5
     };
 
-    const response = await fetch(`${SERVER_URL}/logistic/search`, {
+    const response = await fetch(`${mobile}/logistic/search`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)

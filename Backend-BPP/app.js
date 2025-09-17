@@ -3,6 +3,9 @@ const express = require("express");
 const db = require("./config/db");
 require("dotenv").config();
 const becknRoutes = require("./routes/becknRoutes");
+const batchRoute = require("./routes/batchRoute.js");
+const certificateRoutes = require("./routes/certificateRoutes");
+
 const cors = require("cors");
 const app = express();
 app.use(express.json());
@@ -26,6 +29,9 @@ app.use(
 );
 
 app.use("/", becknRoutes);
+app.use("/api/batches/", batchRoute);
+app.use("/api/certificate", certificateRoutes);
+
 const PORT = process.env.PORT;
 const HOST = "0.0.0.0"; // Allow external access via LAN IP
 

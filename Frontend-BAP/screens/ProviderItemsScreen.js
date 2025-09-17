@@ -14,13 +14,14 @@ import tw from "tailwind-react-native-classnames";
 import { SERVER_URL,mobile_url } from '@env';
 
 export default function ProviderItemsScreen({ navigation, route }) {
+  const mobile="http://10.98.198.249:5000";
   const [provider, setProvider] = useState(route.params?.provider);
   const isOrganic=true;
   console.log(provider);
  const handleInit = async () => {
   try {
     const response = await axios.post(
-  `${SERVER_URL}/bap/init`,
+  `${mobile}/bap/init`,
       {
         provider_id: provider.provider_id, // ✅ Fix: use provider_id instead of provider.id
         items: provider.items.map(item => ({

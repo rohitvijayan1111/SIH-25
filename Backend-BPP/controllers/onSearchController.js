@@ -43,7 +43,7 @@ exports.handleSearch = async (req, res) => {
       userLocation,
       radiusKm
     });
-
+    
     const response = responseBuilder.buildOnSearchResponse(filteredCatalog);
     res.json(response);
   } catch (error) {

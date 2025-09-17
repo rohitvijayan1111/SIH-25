@@ -11,13 +11,14 @@ import { SERVER_URL,mobile_url } from '@env';
 import tw from "tailwind-react-native-classnames";
 
 export default function ViewCartScreen({ navigation }) {
+   const mobile="http://10.98.198.249:5000";
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
   const fetchCartData = async () => {
     try {
       const response = await fetch(
-        `${SERVER_URL}/cart/view/a985baac-9028-4dc1-bbd9-a6f3aae49ef5`
+        `${mobile}/cart/view/a985baac-9028-4dc1-bbd9-a6f3aae49ef5`
       );
       const json = await response.json();
       setCartData(json.cart || []);

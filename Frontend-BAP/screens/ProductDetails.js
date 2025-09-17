@@ -14,7 +14,7 @@ import SimilarProducts from '../components/SimilarProducts'; // adjust if path i
 
 
 export default function ProductDetailsScreen({ route, navigation }) {
- 
+ const mobile="http://10.98.198.249:5000";
   const { item_id } = route.params;
   // console.log(item_id);
   const [productData, setProductData] = useState(null);
@@ -34,8 +34,8 @@ export default function ProductDetailsScreen({ route, navigation }) {
 
 
   // ✅ Use your backend BAP IP here
-  const API_URL = `${SERVER_URL}/bap/select`;
-  const SEARCH_URL = `${SERVER_URL}/bap/search`;
+  const API_URL = `${mobile}/bap/select`;
+  const SEARCH_URL = `${mobile}/bap/search`;
  const fetchSimilarProducts = async (categoryName) => {
   try {
     const res = await fetch(SEARCH_URL, {
@@ -168,7 +168,7 @@ export default function ProductDetailsScreen({ route, navigation }) {
     console.log("Missing Price", "This item has no price. Please select a batch or try another product.");
     return;
   }
-      const response = await fetch("http://192.168.39.249:5000/cart/add", {
+      const response = await fetch(`${mobile}/cart/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
