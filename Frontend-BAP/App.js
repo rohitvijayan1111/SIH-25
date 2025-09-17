@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import tw from 'tailwind-react-native-classnames';
 import HomePage from './screens/HomePage'; // Make sure path is correct
+import VoicePage from './screens/VoicePage';
 import ProductDetailsScreen from './screens/ProductDetails'; // adjust path if needed
 import ViewCartScreen from './screens/ViewCartScreen';
 import ProviderItemsScreen from './screens/ProviderItemsScreen';
@@ -27,6 +28,13 @@ const WelcomeScreen = ({ navigation }) => {
       <Text style={tw`text-3xl font-extrabold mb-10 text-gray-800`}>
         Welcome to the Shopping App
       </Text>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Voice')}
+        style={tw`mb-4 w-full bg-green-600 py-4 rounded-xl items-center shadow-md`}
+      >
+        <Text style={tw`text-white text-lg font-semibold`}>Add Product using voice feature</Text>
+      </TouchableOpacity>
 
       {/* Home Button */}
       <TouchableOpacity
@@ -73,6 +81,7 @@ export default function App() {
           component={WelcomeScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen name='Voice' component={VoicePage} />
         <Stack.Screen name='Home' component={HomePage} />
         <Stack.Screen
           name='ProductDetails'
