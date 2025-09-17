@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 buildscript{
     repositories{
         google()
@@ -8,6 +10,7 @@ buildscript{
     }
 }
 
+>>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 allprojects {
     repositories {
         google()

@@ -1,3 +1,7 @@
 {
+<<<<<<< HEAD
+    "cmake.sourceDirectory": "C:/Users/Kamali V/Desktop/SIH-25/Frontend-BAP/node_modules/expo-modules-core/android"
+=======
     "java.configuration.updateBuildConfiguration": "interactive"
+>>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 }

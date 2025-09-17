@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+// TODO Implement this library.
+=======
 import 'package:demo/screens/completed_procurement_details.dart';
+>>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 import 'package:flutter/material.dart';
 
 class ProcurementsScreen extends StatefulWidget {
@@ -9,6 +13,14 @@ class ProcurementsScreen extends StatefulWidget {
 }
 
 class _ProcurementsScreenState extends State<ProcurementsScreen> {
+<<<<<<< HEAD
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Voice Page')),
+      body: const Center(
+        child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
+=======
   String selectedTab = "progressing";
   String selectedDays = "Last 60 days";
   List<String> selectedCrops = ["Wheat"];
@@ -315,6 +327,7 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
             ],
           ),
         ],
+>>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
       ),
     );
   }
