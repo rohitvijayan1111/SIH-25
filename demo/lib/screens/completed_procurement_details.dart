@@ -1,36 +1,48 @@
 import 'package:flutter/material.dart';
 
-class CompletedProcurementDetails extends StatelessWidget {
-  final bool isEmbedded; // ✅ to control if used inside tab or standalone
+class CompletedProcurementDetails extends StatefulWidget {
+  final bool isEmbedded; // control if used inside tab or standalone
 
-  CompletedProcurementDetails({super.key, this.isEmbedded = true});
+  const CompletedProcurementDetails({super.key, this.isEmbedded = true});
 
-  // Dynamic content inside widget, cannot be const
-  final Map<String, dynamic> completedProcurementData = {
-    "date": "05/03/2024",
-    "farmerDetails": {
-      "farmerName": "Sunita Singh",
-      "mobNo": "8493021573",
-      "address": "Sector 14, Lucknow",
-    },
-    "cropDetails": {
-      "batchNo": "#3942",
-      "cropName": "Barley",
-      "variety": "846251",
-      "quantity": "282 Quintal",
-      "pricePerQuintal": "85924",
-      "totalAmount": "392801",
-      "paymentStatus": "Completed",
-      "cropPhoto": "https://picsum.photos/400/250?crop", // sample
-    },
-    "receiptPhoto": "receipt_placeholder.jpg",
-    "deliveryPersonDetails": {
-      "name": "Sunita Singh",
-      "mobNo": "8493021573",
-      "tractorNo": "UP32 XY 1234",
-      "tractorPhoto": "https://picsum.photos/400/250?tractor", // sample
-    },
-  };
+  @override
+  State<CompletedProcurementDetails> createState() =>
+      _CompletedProcurementDetailsState();
+}
+
+class _CompletedProcurementDetailsState
+    extends State<CompletedProcurementDetails> {
+  late Map<String, dynamic> completedProcurementData;
+
+  @override
+  void initState() {
+    super.initState();
+    completedProcurementData = {
+      "date": "05/03/2024",
+      "farmerDetails": {
+        "farmerName": "Sunita Singh",
+        "mobNo": "8493021573",
+        "address": "Sector 14, Lucknow",
+      },
+      "cropDetails": {
+        "batchNo": "#3942",
+        "cropName": "Barley",
+        "variety": "846251",
+        "quantity": "282 Quintal",
+        "pricePerQuintal": "85924",
+        "totalAmount": "392801",
+        "paymentStatus": "Completed",
+        "cropPhoto": "https://picsum.photos/400/250?crop",
+      },
+      "receiptPhoto": "receipt_placeholder.jpg",
+      "deliveryPersonDetails": {
+        "name": "Sunita Singh",
+        "mobNo": "8493021573",
+        "tractorNo": "UP32 XY 1234",
+        "tractorPhoto": "https://picsum.photos/400/250?tractor",
+      },
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +53,7 @@ class CompletedProcurementDetails extends StatelessWidget {
       child: Column(
         children: [
           // Header (only if not embedded)
-          if (!isEmbedded)
+          if (!widget.isEmbedded)
             Container(
               color: const Color(0xFFB2FFB7),
               padding: const EdgeInsets.all(8),
@@ -81,7 +93,7 @@ class CompletedProcurementDetails extends StatelessWidget {
                     Text("Date: ${item["date"]}",
                         style: const TextStyle(color: Colors.grey)),
                     OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () => editFarmerDetails(),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Color(0xFF2B9846)),
                       ),
@@ -113,12 +125,12 @@ class CompletedProcurementDetails extends StatelessWidget {
                 buildDetailRow("Crop Name", item["cropDetails"]["cropName"]),
                 buildDetailRow("Variety", item["cropDetails"]["variety"]),
                 buildDetailRow("Quantity", item["cropDetails"]["quantity"]),
-                buildDetailRow("Price per Quintal",
-                    item["cropDetails"]["pricePerQuintal"]),
+                buildDetailRow(
+                    "Price per Quintal", item["cropDetails"]["pricePerQuintal"]),
                 buildDetailRow(
                     "Total Amount", item["cropDetails"]["totalAmount"]),
-                buildDetailRow("Payment Status",
-                    item["cropDetails"]["paymentStatus"]),
+                buildDetailRow(
+                    "Payment Status", item["cropDetails"]["paymentStatus"]),
 
                 const SizedBox(height: 8),
                 const Text("Crop Photo",
@@ -139,12 +151,12 @@ class CompletedProcurementDetails extends StatelessWidget {
                 const Text("Delivery Person Details",
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                buildDetailRow("Delivery Person Name",
-                    item["deliveryPersonDetails"]["name"]),
-                buildDetailRow("Delivery Person Mobile",
-                    item["deliveryPersonDetails"]["mobNo"]),
-                buildDetailRow("Vehicle No.",
-                    item["deliveryPersonDetails"]["tractorNo"]),
+                buildDetailRow(
+                    "Delivery Person Name", item["deliveryPersonDetails"]["name"]),
+                buildDetailRow(
+                    "Delivery Person Mobile", item["deliveryPersonDetails"]["mobNo"]),
+                buildDetailRow(
+                    "Vehicle No.", item["deliveryPersonDetails"]["tractorNo"]),
 
                 const SizedBox(height: 8),
                 const Text("Vehicle Photo",
@@ -190,10 +202,7 @@ class CompletedProcurementDetails extends StatelessWidget {
       ),
     );
 
-    // ✅ Use dynamic widget, no const
-    return isEmbedded
-        ? content
-        : SafeArea(child: Scaffold(body: content));
+    return widget.isEmbedded ? content : SafeArea(child: Scaffold(body: content));
   }
 
   Widget buildDetailRow(String title, String value) {
@@ -217,6 +226,55 @@ class CompletedProcurementDetails extends StatelessWidget {
       height: 1,
       width: double.infinity,
       color: Colors.grey.shade300,
+    );
+  }
+
+  void editFarmerDetails() {
+    final farmer = completedProcurementData["farmerDetails"];
+    final crop = completedProcurementData["cropDetails"];
+    showDialog(
+      context: context,
+      builder: (_) {
+        final nameController = TextEditingController(text: farmer["farmerName"]);
+        final mobController = TextEditingController(text: farmer["mobNo"]);
+        final addressController = TextEditingController(text: farmer["address"]);
+        final cropNameController = TextEditingController(text: crop["cropName"]);
+        final qtyController = TextEditingController(text: crop["quantity"]);
+        return AlertDialog(
+          title: const Text("Edit Details"),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(controller: nameController, decoration: const InputDecoration(labelText: "Farmer Name")),
+                TextField(controller: mobController, decoration: const InputDecoration(labelText: "Farmer Mobile")),
+                TextField(controller: addressController, decoration: const InputDecoration(labelText: "Address")),
+                const SizedBox(height: 10),
+                TextField(controller: cropNameController, decoration: const InputDecoration(labelText: "Crop Name")),
+                TextField(controller: qtyController, decoration: const InputDecoration(labelText: "Quantity")),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  farmer["farmerName"] = nameController.text;
+                  farmer["mobNo"] = mobController.text;
+                  farmer["address"] = addressController.text;
+                  crop["cropName"] = cropNameController.text;
+                  crop["quantity"] = qtyController.text;
+                });
+                Navigator.pop(context);
+              },
+              child: const Text("Save"),
+            ),
+          ],
+        );
+      },
     );
   }
 }
