@@ -149,14 +149,6 @@ class _SignUpPageState extends State<SignUpPage> {
         'authMethod': authMethod,
         'state': _selectedState,
         'district': _selectedDistrict,
-        'likedcontent': [],
-        'likedauthors': [],
-        'likednewschannels': [],
-        'profileImageUrl': "",
-        'comments': [],
-        'subscriptions': [],
-        'Events': [],
-        'EventsRegistered': [],
       });
     }
   }
