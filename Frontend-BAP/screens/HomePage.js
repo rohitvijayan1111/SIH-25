@@ -27,7 +27,7 @@ const categoryList = [
 
 
 const HomePage = ({navigation}) => {
-  const mobile="http://192.168.1.10:5000";
+  // const mobile="http://192.168.1.10:5000";
   
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
