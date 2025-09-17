@@ -1,3 +1,4 @@
+import 'package:demo/screens/completed_procurement_details.dart';
 import 'package:flutter/material.dart';
 
 class ProcurementsScreen extends StatefulWidget {
@@ -149,29 +150,30 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
             ),
           ),
 
-          // List
+          // List Section
           Expanded(
-            child: ListView.builder(
-              itemCount: filteredList.length,
-              itemBuilder: (context, index) {
-                final item = filteredList[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.green.shade200,
-                      child: Text(item["id"].toString()),
-                    ),
-                    title: Text(item["name"]),
-                    subtitle: Text(item["isCompleted"]
-                        ? "Completed"
-                        : "In Progress"),
-                  ),
-                );
-              },
-            ),
-          ),
+  child: selectedTab == "completed"
+      ? CompletedProcurementDetails(isEmbedded: true) // 👈 embed mode
+      : ListView.builder(
+          itemCount: filteredList.length,
+          itemBuilder: (context, index) {
+            final item = filteredList[index];
+            return Card(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.green.shade200,
+                  child: Text(item["id"].toString()),
+                ),
+                title: Text(item["name"]),
+                subtitle:
+                    Text(item["isCompleted"] ? "Completed" : "In Progress"),
+              ),
+            );
+          },
+        ),
+),
+
         ],
       ),
 
@@ -266,7 +268,8 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundColor: Colors.green,
-                    child: Text(farmer[0], style: const TextStyle(color: Colors.white)),
+                    child: Text(farmer[0],
+                        style: const TextStyle(color: Colors.white)),
                   ),
                   title: Text(farmer),
                   trailing: Icon(
