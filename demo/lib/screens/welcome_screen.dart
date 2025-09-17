@@ -1,5 +1,7 @@
 // Welcome Screen
 
+import 'package:demo/screens/payment_details.dart';
+import 'package:demo/screens/product_details.dart';
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'voice_page.dart';
@@ -101,6 +103,35 @@ class WelcomeScreen extends StatelessWidget {
         label: "Procurements",
         color: Colors.indigo,
       ),
+
+      // Inside _buildButtons in welcome_screen.dart
+
+_buildButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentDetailsScreen(
+          paymentDetails: {
+            "totalAmount": 2000,
+            "paidAmount": 1679,
+            "dueAmount": 321,
+            "transactions": [
+              {
+                "method": "Cash",
+                "date": "2025-09-01T21:45:00",
+                "amount": 1679,
+              },
+            ],
+          },
+        ),
+      ),
+    );
+  },
+  label: "Payment Details",
+  color: Colors.deepPurple,
+),
+
     ];
 
     if (isWideScreen) {

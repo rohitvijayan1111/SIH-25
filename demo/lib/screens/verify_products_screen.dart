@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-// TODO Implement this library.
-import 'package:flutter/material.dart';
-
-class VerifyProductsScreen extends StatefulWidget {
-  const VerifyProductsScreen({super.key});
-=======
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -14,21 +7,12 @@ class VerifyProductsScreen extends StatefulWidget {
   final Map<String, dynamic> bppResponse;
   const VerifyProductsScreen({Key? key, required this.bppResponse})
       : super(key: key);
->>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 
   @override
   State<VerifyProductsScreen> createState() => _VerifyProductsScreenState();
 }
 
 class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
-<<<<<<< HEAD
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Voice Page')),
-      body: const Center(
-        child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
-=======
   Map<String, dynamic>? selectedDelivery;
   List<dynamic> logisticsOptions = [];
 
@@ -392,7 +376,6 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
             ),
           ),
         ],
->>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
       ),
     );
   }

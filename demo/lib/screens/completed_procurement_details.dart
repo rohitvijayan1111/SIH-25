@@ -1,17 +1,9 @@
-<<<<<<< HEAD
-// TODO Implement this library.
-import 'package:flutter/material.dart';
-
-class CompletedProcurementDetails extends StatefulWidget {
-  const CompletedProcurementDetails({super.key});
-=======
 import 'package:flutter/material.dart';
 
 class CompletedProcurementDetails extends StatefulWidget {
   final bool isEmbedded; // control if used inside tab or standalone
 
   const CompletedProcurementDetails({super.key, this.isEmbedded = true});
->>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 
   @override
   State<CompletedProcurementDetails> createState() =>
@@ -20,17 +12,6 @@ class CompletedProcurementDetails extends StatefulWidget {
 
 class _CompletedProcurementDetailsState
     extends State<CompletedProcurementDetails> {
-<<<<<<< HEAD
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Voice Page')),
-      body: const Center(
-        child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
-      ),
-    );
-  }
-=======
   late Map<String, dynamic> completedProcurementData;
 
   @override
@@ -296,5 +277,4 @@ class _CompletedProcurementDetailsState
       },
     );
   }
->>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 }
