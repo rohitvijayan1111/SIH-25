@@ -446,8 +446,8 @@
 
 import 'dart:async';
 import 'dart:math';
+
 import 'package:flutter/material.dart';
-import '../screens/product_details.dart';
 
 class CategorySection extends StatefulWidget {
   final String category;
@@ -583,7 +583,7 @@ class _CategorySectionState extends State<CategorySection> {
                   : '';
 
               return Container(
-                width: (int)cardWidth,
+                width: cardWidth.toDouble(),
                 margin: const EdgeInsets.only(right: 12),
                 child: Card(
                   shape: RoundedRectangleBorder(
