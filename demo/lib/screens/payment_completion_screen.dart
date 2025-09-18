@@ -7,9 +7,9 @@ class PaymentCompletionScreen extends StatelessWidget {
 
   const PaymentCompletionScreen({
     super.key,
-    this.amount = "1679",
-    this.method = "Cash",
-    this.dateTime = "September 1, 2025 at 9:45 PM",
+    required this.amount,
+    required this.method,
+    required this.dateTime,
   });
 
   @override
@@ -37,7 +37,6 @@ class PaymentCompletionScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // ✅ Success Icon
                   Container(
                     width: 64,
                     height: 64,
@@ -52,42 +51,21 @@ class PaymentCompletionScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // ✅ Title
                   const Text(
                     "Order Successful",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
-
-                  // ✅ Subtitle
                   const Text(
                     "Thank you for your purchase. Your order is being processed.",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black54,
-                      height: 1.4,
-                    ),
                     textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black54, height: 1.4),
                   ),
                   const SizedBox(height: 24),
-
-                  // ✅ Payment details
-                  Column(
-                    children: [
-                      _buildRow("Amount Paid", "₹$amount"),
-                      _buildRow("Payment Method", method),
-                      _buildRow("Date & Time", dateTime),
-                    ],
-                  ),
+                  _buildRow("Amount Paid", "₹$amount"),
+                  _buildRow("Payment Method", method),
+                  _buildRow("Date & Time", dateTime),
                   const SizedBox(height: 24),
-
-                  // ✅ Back to Home button
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -100,9 +78,6 @@ class PaymentCompletionScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2B9846),
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
                       ),
                       child: const Text(
                         "Back to Home",
@@ -123,7 +98,6 @@ class PaymentCompletionScreen extends StatelessWidget {
     );
   }
 
-  // Helper widget for details rows
   static Widget _buildRow(String label, String value) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -134,15 +108,11 @@ class PaymentCompletionScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: const TextStyle(color: Colors.black54)),
-          Flexible(
-            child: Text(
-              value,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
-              textAlign: TextAlign.right,
-              overflow: TextOverflow.ellipsis,
+          Text(
+            value,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
             ),
           ),
         ],
