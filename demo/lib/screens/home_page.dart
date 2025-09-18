@@ -1,24 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// class HomePage extends StatefulWidget {
-//   const HomePage({super.key});
-
-//   @override
-//   State<HomePage> createState() => _HomePageState();
-// }
-
-// class _HomePageState extends State<HomePage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Voice Page')),
-//       body: const Center(
-//         child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -28,7 +7,7 @@ import 'product_details.dart'; // Create this screen
 import 'package:demo/components/category_section.dart'; // Create this component
 import 'package:demo/global.dart';
 
-const String SERVER_URL = Globals.SERVER_URL_1;
+const String SERVER_URL = Globals.SERVER_URL_BAP;
 
 // Define the data models to handle the API response
 class CategoryData {
@@ -41,15 +20,6 @@ class CategoryData {
     required this.items,
     required this.providers,
   });
-
-  factory CategoryData.fromJson(Map<String, dynamic> json) {
-    final catalog = json['catalog']?['message']?['catalog'];
-    return CategoryData(
-      category: json['category'] ?? 'Unknown',
-      items: catalog?['items'] ?? [],
-      providers: catalog?['providers'] ?? [],
-    );
-  }
 }
 
 class HomePage extends StatefulWidget {
@@ -117,13 +87,17 @@ class _HomePageState extends State<HomePage> {
           'radius': 1000,
         }),
       );
+      // print("📩 Raw Response for category $category:");
+      // print(response.body);
 
       if (response.statusCode != 200) {
         throw Exception('HTTP error! Status: ${response.statusCode}');
       }
 
       final jsonResponse = jsonDecode(response.body);
-      final catalog = jsonResponse['catalog']?['message']?['catalog'];
+      final catalog = jsonResponse['catalog'];
+      print("\nprovidersssss\n");
+      print(catalog['providers'][0]);
 
       if (catalog == null) {
         throw Exception('Invalid ONDC /on_search response format.');
@@ -146,7 +120,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _searchProductsByName(String name) async {
     if (name.trim().isEmpty) {
-      _loadInitialCategories(); // Fallback to initial data
+      _loadInitialCategories(); // fallback
       return;
     }
 
@@ -167,8 +141,11 @@ class _HomePageState extends State<HomePage> {
         }),
       );
 
+      // print("📩 Raw Response for search term: $name");
+      // print(response.body);
+
       final jsonResponse = jsonDecode(response.body);
-      final catalog = jsonResponse['catalog']?['message']?['catalog'];
+      final catalog = jsonResponse['catalog'];
 
       setState(() {
         categories = [
@@ -180,7 +157,7 @@ class _HomePageState extends State<HomePage> {
         ];
       });
     } catch (error) {
-      print("Error searching product name: $error");
+      print("❌ Error searching product name: $error");
     } finally {
       setState(() {
         isLoading = false;
@@ -209,12 +186,15 @@ class _HomePageState extends State<HomePage> {
         }),
       );
 
+      print("📩 Raw Response for category $categoryID:");
+      print(response.body);
+
       if (response.statusCode != 200) {
         throw Exception('HTTP error! Status: ${response.statusCode}');
       }
 
       final jsonResponse = jsonDecode(response.body);
-      final catalog = jsonResponse['catalog']?['message']?['catalog'];
+      final catalog = jsonResponse['catalog'];
 
       if (catalog == null) {
         throw Exception('Invalid /on_search response format. Missing catalog.');
