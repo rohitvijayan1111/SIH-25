@@ -27,9 +27,10 @@ class PaymentCompletionScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 6)),
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 6),
+                  ),
                 ],
               ),
               padding: const EdgeInsets.all(24),
@@ -40,19 +41,26 @@ class PaymentCompletionScreen extends StatelessWidget {
                     width: 64,
                     height: 64,
                     decoration: const BoxDecoration(
-                        color: Color(0xFF2B9846), shape: BoxShape.circle),
-                    child: const Icon(Icons.check,
-                        size: 32, color: Colors.white),
+                      color: Color(0xFF2B9846),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.check,
+                      size: 32,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  const Text("Order Successful",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
+                  const Text(
+                    "Order Successful",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                  ),
                   const SizedBox(height: 8),
                   const Text(
-                      "Thank you for your purchase. Your order is being processed.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.black54, height: 1.4)),
+                    "Thank you for your purchase. Your order is being processed.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black54, height: 1.4),
+                  ),
                   const SizedBox(height: 24),
                   _buildRow("Amount Paid", "₹$amount"),
                   _buildRow("Payment Method", method),
@@ -62,18 +70,25 @@ class PaymentCompletionScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.popUntil(context, ModalRoute.withName('/home'));
+                        Navigator.popUntil(
+                          context,
+                          ModalRoute.withName('/home'),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2B9846),
-                          padding: const EdgeInsets.symmetric(vertical: 14)),
-                      child: const Text("Back to Home",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white)),
+                        backgroundColor: const Color(0xFF2B9846),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
+                        "Back to Home",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -93,9 +108,13 @@ class PaymentCompletionScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: const TextStyle(color: Colors.black54)),
-          Text(value,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w500, color: Colors.black87)),
+          Text(
+            value,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
+          ),
         ],
       ),
     );
