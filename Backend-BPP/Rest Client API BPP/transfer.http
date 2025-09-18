@@ -1,0 +1,52 @@
+### 1️⃣ Create Transfer Record
+POST http://localhost:3000/api/transfers
+Content-Type: application/json
+
+{
+  "batch_id": "af7df286-383c-44d1-8132-5f523c3e1cbe",
+  "from_actor": "FPO-07",
+  "to_actor": "Retailer",
+  "quantity_kg": 150,
+  "location_name": "Village Collection Center",
+  "geo_lat": 12.9716,
+  "geo_lon": 77.5946
+}
+
+###
+
+### 2️⃣ Fetch Transfer History by Batch
+GET http://localhost:3000/api/transfers/batch/af7df286-383c-44d1-8132-5f523c3e1cbe
+
+###
+
+### 3️⃣ Fetch Latest Transfer Event for a Batch
+GET http://localhost:3000/api/transfers/latest/af7df286-383c-44d1-8132-5f523c3e1cbe
+
+
+###
+
+### 4️⃣ Fetch Transfers by Actor
+GET http://localhost:3000/api/transfers/actor/FPO-07
+
+###
+
+### 5️⃣ Verify Transfer on Blockchain
+GET http://localhost:3000/api/transfers/06f0ec36-e1a8-4107-8870-453651234986/verify
+
+###
+
+### 6️⃣ Update Transfer Record
+PUT http://localhost:3000/api/transfers/06f0ec36-e1a8-4107-8870-453651234986
+Content-Type: application/json
+
+{
+  "quantity_kg": 115,
+  "location_name": "Updated Warehouse Location",
+  "geo_lat": 13.0827,
+  "geo_lon": 80.2707
+}
+
+###
+
+### 7️⃣ Delete Transfer Record (Soft Delete)
+DELETE http://localhost:3000/api/transfers/06f0ec36-e1a8-4107-8870-453651234986

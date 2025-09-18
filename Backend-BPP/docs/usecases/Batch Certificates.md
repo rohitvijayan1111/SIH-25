@@ -7,7 +7,7 @@ Here’s an expanded version just for the **Batch Certificates use cases + API e
 
 ### 1️⃣ **Attach Certification to a Batch**
 
-* **Use Case**: Farmers, producers, or certifying authorities attach certificates (Organic, FSSAI, Fair Trade, ISO, Lab Test Reports) to a batch.
+* **Use Case**: Farmerfeature/batches,certificate-apis, producers, or certifying authorities attach certificates (Organic, FSSAI, Fair Trade, ISO, Lab Test Reports) to a batch.
 * **Endpoint**:
 
   ```
