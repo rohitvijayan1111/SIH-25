@@ -253,28 +253,47 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.green.shade50, // light background green
       appBar: AppBar(
-        title: const Text('Home'),
-        backgroundColor: Colors.green,
+        title: const Text(
+          'Home',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        centerTitle: true,
         elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF2e7d32),
+                Color(0xFF66bb6a),
+              ], // dark → light green
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: Column(
         children: [
           // Search Bar Section
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
-              color: Colors.green[100],
+              gradient: LinearGradient(
+                colors: [Colors.green.shade100, Colors.green.shade200],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
               borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(16),
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 5,
-                  offset: const Offset(0, 2),
+                  color: Colors.green.withOpacity(0.2),
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
@@ -286,12 +305,16 @@ class _HomePageState extends State<HomePage> {
                     onChanged: (value) => setState(() => searchTerm = value),
                     decoration: InputDecoration(
                       hintText: "Search products...",
-                      hintStyle: const TextStyle(color: Colors.grey),
+                      hintStyle: TextStyle(color: Colors.green.shade600),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
                         borderSide: BorderSide.none,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.green.shade700,
                       ),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -303,52 +326,66 @@ class _HomePageState extends State<HomePage> {
                 ElevatedButton(
                   onPressed: () => _searchProductsByName(searchTerm),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.green.shade700,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
                     elevation: 3,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
                   ),
                   child: const Text(
                     "Search",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
+
           // Category List Section
           Container(
-            height: 50,
-            margin: const EdgeInsets.symmetric(vertical: 8),
+            height: 55,
+            margin: const EdgeInsets.symmetric(vertical: 10),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: categoryList.length,
               itemBuilder: (context, index) {
                 final categoryItem = categoryList[index];
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: ElevatedButton(
                     onPressed: () => _handleCategoryPress(
                       categoryItem['id']!,
                       categoryItem['name']!,
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[200],
+                      backgroundColor: Colors.green.shade300,
+                      foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      elevation: 1,
+                      elevation: 2,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                     ),
                     child: Text(
                       categoryItem['name']!,
-                      style: TextStyle(color: Colors.green[800]),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                 );
               },
             ),
           ),
+
           // Content Section (Product List)
           Expanded(
             child: SingleChildScrollView(
@@ -365,7 +402,7 @@ class _HomePageState extends State<HomePage> {
                         providers: section.providers,
                       ),
                       if (index < categories.length - 1)
-                        const Divider(height: 1, color: Colors.grey),
+                        Divider(height: 1, color: Colors.green.shade200),
                     ],
                   );
                 }).toList(),
