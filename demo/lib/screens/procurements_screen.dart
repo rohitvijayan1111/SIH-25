@@ -188,17 +188,31 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
 
       // Floating Button
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CreateProcurementScreen(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add, size: 30),
+  backgroundColor: Colors.green,
+  onPressed: () async {
+    // Navigate to CreateProcurementScreen and wait for returned data
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CreateProcurementScreen(),
       ),
+    );
+
+    // If user saved new procurement, add it to the list
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        // Assign a new unique id based on current list length
+        result["id"] = procurementList.length + 1;
+        result["isCompleted"] = false; // default status
+        result["name"] =
+            "${result["cropName"] ?? "Crop"} Procurement"; // title for display
+        procurementList.add(result);
+      });
+    }
+  },
+  child: const Icon(Icons.add, size: 30),
+),
+
 
       // Modals
       bottomSheet: isFilterModalOpen
