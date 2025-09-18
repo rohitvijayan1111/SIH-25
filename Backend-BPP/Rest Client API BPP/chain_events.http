@@ -1,0 +1,31 @@
+### 1️⃣ Record a New Chain Event
+POST http://localhost:3000/api/chain-events
+Content-Type: application/json
+
+{
+  "event_type": "TransferRecorded",
+  "entity_type": "batch",
+  "entity_id": "af7df286-383c-44d1-8132-5f523c3e1cbe",
+  "details": {
+    "from_actor": "Farmer Ajith",
+    "to_actor": "FPO-07",
+    "quantity_kg": 120,
+    "location_name": "Village Collection Center"
+  },
+  "tx_hash": "0xabc123..."
+}
+
+### 2️⃣ Fetch All Chain Events
+GET http://localhost:3000/api/chain-events
+
+### 3️⃣ Fetch Events by Entity
+GET http://localhost:3000/api/chain-events/entity/batch/af7df286-383c-44d1-8132-5f523c3e1cbe
+
+### 4️⃣ Fetch Events by Actor
+GET http://localhost:3000/api/chain-events/actor/FPO-07
+
+### 5️⃣ Fetch Latest Event for an Entity
+GET http://localhost:3000/api/chain-events/latest/batch/af7df286-383c-44d1-8132-5f523c3e1cbe
+
+### 6️⃣ Verify Event on Blockchain
+GET http://localhost:3000/api/chain-events/10039332-07a3-4b1e-8447-2a14c69056ab/verify
