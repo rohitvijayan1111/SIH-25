@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'payment_screen.dart';
 
 class PaymentDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> paymentDetails;
@@ -15,9 +16,9 @@ class PaymentDetailsScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Header
+            // ✅ Header
             Container(
-              color: const Color(0xFFB2FFB7), // bg-[#B2FFB7]
+              color: const Color(0xFFB2FFB7),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
               child: Row(
                 children: [
@@ -28,10 +29,7 @@ class PaymentDetailsScreen extends StatelessWidget {
                   const SizedBox(width: 8),
                   const Text(
                     "Payment Details",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -42,117 +40,86 @@ class PaymentDetailsScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   children: [
-                    // Amount Summary
+                    // ✅ Amount Summary
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border: Border.all(color: Colors.grey.shade300, width: 2),
+                        border:
+                            Border.all(color: Colors.grey.shade300, width: 2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
-                          _buildRow(
-                              "Total Amount", "₹${paymentDetails['totalAmount']}"),
-                          _buildRow(
-                              "Paid Amount", "₹${paymentDetails['paidAmount']}"),
-                          _buildRow(
-                              "Due Amount", "₹${paymentDetails['dueAmount']}"),
+                          _buildRow("Total Amount",
+                              "₹${paymentDetails['totalAmount']}"),
+                          _buildRow("Paid Amount",
+                              "₹${paymentDetails['paidAmount']}"),
+                          _buildRow("Due Amount",
+                              "₹${paymentDetails['dueAmount']}"),
                         ],
                       ),
                     ),
 
-                    // Transactions
+                    // ✅ Transactions
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border: Border.all(color: Colors.grey.shade300, width: 2),
+                        border:
+                            Border.all(color: Colors.grey.shade300, width: 2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "Transaction",
+                            "Transactions",
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 12),
-
                           ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: transactions.length,
                             itemBuilder: (context, index) {
-                              final item =
+                              final tx =
                                   transactions[index] as Map<String, dynamic>;
-                              final date =
-                                  DateTime.tryParse(item['date'] ?? '') ??
-                                      DateTime.now();
-
-                              // ✅ Fix: compute hourOfPeriod manually
-                              final hourOfPeriod = date.hour % 12 == 0
-                                  ? 12
-                                  : date.hour % 12;
-                              final minute =
-                                  date.minute.toString().padLeft(2, '0');
-                              final period = date.hour >= 12 ? 'PM' : 'AM';
-
-                              return Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.grey.shade400,
-                                    ),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Pay By ${item['method']}",
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          "${date.day.toString().padLeft(2, '0')}-${_monthName(date.month)}-${date.year}, "
-                                          "$hourOfPeriod:$minute $period",
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.grey.shade600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      "₹${(item['amount'] is num) ? (item['amount'] as num).toStringAsFixed(2) : '0.00'}",
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              return ListTile(
+                                title: Text("Pay By ${tx['method']}"),
+                                subtitle: Text(tx['date'] ?? ''),
+                                trailing: Text("₹${tx['amount']}"),
                               );
                             },
                           ),
                         ],
+                      ),
+                    ),
+
+                    // ✅ Proceed to Payment
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 14, horizontal: 20),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                PaymentScreen(order: paymentDetails),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Proceed to Payment",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ],
@@ -171,35 +138,12 @@ class PaymentDetailsScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label,
-              style: const TextStyle(
-                fontSize: 15,
-              )),
+          Text(label, style: const TextStyle(fontSize: 15)),
           Text(value,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              )),
+              style:
+                  const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
         ],
       ),
     );
-  }
-
-  String _monthName(int month) {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
-    return months[month - 1];
   }
 }
