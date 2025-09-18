@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
 
 class PaymentCompletionScreen extends StatelessWidget {
@@ -94,7 +93,9 @@ class PaymentCompletionScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.popUntil(
-                            context, ModalRoute.withName('/home'));
+                          context,
+                          ModalRoute.withName('/home'),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2B9846),
@@ -127,9 +128,7 @@ class PaymentCompletionScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Color(0xFFEDEDED), width: 1),
-        ),
+        border: Border(bottom: BorderSide(color: Color(0xFFEDEDED), width: 1)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -147,25 +146,6 @@ class PaymentCompletionScreen extends StatelessWidget {
             ),
           ),
         ],
-=======
-// TODO Implement this library.
-import 'package:flutter/material.dart';
-
-class PaymentSuccessPage extends StatefulWidget {
-  const PaymentSuccessPage({super.key});
-
-  @override
-  State<PaymentSuccessPage> createState() => _PaymentSuccessPageState();
-}
-
-class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Voice Page')),
-      body: const Center(
-        child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
->>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
       ),
     );
   }

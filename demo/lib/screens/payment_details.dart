@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
 
 class PaymentDetailsScreen extends StatelessWidget {
@@ -29,10 +28,7 @@ class PaymentDetailsScreen extends StatelessWidget {
                   const SizedBox(width: 8),
                   const Text(
                     "Payment Details",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -49,17 +45,26 @@ class PaymentDetailsScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border: Border.all(color: Colors.grey.shade300, width: 2),
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 2,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
                           _buildRow(
-                              "Total Amount", "₹${paymentDetails['totalAmount']}"),
+                            "Total Amount",
+                            "₹${paymentDetails['totalAmount']}",
+                          ),
                           _buildRow(
-                              "Paid Amount", "₹${paymentDetails['paidAmount']}"),
+                            "Paid Amount",
+                            "₹${paymentDetails['paidAmount']}",
+                          ),
                           _buildRow(
-                              "Due Amount", "₹${paymentDetails['dueAmount']}"),
+                            "Due Amount",
+                            "₹${paymentDetails['dueAmount']}",
+                          ),
                         ],
                       ),
                     ),
@@ -70,7 +75,10 @@ class PaymentDetailsScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border: Border.all(color: Colors.grey.shade300, width: 2),
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 2,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -94,19 +102,22 @@ class PaymentDetailsScreen extends StatelessWidget {
                                   transactions[index] as Map<String, dynamic>;
                               final date =
                                   DateTime.tryParse(item['date'] ?? '') ??
-                                      DateTime.now();
+                                  DateTime.now();
 
                               // ✅ Fix: compute hourOfPeriod manually
                               final hourOfPeriod = date.hour % 12 == 0
                                   ? 12
                                   : date.hour % 12;
-                              final minute =
-                                  date.minute.toString().padLeft(2, '0');
+                              final minute = date.minute.toString().padLeft(
+                                2,
+                                '0',
+                              );
                               final period = date.hour >= 12 ? 'PM' : 'AM';
 
                               return Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ),
                                 decoration: BoxDecoration(
                                   border: Border(
                                     bottom: BorderSide(
@@ -172,15 +183,11 @@ class PaymentDetailsScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label,
-              style: const TextStyle(
-                fontSize: 15,
-              )),
-          Text(value,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              )),
+          Text(label, style: const TextStyle(fontSize: 15)),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          ),
         ],
       ),
     );
@@ -199,30 +206,8 @@ class PaymentDetailsScreen extends StatelessWidget {
       "Sep",
       "Oct",
       "Nov",
-      "Dec"
+      "Dec",
     ];
     return months[month - 1];
   }
-=======
-// TODO Implement this library.
-import 'package:flutter/material.dart';
-
-class PaymentDetails extends StatefulWidget {
-  const PaymentDetails({super.key});
-
-  @override
-  State<PaymentDetails> createState() => _PaymentDetailsState();
-}
-
-class _PaymentDetailsState extends State<PaymentDetails> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Voice Page')),
-      body: const Center(
-        child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
-      ),
-    );
-  }
->>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 }

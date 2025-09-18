@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,20 +6,12 @@ class ProductDetailsScreen extends StatefulWidget {
   final String itemId;
 
   const ProductDetailsScreen({super.key, required this.itemId});
-=======
-// TODO Implement this library.
-import 'package:flutter/material.dart';
-
-class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key});
->>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-<<<<<<< HEAD
   bool loading = true;
   int quantity = 1;
   Map<String, dynamic>? productData;
@@ -43,7 +34,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"items": [{"id": widget.itemId}]}),
+        body: jsonEncode({
+          "items": [
+            {"id": widget.itemId},
+          ],
+        }),
       );
 
       final json = jsonDecode(response.body);
@@ -89,8 +84,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
       final json = jsonDecode(response.body);
       setState(() {
-        relatedItems =
-            json["catalog"]?["message"]?["catalog"]?["items"] ?? [];
+        relatedItems = json["catalog"]?["message"]?["catalog"]?["items"] ?? [];
       });
     } catch (e) {
       debugPrint("❌ Error fetching similar products: $e");
@@ -100,23 +94,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   void handleBatchSelect(int index, Map<String, dynamic> batch) {
     setState(() {
       selectedBatchIndex = index;
-      selectedPrice = double.tryParse(batch["price"]?["value"]?.toString() ?? "0");
+      selectedPrice = double.tryParse(
+        batch["price"]?["value"]?.toString() ?? "0",
+      );
     });
   }
 
   void handleAddToCart(Map<String, dynamic> item) {
     debugPrint("🛒 Added to cart: $item");
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Added to cart")),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text("Added to cart")));
   }
 
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (productData == null ||
@@ -154,10 +148,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             // Product Name
             Text(
               item["descriptor"]?["name"] ?? "Unnamed Product",
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
 
@@ -175,16 +166,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             // Quantity Selector
             Row(
               children: [
-                const Text("Quantity:",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                const Text(
+                  "Quantity:",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
                 IconButton(
                   icon: const Icon(Icons.remove_circle, color: Colors.red),
                   onPressed: () => setState(() {
                     if (quantity > 1) quantity--;
                   }),
                 ),
-                Text(quantity.toString(),
-                    style: const TextStyle(fontSize: 18)),
+                Text(quantity.toString(), style: const TextStyle(fontSize: 18)),
                 IconButton(
                   icon: const Icon(Icons.add_circle, color: Colors.green),
                   onPressed: () => setState(() => quantity++),
@@ -195,9 +187,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
             // Available Batches
             if (item["batches"] != null && item["batches"].isNotEmpty) ...[
-              const Text("Available Batches",
-                  style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+              const Text(
+                "Available Batches",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
               const SizedBox(height: 10),
               for (int i = 0; i < item["batches"].length; i++)
                 GestureDetector(
@@ -214,10 +207,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           Text(
                             "₹${item["batches"][i]["price"]?["value"] ?? "N/A"}",
                             style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           Text(
-                              "Stock: ${item["batches"][i]["quantity"]?["available"]?["count"] ?? "N/A"}"),
+                            "Stock: ${item["batches"][i]["quantity"]?["available"]?["count"] ?? "N/A"}",
+                          ),
                         ],
                       ),
                     ),
@@ -233,33 +229,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   padding: const EdgeInsets.symmetric(
-                      vertical: 14, horizontal: 24),
+                    vertical: 14,
+                    horizontal: 24,
+                  ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 onPressed: () => handleAddToCart({
                   "item_name": item["descriptor"]?["name"],
                   "quantity": quantity,
-                  "unit_price": selectedPrice ??
-                      double.tryParse(item["batches"]?[0]?["price"]?["value"]?.toString() ?? "0") ??
+                  "unit_price":
+                      selectedPrice ??
+                      double.tryParse(
+                        item["batches"]?[0]?["price"]?["value"]?.toString() ??
+                            "0",
+                      ) ??
                       0,
                 }),
                 icon: const Icon(Icons.shopping_cart),
-                label: const Text("Add to Cart",
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                label: const Text(
+                  "Add to Cart",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ],
         ),
-=======
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Voice Page')),
-      body: const Center(
-        child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
->>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
       ),
     );
   }

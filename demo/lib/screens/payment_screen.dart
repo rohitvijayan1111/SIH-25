@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
 import 'payment_completion_screen.dart'; // ensure this file exists
 
@@ -6,20 +5,12 @@ class PaymentScreen extends StatefulWidget {
   final Map<String, dynamic> order;
 
   const PaymentScreen({super.key, required this.order});
-=======
-// TODO Implement this library.
-import 'package:flutter/material.dart';
-
-class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key});
->>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-<<<<<<< HEAD
   String paymentType = "COD";
   bool loading = false;
 
@@ -29,16 +20,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     // 👇 Navigate and wait for result
     Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => PaymentCompletionScreen(
-      amount: "1679",
-      method: paymentType == "COD" ? "Cash" : "Online",
-      dateTime: "September 1, 2025 at 9:45 PM",
-    ),
-  ),
-);
-
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentCompletionScreen(
+          amount: "1679",
+          method: paymentType == "COD" ? "Cash" : "Online",
+          dateTime: "September 1, 2025 at 9:45 PM",
+        ),
+      ),
+    );
 
     // Reset loading when user comes back
     if (mounted) {
@@ -127,10 +117,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ElevatedButton(
                 onPressed: loading ? null : handlePayment,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      loading ? Colors.green[300] : Colors.green[600],
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                  backgroundColor: loading
+                      ? Colors.green[300]
+                      : Colors.green[600],
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 24,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -148,14 +141,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ],
           ),
         ),
-=======
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Voice Page')),
-      body: const Center(
-        child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
->>>>>>> 89f70c0f0ca5889202553f4504723363d59b1deb
       ),
     );
   }

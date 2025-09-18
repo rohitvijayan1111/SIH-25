@@ -97,14 +97,6 @@ class _CollectDetailsState extends State<CollectDetails> {
                         'email': globalEmail ?? "",
                         'state': [_selectedState],
                         'district': [_selectedDistrict],
-                        'likedcontent': [],
-                        'likedauthors': [],
-                        'likednewschannels': [],
-                        'profileImageUrl': "",
-                        'comments': [],
-                        'subscriptions': [],
-                        'Events': [],
-                        'EventsRegistered': [],
                       });
 
                   Navigator.pushReplacement(
