@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class VerifyProductsScreen extends StatefulWidget {
   final Map<String, dynamic> bppResponse;
   const VerifyProductsScreen({Key? key, required this.bppResponse})
-      : super(key: key);
+    : super(key: key);
 
   @override
   State<VerifyProductsScreen> createState() => _VerifyProductsScreenState();
@@ -33,15 +33,17 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
       final payload = {
         'start': {
           'gps': fulfillment['start']?['location']?['gps'] ?? "13.0827,80.2707",
-          'address': fulfillment['start']?['location']?['address'] ??
+          'address':
+              fulfillment['start']?['location']?['address'] ??
               "Warehouse, Chennai",
         },
         'end': {
           'gps': fulfillment['end']?['location']?['gps'] ?? "12.9716,77.5946",
           'address':
-              fulfillment['end']?['location']?['address'] ?? "Customer Address, Bangalore",
+              fulfillment['end']?['location']?['address'] ??
+              "Customer Address, Bangalore",
         },
-        'weight_kg': 5
+        'weight_kg': 5,
       };
 
       final response = await http.post(
@@ -106,14 +108,18 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                         Text(
                           provider['descriptor']?['name'] ?? 'Unknown Provider',
                           style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green),
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           "📍 ${fulfillment['start']?['location']?['address'] ?? 'No address'}",
-                          style: TextStyle(fontSize: 14, color: Colors.green[800]),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.green[800],
+                          ),
                         ),
                       ],
                     ),
@@ -131,17 +137,22 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🚚 Fulfillment Info',
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green[700])),
+                        Text(
+                          '🚚 Fulfillment Info',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green[700],
+                          ),
+                        ),
                         const SizedBox(height: 8),
                         Text('Type: ${fulfillment['type'] ?? 'N/A'}'),
                         Text(
-                            '📍 Pickup: ${fulfillment['start']?['location']?['address'] ?? 'N/A'}'),
+                          '📍 Pickup: ${fulfillment['start']?['location']?['address'] ?? 'N/A'}',
+                        ),
                         Text(
-                            '🏁 Delivery: ${fulfillment['end']?['location']?['address'] ?? 'N/A'}'),
+                          '🏁 Delivery: ${fulfillment['end']?['location']?['address'] ?? 'N/A'}',
+                        ),
                         Text(
                           '⏳ ETA: ${fulfillment['estimated_delivery'] != null ? fulfillment['estimated_delivery'] : 'N/A'}',
                         ),
@@ -157,11 +168,16 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                   const SizedBox(height: 8),
                   ...items.map((item) {
                     final qty = item['quantity']?['count'] ?? 1;
-                    final unit = item['quantity']?['unitized']?['measure']?['unit'] ?? '';
-                    final unitPrice = double.parse(item['price']?['value']?.toString() ?? '0');
+                    final unit =
+                        item['quantity']?['unitized']?['measure']?['unit'] ??
+                        '';
+                    final unitPrice = double.parse(
+                      item['price']?['value']?.toString() ?? '0',
+                    );
                     final subtotal = (unitPrice * qty).toStringAsFixed(2);
                     final isOrganic = item['tags']?[0]?['value'] == 'true';
-                    final imageUrl = item['descriptor']?['images']?[0] ??
+                    final imageUrl =
+                        item['descriptor']?['images']?[0] ??
                         'https://via.placeholder.com/60';
 
                     return Container(
@@ -192,7 +208,9 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                                   right: -2,
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 6, vertical: 2),
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: Colors.green[200],
                                       borderRadius: BorderRadius.circular(12),
@@ -200,9 +218,10 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                                     child: const Text(
                                       'Organic',
                                       style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.green),
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -216,15 +235,26 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                                 Text(
                                   item['descriptor']?['name'] ?? '',
                                   style: const TextStyle(
-                                      fontSize: 14, fontWeight: FontWeight.bold),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                Text('Qty: $qty $unit', style: const TextStyle(fontSize: 12)),
-                                Text('Unit Price: ₹$unitPrice', style: const TextStyle(fontSize: 12)),
-                                Text('Subtotal: ₹$subtotal',
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green)),
+                                Text(
+                                  'Qty: $qty $unit',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  'Unit Price: ₹$unitPrice',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  'Subtotal: ₹$subtotal',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -245,12 +275,21 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('💰 Price Summary',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
+                        const Text(
+                          '💰 Price Summary',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
                         const SizedBox(height: 8),
-                        ...((quote['breakup'] ?? []) as List<dynamic>).map((entry) {
-                          final price = double.parse(entry['price']?['value']?.toString() ?? '0');
+                        ...((quote['breakup'] ?? []) as List<dynamic>).map((
+                          entry,
+                        ) {
+                          final price = double.parse(
+                            entry['price']?['value']?.toString() ?? '0',
+                          );
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -263,29 +302,44 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Total', style: TextStyle(fontWeight: FontWeight.bold)),
+                            const Text(
+                              'Total',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                             Text(
                               '₹${double.parse(quote['price']?['value']?.toString() ?? '0')}',
-                              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
 
                   // Logistics Options
                   if (logisticsOptions.isNotEmpty) ...[
-                    const Text('🚚 Delivery Options',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
+                    const Text(
+                      '🚚 Delivery Options',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     ...logisticsOptions.map((provider) {
                       final providerId = provider['id'];
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ...((provider['items'] ?? []) as List<dynamic>).map((option) {
-                            final isSelected = selectedDelivery != null &&
+                          ...((provider['items'] ?? []) as List<dynamic>).map((
+                            option,
+                          ) {
+                            final isSelected =
+                                selectedDelivery != null &&
                                 selectedDelivery!['providerId'] == providerId &&
                                 selectedDelivery!['itemId'] == option['id'];
                             return GestureDetector(
@@ -293,7 +347,8 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                                 setState(() {
                                   selectedDelivery = {
                                     'providerId': providerId,
-                                    'providerName': provider['descriptor']?['name'],
+                                    'providerName':
+                                        provider['descriptor']?['name'],
                                     'itemId': option['id'],
                                     'itemName': option['descriptor']?['name'],
                                     'price': option['price']?['value'],
@@ -305,25 +360,39 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                                 margin: const EdgeInsets.only(bottom: 8),
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: isSelected ? Colors.green[100] : Colors.green[50],
+                                  color: isSelected
+                                      ? Colors.green[100]
+                                      : Colors.green[50],
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                      color: isSelected ? Colors.green : Colors.green.shade200),
+                                    color: isSelected
+                                        ? Colors.green
+                                        : Colors.green.shade200,
+                                  ),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(option['descriptor']?['name'] ?? '',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold, fontSize: 14)),
+                                    Text(
+                                      option['descriptor']?['name'] ?? '',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
                                     const SizedBox(height: 4),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('Price: ₹${option['price']?['value'] ?? 0}'),
-                                        Text('ETA: ${option['time']?['duration'] ?? ''}'),
+                                        Text(
+                                          'Price: ₹${option['price']?['value'] ?? 0}',
+                                        ),
+                                        Text(
+                                          'ETA: ${option['time']?['duration'] ?? ''}',
+                                        ),
                                       ],
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
@@ -332,7 +401,7 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                         ],
                       );
                     }).toList(),
-                  ]
+                  ],
                 ],
               ),
             ),
@@ -346,31 +415,46 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                  color: Colors.green[100],
-                  border: Border(top: BorderSide(color: Colors.green.shade200)),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)
-                  ]),
+                color: Colors.green[100],
+                border: Border(top: BorderSide(color: Colors.green.shade200)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 8,
+                  ),
+                ],
+              ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green[700],
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 onPressed: selectedDelivery != null
                     ? () {
-                        Navigator.pushNamed(context, '/paymentScreen',
-                            arguments: {'order': order});
+                        Navigator.pushNamed(
+                          context,
+                          '/paymentScreen',
+                          arguments: {'order': order},
+                        );
                       }
                     : () {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
                             content: Text(
-                                'Please select a delivery option before proceeding.')));
+                              'Please select a delivery option before proceeding.',
+                            ),
+                          ),
+                        );
                       },
                 child: const Text(
                   '✅ Proceed to Payment',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),

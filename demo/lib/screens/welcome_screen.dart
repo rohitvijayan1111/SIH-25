@@ -3,13 +3,14 @@
 import 'package:demo/screens/payment_details.dart';
 import 'package:demo/screens/product_details.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import 'home_page.dart';
 import 'voice_page.dart';
 import 'view_cart_screen.dart';
 import 'procurements_screen.dart';
 import '../auth/signin.dart';
-import '../auth/splashscreen.dart';
-import '../global.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -44,8 +45,7 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
 
-                      // We'll wrap the buttons in a new widget
-                      // that changes based on screen size
+                      // Buttons
                       _buildButtons(isWideScreen, context),
 
                       const SizedBox(height: 40),
@@ -60,8 +60,22 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
+  // 🔑 Sign out function
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      await GoogleSignIn().signOut(); // Google sign out
+    } catch (_) {}
+    await FirebaseAuth.instance.signOut(); // Firebase sign out
+
+    // Navigate back to SignIn page
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SignInPage()),
+    );
+  }
+
   Widget _buildButtons(bool isWideScreen, BuildContext context) {
-    // A list of the buttons you want to display
+    // Buttons list
     final buttonWidgets = [
       _buildButton(
         onPressed: () {
@@ -103,39 +117,45 @@ class WelcomeScreen extends StatelessWidget {
         label: "Procurements",
         color: Colors.indigo,
       ),
+      // 🔴 New Sign Out button
+      _buildButton(
+        onPressed: () async {
+          await _signOut(context);
+        },
+        label: "Sign Out",
+        color: Colors.red,
+      ),
 
       // Inside _buildButtons in welcome_screen.dart
-
-_buildButton(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PaymentDetailsScreen(
-          paymentDetails: {
-            "totalAmount": 2000,
-            "paidAmount": 1679,
-            "dueAmount": 321,
-            "transactions": [
-              {
-                "method": "Cash",
-                "date": "2025-09-01T21:45:00",
-                "amount": 1679,
-              },
-            ],
-          },
-        ),
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PaymentDetailsScreen(
+                paymentDetails: {
+                  "totalAmount": 2000,
+                  "paidAmount": 1679,
+                  "dueAmount": 321,
+                  "transactions": [
+                    {
+                      "method": "Cash",
+                      "date": "2025-09-01T21:45:00",
+                      "amount": 1679,
+                    },
+                  ],
+                },
+              ),
+            ),
+          );
+        },
+        label: "Payment Details",
+        color: Colors.deepPurple,
       ),
-    );
-  },
-  label: "Payment Details",
-  color: Colors.deepPurple,
-),
-
     ];
 
     if (isWideScreen) {
-      // For wide screens, use a Row to put buttons side-by-side
+      // Wide screens: side by side
       return Wrap(
         spacing: 16.0,
         runSpacing: 16.0,
@@ -143,7 +163,7 @@ _buildButton(
         children: buttonWidgets,
       );
     } else {
-      // For smaller screens, use a Column to stack the buttons
+      // Mobile: stacked
       return Column(
         children: [
           ...buttonWidgets.map(
@@ -163,7 +183,7 @@ _buildButton(
     required Color color,
   }) {
     return SizedBox(
-      width: 250, // Give the buttons a consistent width
+      width: 250,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(

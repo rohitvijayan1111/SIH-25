@@ -46,18 +46,26 @@ class PaymentDetailsScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border:
-                            Border.all(color: Colors.grey.shade300, width: 2),
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 2,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
-                          _buildRow("Total Amount",
-                              "₹${paymentDetails['totalAmount']}"),
-                          _buildRow("Paid Amount",
-                              "₹${paymentDetails['paidAmount']}"),
-                          _buildRow("Due Amount",
-                              "₹${paymentDetails['dueAmount']}"),
+                          _buildRow(
+                            "Total Amount",
+                            "₹${paymentDetails['totalAmount']}",
+                          ),
+                          _buildRow(
+                            "Paid Amount",
+                            "₹${paymentDetails['paidAmount']}",
+                          ),
+                          _buildRow(
+                            "Due Amount",
+                            "₹${paymentDetails['dueAmount']}",
+                          ),
                         ],
                       ),
                     ),
@@ -68,8 +76,10 @@ class PaymentDetailsScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border:
-                            Border.all(color: Colors.grey.shade300, width: 2),
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 2,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -78,7 +88,9 @@ class PaymentDetailsScreen extends StatelessWidget {
                           const Text(
                             "Transactions",
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(height: 12),
                           ListView.builder(
@@ -105,7 +117,9 @@ class PaymentDetailsScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         padding: const EdgeInsets.symmetric(
-                            vertical: 14, horizontal: 20),
+                          vertical: 14,
+                          horizontal: 20,
+                        ),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -119,7 +133,9 @@ class PaymentDetailsScreen extends StatelessWidget {
                       child: const Text(
                         "Proceed to Payment",
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -139,9 +155,10 @@ class PaymentDetailsScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: const TextStyle(fontSize: 15)),
-          Text(value,
-              style:
-                  const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          ),
         ],
       ),
     );

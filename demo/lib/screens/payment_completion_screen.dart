@@ -87,8 +87,12 @@ class PaymentCompletionScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: const BoxDecoration(
+<<<<<<< HEAD
+        border: Border(bottom: BorderSide(color: Color(0xFFEDEDED), width: 1)),
+=======
         border:
             Border(bottom: BorderSide(color: Color(0xFFEDEDED), width: 1)),
+>>>>>>> 6d1ccaaf78b5dde64fcf1239fbe2344579caf0ff
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import '../components/similar_products.dart';
+// import 'similar_products.dart';
 
 // Replace with your .env values
 const SERVER_URL = "http://your-server-ip:5000";
@@ -8,7 +9,8 @@ const SERVER_URL = "http://your-server-ip:5000";
 class ProductDetailsScreen extends StatefulWidget {
   final String itemId;
 
-  const ProductDetailsScreen({Key? key, required this.itemId, required product}) : super(key: key);
+  const ProductDetailsScreen({Key? key, required this.itemId, required product})
+    : super(key: key);
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -27,7 +29,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     "currency": "INR",
     "weightPerUnit": null,
     "unit": "unit",
-    "availableCount": 0
+    "availableCount": 0,
   };
 
   Future<void> fetchSimilarProducts(String category) async {
@@ -41,7 +43,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           "category": category,
           "lat": 23.2599,
           "lon": 79.0882,
-          "radius": 1000
+          "radius": 1000,
         }),
       );
 
@@ -65,8 +67,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "items": [
-            {"id": widget.itemId}
-          ]
+            {"id": widget.itemId},
+          ],
         }),
       );
 
@@ -84,8 +86,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             "currency": firstBatch["price"]?["currency"] ?? "INR",
             "weightPerUnit":
                 firstBatch["quantity"]?["unitized"]?["measure"]?["weight_per_unit"],
-            "unit": firstBatch["quantity"]?["unitized"]?["measure"]?["unit"] ?? "unit",
-            "availableCount": firstBatch["quantity"]?["available"]?["count"] ?? 0,
+            "unit":
+                firstBatch["quantity"]?["unitized"]?["measure"]?["unit"] ??
+                "unit",
+            "availableCount":
+                firstBatch["quantity"]?["available"]?["count"] ?? 0,
           };
         }
 
@@ -112,9 +117,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       }
 
       final url = Uri.parse("http://192.168.39.249:5000/cart/add");
-      final res = await http.post(url,
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode(item));
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(item),
+      );
 
       if (res.statusCode == 200) {
         debugPrint("✅ Cart added successfully: ${res.body}");
@@ -135,16 +142,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (productData == null || productData!["providers"] == null) {
       return const Scaffold(
-        body: Center(
-          child: Text("⚠️ No product data available"),
-        ),
+        body: Center(child: Text("⚠️ No product data available")),
       );
     }
 
@@ -162,10 +165,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
             Center(
               child: Image.network(
-                item["descriptor"]?["image"] ?? "https://via.placeholder.com/150",
+                item["descriptor"]?["image"] ??
+                    "https://via.placeholder.com/150",
                 height: 200,
               ),
             ),
@@ -199,8 +202,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             // Quantity Selector
             Row(
               children: [
-                const Text("Quantity: ",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                const Text(
+                  "Quantity: ",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
                 IconButton(
                   onPressed: () {
                     setState(() {
@@ -209,9 +214,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   },
                   icon: const Icon(Icons.remove_circle, color: Colors.green),
                 ),
-                Text("$quantity",
-                    style:
-                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text(
+                  "$quantity",
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 IconButton(
                   onPressed: () {
                     setState(() {
@@ -226,8 +235,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
             // Batches
             if (batches.isNotEmpty) ...[
-              const Text("Available Batches",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              const Text(
+                "Available Batches",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
               const SizedBox(height: 10),
               for (int i = 0; i < batches.length; i++)
                 GestureDetector(
@@ -243,9 +254,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       border: Border.all(
-                          color: selectedBatchIndex == i
-                              ? Colors.green
-                              : Colors.grey),
+                        color: selectedBatchIndex == i
+                            ? Colors.green
+                            : Colors.grey,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                       color: selectedBatchIndex == i
                           ? Colors.green.shade50
@@ -254,13 +266,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("₹${batches[i]["price"]["value"]}",
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green)),
                         Text(
-                            "Stock: ${batches[i]["quantity"]["available"]["count"] ?? 0} units"),
+                          "₹${batches[i]["price"]["value"]}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                        Text(
+                          "Stock: ${batches[i]["quantity"]["available"]["count"] ?? 0} units",
+                        ),
                       ],
                     ),
                   ),
@@ -288,12 +304,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12))),
-                child: const Text("🛒 Add to Cart",
-                    style: TextStyle(fontSize: 16)),
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  "🛒 Add to Cart",
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ),
 
@@ -301,22 +321,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
             // Similar Products (Placeholder)
             if (relatedItems.isNotEmpty) ...[
-              const Text("Similar Products",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text(
+                "Similar Products",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 10),
               Column(
                 children: relatedItems
-                    .map((prod) => ListTile(
-                          leading: Image.network(
-                            prod["descriptor"]?["image"] ??
-                                "https://via.placeholder.com/50",
-                            width: 50,
-                            height: 50,
-                          ),
-                          title: Text(prod["descriptor"]?["name"] ?? "Unknown"),
-                        ))
+                    .map(
+                      (prod) => ListTile(
+                        leading: Image.network(
+                          prod["descriptor"]?["image"] ??
+                              "https://via.placeholder.com/50",
+                          width: 50,
+                          height: 50,
+                        ),
+                        title: Text(prod["descriptor"]?["name"] ?? "Unknown"),
+                      ),
+                    )
                     .toList(),
-              )
+              ),
             ],
           ],
         ),

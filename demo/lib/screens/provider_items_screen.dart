@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class ProviderItemsScreen extends StatefulWidget {
   final Map<String, dynamic> provider;
   const ProviderItemsScreen({Key? key, required this.provider})
-      : super(key: key);
+    : super(key: key);
 
   @override
   State<ProviderItemsScreen> createState() => _ProviderItemsScreenState();
@@ -23,8 +23,10 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
   }
 
   double get totalMRP {
-    return (provider['items'] as List<dynamic>)
-        .fold(0.0, (sum, item) => sum + (item['total_price'] ?? 0));
+    return (provider['items'] as List<dynamic>).fold(
+      0.0,
+      (sum, item) => sum + (item['total_price'] ?? 0),
+    );
   }
 
   Future<void> handleInit() async {
@@ -41,28 +43,33 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
             return {
               'id': item['bpp_product_id'],
               'quantity': item['quantity'],
-              'fulfillment_id': item['fulfillment_id']
+              'fulfillment_id': item['fulfillment_id'],
             };
           }).toList(),
           'delivery_address': {
             'gps': '23.0225,72.5714',
-            'address': 'Plot 12, SG Road, Ahmedabad, Gujarat'
-          }
+            'address': 'Plot 12, SG Road, Ahmedabad, Gujarat',
+          },
         }),
       );
 
       if (response.statusCode == 200) {
         final bppResponse = jsonDecode(response.body)['bpp_response'];
         // Navigate to next screen (replace with your route)
-        Navigator.pushNamed(context, '/verifyProducts',
-            arguments: {'bpp_response': bppResponse});
+        Navigator.pushNamed(
+          context,
+          '/verifyProducts',
+          arguments: {'bpp_response': bppResponse},
+        );
       } else {
         throw Exception('Failed to verify products');
       }
     } catch (e) {
       print('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to verify products. Please try again.')),
+        const SnackBar(
+          content: Text('Failed to verify products. Please try again.'),
+        ),
       );
     }
   }
@@ -76,7 +83,7 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
           'user_id': 'a985baac-9028-4dc1-bbd9-a6f3aae49ef5',
           'bpp_product_id': item['bpp_product_id'],
           'provider_id': provider['provider_id'],
-          'quantity': newQty
+          'quantity': newQty,
         }),
       );
 
@@ -91,7 +98,8 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
             if (i['bpp_product_id'] == item['bpp_product_id']) {
               i['quantity'] = newQty;
               i['total_price'] = double.parse(
-                  (newQty * (i['unit_price'] ?? 0)).toStringAsFixed(2));
+                (newQty * (i['unit_price'] ?? 0)).toStringAsFixed(2),
+              );
             }
             return i;
           }).toList();
@@ -137,12 +145,18 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
                         Text(
                           provider['provider_name'],
                           style: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           "📍 ${provider['provider_address']}",
-                          style: TextStyle(fontSize: 14, color: Colors.green[800]),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.green[800],
+                          ),
                         ),
                       ],
                     ),
@@ -151,8 +165,10 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
 
                   // Product List
                   ...items.map((item) {
-                    final isOrganic = (item['tags'] as List<dynamic>?)
-                            ?.any((t) => t['key'] == 'organic' && t['value'] == 'true') ??
+                    final isOrganic =
+                        (item['tags'] as List<dynamic>?)?.any(
+                          (t) => t['key'] == 'organic' && t['value'] == 'true',
+                        ) ??
                         false;
 
                     return Container(
@@ -185,7 +201,9 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
                                   right: -4,
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 6, vertical: 2),
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: Colors.green[200],
                                       borderRadius: BorderRadius.circular(12),
@@ -193,9 +211,10 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
                                     child: const Text(
                                       'Organic',
                                       style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.green),
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -211,7 +230,9 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
                                 Text(
                                   item['item_name'],
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -222,18 +243,28 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
                                   children: [
                                     IconButton(
                                       onPressed: () => updateCartQuantity(
-                                          item, item['quantity'] - 1),
-                                      icon: const Icon(Icons.remove_circle_outline),
+                                        item,
+                                        item['quantity'] - 1,
+                                      ),
+                                      icon: const Icon(
+                                        Icons.remove_circle_outline,
+                                      ),
                                     ),
                                     Text(
                                       '${item['quantity']}',
                                       style: const TextStyle(
-                                          fontSize: 16, fontWeight: FontWeight.bold),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     IconButton(
                                       onPressed: () => updateCartQuantity(
-                                          item, item['quantity'] + 1),
-                                      icon: const Icon(Icons.add_circle_outline),
+                                        item,
+                                        item['quantity'] + 1,
+                                      ),
+                                      icon: const Icon(
+                                        Icons.add_circle_outline,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -244,17 +275,25 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('Unit Price: ₹${item['unit_price']}',
-                                        style: TextStyle(
-                                            color: Colors.green[700], fontSize: 12)),
-                                    Text('₹${item['total_price']}',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold, fontSize: 16)),
+                                    Text(
+                                      'Unit Price: ₹${item['unit_price']}',
+                                      style: TextStyle(
+                                        color: Colors.green[700],
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Text(
+                                      '₹${item['total_price']}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     );
@@ -278,7 +317,7 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
                   BoxShadow(
                     color: Colors.black.withOpacity(0.08),
                     blurRadius: 8,
-                  )
+                  ),
                 ],
               ),
               child: Column(
@@ -287,20 +326,25 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                        color: Colors.green[50],
-                        borderRadius: BorderRadius.circular(12)),
+                      color: Colors.green[50],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           'Total Amount',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                         Text(
                           '₹${totalMRP + shippingCost}',
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                       ],
                     ),
@@ -308,18 +352,23 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
                   const SizedBox(height: 8),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12))),
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
                     onPressed: handleInit,
                     child: const Center(
-                        child: Text(
-                      '✅ Verify Products & Continue',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    )),
-                  )
+                      child: Text(
+                        '✅ Verify Products & Continue',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -26,8 +26,11 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
 
   List<Map<String, dynamic>> get filteredList {
     return procurementList
-        .where((item) =>
-            item["isCompleted"] == (selectedTab == "completed" ? true : false))
+        .where(
+          (item) =>
+              item["isCompleted"] ==
+              (selectedTab == "completed" ? true : false),
+        )
         .toList();
   }
 
@@ -120,7 +123,9 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
                     onTap: () => setState(() => isFarmerModalOpen = true),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 10),
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey.shade400),
                         borderRadius: BorderRadius.circular(8),
@@ -152,28 +157,31 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
 
           // List Section
           Expanded(
-  child: selectedTab == "completed"
-      ? CompletedProcurementDetails(isEmbedded: true) // 👈 embed mode
-      : ListView.builder(
-          itemCount: filteredList.length,
-          itemBuilder: (context, index) {
-            final item = filteredList[index];
-            return Card(
-              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.green.shade200,
-                  child: Text(item["id"].toString()),
-                ),
-                title: Text(item["name"]),
-                subtitle:
-                    Text(item["isCompleted"] ? "Completed" : "In Progress"),
-              ),
-            );
-          },
-        ),
-),
-
+            child: selectedTab == "completed"
+                ? CompletedProcurementDetails(isEmbedded: true) // 👈 embed mode
+                : ListView.builder(
+                    itemCount: filteredList.length,
+                    itemBuilder: (context, index) {
+                      final item = filteredList[index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.green.shade200,
+                            child: Text(item["id"].toString()),
+                          ),
+                          title: Text(item["name"]),
+                          subtitle: Text(
+                            item["isCompleted"] ? "Completed" : "In Progress",
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
         ],
       ),
 
@@ -192,8 +200,8 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
       bottomSheet: isFilterModalOpen
           ? _buildFilterModal(context)
           : isFarmerModalOpen
-              ? _buildFarmerModal(context)
-              : null,
+          ? _buildFarmerModal(context)
+          : null,
     );
   }
 
@@ -205,18 +213,22 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Filters",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const Text(
+            "Filters",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             children: ["Last 30 days", "Last 60 days", "Last 3 months"]
-                .map((d) => ChoiceChip(
-                      label: Text(d),
-                      selected: selectedDays == d,
-                      onSelected: (_) => setState(() => selectedDays = d),
-                      selectedColor: Colors.green.shade100,
-                    ))
+                .map(
+                  (d) => ChoiceChip(
+                    label: Text(d),
+                    selected: selectedDays == d,
+                    onSelected: (_) => setState(() => selectedDays = d),
+                    selectedColor: Colors.green.shade100,
+                  ),
+                )
                 .toList(),
           ),
           const Spacer(),
@@ -256,8 +268,10 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          const Text("Select Farmer",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const Text(
+            "Select Farmer",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
           const Divider(),
           Expanded(
             child: ListView.builder(
@@ -268,8 +282,10 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundColor: Colors.green,
-                    child: Text(farmer[0],
-                        style: const TextStyle(color: Colors.white)),
+                    child: Text(
+                      farmer[0],
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
                   title: Text(farmer),
                   trailing: Icon(
