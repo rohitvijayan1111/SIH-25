@@ -693,6 +693,7 @@ import 'dart:math';
 
 import 'package:demo/screens/product_details.dart';
 import 'package:flutter/material.dart';
+import '../screens/product_details.dart';
 
 class CategorySection extends StatefulWidget {
   final String category;

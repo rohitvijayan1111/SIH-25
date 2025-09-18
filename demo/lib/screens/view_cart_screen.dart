@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+/// View Cart Screen
+/// Displays farmers/suppliers in the cart with their details and item counts
+/// Allows users to manage their cart and proceed with orders
 class ViewCartScreen extends StatefulWidget {
   const ViewCartScreen({super.key});
 
@@ -295,6 +298,46 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Cart Item Model
+/// Represents a farmer/supplier item in the cart
+class CartItem {
+  final String id;
+  final String farmerName;
+  final String location;
+  int itemCount;
+  final String profileImage;
+
+  CartItem({
+    required this.id,
+    required this.farmerName,
+    required this.location,
+    required this.itemCount,
+    required this.profileImage,
+  });
+
+  // Convert to JSON for storage
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'farmerName': farmerName,
+      'location': location,
+      'itemCount': itemCount,
+      'profileImage': profileImage,
+    };
+  }
+
+  // Create from JSON
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      id: json['id'],
+      farmerName: json['farmerName'],
+      location: json['location'],
+      itemCount: json['itemCount'],
+      profileImage: json['profileImage'],
     );
   }
 }
