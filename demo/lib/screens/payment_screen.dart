@@ -52,11 +52,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
           children: [
             Expanded(child: Text("$emoji $label")),
             if (isSelected)
-              const Text("✓",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green)),
+              const Text(
+                "✓",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
+              ),
           ],
         ),
       ),
@@ -73,11 +76,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("💳 Choose Payment Method",
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF065F46))),
+              const Text(
+                "💳 Choose Payment Method",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF065F46),
+                ),
+              ),
               const SizedBox(height: 20),
               _buildOption("COD", "Cash on Delivery (COD)", "🧺"),
               _buildOption("ONLINE", "Online Payment", "🌱"),
@@ -85,17 +91,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ElevatedButton(
                 onPressed: loading ? null : handlePayment,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      loading ? Colors.green[300] : Colors.green[600],
+                  backgroundColor: loading
+                      ? Colors.green[300]
+                      : Colors.green[600],
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   minimumSize: const Size(double.infinity, 50),
                 ),
                 child: Text(
                   loading ? "Processing..." : "Proceed",
                   style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
