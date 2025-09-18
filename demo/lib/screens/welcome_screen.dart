@@ -11,6 +11,7 @@ import 'voice_page.dart';
 import 'view_cart_screen.dart';
 import 'procurements_screen.dart';
 import '../auth/signin.dart';
+import 'CustomerScreens/customer_main_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -96,6 +97,14 @@ class WelcomeScreen extends StatelessWidget {
         },
         label: "Go to Home Page",
         color: Colors.green,
+      ),
+      _buildButton(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CustomerMainScreen()),
+        ),
+        label: 'Customer App',
+        color: Colors.blue,
       ),
       _buildButton(
         onPressed: () {
