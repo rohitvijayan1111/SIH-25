@@ -1,4 +1,5 @@
 import 'package:demo/screens/completed_procurement_details.dart';
+import 'package:demo/screens/create_procurement_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProcurementsScreen extends StatefulWidget {
@@ -189,8 +190,11 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Navigate to Create Procurement")),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CreateProcurementScreen(),
+            ),
           );
         },
         child: const Icon(Icons.add, size: 30),
@@ -200,8 +204,8 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
       bottomSheet: isFilterModalOpen
           ? _buildFilterModal(context)
           : isFarmerModalOpen
-          ? _buildFarmerModal(context)
-          : null,
+              ? _buildFarmerModal(context)
+              : null,
     );
   }
 
