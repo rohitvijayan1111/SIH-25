@@ -61,9 +61,25 @@ class _HomePageState extends State<HomePage> {
       final results = await Future.wait([
         _fetchCategoryProducts("seed"),
         _fetchCategoryProducts("fertilizer"),
+        _fetchCategoryProducts("Fungicide"),
+        _fetchCategoryProducts("Herbicide"),
       ]);
+      List<dynamic> trendingItems = [];
+      List<dynamic> trendingProviders = [];
+
+      for (var categoryData in results) {
+        trendingItems.addAll(categoryData.items.take(2));
+        trendingProviders.addAll(categoryData.providers.take(2));
+      }
+
+      final trendingCategory = CategoryData(
+        category: "TRENDING",
+        items: trendingItems,
+        providers: trendingProviders,
+      );
+
       setState(() {
-        categories = results;
+        categories = [trendingCategory, ...results];
       });
     } catch (e) {
       print("Error loading initial categories: $e");

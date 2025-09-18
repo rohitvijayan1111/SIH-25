@@ -1,21 +1,45 @@
-// TODO Implement this library.
 import 'package:flutter/material.dart';
 
-class SimilarProducts extends StatefulWidget {
-  const SimilarProducts({super.key});
+class SimilarProducts extends StatelessWidget {
+  final dynamic product;
 
-  @override
-  State<SimilarProducts> createState() => _SimilarProductsState();
-}
+  const SimilarProducts({super.key, required this.product});
 
-class _SimilarProductsState extends State<SimilarProducts> {
+  Future<List<Map<String, dynamic>>> fetchSimilarProducts() async {
+    // 🔹 Here you can call your API to get similar products
+    // For now using dummy data
+    await Future.delayed(const Duration(seconds: 1));
+    return [
+      {"name": "Similar Product 1", "price": "100"},
+      {"name": "Similar Product 2", "price": "120"},
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Voice Page')),
-      body: const Center(
-        child: Text('This is the Voice Page', style: TextStyle(fontSize: 18)),
-      ),
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: fetchSimilarProducts(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Text("No similar products found.");
+        }
+
+        final similarProducts = snapshot.data!;
+        return Column(
+          children: similarProducts.map((prod) {
+            return Card(
+              child: ListTile(
+                leading: const Icon(Icons.shopping_cart),
+                title: Text(prod['name']),
+                subtitle: Text("Price: ₹${prod['price']}"),
+              ),
+            );
+          }).toList(),
+        );
+      },
     );
   }
 }

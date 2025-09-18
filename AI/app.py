@@ -1,21 +1,22 @@
-from flask import Flask
-from flask_cors import CORS
-from routes.auth import auth
-from routes.speech import speech
 
+from flask import Flask,  jsonify
+import os
+from dotenv import load_dotenv
+from mcp import StdioServerParameters
+from descope import DescopeClient
+import nest_asyncio
+
+load_dotenv()
+
+
+nest_asyncio.apply()
 
 app = Flask(__name__)
-CORS(
-    app,
-    resources={r"/*": {"origins": "*"}},   # ✅ allow all origins
-    supports_credentials=True,             # allow cookies/authorization headers
-    allow_headers="*",                     # ✅ allow all custom headers
-    expose_headers="*",                    # ✅ expose all headers to client
-    methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]  # ✅ full set of methods
-)
 
-app.register_blueprint(auth, url_prefix="/api/auth")
-app.register_blueprint(speech,url_prefix="/api")
+@app.route("/", methods=["GET"])
+def hello():
+    return jsonify({"message": "Hello!"})
 
 if __name__ == "__main__":
-    app.run(debug=True, port=4000)
+    app.run(host="127.0.0.1", port=2222, debug=True)
+
