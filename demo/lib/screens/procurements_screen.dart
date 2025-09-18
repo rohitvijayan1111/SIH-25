@@ -1,4 +1,5 @@
 import 'package:demo/screens/completed_procurement_details.dart';
+import 'package:demo/screens/create_procurement_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProcurementsScreen extends StatefulWidget {
@@ -187,21 +188,38 @@ class _ProcurementsScreenState extends State<ProcurementsScreen> {
 
       // Floating Button
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Navigate to Create Procurement")),
-          );
-        },
-        child: const Icon(Icons.add, size: 30),
+  backgroundColor: Colors.green,
+  onPressed: () async {
+    // Navigate to CreateProcurementScreen and wait for returned data
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CreateProcurementScreen(),
       ),
+    );
+
+    // If user saved new procurement, add it to the list
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        // Assign a new unique id based on current list length
+        result["id"] = procurementList.length + 1;
+        result["isCompleted"] = false; // default status
+        result["name"] =
+            "${result["cropName"] ?? "Crop"} Procurement"; // title for display
+        procurementList.add(result);
+      });
+    }
+  },
+  child: const Icon(Icons.add, size: 30),
+),
+
 
       // Modals
       bottomSheet: isFilterModalOpen
           ? _buildFilterModal(context)
           : isFarmerModalOpen
-          ? _buildFarmerModal(context)
-          : null,
+              ? _buildFarmerModal(context)
+              : null,
     );
   }
 

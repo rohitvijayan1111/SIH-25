@@ -691,6 +691,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:demo/screens/product_details.dart';
 import 'package:flutter/material.dart';
 import '../screens/product_details.dart';
 
@@ -827,7 +828,9 @@ class _CategorySectionState extends State<CategorySection> {
                   : '';
 
               return Container(
-                width: cardWidth,
+
+                width: cardWidth.toDouble(),
+
                 margin: const EdgeInsets.only(right: 12),
                 child: Card(
                   color: Colors.green[50],
