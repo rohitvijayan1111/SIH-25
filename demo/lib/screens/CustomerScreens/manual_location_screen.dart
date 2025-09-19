@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+import 'location_screen.dart';
+
+class ManualLocationScreen extends StatelessWidget {
+  const ManualLocationScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text('Choose Location'),
+      ),
+      body: const Center(
+        child: Text('Map selection here'),
+      ),
+    );
+  }
+}
