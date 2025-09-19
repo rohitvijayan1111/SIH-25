@@ -1,4 +1,3 @@
-// lib/screens/home_page.dart
 import 'dart:convert';
 
 import 'package:demo/global.dart';
@@ -7,7 +6,6 @@ import 'package:http/http.dart' as http;
 
 const String SERVER_URL = Globals.SERVER_URL_BAP;
 
-/// Model for category data
 class CategoryData {
   final String category;
   final List<dynamic> items;
@@ -48,12 +46,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadInitialCategories();
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
   }
 
   Future<void> _loadInitialCategories() async {
@@ -327,7 +319,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-/// Category Section Widget
 class CategorySection extends StatelessWidget {
   final String category;
   final List<dynamic> items;
@@ -342,14 +333,11 @@ class CategorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) {
-      return const SizedBox.shrink();
-    }
+    if (items.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Category Title
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Text(
@@ -361,8 +349,6 @@ class CategorySection extends StatelessWidget {
             ),
           ),
         ),
-
-        // Items List
         SizedBox(
           height: 250,
           child: ListView.builder(
@@ -374,15 +360,13 @@ class CategorySection extends StatelessWidget {
                   ? (providers.first['descriptor']?['name'] ?? "")
                   : "";
 
-              // Extract image safely
               String? imageUrl;
               if (item['descriptor']?['images'] != null &&
                   item['descriptor']['images'].isNotEmpty) {
                 final firstImage = item['descriptor']['images'][0];
                 if (firstImage is String) {
                   imageUrl = firstImage;
-                } else if (firstImage is Map &&
-                    firstImage.containsKey('url')) {
+                } else if (firstImage is Map && firstImage.containsKey('url')) {
                   imageUrl = firstImage['url'];
                 }
               }
@@ -404,25 +388,17 @@ class CategorySection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Item Image
+                    // Image
                     Container(
                       height: 120,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                       ),
                       child: imageUrl != null
                           ? Image.network(
                               imageUrl,
                               fit: BoxFit.cover,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return const Center(
-                                  child: CircularProgressIndicator(color: Colors.green),
-                                );
-                              },
                               errorBuilder: (context, error, stackTrace) => Container(
                                 color: Colors.green[100],
                                 child: const Icon(Icons.shopping_bag, size: 60, color: Colors.green),
@@ -434,48 +410,52 @@ class CategorySection extends StatelessWidget {
                             ),
                     ),
 
-                    // Item Name
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         item['descriptor']?['name'] ?? "Unnamed",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                       ),
                     ),
 
-                    // Provider Name
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         providerName,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
 
-                    // Add to Cart Button
+                    // Add to Cart
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            final product = {
+                              "provider_name": providerName.isNotEmpty ? providerName : "Unknown",
+                              "provider_address": "",
+                              "items": [
+                                {
+                                  "id": item['id'] ?? item['descriptor']?['id'] ?? "",
+                                  "name": item['descriptor']?['name'] ?? "Unnamed",
+                                  "qty": 1,
+                                  "price": item['price'] ?? 0
+                                }
+                              ]
+                            };
+                            await addToGlobalCart(product);
+
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("${item['descriptor']?['name']} added to cart")),
                             );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green.shade600,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                             padding: const EdgeInsets.symmetric(vertical: 8),
                           ),
                           child: const Text(
