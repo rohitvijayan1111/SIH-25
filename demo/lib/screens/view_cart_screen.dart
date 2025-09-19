@@ -1,10 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../global.dart';
 
-/// View Cart Screen
-/// Displays farmers/suppliers in the cart with their details and item counts
-/// Allows users to manage their cart and proceed with orders
 class ViewCartScreen extends StatefulWidget {
   const ViewCartScreen({super.key});
 
@@ -13,7 +13,7 @@ class ViewCartScreen extends StatefulWidget {
 }
 
 class _ViewCartScreenState extends State<ViewCartScreen> {
-  List<dynamic> cartData = [];
+  List<Map<String, dynamic>> cartData = [];
 
   @override
   void initState() {
@@ -21,32 +21,52 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     _loadCartData();
   }
 
-  void _loadCartData() {
-    // ✅ Load cart data directly from global.dart
+  /// Load cart from SharedPreferences or fallback to globalCart
+  Future<void> _loadCartData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final cartString = prefs.getString('cart');
+    if (cartString != null) {
+      final List<dynamic> decoded = jsonDecode(cartString);
+      cartData = decoded.cast<Map<String, dynamic>>();
+      globalCart = List<Map<String, dynamic>>.from(cartData);
+    } else {
+      cartData = List<Map<String, dynamic>>.from(globalCart);
+    }
+    setState(() {});
+  }
+
+  /// Save cart to SharedPreferences
+  Future<void> _saveCartData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('cart', jsonEncode(cartData));
+  }
+
+  /// Update cart in-memory and persist
+  void _updateCart(List<Map<String, dynamic>> newCart) {
     setState(() {
-      cartData = globalCart;
+      cartData = List<Map<String, dynamic>>.from(newCart);
+      globalCart = List<Map<String, dynamic>>.from(newCart);
     });
+    _saveCartData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF0FDF4), // green-50
+      backgroundColor: const Color(0xFFF0FDF4),
       body: Column(
         children: [
-          // 🟢 Header
+          // Header
           Container(
             decoration: const BoxDecoration(
               color: Colors.green,
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(24),
-              ),
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black26,
                   blurRadius: 6,
                   offset: Offset(0, 2),
-                )
+                ),
               ],
             ),
             padding:
@@ -54,13 +74,11 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // ⬅️ Back Button + Title
                 Row(
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.arrow_back_ios,
-                          color: Colors.white),
+                      child: const Icon(Icons.arrow_back_ios, color: Colors.white),
                     ),
                     const SizedBox(width: 8),
                     const Text(
@@ -73,20 +91,17 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                     ),
                   ],
                 ),
-
-                // 🏷️ Item Count (Only show if cart has items)
                 if (cartData.isNotEmpty)
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.green.shade500,
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Text(
                       "${cartData.fold<int>(0, (acc, curr) {
-                        final provider = curr as Map<String, dynamic>;
-                        final items = provider['items'] as List<dynamic>? ?? [];
+                        final items = curr['items'] as List<dynamic>? ?? [];
                         return acc + items.length;
                       })} items",
                       style: const TextStyle(
@@ -94,12 +109,12 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                  )
+                  ),
               ],
             ),
           ),
 
-          // 📦 Body content (Empty / Non-Empty)
+          // Cart Body
           Expanded(
             child: cartData.isEmpty
                 ? _buildEmptyCart(context)
@@ -110,13 +125,11 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     );
   }
 
-  /// Empty cart widget
   Widget _buildEmptyCart(BuildContext context) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 🛒 Circular Icon
           Container(
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
@@ -133,7 +146,6 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
             child: const Text("🛒🌿", style: TextStyle(fontSize: 48)),
           ),
           const SizedBox(height: 24),
-
           const Text(
             "Your Cart Feels Light",
             style: TextStyle(
@@ -143,14 +155,12 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
             ),
           ),
           const SizedBox(height: 8),
-
           const Text(
             "Add some fresh products to get started",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const SizedBox(height: 28),
-
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
@@ -161,9 +171,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
               ),
               elevation: 4,
             ),
-            onPressed: () {
-              Navigator.pushNamed(context, "/home");
-            },
+            onPressed: () => Navigator.pushNamed(context, "/home"),
             child: const Text(
               "Browse Products",
               style: TextStyle(
@@ -171,13 +179,12 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                   fontWeight: FontWeight.w600,
                   color: Colors.white),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  /// Non-empty cart widget
   Widget _buildCartList(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
@@ -209,7 +216,6 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
             ),
             child: Row(
               children: [
-                // Icon Area
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
@@ -217,12 +223,9 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text("🧑‍🌾",
-                      style:
-                          TextStyle(fontSize: 20, color: Colors.green)),
+                      style: TextStyle(fontSize: 20, color: Colors.green)),
                 ),
                 const SizedBox(width: 16),
-
-                // Provider Info
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,20 +256,16 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                     ],
                   ),
                 ),
-
-                // Item Count & Arrow
                 Row(
                   children: [
                     Text(
                       "${provider["items"]?.length ?? 0}",
                       style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.green),
+                          fontWeight: FontWeight.w600, color: Colors.green),
                     ),
                     const SizedBox(width: 4),
                     const Text("→",
-                        style: TextStyle(
-                            fontSize: 16, color: Colors.grey)),
+                        style: TextStyle(fontSize: 16, color: Colors.grey)),
                   ],
                 )
               ],
