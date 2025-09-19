@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart'; // <-- make sure this path matches your project
 
 class PaymentCompletionScreen extends StatelessWidget {
   final String amount;
@@ -70,9 +71,11 @@ class PaymentCompletionScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.popUntil(
+                        Navigator.pushAndRemoveUntil(
                           context,
-                          ModalRoute.withName('/home'),
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()),
+                          (route) => false, // clears navigation stack
                         );
                       },
                       style: ElevatedButton.styleFrom(

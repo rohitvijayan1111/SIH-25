@@ -10,7 +10,6 @@ import 'voice_page.dart';
 import 'view_cart_screen.dart';
 import 'procurements_screen.dart';
 import '../auth/signin.dart';
-import 'CustomerScreens/customer_main_screen.dart';
 import 'CustomerScreens/signin_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'checkout_screen.dart'; // ✅ import your checkout screen
 
 // Cart Item Model - Represents each product in cart
 class CartItem {
@@ -67,19 +68,12 @@ class _CartScreenState extends State<CartScreen> {
 
       // Top app bar
       appBar: AppBar(
-        // Background color of app bar
         backgroundColor: Colors.white,
-        // Remove shadow under app bar
         elevation: 0,
-
-        // Back button (automatically added by Flutter)
         leading: IconButton(
-          onPressed: () =>
-              Navigator.pop(context), // Goes back to previous screen
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.close, color: Colors.black),
         ),
-
-        // Title in center
         title: const Text(
           'Shopping Cart',
           style: TextStyle(
@@ -89,12 +83,9 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ),
         centerTitle: true,
-
-        // Edit button on right
         actions: [
           TextButton(
             onPressed: () {
-              // Handle edit action
               print('Edit tapped');
             },
             child: const Text(
@@ -105,45 +96,31 @@ class _CartScreenState extends State<CartScreen> {
         ],
       ),
 
-      // Main content of screen
       body: Column(
         children: [
-          // Scrollable list of cart items
           Expanded(
             child: ListView.builder(
-              // Add padding around the list
               padding: const EdgeInsets.all(16),
-              // Number of items in cart
               itemCount: cartItems.length,
-              // Builder function creates each cart item widget
               itemBuilder: (context, index) {
-                final item = cartItems[index]; // Get item at current index
-                return _buildCartItemCard(
-                  item,
-                  index,
-                ); // Create card for this item
+                final item = cartItems[index];
+                return _buildCartItemCard(item, index);
               },
             ),
           ),
-
-          // Bottom section with delivery options and checkout
           _buildBottomSection(),
         ],
       ),
     );
   }
 
-  // Builds individual cart item card
   Widget _buildCartItemCard(CartItem item, int index) {
     return Container(
-      // Add space between cards
       margin: const EdgeInsets.only(bottom: 16),
-      // Card styling
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        // Shadow effect
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -153,11 +130,8 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ],
       ),
-
-      // Row layout: image on left, details in middle, quantity controls on right
       child: Row(
         children: [
-          // Product image
           Container(
             width: 60,
             height: 60,
@@ -169,27 +143,20 @@ class _CartScreenState extends State<CartScreen> {
               child: Text(item.image, style: const TextStyle(fontSize: 30)),
             ),
           ),
-
-          const SizedBox(width: 16), // Space between image and text
-          // Product details (name, category, price)
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start, // Align text to left
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Category label
                 Text(
                   item.category,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.green,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 const SizedBox(height: 4),
-
-                // Product name
                 Text(
                   item.name,
                   style: const TextStyle(
@@ -198,23 +165,17 @@ class _CartScreenState extends State<CartScreen> {
                     color: Colors.black,
                   ),
                 ),
-
                 const SizedBox(height: 4),
-
-                // Quantity display
                 Text(
                   'Qty: ${item.quantity}',
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
             ),
           ),
-
-          // Right side: price and quantity controls
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // Price
               Text(
                 '₹${item.price.toInt()}',
                 style: const TextStyle(
@@ -223,14 +184,10 @@ class _CartScreenState extends State<CartScreen> {
                   color: Colors.black,
                 ),
               ),
-
               const SizedBox(height: 8),
-
-              // Quantity controls row
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Decrease quantity button
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -246,17 +203,11 @@ class _CartScreenState extends State<CartScreen> {
                         color: Colors.grey,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.remove,
-                        size: 16,
-                        color: Colors.black,
-                      ),
+                      child: const Icon(Icons.remove,
+                          size: 16, color: Colors.black),
                     ),
                   ),
-
                   const SizedBox(width: 12),
-
-                  // Quantity display
                   Text(
                     '${item.quantity}',
                     style: const TextStyle(
@@ -264,10 +215,7 @@ class _CartScreenState extends State<CartScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-
                   const SizedBox(width: 12),
-
-                  // Increase quantity button
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -281,11 +229,8 @@ class _CartScreenState extends State<CartScreen> {
                         color: Colors.green,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.add,
-                        size: 16,
-                        color: Colors.white,
-                      ),
+                      child:
+                          const Icon(Icons.add, size: 16, color: Colors.white),
                     ),
                   ),
                 ],
@@ -297,7 +242,6 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  // Builds bottom section with coupon, delivery options, and checkout
   Widget _buildBottomSection() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -312,33 +256,21 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ],
       ),
-
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Coupon code section
           _buildCouponSection(),
-
           const SizedBox(height: 16),
-
-          // Delivery/Pickup options
           _buildDeliveryOptions(),
-
           const SizedBox(height: 16),
-
-          // Price breakdown
           _buildPriceBreakdown(),
-
           const SizedBox(height: 20),
-
-          // Checkout button
           _buildCheckoutButton(),
         ],
       ),
     );
   }
 
-  // Coupon code input section
   Widget _buildCouponSection() {
     return Row(
       children: [
@@ -346,15 +278,12 @@ class _CartScreenState extends State<CartScreen> {
           'Coupon code',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
-
-        const Spacer(), // Pushes "Your code" to right
-
+        const Spacer(),
         GestureDetector(
           onTap: () {
-            // Handle coupon tap
             print('Coupon tapped');
           },
-          child: Text(
+          child: const Text(
             'Your code',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
@@ -363,11 +292,9 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  // Delivery and pickup option buttons
   Widget _buildDeliveryOptions() {
     return Row(
       children: [
-        // Pickup button
         Expanded(
           child: GestureDetector(
             onTap: () {
@@ -395,10 +322,7 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ),
         ),
-
         const SizedBox(width: 16),
-
-        // Delivery button
         Expanded(
           child: GestureDetector(
             onTap: () {
@@ -434,11 +358,8 @@ class _CartScreenState extends State<CartScreen> {
                         color: Colors.white,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.check,
-                        size: 14,
-                        color: Colors.green,
-                      ),
+                      child: const Icon(Icons.check,
+                          size: 14, color: Colors.green),
                     ),
                   ],
                 ],
@@ -450,9 +371,7 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  // Price calculation and breakdown
   Widget _buildPriceBreakdown() {
-    // Calculate subtotal
     double subtotal = cartItems.fold(
       0,
       (sum, item) => sum + (item.price * item.quantity),
@@ -462,7 +381,6 @@ class _CartScreenState extends State<CartScreen> {
 
     return Column(
       children: [
-        // Delivery fee row
         if (isDeliverySelected)
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
@@ -477,8 +395,6 @@ class _CartScreenState extends State<CartScreen> {
               ],
             ),
           ),
-
-        // Total price row
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -492,8 +408,6 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ],
         ),
-
-        // Item count
         Padding(
           padding: const EdgeInsets.only(top: 4),
           child: Row(
@@ -501,9 +415,9 @@ class _CartScreenState extends State<CartScreen> {
             children: [
               Text(
                 '${cartItems.length} items',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
               ),
-              Text(
+              const Text(
                 'Include taxes',
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
@@ -514,15 +428,16 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  // Checkout button
+  // ✅ Updated Checkout button
   Widget _buildCheckoutButton() {
     return SizedBox(
-      width: double.infinity, // Full width button
+      width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          // Handle checkout
-          print('Checkout tapped');
-          // Navigate to checkout screen or show payment options
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const CheckoutScreen()),
+          );
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.green,

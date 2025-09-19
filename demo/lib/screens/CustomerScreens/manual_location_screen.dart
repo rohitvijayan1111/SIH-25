@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'location_screen.dart';
 
 class ManualLocationScreen extends StatelessWidget {
   const ManualLocationScreen({super.key});
