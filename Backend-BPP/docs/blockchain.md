@@ -61,7 +61,7 @@ CREATE TABLE chain_events (
     entity_id UUID,
     details JSONB,
     tx_hash TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CU RRENT_TIMESTAMP
 );
 
 -- 15. Payments
