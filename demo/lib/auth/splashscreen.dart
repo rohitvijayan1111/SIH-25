@@ -7,6 +7,8 @@ import 'signin.dart';
 import '../global.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -52,8 +54,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _fetchUserData(String userId) async {
     if (globalUserId == null || globalUsername == null) {
       try {
-        final FirebaseAuth _auth = FirebaseAuth.instance;
-        User? user = _auth.currentUser;
+        final FirebaseAuth auth = FirebaseAuth.instance;
+        User? user = auth.currentUser;
         if (user != null) {
           globalUserId = user.uid;
           globalUsername = user.displayName ?? 'User';

@@ -711,7 +711,7 @@ class CategoryData {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -1028,11 +1028,11 @@ class CategorySection extends StatelessWidget {
   final List<dynamic> providers;
 
   const CategorySection({
-    Key? key,
+    super.key,
     required this.category,
     required this.items,
     required this.providers,
-  }) : super(key: key);
+  });
 
   String? _extractImage(dynamic item) {
     if (item['descriptor']?['images'] != null &&

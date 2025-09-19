@@ -5,8 +5,7 @@ import 'package:http/http.dart' as http;
 
 class ProviderItemsScreen extends StatefulWidget {
   final Map<String, dynamic> provider;
-  const ProviderItemsScreen({Key? key, required this.provider})
-    : super(key: key);
+  const ProviderItemsScreen({super.key, required this.provider});
 
   @override
   State<ProviderItemsScreen> createState() => _ProviderItemsScreenState();
@@ -297,7 +296,7 @@ class _ProviderItemsScreenState extends State<ProviderItemsScreen> {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),

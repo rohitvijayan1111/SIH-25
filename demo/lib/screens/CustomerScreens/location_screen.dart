@@ -3,7 +3,7 @@ import 'language_screen.dart';
 import 'manual_location_screen.dart';
 
 class LocationScreen extends StatelessWidget {
-  const LocationScreen({Key? key}) : super(key: key);
+  const LocationScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'location_screen.dart';
 
 class ManualLocationScreen extends StatelessWidget {
-  const ManualLocationScreen({Key? key}) : super(key: key);
+  const ManualLocationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

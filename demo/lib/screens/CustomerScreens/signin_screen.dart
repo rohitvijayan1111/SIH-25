@@ -1,65 +1,101 @@
 import 'package:flutter/material.dart';
-import 'forgotpassword_screen.dart';
-import 'signup_screen.dart';
 import 'customer_main_screen.dart';
+import 'signup_screen.dart';
+import 'forgotpassword_screen.dart';
 
 class SignInScreen extends StatelessWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  const SignInScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Welcome',
+              "Sign In",
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
-            const Text('Sign in to continue'),
-            const SizedBox(height: 24),
-            const TextField(
-              decoration: InputDecoration(labelText: 'Username', hintText: 'john@gmail.com'),
+            const SizedBox(height: 32),
+
+            // Email
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                labelText: "Email",
+                border: OutlineInputBorder(),
+              ),
             ),
-            const SizedBox(height: 8),
-            const TextField(
+            const SizedBox(height: 16),
+
+            // Password
+            TextField(
+              controller: passwordController,
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(
+                labelText: "Password",
+                border: OutlineInputBorder(),
+              ),
             ),
-            const SizedBox(height: 8),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));
+            const SizedBox(height: 24),
+
+            // 🔑 Sign In Button → Goes to CustomerMainScreen
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CustomerMainScreen(),
+                  ),
+                );
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: const Size(double.infinity, 50),
+              ),
               child: const Text(
-                'Forgot password?',
-                style: TextStyle(color: Colors.blue),
+                "Sign In",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CustomerMainScreen()));
-                },
-                child: const Text('Sign In'),
-              ),
+
+            // Forgot Password
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ForgotPasswordScreen(),
+                  ),
+                );
+              },
+              child: const Text("Forgot Password?"),
             ),
+
             const SizedBox(height: 16),
+
+            // Sign Up Link
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Don\'t have an account? '),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                const Text("Don't have an account?"),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpScreen(),
+                      ),
+                    );
                   },
-                  child: const Text('Sign Up', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
+                  child: const Text("Sign Up"),
                 ),
               ],
             ),

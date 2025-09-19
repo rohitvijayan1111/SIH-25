@@ -5,8 +5,7 @@ import 'package:http/http.dart' as http;
 
 class VerifyProductsScreen extends StatefulWidget {
   final Map<String, dynamic> bppResponse;
-  const VerifyProductsScreen({Key? key, required this.bppResponse})
-    : super(key: key);
+  const VerifyProductsScreen({super.key, required this.bppResponse});
 
   @override
   State<VerifyProductsScreen> createState() => _VerifyProductsScreenState();
@@ -154,7 +153,7 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                           '🏁 Delivery: ${fulfillment['end']?['location']?['address'] ?? 'N/A'}',
                         ),
                         Text(
-                          '⏳ ETA: ${fulfillment['estimated_delivery'] != null ? fulfillment['estimated_delivery'] : 'N/A'}',
+                          '⏳ ETA: ${fulfillment['estimated_delivery'] ?? 'N/A'}',
                         ),
                       ],
                     ),
@@ -261,7 +260,7 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
 
                   // Price Summary
                   Container(
@@ -397,10 +396,10 @@ class _VerifyProductsScreenState extends State<VerifyProductsScreen> {
                                 ),
                               ),
                             );
-                          }).toList(),
+                          }),
                         ],
                       );
-                    }).toList(),
+                    }),
                   ],
                 ],
               ),

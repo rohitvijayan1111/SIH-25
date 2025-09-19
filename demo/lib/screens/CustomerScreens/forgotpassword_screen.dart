@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'customer_main_screen.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+  const ForgotPasswordScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

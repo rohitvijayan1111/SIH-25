@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'location_screen.dart';
 
 class VerificationScreen extends StatelessWidget {
-  const VerificationScreen({Key? key}) : super(key: key);
+  const VerificationScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

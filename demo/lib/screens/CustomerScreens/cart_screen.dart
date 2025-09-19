@@ -381,7 +381,7 @@ class _CartScreenState extends State<CartScreen> {
                 color: !isDeliverySelected ? Colors.green : Colors.grey,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: !isDeliverySelected ? Colors.green : Colors.grey!,
+                  color: !isDeliverySelected ? Colors.green : Colors.grey,
                 ),
               ),
               child: Text(
@@ -412,7 +412,7 @@ class _CartScreenState extends State<CartScreen> {
                 color: isDeliverySelected ? Colors.green : Colors.grey,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: isDeliverySelected ? Colors.green : Colors.grey!,
+                  color: isDeliverySelected ? Colors.green : Colors.grey,
                 ),
               ),
               child: Row(

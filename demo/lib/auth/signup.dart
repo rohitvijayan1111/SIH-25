@@ -348,6 +348,8 @@ import 'collect_details.dart';
 import 'splashscreen.dart';
 
 class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
+
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
@@ -624,7 +626,7 @@ class _SignUpPageState extends State<SignUpPage> {
     ValueChanged<String> onChanged,
   ) {
     return DropdownButtonFormField<String>(
-      value: selectedValue,
+      initialValue: selectedValue,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
