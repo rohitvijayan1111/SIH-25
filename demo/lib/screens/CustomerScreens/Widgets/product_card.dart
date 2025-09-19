@@ -46,7 +46,9 @@ class ProductCard extends StatelessWidget {
                         top: Radius.circular(12),
                       ),
                       image: DecorationImage(
-                        image: NetworkImage(product.imageUrl),
+                        image: product.imageUrl.startsWith('http')
+                            ? NetworkImage(product.imageUrl) as ImageProvider
+                            : AssetImage(product.imageUrl),
                         fit: BoxFit.cover,
                       ),
                     ),

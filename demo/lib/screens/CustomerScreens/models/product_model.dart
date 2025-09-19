@@ -40,7 +40,7 @@ class ProductData {
     return [
       const Product(
         id: '1',
-        name: 'Fresh Broccoli',
+        name: 'Broccoli',
         price: '120',
         imageUrl:
             'https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=400',
@@ -50,27 +50,25 @@ class ProductData {
       ),
       const Product(
         id: '2',
-        name: 'Fresh Papaya',
+        name: 'Papaya',
         price: '80',
-        imageUrl:
-            'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400',
+        imageUrl: 'assets/CustomerUIAssets/images/papaya.jpg',
         category: 'Fruits',
         description: 'Sweet and juicy papaya',
         farmerName: 'Farmer Mary',
       ),
       const Product(
         id: '3',
-        name: 'Fresh Tomatoes',
+        name: 'Tomatoes',
         price: '60',
-        imageUrl:
-            'https://images.unsplash.com/photo-1546470427-227aeb7abd5e?w=400',
+        imageUrl: 'assets/CustomerUIAssets/images/tomato.jpg',
         category: 'Vegetables',
         description: 'Red ripe tomatoes',
         farmerName: 'Farmer Bob',
       ),
       const Product(
         id: '4',
-        name: 'Fresh Carrots',
+        name: 'Carrots',
         price: '45',
         imageUrl:
             'https://images.unsplash.com/photo-1447175008436-054170c2e979?w=400',

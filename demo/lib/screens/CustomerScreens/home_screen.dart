@@ -4,6 +4,8 @@ import 'widgets/product_card.dart';
 import 'widgets/category_card.dart';
 import 'widgets/search_bar.dart';
 
+import './cart_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -87,6 +89,16 @@ class _HomeScreenState extends State<HomeScreen> {
               // Handle notifications
             },
             icon: const Icon(Icons.notifications_outlined),
+          ),
+          IconButton(
+            onPressed: () {
+              // Handle notifications
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartScreen()),
+              );
+            },
+            icon: const Icon(Icons.shopping_cart),
           ),
         ],
       ),
