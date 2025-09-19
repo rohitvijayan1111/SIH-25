@@ -27,9 +27,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Icon(Icons.arrow_back, color: Colors.black),
-                  const Text("Checkout",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  const Text(
+                    "Checkout",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(width: 24),
                 ],
               ),
@@ -46,7 +47,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               sectionTile(
                 label: "Delivery Address",
                 title: "Home",
-                subtitle: "43 Bourke Street, Newbridge NSW 837 Raffles ...",
+                subtitle: "43 Bourke Street, Newbridge NSW 837 Raffles City Tower ...",
               ),
 
               // Payment
@@ -55,7 +56,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   final method = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const PaymentScreen()),
+                      builder: (context) => const PaymentScreen(),
+                    ),
                   );
                   if (method != null) {
                     setState(() {
@@ -73,11 +75,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Payment",
-                          style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w400)),
+                      const Text(
+                        "Payment",
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                       const SizedBox(height: 6),
                       Row(
                         children: [
@@ -87,14 +92,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             height: 25,
                           ),
                           const SizedBox(width: 10),
-                          Text(
-                            selectedPaymentMethod ?? "Choose Payment",
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: Text(
+                              selectedPaymentMethod ?? "Choose Payment",
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis, // ✅ Prevent overflow
+                            ),
                           ),
-                          const Spacer(),
-                          const Icon(Icons.chevron_right,
-                              color: Colors.grey, size: 20),
+                          const Icon(
+                            Icons.chevron_right,
+                            color: Colors.grey,
+                            size: 20,
+                          ),
                         ],
                       ),
                     ],
@@ -113,15 +126,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Order",
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w400)),
+                    const Text(
+                      "Order",
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                     const SizedBox(height: 6),
-                    const Text("Today",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text(
+                      "Today",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     orderRow("Mustard Greens x 1", "₹59"),
                     orderRow("Organic Carrots x 1", "₹60"),
                     orderRow("Organic Apple x 1", "₹120"),
@@ -143,21 +163,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Code Redeemed",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w500)),
+                    const Text(
+                      "Code Redeemed",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.purple,
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: const Text("20% Off",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14)),
+                      child: const Text(
+                        "20% Off",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -170,21 +199,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   backgroundColor: const Color(0xFF77C043),
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const SuccessScreen()),
+                      builder: (context) => const SuccessScreen(),
+                    ),
                   );
                 },
                 child: const Center(
-                  child: Text("Place Order",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600)),
+                  child: Text(
+                    "Place Order",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -194,8 +228,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget sectionTile(
-      {required String label, required String title, required String subtitle}) {
+  Widget sectionTile({
+    required String label,
+    required String title,
+    required String subtitle,
+  }) {
     return Container(
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
@@ -204,23 +241,39 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label,
-              style: const TextStyle(
-                  fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w400)),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.grey,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
           const SizedBox(height: 6),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
+              Expanded( // ✅ Fix overflow
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                    Text(subtitle,
-                        style:
-                            const TextStyle(fontSize: 14, color: Colors.black54)),
-                  ]),
-              const Spacer(),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(fontSize: 14, color: Colors.black54),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
               const Icon(Icons.chevron_right, color: Colors.grey, size: 20),
             ],
           ),
@@ -235,14 +288,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(item,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: bold ? FontWeight.bold : FontWeight.normal)),
-          Text(price,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: bold ? FontWeight.bold : FontWeight.normal)),
+          Text(
+            item,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          Text(
+            price,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
         ],
       ),
     );
