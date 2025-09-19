@@ -1,4 +1,7 @@
-// global.dart
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Globals {
   // API URLs
   static const String SERVER_URL_BAP = "http://127.0.0.1:5000";
@@ -12,21 +15,19 @@ String? globalUsername;
 String? globalEmail;
 int? globaltheme = 1;
 
-// 🛒 Global Cart (Local in-memory store for now)
+// 🛒 Global Cart (in-memory)
 List<Map<String, dynamic>> globalCart = [];
 
-/// Add a product to the global cart.
-/// product should be a Map like:
-/// {
-///   "provider_name": "Farmer A",
-///   "provider_address": "Village 1",
-///   "items": [{"id": "1", "name": "Tomato", "qty": 1}]
-/// }
-void addToGlobalCart(Map<String, dynamic> product) {
+/// Add a product to the global cart and persist it
+Future<void> addToGlobalCart(Map<String, dynamic> product) async {
   globalCart.add(product);
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('cart', jsonEncode(globalCart));
 }
 
 /// Clear the global cart
-void clearGlobalCart() {
+Future<void> clearGlobalCart() async {
   globalCart.clear();
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('cart');
 }

@@ -5,6 +5,7 @@ import 'widgets/category_card.dart';
 import 'widgets/search_bar.dart';
 
 import './cart_screen.dart';
+import './product_details_screen.dart'; // NEW import
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header Section
             _buildHeader(),
 
             // Search Bar
@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // Categories
             _buildCategories(),
 
-            // Featured Section (Optional)
+            // Featured Section
             _buildFeaturedSection(),
 
             // Products Grid
@@ -56,14 +56,12 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          // User Avatar
           CircleAvatar(
             radius: 20,
             backgroundColor: Colors.grey[300],
             child: const Icon(Icons.person, color: Colors.grey),
           ),
           const SizedBox(width: 12),
-          // Welcome Text
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,16 +81,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          // Notification Bell
           IconButton(
-            onPressed: () {
-              // Handle notifications
-            },
+            onPressed: () {},
             icon: const Icon(Icons.notifications_outlined),
           ),
           IconButton(
             onPressed: () {
-              // Handle notifications
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const CartScreen()),
@@ -195,8 +189,8 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // 2 products per row
-          childAspectRatio: 0.8, // Width to height ratio
+          crossAxisCount: 2,
+          childAspectRatio: 0.8,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
         ),
@@ -205,7 +199,15 @@ class _HomeScreenState extends State<HomeScreen> {
           final product = filteredProducts[index];
           return ProductCard(
             product: product,
-            onTap: () => _showProductDetails(product),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      ProductDetailsScreen(productName: product.name),
+                ),
+              );
+            },
             onFavoriteToggle: () => _toggleFavorite(product),
           );
         },
@@ -213,7 +215,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Filter products by search text
   void _filterProducts(String searchText) {
     setState(() {
       if (searchText.isEmpty) {
@@ -229,7 +230,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // Filter products by selected category
   void _filterByCategory() {
     setState(() {
       if (selectedCategory == 'All') {
@@ -242,124 +242,17 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // Toggle favorite status
   void _toggleFavorite(Product product) {
     setState(() {
       final index = products.indexWhere((p) => p.id == product.id);
       if (index != -1) {
         products[index] = product.copyWith(isFavorite: !product.isFavorite);
-        _filterByCategory(); // Refresh filtered list
+        _filterByCategory();
       }
     });
   }
 
-  // Show product details
-  void _showProductDetails(Product product) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => _buildProductDetailsModal(product),
-    );
-  }
-
-  Widget _buildProductDetailsModal(Product product) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.7,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        children: [
-          // Modal Handle
-          Container(
-            width: 40,
-            height: 4,
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          // Product Image
-          Expanded(
-            flex: 2,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(product.imageUrl),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          // Product Details
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '₹${product.price} / kg',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF4CAF50),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    product.description,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                  ),
-                  const Spacer(),
-                  // Add to Cart Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        _showAddToCartSuccess();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4CAF50),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        'Add to Cart',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Show filter dialog
+  // Removed old _showProductDetails() and bottom sheet code
   void _showFilterDialog() {
     showDialog(
       context: context,
@@ -372,17 +265,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Text('Close'),
           ),
         ],
-      ),
-    );
-  }
-
-  // Show add to cart success message
-  void _showAddToCartSuccess() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Product added to cart!'),
-        backgroundColor: Color(0xFF4CAF50),
-        duration: Duration(seconds: 2),
       ),
     );
   }

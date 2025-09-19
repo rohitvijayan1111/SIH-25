@@ -21,8 +21,8 @@ class _SignInPageState extends State<SignInPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  String _selectedState = "Not Selected";
-  String _selectedDistrict = "Not Selected";
+  final String _selectedState = "Not Selected";
+  final String _selectedDistrict = "Not Selected";
   Future<void> _signInWithGoogle() async {
     try {
       // Start Google Sign-In

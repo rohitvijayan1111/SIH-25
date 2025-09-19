@@ -1,7 +1,6 @@
 // Welcome Screen
 
 import 'package:demo/screens/payment_details.dart';
-import 'package:demo/screens/product_details.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,7 +10,7 @@ import 'voice_page.dart';
 import 'view_cart_screen.dart';
 import 'procurements_screen.dart';
 import '../auth/signin.dart';
-import 'CustomerScreens/customer_main_screen.dart';
+import 'CustomerScreens/signin_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -101,7 +100,7 @@ class WelcomeScreen extends StatelessWidget {
       _buildButton(
         onPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const CustomerMainScreen()),
+          MaterialPageRoute(builder: (context) => const SignInScreen()),
         ),
         label: 'Customer App',
         color: Colors.blue,

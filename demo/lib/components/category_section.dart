@@ -688,17 +688,343 @@
 //   }
 // }
 
-import 'dart:async';
-import 'dart:math';
+// lib/screens/home_page.dart
+import 'dart:convert';
 
-import 'package:demo/screens/product_details.dart';
+import 'package:demo/global.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-import '../global.dart';
+const String SERVER_URL = Globals.SERVER_URL_BAP;
 
-class CategorySection extends StatefulWidget {
+/// Model for category data
+class CategoryData {
   final String category;
-  final List<dynamic> items; 
+  final List<dynamic> items;
+  final List<dynamic> providers;
+
+  CategoryData({
+    required this.category,
+    required this.items,
+    required this.providers,
+  });
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<CategoryData> categories = [];
+  bool isLoading = true;
+  String searchTerm = "";
+  final TextEditingController _searchController = TextEditingController();
+
+  final List<Map<String, String>> categoryList = [
+    {'id': 'seed', 'name': 'Seeds'},
+    {'id': 'micro', 'name': 'Micro Nutrient'},
+    {'id': 'fertilizer', 'name': 'Fertilizer'},
+    {'id': 'fungicide', 'name': 'Fungicide'},
+    {'id': 'growth_promoter', 'name': 'Growth Promoter'},
+    {'id': 'growth_regulator', 'name': 'Growth Regulators'},
+    {'id': 'herbicide', 'name': 'Herbicide'},
+    {'id': 'land', 'name': 'Land Lease & Sale'},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialCategories();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  /// Load initial categories and trending items
+  Future<void> _loadInitialCategories() async {
+    setState(() => isLoading = true);
+
+    try {
+      final results = await Future.wait<CategoryData>([
+        _fetchCategoryProducts("seed"),
+        _fetchCategoryProducts("fertilizer"),
+        _fetchCategoryProducts("fungicide"),
+        _fetchCategoryProducts("herbicide"),
+      ]);
+
+      List<dynamic> trendingItems = [];
+      List<dynamic> trendingProviders = [];
+
+      for (var categoryData in results) {
+        trendingItems.addAll(categoryData.items.take(2));
+        trendingProviders.addAll(categoryData.providers.take(2));
+      }
+
+      final trendingCategory = CategoryData(
+        category: "TRENDING",
+        items: trendingItems,
+        providers: trendingProviders,
+      );
+
+      setState(() {
+        categories = [trendingCategory, ...results];
+      });
+    } catch (e) {
+      debugPrint("Error loading initial categories: $e");
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  /// Fetch products from API for a category
+  Future<CategoryData> _fetchCategoryProducts(String category) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$SERVER_URL/bap/search'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'productName': '',
+          'category': category,
+          'lat': '23.2599',
+          'lon': '79.0882',
+          'radius': 1000,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('HTTP error! Status: ${response.statusCode}');
+      }
+
+      final jsonResponse = jsonDecode(response.body);
+      final catalog = jsonResponse['catalog'];
+
+      return CategoryData(
+        category: category.toUpperCase(),
+        items: catalog?['items'] ?? [],
+        providers: catalog?['providers'] ?? [],
+      );
+    } catch (error) {
+      debugPrint("Error fetching $category products: $error");
+      return CategoryData(category: category.toUpperCase(), items: [], providers: []);
+    }
+  }
+
+  /// Search products by name
+  Future<void> _searchProductsByName(String name) async {
+    if (name.trim().isEmpty) {
+      _loadInitialCategories();
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      final response = await http.post(
+        Uri.parse('$SERVER_URL/bap/search'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'productName': name,
+          'category': '',
+          'lat': '23.2599',
+          'lon': '79.0882',
+          'radius': 1000,
+        }),
+      );
+
+      final jsonResponse = jsonDecode(response.body);
+      final catalog = jsonResponse['catalog'];
+
+      setState(() {
+        categories = [
+          CategoryData(
+            category: 'Results for "$name"',
+            items: catalog?['items'] ?? [],
+            providers: catalog?['providers'] ?? [],
+          ),
+        ];
+      });
+    } catch (error) {
+      debugPrint("Error searching product name: $error");
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  /// Handle category button press
+  Future<void> _handleCategoryPress(String categoryID, String categoryName) async {
+    setState(() => isLoading = true);
+
+    try {
+      final response = await http.post(
+        Uri.parse('$SERVER_URL/bap/search'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'productName': '',
+          'category': categoryID.toLowerCase(),
+          'lat': '23.2599',
+          'lon': '79.0882',
+          'radius': 1000,
+        }),
+      );
+
+      final jsonResponse = jsonDecode(response.body);
+      final catalog = jsonResponse['catalog'];
+
+      setState(() {
+        categories = [
+          CategoryData(
+            category: categoryName,
+            items: catalog?['items'] ?? [],
+            providers: catalog?['providers'] ?? [],
+          ),
+        ];
+      });
+    } catch (error) {
+      debugPrint("Error fetching category \"$categoryName\": $error");
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: CircularProgressIndicator(color: Colors.green),
+        ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: Colors.green.shade50,
+      appBar: AppBar(
+        title: const Text(
+          'Home',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF2e7d32), Color(0xFF66bb6a)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          // Search Bar
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.green.shade100, Colors.green.shade200],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) => setState(() => searchTerm = value),
+                    decoration: InputDecoration(
+                      hintText: "Search products...",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide.none,
+                      ),
+                      prefixIcon: Icon(Icons.search, color: Colors.green.shade700),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () => _searchProductsByName(searchTerm),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green.shade700,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  ),
+                  child: const Text(
+                    "Search",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Categories
+          Container(
+            height: 55,
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: categoryList.length,
+              itemBuilder: (context, index) {
+                final categoryItem = categoryList[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: ElevatedButton(
+                    onPressed: () => _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade300,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                    ),
+                    child: Text(categoryItem['name']!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                  ),
+                );
+              },
+            ),
+          ),
+
+          // Products
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Column(
+                children: categories.map<Widget>((section) {
+                  return CategorySection(
+                    category: section.category,
+                    items: section.items,
+                    providers: section.providers,
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Category Section Widget
+class CategorySection extends StatelessWidget {
+  final String category;
+  final List<dynamic> items;
   final List<dynamic> providers;
 
   const CategorySection({
@@ -708,277 +1034,174 @@ class CategorySection extends StatefulWidget {
     required this.providers,
   });
 
-  @override
-  State<CategorySection> createState() => _CategorySectionState();
-}
-
-class _CategorySectionState extends State<CategorySection> {
-  final ScrollController _scrollController = ScrollController();
-  Timer? _autoScrollTimer;
-  double scrollPosition = 0.0;
-  final Random _random = Random();
-
-  bool get isTrending => widget.category.toLowerCase() == "trending";
-
-  @override
-  void initState() {
-    super.initState();
-    if (isTrending) {
-      _startAutoScroll();
-    }
-  }
-
-  void _startAutoScroll() {
-    _scheduleNextScroll();
-  }
-
-  void _scheduleNextScroll() {
-    final delay = [2, 3, 4, 5][_random.nextInt(4)];
-
-    _autoScrollTimer = Timer(Duration(seconds: delay), () {
-      if (_scrollController.hasClients) {
-        final maxScroll = _scrollController.position.maxScrollExtent;
-        final viewportWidth = _scrollController.position.viewportDimension;
-
-        if (scrollPosition < maxScroll) {
-          scrollPosition += viewportWidth * 0.5;
-        } else {
-          scrollPosition = 0;
-        }
-
-        _scrollController.animateTo(
-          scrollPosition,
-          duration: const Duration(seconds: 1),
-          curve: Curves.easeInOut,
-        );
+  String? _extractImage(dynamic item) {
+    if (item['descriptor']?['images'] != null &&
+        item['descriptor']['images'].isNotEmpty) {
+      final firstImage = item['descriptor']['images'][0];
+      if (firstImage is String) {
+        return firstImage;
+      } else if (firstImage is Map && firstImage.containsKey('url')) {
+        return firstImage['url'];
       }
-      _scheduleNextScroll();
-    });
-  }
-
-  @override
-  void dispose() {
-    _autoScrollTimer?.cancel();
-    _scrollController.dispose();
-    super.dispose();
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    final cardWidth = isTrending
-        ? (screenWidth < 600 ? 200.0 : 260.0)
-        : (screenWidth < 600 ? 160.0 : 220.0);
-
-    final cardHeight = isTrending ? 300.0 : 260.0;
+    if (items.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Category Title
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Text(
-            widget.category.toUpperCase(),
-            style: TextStyle(
-              fontSize: isTrending ? 20 : 18,
+            category,
+            style: const TextStyle(
+              fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.green[900],
+              color: Colors.black87,
             ),
           ),
         ),
-        const SizedBox(height: 8),
 
-        // Horizontal carousel
-        SizedBox(
-          height: cardHeight,
-          child: ListView.builder(
-            controller: _scrollController,
-            scrollDirection: Axis.horizontal,
-            physics: isTrending
-                ? const AlwaysScrollableScrollPhysics()
-                : const NeverScrollableScrollPhysics(),
-            itemCount: widget.items.length,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            itemBuilder: (context, index) {
-              final item = widget.items[index];
-              final name = item['descriptor']?['name'] ?? 'Unknown Item';
-              final imageUrl =
-                  (item['descriptor']?['images'] != null &&
-                      item['descriptor']['images'].isNotEmpty)
-                  ? item['descriptor']['images'][0]
-                  : null;
+        // TRENDING → horizontal scroll
+        category == "TRENDING"
+            ? SizedBox(
+                height: 260,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    final imageUrl = _extractImage(item);
+                    final providerName = providers.isNotEmpty
+                        ? (providers.first['descriptor']?['name'] ?? "")
+                        : "";
 
-              final unit =
-                  item['quantity']?['unitized']?['measure']?['unit'] ?? '';
-              final batches = (item['batches'] as List<dynamic>? ?? []);
-              final price = batches.isNotEmpty
-                  ? (batches[0]['price']?['value'] ?? '-')
-                  : '-';
-
-              final provider = widget.providers.isNotEmpty
-                  ? widget.providers[index % widget.providers.length]
-                  : null;
-              final seller =
-                  provider?['descriptor']?['name'] ?? 'Unknown Seller';
-              final location =
-                  (provider?['locations'] != null &&
-                      provider!['locations'].isNotEmpty)
-                  ? provider['locations'][0]['address']
-                  : '';
-
-              return Container(
-
-                width: cardWidth.toDouble(),
-
-                margin: const EdgeInsets.only(right: 12),
-                child: Card(
-                  color: Colors.green[50],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: isTrending ? 5 : 3,
-                  shadowColor: Colors.green.withOpacity(0.3),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ProductDetails(product: item),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Upper Half: Image
-                        Expanded(
-                          flex: isTrending ? 6 : 5,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(12),
-                            ),
-                            child: imageUrl != null
-                                ? Image.network(
-                                    imageUrl,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Container(
-                                    color: Colors.green[100],
-                                    child: const Icon(
-                                      Icons.shopping_bag,
-                                      size: 60,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                          ),
-                        ),
-
-                                                // Lower Half: Text + Add to Cart Button
-                        Expanded(
-                          flex: isTrending ? 4 : 5,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween, // ✅ prevents overflow
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: isTrending ? 16 : 14,
-                                        color: Colors.green[900],
-                                      ),
-                                    ),
-                                    Text(
-                                      "₹$price / $unit",
-                                      style: TextStyle(
-                                        color: Colors.green[700],
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Seller: $seller",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Colors.teal[700],
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    if (location.isNotEmpty)
-                                      Text(
-                                        location,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-
-                                                                SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.green,
-                                        padding: const EdgeInsets.symmetric(vertical: 8),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        // 🛒 Add selected product to global cart
-                                        addToGlobalCart({
-                                          "provider_name": provider["descriptor"]?["name"] ?? "Unknown Farmer",
-                                          "provider_address": provider["locations"]?[0]?["city"]?["name"] ?? "Unknown Address",
-                                          "items": [
-                                            {
-                                              "id": item["id"],
-                                              "name": item["descriptor"]?["name"],
-                                              "qty": 1,
-                                            }
-                                          ],
-                                        });
-
-                                        // ✅ Show Snackbar confirmation
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text("✅ Added to cart")),
-                                        );
-                                      },
-                                      child: const Text(
-                                        "Add to Cart",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                  ],
-                                ),
-                              ),
-                            ),
-
-
-                      ],
-                    ),
-                  ),
+                    return SizedBox(
+                      width: 180,
+                      child: _buildProductCard(imageUrl, item, providerName),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 16),
+              )
+            : GridView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: items.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.75,
+                ),
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  final imageUrl = _extractImage(item);
+                  final providerName = providers.isNotEmpty
+                      ? (providers.first['descriptor']?['name'] ?? "")
+                      : "";
+
+                  return _buildProductCard(imageUrl, item, providerName);
+                },
+              ),
       ],
+    );
+  }
+
+  Widget _buildProductCard(String? imageUrl, dynamic item, String providerName) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            blurRadius: 5,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Item Image
+          Container(
+            height: 120,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+            ),
+            child: imageUrl != null
+                ? Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: Colors.green[100],
+                      child: const Icon(Icons.shopping_bag,
+                          size: 60, color: Colors.green),
+                    ),
+                  )
+                : Container(
+                    color: Colors.green[100],
+                    child: const Icon(Icons.shopping_bag,
+                        size: 60, color: Colors.green),
+                  ),
+          ),
+
+          // Item Name
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              item['descriptor']?['name'] ?? "Unnamed",
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 14),
+            ),
+          ),
+
+          // Provider Name
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(
+              providerName,
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+          ),
+
+          const Spacer(),
+
+          // Add to Cart button
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                // TODO: Handle Add to Cart
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: const Size.fromHeight(36),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+              ),
+              icon: const Icon(Icons.add_shopping_cart,
+                  size: 16, color: Colors.white),
+              label: const Text(
+                "Add to Cart",
+                style:
+                    TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

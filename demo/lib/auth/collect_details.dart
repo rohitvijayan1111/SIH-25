@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../global.dart';
 import 'splashscreen.dart';
 
 class CollectDetails extends StatefulWidget {
@@ -9,7 +8,7 @@ class CollectDetails extends StatefulWidget {
   final String email;
   final String authMethod;
 
-  CollectDetails({
+  const CollectDetails({super.key, 
     required this.uid,
     required this.name,
     required this.email,
@@ -77,7 +76,7 @@ class _CollectDetailsState extends State<CollectDetails> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             DropdownButtonFormField<String>(
-              value: _selectedState,
+              initialValue: _selectedState,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "State",
@@ -89,7 +88,7 @@ class _CollectDetailsState extends State<CollectDetails> {
             ),
             SizedBox(height: 20),
             DropdownButtonFormField<String>(
-              value: _selectedDistrict,
+              initialValue: _selectedDistrict,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "District",
@@ -101,7 +100,7 @@ class _CollectDetailsState extends State<CollectDetails> {
             ),
             SizedBox(height: 20),
             DropdownButtonFormField<String>(
-              value: _selectedRole,
+              initialValue: _selectedRole,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Role",
