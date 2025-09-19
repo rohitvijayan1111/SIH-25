@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
+
+import 'package:demo/components/category_section.dart'; // Create this component
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../global.dart';
-import 'product_details.dart'; // Create this screen
-import 'package:demo/components/category_section.dart'; // Create this component
-import 'package:demo/global.dart';
 
 const String SERVER_URL = Globals.SERVER_URL_BAP;
 
-// Define the data models to handle the API response
+
+// Define the data models to handle the API respons
 class CategoryData {
   final String category;
   final List<dynamic> items;
