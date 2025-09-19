@@ -1,15 +1,11 @@
 import 'dart:convert';
 
-import 'package:demo/components/category_section.dart'; // Create this component
+import 'package:demo/global.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../global.dart';
-
 const String SERVER_URL = Globals.SERVER_URL_BAP;
 
-
-// Define the data models to handle the API respons
 class CategoryData {
   final String category;
   final List<dynamic> items;
@@ -30,11 +26,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<dynamic> categories = [];
+  List<CategoryData> categories = [];
   bool isLoading = true;
   String searchTerm = "";
+  final TextEditingController _searchController = TextEditingController();
 
-  // The category list from your React Native code
   final List<Map<String, String>> categoryList = [
     {'id': 'seed', 'name': 'Seeds'},
     {'id': 'micro', 'name': 'Micro Nutrient'},
@@ -53,17 +49,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadInitialCategories() async {
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
 
     try {
-      final results = await Future.wait([
+      final results = await Future.wait<CategoryData>([
         _fetchCategoryProducts("seed"),
         _fetchCategoryProducts("fertilizer"),
-        _fetchCategoryProducts("Fungicide"),
-        _fetchCategoryProducts("Herbicide"),
+        _fetchCategoryProducts("fungicide"),
+        _fetchCategoryProducts("herbicide"),
       ]);
+
       List<dynamic> trendingItems = [];
       List<dynamic> trendingProviders = [];
 
@@ -82,11 +77,9 @@ class _HomePageState extends State<HomePage> {
         categories = [trendingCategory, ...results];
       });
     } catch (e) {
-      print("Error loading initial categories: $e");
+      debugPrint("Error loading initial categories: $e");
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      setState(() => isLoading = false);
     }
   }
 
@@ -103,8 +96,6 @@ class _HomePageState extends State<HomePage> {
           'radius': 1000,
         }),
       );
-      // print("📩 Raw Response for category $category:");
-      // print(response.body);
 
       if (response.statusCode != 200) {
         throw Exception('HTTP error! Status: ${response.statusCode}');
@@ -112,37 +103,25 @@ class _HomePageState extends State<HomePage> {
 
       final jsonResponse = jsonDecode(response.body);
       final catalog = jsonResponse['catalog'];
-      print("\nprovidersssss\n");
-      print(catalog['providers'][0]);
-
-      if (catalog == null) {
-        throw Exception('Invalid ONDC /on_search response format.');
-      }
 
       return CategoryData(
         category: category.toUpperCase(),
-        items: catalog['items'] ?? [],
-        providers: catalog['providers'] ?? [],
+        items: catalog?['items'] ?? [],
+        providers: catalog?['providers'] ?? [],
       );
     } catch (error) {
-      print("❌ Error fetching $category products: $error");
-      return CategoryData(
-        category: category.toUpperCase(),
-        items: [],
-        providers: [],
-      );
+      debugPrint("Error fetching $category products: $error");
+      return CategoryData(category: category.toUpperCase(), items: [], providers: []);
     }
   }
 
   Future<void> _searchProductsByName(String name) async {
     if (name.trim().isEmpty) {
-      _loadInitialCategories(); // fallback
+      _loadInitialCategories();
       return;
     }
 
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
 
     try {
       final response = await http.post(
@@ -157,9 +136,6 @@ class _HomePageState extends State<HomePage> {
         }),
       );
 
-      // print("📩 Raw Response for search term: $name");
-      // print(response.body);
-
       final jsonResponse = jsonDecode(response.body);
       final catalog = jsonResponse['catalog'];
 
@@ -173,21 +149,14 @@ class _HomePageState extends State<HomePage> {
         ];
       });
     } catch (error) {
-      print("❌ Error searching product name: $error");
+      debugPrint("Error searching product name: $error");
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      setState(() => isLoading = false);
     }
   }
 
-  Future<void> _handleCategoryPress(
-    String categoryID,
-    String categoryName,
-  ) async {
-    setState(() {
-      isLoading = true;
-    });
+  Future<void> _handleCategoryPress(String categoryID, String categoryName) async {
+    setState(() => isLoading = true);
 
     try {
       final response = await http.post(
@@ -202,35 +171,22 @@ class _HomePageState extends State<HomePage> {
         }),
       );
 
-      print("📩 Raw Response for category $categoryID:");
-      print(response.body);
-
-      if (response.statusCode != 200) {
-        throw Exception('HTTP error! Status: ${response.statusCode}');
-      }
-
       final jsonResponse = jsonDecode(response.body);
       final catalog = jsonResponse['catalog'];
-
-      if (catalog == null) {
-        throw Exception('Invalid /on_search response format. Missing catalog.');
-      }
 
       setState(() {
         categories = [
           CategoryData(
             category: categoryName,
-            items: catalog['items'] ?? [],
-            providers: catalog['providers'] ?? [],
+            items: catalog?['items'] ?? [],
+            providers: catalog?['providers'] ?? [],
           ),
         ];
       });
     } catch (error) {
-      print("❌ Error fetching category \"$categoryName\": $error");
+      debugPrint("Error fetching category \"$categoryName\": $error");
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      setState(() => isLoading = false);
     }
   }
 
@@ -240,20 +196,13 @@ class _HomePageState extends State<HomePage> {
       return const Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(color: Colors.green),
-              SizedBox(height: 12),
-              Text("Loading products...", style: TextStyle(color: Colors.grey)),
-            ],
-          ),
+          child: CircularProgressIndicator(color: Colors.green),
         ),
       );
     }
 
     return Scaffold(
-      backgroundColor: Colors.green.shade50, // light background green
+      backgroundColor: Colors.green.shade50,
       appBar: AppBar(
         title: const Text(
           'Home',
@@ -264,10 +213,7 @@ class _HomePageState extends State<HomePage> {
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                Color(0xFF2e7d32),
-                Color(0xFF66bb6a),
-              ], // dark → light green
+              colors: [Color(0xFF2e7d32), Color(0xFF66bb6a)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -276,7 +222,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          // Search Bar Section
+          // Search Bar
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
@@ -289,36 +235,22 @@ class _HomePageState extends State<HomePage> {
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.green.withOpacity(0.2),
-                  blurRadius: 6,
-                  offset: const Offset(0, 3),
-                ),
-              ],
             ),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
-                    controller: TextEditingController(text: searchTerm),
+                    controller: _searchController,
                     onChanged: (value) => setState(() => searchTerm = value),
                     decoration: InputDecoration(
                       hintText: "Search products...",
-                      hintStyle: TextStyle(color: Colors.green.shade600),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
                         borderSide: BorderSide.none,
                       ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Colors.green.shade700,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                      ),
+                      prefixIcon: Icon(Icons.search, color: Colors.green.shade700),
                     ),
                   ),
                 ),
@@ -330,25 +262,18 @@ class _HomePageState extends State<HomePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    elevation: 3,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   ),
                   child: const Text(
                     "Search",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
             ),
           ),
 
-          // Category List Section
+          // Categories
           Container(
             height: 55,
             margin: const EdgeInsets.symmetric(vertical: 10),
@@ -360,50 +285,29 @@ class _HomePageState extends State<HomePage> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: ElevatedButton(
-                    onPressed: () => _handleCategoryPress(
-                      categoryItem['id']!,
-                      categoryItem['name']!,
-                    ),
+                    onPressed: () => _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green.shade300,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      elevation: 2,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                     ),
-                    child: Text(
-                      categoryItem['name']!,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
+                    child: Text(categoryItem['name']!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
                   ),
                 );
               },
             ),
           ),
 
-          // Content Section (Product List)
+          // Products
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Column(
-                children: categories.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final section = entry.value;
-                  return Column(
-                    children: [
-                      CategorySection(
-                        category: section.category,
-                        items: section.items,
-                        providers: section.providers,
-                      ),
-                      if (index < categories.length - 1)
-                        Divider(height: 1, color: Colors.green.shade200),
-                    ],
+                children: categories.map<Widget>((section) {
+                  return CategorySection(
+                    category: section.category,
+                    items: section.items,
+                    providers: section.providers,
                   );
                 }).toList(),
               ),
@@ -411,6 +315,163 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CategorySection extends StatelessWidget {
+  final String category;
+  final List<dynamic> items;
+  final List<dynamic> providers;
+
+  const CategorySection({
+    Key? key,
+    required this.category,
+    required this.items,
+    required this.providers,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (items.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Text(
+            category,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 250,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final item = items[index];
+              final providerName = providers.isNotEmpty
+                  ? (providers.first['descriptor']?['name'] ?? "")
+                  : "";
+
+              String? imageUrl;
+              if (item['descriptor']?['images'] != null &&
+                  item['descriptor']['images'].isNotEmpty) {
+                final firstImage = item['descriptor']['images'][0];
+                if (firstImage is String) {
+                  imageUrl = firstImage;
+                } else if (firstImage is Map && firstImage.containsKey('url')) {
+                  imageUrl = firstImage['url'];
+                }
+              }
+
+              return Container(
+                width: 160,
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade300,
+                      blurRadius: 5,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Image
+                    Container(
+                      height: 120,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      ),
+                      child: imageUrl != null
+                          ? Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => Container(
+                                color: Colors.green[100],
+                                child: const Icon(Icons.shopping_bag, size: 60, color: Colors.green),
+                              ),
+                            )
+                          : Container(
+                              color: Colors.green[100],
+                              child: const Icon(Icons.shopping_bag, size: 60, color: Colors.green),
+                            ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        item['descriptor']?['name'] ?? "Unnamed",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        providerName,
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ),
+
+                    // Add to Cart
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final product = {
+                              "provider_name": providerName.isNotEmpty ? providerName : "Unknown",
+                              "provider_address": "",
+                              "items": [
+                                {
+                                  "id": item['id'] ?? item['descriptor']?['id'] ?? "",
+                                  "name": item['descriptor']?['name'] ?? "Unnamed",
+                                  "qty": 1,
+                                  "price": item['price'] ?? 0
+                                }
+                              ]
+                            };
+                            await addToGlobalCart(product);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("${item['descriptor']?['name']} added to cart")),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green.shade600,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          ),
+                          child: const Text(
+                            "Add to Cart",
+                            style: TextStyle(fontSize: 12, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
