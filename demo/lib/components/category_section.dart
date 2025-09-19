@@ -693,11 +693,12 @@ import 'dart:math';
 
 import 'package:demo/screens/product_details.dart';
 import 'package:flutter/material.dart';
-import '../screens/product_details.dart';
+
+import '../global.dart';
 
 class CategorySection extends StatefulWidget {
   final String category;
-  final List<dynamic> items;
+  final List<dynamic> items; 
   final List<dynamic> providers;
 
   const CategorySection({
@@ -927,30 +928,45 @@ class _CategorySectionState extends State<CategorySection> {
                                   ],
                                 ),
 
-                                // ✅ Add to Cart Button
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green,
-                                      padding: const EdgeInsets.symmetric(vertical: 8),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                                                SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.green,
+                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        // 🛒 Add selected product to global cart
+                                        addToGlobalCart({
+                                          "provider_name": provider["descriptor"]?["name"] ?? "Unknown Farmer",
+                                          "provider_address": provider["locations"]?[0]?["city"]?["name"] ?? "Unknown Address",
+                                          "items": [
+                                            {
+                                              "id": item["id"],
+                                              "name": item["descriptor"]?["name"],
+                                              "qty": 1,
+                                            }
+                                          ],
+                                        });
+
+                                        // ✅ Show Snackbar confirmation
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text("✅ Added to cart")),
+                                        );
+                                      },
+                                      child: const Text(
+                                        "Add to Cart",
+                                        style: TextStyle(color: Colors.white),
                                       ),
                                     ),
-                                    onPressed: () {
-                                      // handle cart logic
-                                    },
-                                    child: const Text(
-                                      "Add to Cart",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
                                   ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
 
 
                       ],

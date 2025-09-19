@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
+import '../global.dart';
 
 /// View Cart Screen
 /// Displays farmers/suppliers in the cart with their details and item counts
@@ -15,69 +14,27 @@ class ViewCartScreen extends StatefulWidget {
 
 class _ViewCartScreenState extends State<ViewCartScreen> {
   List<dynamic> cartData = [];
-  bool loading = true;
-
-  // Replace with your actual URL
-  final String serverUrl = "http://your-server-url.com";
-
-  Future<void> fetchCartData() async {
-    try {
-      final response = await http.get(
-        Uri.parse("$serverUrl/cart/view/a985baac-9028-4dc1-bbd9-a6f3aae49ef5"),
-      );
-
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        setState(() {
-          cartData = jsonData["cart"] ?? [];
-        });
-      } else {
-        _showError("Failed to load cart data.");
-      }
-    } catch (err) {
-      debugPrint("❌ Failed to fetch cart: $err");
-      _showError("Failed to load cart data.");
-    } finally {
-      setState(() {
-        loading = false;
-      });
-    }
-  }
-
-  void _showError(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg)),
-    );
-  }
 
   @override
   void initState() {
     super.initState();
-    fetchCartData();
+    _loadCartData();
+  }
+
+  void _loadCartData() {
+    // ✅ Load cart data directly from global.dart
+    setState(() {
+      cartData = globalCart;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (loading) {
-      return const Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(color: Colors.green),
-              SizedBox(height: 12),
-              Text("Loading your cart..."),
-            ],
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       backgroundColor: const Color(0xFFF0FDF4), // green-50
       body: Column(
         children: [
-          // 🟢 Header (common for both states)
+          // 🟢 Header
           Container(
             decoration: const BoxDecoration(
               color: Colors.green,
@@ -317,44 +274,6 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
           ),
         );
       },
-    );
-  }
-}
-
-/// Cart Item Model
-/// Represents a farmer/supplier item in the cart
-class CartItem {
-  final String id;
-  final String farmerName;
-  final String location;
-  int itemCount;
-  final String profileImage;
-
-  CartItem({
-    required this.id,
-    required this.farmerName,
-    required this.location,
-    required this.itemCount,
-    required this.profileImage,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'farmerName': farmerName,
-      'location': location,
-      'itemCount': itemCount,
-      'profileImage': profileImage,
-    };
-  }
-
-  factory CartItem.fromJson(Map<String, dynamic> json) {
-    return CartItem(
-      id: json['id'],
-      farmerName: json['farmerName'],
-      location: json['location'],
-      itemCount: json['itemCount'],
-      profileImage: json['profileImage'],
     );
   }
 }
