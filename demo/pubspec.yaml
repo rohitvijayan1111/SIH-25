@@ -1,5 +1,5 @@
 name: demo
-description: "A new Flutter project."
+description: 'A new Flutter project.'
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -28,9 +28,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 
-  
-
-
 dependencies:
   flutter:
     sdk: flutter
@@ -46,7 +43,7 @@ dependencies:
   firebase_core: ^4.1.0
   speech_to_text: ^7.3.0
   translator: ^1.0.4+1
- 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -63,11 +60,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/CustomerUIAssets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
