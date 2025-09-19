@@ -10,7 +10,18 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  List<Product> favoriteProducts = [];
+  List<Product> favoriteProducts = [
+     const Product(
+      id: '3',
+      name: 'Tomatoes',
+      price: '60',
+      imageUrl: 'assets/CustomerUIAssets/images/tomato.jpg',
+      category: 'Vegetables',
+      description: 'Red ripe tomatoes',
+      farmerName: 'Farmer Bob',
+    ),
+    
+  ];
 
   @override
   void initState() {
