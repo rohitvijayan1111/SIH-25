@@ -4,15 +4,75 @@ import 'package:demo/global.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class CategoryData {
-  final String category;
-  final List<dynamic> items;
-  final List<dynamic> providers;
-  CategoryData({
-    required this.category,
-    required this.items,
-    required this.providers,
+class InventoryItem {
+  final String batchId;
+  final String batchCode;
+  final String productId;
+  final String productName;
+  final String productType;
+  final String farmerId;
+  final String farmerName;
+  final String availableQty;
+  final String unit;
+  final String pricePerUnit;
+  final int batchQuantity;
+  final DateTime manufacturedOn;
+  final DateTime expiryDate;
+  final DateTime harvestDate;
+  final String locationName;
+  final double geoLat;
+  final double geoLon;
+  final String status;
+  final String metaHash;
+  final String? chainTx;
+
+  InventoryItem({
+    required this.batchId,
+    required this.batchCode,
+    required this.productId,
+    required this.productName,
+    required this.productType,
+    required this.farmerId,
+    required this.farmerName,
+    required this.availableQty,
+    required this.unit,
+    required this.pricePerUnit,
+    required this.batchQuantity,
+    required this.manufacturedOn,
+    required this.expiryDate,
+    required this.harvestDate,
+    required this.locationName,
+    required this.geoLat,
+    required this.geoLon,
+    required this.status,
+    required this.metaHash,
+    this.chainTx,
   });
+
+  factory InventoryItem.fromJson(Map<String, dynamic> json) {
+    return InventoryItem(
+      batchId: json['batch_id'],
+      batchCode: json['batch_code'],
+      productId: json['product_id'],
+      productName: json['product_name'],
+      productType: json['product_type'],
+      farmerId: json['farmer_id'],
+      farmerName: json['farmer_name'],
+      availableQty: json['available_qty'],
+      unit: json['unit'],
+      pricePerUnit: json['price_per_unit'],
+      batchQuantity: json['batch_quantity'],
+      manufacturedOn: DateTime.parse(json['manufactured_on']),
+      expiryDate: DateTime.parse(json['expiry_date']),
+      harvestDate: DateTime.parse(json['harvest_date']),
+      locationName: json['location_name'],
+      geoLat: (json['geo_lat'] as num).toDouble(),
+      geoLon: (json['geo_lon'] as num).toDouble(),
+      status: json['status'],
+      metaHash: json['meta_hash'],
+      chainTx: json['chain_tx'],
+    );
+  }
 }
 
 class HomePage extends StatefulWidget {
@@ -23,7 +83,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<CategoryData> categories = [];
+  List<InventoryItem> inventory_items_for_category = [];
   bool isLoading = true;
   String searchTerm = "";
   final TextEditingController _searchController = TextEditingController();
@@ -48,7 +108,7 @@ class _HomePageState extends State<HomePage> {
     setState(() => isLoading = true);
 
     try {
-      final results = await Future.wait<CategoryData>([
+      final results = await Future.wait<InventoryItem>([
         _fetchCategoryProducts("seed"),
         _fetchCategoryProducts("fertilizer"),
         _fetchCategoryProducts("fungicide"),
@@ -81,8 +141,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<CategoryData> _fetchCategoryProducts(String category) async {
     try {
-      final response = await http.post(
-        Uri.parse('${Globals.SERVER_URL_BPP}/api/batch?category=$category'),
+      print("\n calling to backend \n");
+      final response = await http.get(
+        Uri.parse(
+          '${Globals.SERVER_URL_BPP}/api/batches?product_type=$category',
+        ),
         headers: {'Content-Type': 'application/json'},
         // body: jsonEncode({
         //   'productName': '',
@@ -92,6 +155,7 @@ class _HomePageState extends State<HomePage> {
         //   'radius': 1000,
         // }),
       );
+      // print("\n backend data ${response} \n");
 
       if (response.statusCode != 200) {
         throw Exception('HTTP error! Status: ${response.statusCode}');
@@ -100,7 +164,7 @@ class _HomePageState extends State<HomePage> {
       final jsonResponse = jsonDecode(response.body);
       debugPrint("🔎 Response for $category: $jsonResponse");
 
-      final catalog = jsonResponse['catalog'];
+      final inventory = jsonResponse['inventory'];
 
       final items = catalog?['items'] ?? catalog?['products']?['items'] ?? [];
       final providers = catalog?['providers'] ?? [];
@@ -131,8 +195,8 @@ class _HomePageState extends State<HomePage> {
     setState(() => isLoading = true);
 
     try {
-      final response = await http.post(
-        Uri.parse('${Globals.SERVER_URL_BPP}/api/batch?name=$name'),
+      final response = await http.get(
+        Uri.parse('${Globals.SERVER_URL_BPP}/api/batches?product_name=$name'),
         headers: {'Content-Type': 'application/json'},
         // body: jsonEncode({
         //   'productName': name,
@@ -172,18 +236,18 @@ class _HomePageState extends State<HomePage> {
     setState(() => isLoading = true);
 
     try {
-      final response = await http.post(
+      final response = await http.get(
         Uri.parse(
-          '${Globals.SERVER_URL_BPP}/api/batch?category=${categoryID.toLowerCase()}',
+          '${Globals.SERVER_URL_BPP}/api/batches?product_type=${categoryID.toLowerCase()}',
         ),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'productName': '',
-          'category': categoryID.toLowerCase(),
-          'lat': '23.2599',
-          'lon': '79.0882',
-          'radius': 1000,
-        }),
+        // body: jsonEncode({
+        //   'productName': '',
+        //   'category': categoryID.toLowerCase(),
+        //   'lat': '23.2599',
+        //   'lon': '79.0882',
+        //   'radius': 1000,
+        // }),
       );
 
       final jsonResponse = jsonDecode(response.body);

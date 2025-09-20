@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Globals {
   // API URLs
   static const String SERVER_URL_BAP = "http://127.0.0.1:5000";
-  static const String SERVER_URL_BPP = "http://127.0.0.1:3000";
+  static const String SERVER_URL_BPP = "http://localhost:3000";
   static const String SERVER_URL_BPP_N = "http://127.0.0.1:2000";
 }
 
