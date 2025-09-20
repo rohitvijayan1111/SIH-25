@@ -8,7 +8,6 @@ class CategoryData {
   final String category;
   final List<dynamic> items;
   final List<dynamic> providers;
-
   CategoryData({
     required this.category,
     required this.items,
@@ -39,7 +38,6 @@ class _HomePageState extends State<HomePage> {
     {'id': 'herbicide', 'name': 'Herbicide'},
     {'id': 'land', 'name': 'Land Lease & Sale'},
   ];
-
   @override
   void initState() {
     super.initState();
@@ -84,7 +82,7 @@ class _HomePageState extends State<HomePage> {
   Future<CategoryData> _fetchCategoryProducts(String category) async {
     try {
       final response = await http.post(
-        Uri.parse('${Globals.SERVER_URL_BPP}/api/batch?category?${category}'),
+        Uri.parse('${Globals.SERVER_URL_BPP}/api/batch?category=$category'),
         headers: {'Content-Type': 'application/json'},
         // body: jsonEncode({
         //   'productName': '',
@@ -134,15 +132,15 @@ class _HomePageState extends State<HomePage> {
 
     try {
       final response = await http.post(
-        Uri.parse('$SERVER_URL/bap/search'),
+        Uri.parse('${Globals.SERVER_URL_BPP}/api/batch?name=$name'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'productName': name,
-          'category': '',
-          'lat': '23.2599',
-          'lon': '79.0882',
-          'radius': 1000,
-        }),
+        // body: jsonEncode({
+        //   'productName': name,
+        //   'category': '',
+        //   'lat': '23.2599',
+        //   'lon': '79.0882',
+        //   'radius': 1000,
+        // }),
       );
 
       final jsonResponse = jsonDecode(response.body);
@@ -175,7 +173,9 @@ class _HomePageState extends State<HomePage> {
 
     try {
       final response = await http.post(
-        Uri.parse('$SERVER_URL/bap/search'),
+        Uri.parse(
+          '${Globals.SERVER_URL_BPP}/api/batch?category=${categoryID.toLowerCase()}',
+        ),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'productName': '',
@@ -431,7 +431,7 @@ class CategorySection extends StatelessWidget {
               if (imageUrl != null &&
                   !(imageUrl.startsWith("http://") ||
                       imageUrl.startsWith("https://"))) {
-                imageUrl = "$SERVER_URL/$imageUrl";
+                imageUrl = "${Globals.SERVER_URL_BAP}/$imageUrl";
               }
 
               return Container(
