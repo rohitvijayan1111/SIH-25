@@ -1,0 +1,61 @@
+### 🌐 Base URL
+@baseUrl = http://localhost:3000/api/payments
+
+###
+# 1️⃣ Create Payment (Lock Payment)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "order_id": "835c5e25-9ed7-4625-9f4d-387a20a04524",
+  "batch_id": "af7df286-383c-44d1-8132-5f523c3e1cbe",
+  "payer": "buyer_ajith@upi",
+  "payee": "farmer_rohit@upi",
+  "amount": 5000.00,
+  "currency": "INR",
+  "payment_method": "UPI"
+}
+
+###
+# 2️⃣ Release Payment (Upon Delivery Confirmation)
+PATCH {{baseUrl}}/edc85e8a-127d-42c4-b2c0-eba79d11a819/release
+Content-Type: application/json
+
+{
+  "chain_tx": "0xabc123ef4567890blockhainTxHashHere"
+}
+
+###
+# 3️⃣ Refund Payment (Handle Disputes)
+PATCH {{baseUrl}}/edc85e8a-127d-42c4-b2c0-eba79d11a819/refund
+Content-Type: application/json
+
+{
+  "reason": "Buyer cancelled order",
+  "chain_tx": "0xdef456789"
+}
+
+###
+# 4️⃣ Upload Payment Proof (IPFS CID)
+POST {{baseUrl}}/edc85e8a-127d-42c4-b2c0-eba79d11a819/proof
+Content-Type: application/json
+
+{
+  "proof_cid": "QmXyz123ExampleIPFSHash"
+}
+
+###
+# 5️⃣ Get Payment by ID
+GET {{baseUrl}}/edc85e8a-127d-42c4-b2c0-eba79d11a819
+
+###
+# 6️⃣ List Payments (All)
+GET {{baseUrl}}
+
+###
+# 7️⃣ List Payments (Filter by Status = RELEASED)
+GET {{baseUrl}}?status=RELEASED
+
+###
+# 8️⃣ List Payments (Filter by Payer)
+GET {{baseUrl}}?payer=buyer_ajith@upi
