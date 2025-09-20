@@ -85,18 +85,62 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<InventoryItem> inventory_items_for_category = [];
   bool isLoading = true;
+  bool isLoadingCategory = false;
   String searchTerm = "";
   final TextEditingController _searchController = TextEditingController();
 
+  // final List<Map<String, String>> categoryList = [
+  //   {'id': 'seed', 'name': 'Seeds'},
+  //   {'id': 'micro', 'name': 'Micro Nutrient'},
+  //   {'id': 'fertilizer', 'name': 'Fertilizer'},
+  //   {'id': 'fungicide', 'name': 'Fungicide'},
+  //   {'id': 'growth_promoter', 'name': 'Growth Promoter'},
+  //   {'id': 'growth_regulator', 'name': 'Growth Regulators'},
+  //   {'id': 'herbicide', 'name': 'Herbicide'},
+  //   {'id': 'land', 'name': 'Land Lease & Sale'},
+  // ];
+
   final List<Map<String, String>> categoryList = [
-    {'id': 'seed', 'name': 'Seeds'},
-    {'id': 'micro', 'name': 'Micro Nutrient'},
-    {'id': 'fertilizer', 'name': 'Fertilizer'},
-    {'id': 'fungicide', 'name': 'Fungicide'},
-    {'id': 'growth_promoter', 'name': 'Growth Promoter'},
-    {'id': 'growth_regulator', 'name': 'Growth Regulators'},
-    {'id': 'herbicide', 'name': 'Herbicide'},
-    {'id': 'land', 'name': 'Land Lease & Sale'},
+    {
+      'id': 'seed',
+      'name': 'Seeds',
+      'image': 'assets/FarmerUIAssets/images/seeds.png',
+    },
+    {
+      'id': 'micro',
+      'name': 'Micro Nutrient',
+      'image': 'assets/FarmerUIAssets/images/micronutrients.png',
+    },
+    {
+      'id': 'fertilizer',
+      'name': 'Fertilizer',
+      'image': 'assets/FarmerUIAssets/images/fertilizer.png',
+    },
+    {
+      'id': 'fungicide',
+      'name': 'Fungicide',
+      'image': 'assets/FarmerUIAssets/images/fungicide.png',
+    },
+    {
+      'id': 'growth_promoter',
+      'name': 'Growth Promoter',
+      'image': 'assets/FarmerUIAssets/images/growthpromoter.png',
+    },
+    {
+      'id': 'growth_regulator',
+      'name': 'Growth Regulators',
+      'image': 'assets/FarmerUIAssets/images/growthregulator.png',
+    },
+    {
+      'id': 'herbicide',
+      'name': 'Herbicide',
+      'image': 'assets/FarmerUIAssets/images/herbicide.png',
+    },
+    {
+      'id': 'land',
+      'name': 'Land Lease & Sale',
+      'image': 'assets/FarmerUIAssets/images/landlease.png',
+    },
   ];
   @override
   void initState() {
@@ -228,12 +272,97 @@ class _HomePageState extends State<HomePage> {
       setState(() => isLoading = false);
     }
   }
+  // OLD
+  // Widget _buildCategoryCard(Map<String, dynamic> categoryItem) {
+  //   return GestureDetector(
+  //     onTap: () =>
+  //         _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         color: Colors.white,
+  //         borderRadius: BorderRadius.circular(12),
+  //         boxShadow: [
+  //           BoxShadow(
+  //             color: Colors.grey.shade200,
+  //             blurRadius: 4,
+  //             offset: const Offset(0, 2),
+  //           ),
+  //         ],
+  //       ),
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           Container(
+  //             padding: const EdgeInsets.all(12),
+  //             decoration: BoxDecoration(
+  //               color: categoryItem['color'].withOpacity(0.1),
+  //               borderRadius: BorderRadius.circular(8),
+  //             ),
+  //             child: Icon(
+  //               categoryItem['icon'],
+  //               size: 24,
+  //               color: categoryItem['color'],
+  //             ),
+  //           ),
+  //           const SizedBox(height: 8),
+  //           Text(
+  //             categoryItem['name'],
+  //             textAlign: TextAlign.center,
+  //             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+  //             maxLines: 2,
+  //             overflow: TextOverflow.ellipsis,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Widget _buildCategoryCard(Map<String, String> categoryItem) {
+    return GestureDetector(
+      onTap: () =>
+          _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Replace decorated icon with image loading from asset
+            Container(
+              height: 40,
+              width: 40,
+              padding: const EdgeInsets.all(6),
+              child: Image.asset(categoryItem['image']!, fit: BoxFit.contain),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              categoryItem['name']!,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Future<void> _handleCategoryPress(
     String categoryID,
     String categoryName,
   ) async {
-    setState(() => isLoading = true);
+    setState(() => isLoadingCategory = true);
 
     try {
       final response = await http.get(
@@ -362,39 +491,46 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // Categories
+          // OLD Categories
+          // Container(
+          //   height: 55,
+          //   margin: const EdgeInsets.symmetric(vertical: 10),
+          //   child: ListView.builder(
+          //     scrollDirection: Axis.horizontal,
+          //     itemCount: categoryList.length,
+          //     itemBuilder: (context, index) {
+          //       final categoryItem = categoryList[index];
+          //       return Padding(
+          //         padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          //         child: ElevatedButton(
+          //           onPressed: () => _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
+          //           style: ElevatedButton.styleFrom(
+          //             backgroundColor: Colors.green.shade300,
+          //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          //             padding: const EdgeInsets.symmetric(horizontal: 20),
+          //           ),
+          //           child: Text(categoryItem['name']!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
+
+          //New
           Container(
-            height: 55,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: GridView.builder(
               itemCount: categoryList.length,
-              itemBuilder: (context, index) {
-                final categoryItem = categoryList[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: ElevatedButton(
-                    onPressed: () => _handleCategoryPress(
-                      categoryItem['id']!,
-                      categoryItem['name']!,
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade300,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                    ),
-                    child: Text(
-                      categoryItem['name']!,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                );
-              },
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.78, // Slightly taller cards!
+              ),
+              itemBuilder: (context, index) =>
+                  _buildCategoryCard(categoryList[index]),
             ),
           ),
 
@@ -583,6 +719,9 @@ class CategorySection extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () async {
                             final product = {
+                              "provider_name": providerName.isNotEmpty
+                                  ? providerName
+                                  : "Unknown",
                               "provider_name": providerName.isNotEmpty
                                   ? providerName
                                   : "Unknown",
