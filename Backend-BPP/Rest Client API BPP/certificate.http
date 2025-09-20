@@ -1,0 +1,18 @@
+### 1️⃣ Attach Certificate to a Batch
+POST http://localhost:3000/api/certificate/af7df286-383c-44d1-8132-5f523c3e1cbe
+Content-Type: application/json
+
+{
+  "cert_id": "FSSAI-5678",
+  "cert_hash": "0xabc123...",
+  "issuer_id": "af7df286-383c-44d1-8132-5f523c3e1cbe",
+  "issuer_name": "FSSAI India",
+  "issued_at": "2025-09-01T10:20:00Z",
+  "file_cid": "bafybeigdyr123",
+  "chain_tx": "0xdef456..."
+}
+
+###
+
+### 2️⃣ Verify Certificate Authenticity
+GET http://localhost:3000/api/certificate/af286-383c-44d1-8132-5f523c3e1cbe/FSSAI-5678/verify

@@ -4,13 +4,10 @@ import 'package:demo/global.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-const String SERVER_URL = Globals.SERVER_URL_BAP;
-
 class CategoryData {
   final String category;
   final List<dynamic> items;
   final List<dynamic> providers;
-
   CategoryData({
     required this.category,
     required this.items,
@@ -85,7 +82,6 @@ class _HomePageState extends State<HomePage> {
       'image': 'assets/FarmerUIAssets/images/landlease.png',
     },
   ];
-
   @override
   void initState() {
     super.initState();
@@ -121,7 +117,7 @@ class _HomePageState extends State<HomePage> {
         categories = [trendingCategory, ...results];
       });
     } catch (e) {
-      debugPrint("Error loading initial categories: $e");
+      debugPrint("❌ Error loading initial categories: $e");
     } finally {
       setState(() => isLoading = false);
     }
@@ -130,15 +126,15 @@ class _HomePageState extends State<HomePage> {
   Future<CategoryData> _fetchCategoryProducts(String category) async {
     try {
       final response = await http.post(
-        Uri.parse('$SERVER_URL/bap/search'),
+        Uri.parse('${Globals.SERVER_URL_BPP}/api/batch?category=$category'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'productName': '',
-          'category': category,
-          'lat': '23.2599',
-          'lon': '79.0882',
-          'radius': 1000,
-        }),
+        // body: jsonEncode({
+        //   'productName': '',
+        //   'category': category,
+        //   'lat': '23.2599',
+        //   'lon': '79.0882',
+        //   'radius': 1000,
+        // }),
       );
 
       if (response.statusCode != 200) {
@@ -146,12 +142,19 @@ class _HomePageState extends State<HomePage> {
       }
 
       final jsonResponse = jsonDecode(response.body);
+      debugPrint("🔎 Response for $category: $jsonResponse");
+
       final catalog = jsonResponse['catalog'];
+
+      final items = catalog?['items'] ?? catalog?['products']?['items'] ?? [];
+      final providers = catalog?['providers'] ?? [];
+
+      debugPrint("✅ ${items.length} items fetched for $category");
 
       return CategoryData(
         category: category.toUpperCase(),
-        items: catalog?['items'] ?? [],
-        providers: catalog?['providers'] ?? [],
+        items: items,
+        providers: providers,
       );
     } catch (error) {
       debugPrint("Error fetching $category products: $error");
@@ -173,31 +176,34 @@ class _HomePageState extends State<HomePage> {
 
     try {
       final response = await http.post(
-        Uri.parse('$SERVER_URL/bap/search'),
+        Uri.parse('${Globals.SERVER_URL_BPP}/api/batch?name=$name'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'productName': name,
-          'category': '',
-          'lat': '23.2599',
-          'lon': '79.0882',
-          'radius': 1000,
-        }),
+        // body: jsonEncode({
+        //   'productName': name,
+        //   'category': '',
+        //   'lat': '23.2599',
+        //   'lon': '79.0882',
+        //   'radius': 1000,
+        // }),
       );
 
       final jsonResponse = jsonDecode(response.body);
       final catalog = jsonResponse['catalog'];
 
+      final items = catalog?['items'] ?? catalog?['products']?['items'] ?? [];
+      final providers = catalog?['providers'] ?? [];
+
       setState(() {
         categories = [
           CategoryData(
             category: 'Results for "$name"',
-            items: catalog?['items'] ?? [],
-            providers: catalog?['providers'] ?? [],
+            items: items,
+            providers: providers,
           ),
         ];
       });
     } catch (error) {
-      debugPrint("Error searching product name: $error");
+      debugPrint("❌ Error searching product name: $error");
     } finally {
       setState(() => isLoading = false);
     }
@@ -296,7 +302,9 @@ class _HomePageState extends State<HomePage> {
 
     try {
       final response = await http.post(
-        Uri.parse('$SERVER_URL/bap/search'),
+        Uri.parse(
+          '${Globals.SERVER_URL_BPP}/api/batch?category=${categoryID.toLowerCase()}',
+        ),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'productName': '',
@@ -310,17 +318,20 @@ class _HomePageState extends State<HomePage> {
       final jsonResponse = jsonDecode(response.body);
       final catalog = jsonResponse['catalog'];
 
+      final items = catalog?['items'] ?? catalog?['products']?['items'] ?? [];
+      final providers = catalog?['providers'] ?? [];
+
       setState(() {
         categories = [
           CategoryData(
             category: categoryName,
-            items: catalog?['items'] ?? [],
-            providers: catalog?['providers'] ?? [],
+            items: items,
+            providers: providers,
           ),
         ];
       });
     } catch (error) {
-      debugPrint("Error fetching category \"$categoryName\": $error");
+      debugPrint("❌ Error fetching category \"$categoryName\": $error");
     } finally {
       setState(() => isLoading = false);
     }
@@ -494,7 +505,15 @@ class CategorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) return const SizedBox.shrink();
+    if (items.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          "No products available in $category",
+          style: const TextStyle(color: Colors.grey),
+        ),
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -517,10 +536,16 @@ class CategorySection extends StatelessWidget {
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
-              final providerName = providers.isNotEmpty
-                  ? (providers.first['descriptor']?['name'] ?? "")
-                  : "";
 
+              // Provider name
+              String providerName = "";
+              if (item['provider']?['descriptor']?['name'] != null) {
+                providerName = item['provider']['descriptor']['name'];
+              } else if (providers.isNotEmpty) {
+                providerName = providers.first['descriptor']?['name'] ?? "";
+              }
+
+              // Image handling
               String? imageUrl;
               if (item['descriptor']?['images'] != null &&
                   item['descriptor']['images'].isNotEmpty) {
@@ -530,6 +555,19 @@ class CategorySection extends StatelessWidget {
                 } else if (firstImage is Map && firstImage.containsKey('url')) {
                   imageUrl = firstImage['url'];
                 }
+              } else if (item['descriptor']?['image'] != null) {
+                if (item['descriptor']['image'] is String) {
+                  imageUrl = item['descriptor']['image'];
+                } else if (item['descriptor']['image'] is Map &&
+                    item['descriptor']['image'].containsKey('url')) {
+                  imageUrl = item['descriptor']['image']['url'];
+                }
+              }
+
+              if (imageUrl != null &&
+                  !(imageUrl.startsWith("http://") ||
+                      imageUrl.startsWith("https://"))) {
+                imageUrl = "${Globals.SERVER_URL_BAP}/$imageUrl";
               }
 
               return Container(
@@ -617,6 +655,9 @@ class CategorySection extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () async {
                             final product = {
+                              "provider_name": providerName.isNotEmpty
+                                  ? providerName
+                                  : "Unknown",
                               "provider_name": providerName.isNotEmpty
                                   ? providerName
                                   : "Unknown",
