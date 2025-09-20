@@ -5,26 +5,39 @@ import 'orders_screen.dart';
 import 'profile_screen.dart';
 
 class CustomerMainScreen extends StatefulWidget {
-  const CustomerMainScreen({super.key});
+  final int value; // 👈 the integer value it receives
+
+  const CustomerMainScreen({
+    super.key,
+    this.value = 0, // default value
+  });
 
   @override
   State<CustomerMainScreen> createState() => _CustomerMainScreenState();
 }
 
 class _CustomerMainScreenState extends State<CustomerMainScreen> {
+  late int tvalue;
+
+  @override
+  void initState() {
+    super.initState();
+    tvalue = widget.value;
+  }
+
   // Current tab index (0 = Home, 1 = Favorites, 2 = Orders, 3 = Profile)
   int currentIndex = 0;
 
-  // List of screens to show for each tab
-  final List<Widget> screens = [
-    const HomeScreen(), // Tab 0: Home/Browse
-    const FavoritesScreen(), // Tab 1: Favorites
-    const OrdersScreen(), // Tab 2: Orders
-    const ProfileScreen(), // Tab 3: Profile
-  ];
-
   @override
   Widget build(BuildContext context) {
+    // 👇 Move screens list inside build, so tvalue is available
+    final List<Widget> screens = [
+      HomeScreen(value: tvalue), // Tab 0: Home/Browse
+      FavoritesScreen(value: tvalue), // Tab 1: Favorites
+      OrdersScreen(value: tvalue), // Tab 2: Orders
+      const ProfileScreen(), // Tab 3: Profile
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white,
 

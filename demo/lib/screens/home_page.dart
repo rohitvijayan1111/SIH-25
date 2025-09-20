@@ -4,6 +4,11 @@ import 'package:demo/global.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:demo/global.dart';
+
 class InventoryItem {
   final String batchId;
   final String batchCode;
@@ -83,22 +88,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<InventoryItem> inventory_items_for_category = [];
+  Map<String, Map<String, List<InventoryItem>>> allCategories = {};
+  Map<String, Map<String, List<InventoryItem>>> selectedCategory = {};
+  List<InventoryItem> searchedItems = [];
   bool isLoading = true;
   bool isLoadingCategory = false;
+  bool category_selected = false;
   String searchTerm = "";
   final TextEditingController _searchController = TextEditingController();
-
-  // final List<Map<String, String>> categoryList = [
-  //   {'id': 'seed', 'name': 'Seeds'},
-  //   {'id': 'micro', 'name': 'Micro Nutrient'},
-  //   {'id': 'fertilizer', 'name': 'Fertilizer'},
-  //   {'id': 'fungicide', 'name': 'Fungicide'},
-  //   {'id': 'growth_promoter', 'name': 'Growth Promoter'},
-  //   {'id': 'growth_regulator', 'name': 'Growth Regulators'},
-  //   {'id': 'herbicide', 'name': 'Herbicide'},
-  //   {'id': 'land', 'name': 'Land Lease & Sale'},
-  // ];
 
   final List<Map<String, String>> categoryList = [
     {
@@ -142,6 +139,7 @@ class _HomePageState extends State<HomePage> {
       'image': 'assets/FarmerUIAssets/images/landlease.png',
     },
   ];
+
   @override
   void initState() {
     super.initState();
@@ -150,31 +148,22 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadInitialCategories() async {
     setState(() => isLoading = true);
-
     try {
-      final results = await Future.wait<InventoryItem>([
-        _fetchCategoryProducts("seed"),
-        _fetchCategoryProducts("fertilizer"),
-        _fetchCategoryProducts("fungicide"),
-        _fetchCategoryProducts("herbicide"),
-      ]);
+      final results =
+          await Future.wait<Map<String, Map<String, List<InventoryItem>>>>([
+            _fetchCategoryProducts("seed"),
+            _fetchCategoryProducts("fertilizer"),
+            _fetchCategoryProducts("fungicide"),
+            _fetchCategoryProducts("herbicide"),
+          ]);
 
-      List<dynamic> trendingItems = [];
-      List<dynamic> trendingProviders = [];
-
-      for (var categoryData in results) {
-        trendingItems.addAll(categoryData.items.take(2));
-        trendingProviders.addAll(categoryData.providers.take(2));
+      final Map<String, Map<String, List<InventoryItem>>> categoryMap = {};
+      for (var result in results) {
+        categoryMap.addAll(result);
       }
 
-      final trendingCategory = CategoryData(
-        category: "TRENDING",
-        items: trendingItems,
-        providers: trendingProviders,
-      );
-
       setState(() {
-        categories = [trendingCategory, ...results];
+        allCategories = categoryMap;
       });
     } catch (e) {
       debugPrint("❌ Error loading initial categories: $e");
@@ -183,145 +172,101 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<CategoryData> _fetchCategoryProducts(String category) async {
+  Future<Map<String, Map<String, List<InventoryItem>>>> _fetchCategoryProducts(
+    String category,
+  ) async {
     try {
-      print("\n calling to backend \n");
       final response = await http.get(
         Uri.parse(
           '${Globals.SERVER_URL_BPP}/api/batches?product_type=$category',
         ),
         headers: {'Content-Type': 'application/json'},
-        // body: jsonEncode({
-        //   'productName': '',
-        //   'category': category,
-        //   'lat': '23.2599',
-        //   'lon': '79.0882',
-        //   'radius': 1000,
-        // }),
       );
-      // print("\n backend data ${response} \n");
 
       if (response.statusCode != 200) {
         throw Exception('HTTP error! Status: ${response.statusCode}');
       }
 
-      final jsonResponse = jsonDecode(response.body);
-      debugPrint("🔎 Response for $category: $jsonResponse");
+      final List<dynamic> inventoryJson =
+          jsonDecode(response.body)['inventory'] ?? [];
+      final Map<String, List<InventoryItem>> grouped = {};
 
-      final inventory = jsonResponse['inventory'];
-
-      final items = catalog?['items'] ?? catalog?['products']?['items'] ?? [];
-      final providers = catalog?['providers'] ?? [];
-
-      debugPrint("✅ ${items.length} items fetched for $category");
-
-      return CategoryData(
-        category: category.toUpperCase(),
-        items: items,
-        providers: providers,
-      );
+      for (var itemJson in inventoryJson) {
+        final item = InventoryItem.fromJson(itemJson);
+        grouped.putIfAbsent(item.productName, () => []);
+        grouped[item.productName]!.add(item);
+      }
+      print("\nhelllo\n");
+      print(grouped);
+      return {category: grouped};
     } catch (error) {
-      debugPrint("Error fetching $category products: $error");
-      return CategoryData(
-        category: category.toUpperCase(),
-        items: [],
-        providers: [],
-      );
+      debugPrint("❌ Error fetching $category products: $error");
+      return {category: {}};
     }
   }
 
-  Future<void> _searchProductsByName(String name) async {
-    if (name.trim().isEmpty) {
-      _loadInitialCategories();
+  void _searchProducts(String query) {
+    if (query.trim().isEmpty) {
+      setState(() => searchedItems.clear());
       return;
     }
 
-    setState(() => isLoading = true);
+    final lowerQuery = query.toLowerCase();
+    final List<InventoryItem> matches = [];
 
-    try {
-      final response = await http.get(
-        Uri.parse('${Globals.SERVER_URL_BPP}/api/batches?product_name=$name'),
-        headers: {'Content-Type': 'application/json'},
-        // body: jsonEncode({
-        //   'productName': name,
-        //   'category': '',
-        //   'lat': '23.2599',
-        //   'lon': '79.0882',
-        //   'radius': 1000,
-        // }),
-      );
-
-      final jsonResponse = jsonDecode(response.body);
-      final catalog = jsonResponse['catalog'];
-
-      final items = catalog?['items'] ?? catalog?['products']?['items'] ?? [];
-      final providers = catalog?['providers'] ?? [];
-
-      setState(() {
-        categories = [
-          CategoryData(
-            category: 'Results for "$name"',
-            items: items,
-            providers: providers,
-          ),
-        ];
+    allCategories.forEach((category, productMap) {
+      productMap.forEach((productName, items) {
+        for (var item in items) {
+          if (item.batchId.toLowerCase().contains(lowerQuery) ||
+              item.batchCode.toLowerCase().contains(lowerQuery) ||
+              item.productId.toLowerCase().contains(lowerQuery) ||
+              item.productName.toLowerCase().contains(lowerQuery) ||
+              item.productType.toLowerCase().contains(lowerQuery) ||
+              item.farmerId.toLowerCase().contains(lowerQuery) ||
+              item.farmerName.toLowerCase().contains(lowerQuery) ||
+              item.availableQty.toLowerCase().contains(lowerQuery) ||
+              item.unit.toLowerCase().contains(lowerQuery) ||
+              item.pricePerUnit.toLowerCase().contains(lowerQuery) ||
+              item.batchQuantity.toString().contains(lowerQuery) ||
+              item.manufacturedOn.toString().toLowerCase().contains(
+                lowerQuery,
+              ) ||
+              item.expiryDate.toString().toLowerCase().contains(lowerQuery) ||
+              item.harvestDate.toString().toLowerCase().contains(lowerQuery) ||
+              item.locationName.toLowerCase().contains(lowerQuery) ||
+              item.geoLat.toString().contains(lowerQuery) ||
+              item.geoLon.toString().contains(lowerQuery) ||
+              item.status.toLowerCase().contains(lowerQuery) ||
+              item.metaHash.toLowerCase().contains(lowerQuery) ||
+              (item.chainTx?.toLowerCase().contains(lowerQuery) ?? false)) {
+            matches.add(item);
+          }
+        }
       });
-    } catch (error) {
-      debugPrint("❌ Error searching product name: $error");
-    } finally {
-      setState(() => isLoading = false);
-    }
+    });
+
+    setState(() {
+      searchedItems = matches;
+    });
+    debugPrint("✅ Found ${searchedItems.length} items for '$query'");
   }
-  // OLD
-  // Widget _buildCategoryCard(Map<String, dynamic> categoryItem) {
-  //   return GestureDetector(
-  //     onTap: () =>
-  //         _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
-  //     child: Container(
-  //       decoration: BoxDecoration(
-  //         color: Colors.white,
-  //         borderRadius: BorderRadius.circular(12),
-  //         boxShadow: [
-  //           BoxShadow(
-  //             color: Colors.grey.shade200,
-  //             blurRadius: 4,
-  //             offset: const Offset(0, 2),
-  //           ),
-  //         ],
-  //       ),
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           Container(
-  //             padding: const EdgeInsets.all(12),
-  //             decoration: BoxDecoration(
-  //               color: categoryItem['color'].withOpacity(0.1),
-  //               borderRadius: BorderRadius.circular(8),
-  //             ),
-  //             child: Icon(
-  //               categoryItem['icon'],
-  //               size: 24,
-  //               color: categoryItem['color'],
-  //             ),
-  //           ),
-  //           const SizedBox(height: 8),
-  //           Text(
-  //             categoryItem['name'],
-  //             textAlign: TextAlign.center,
-  //             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
-  //             maxLines: 2,
-  //             overflow: TextOverflow.ellipsis,
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+
+  Future<void> _handleCategoryPress(String category) async {
+    setState(() => isLoadingCategory = true);
+    final categoryData = allCategories[category];
+    if (categoryData != null) {
+      setState(() {
+        selectedCategory.clear();
+        selectedCategory[category] = categoryData;
+        category_selected = true;
+      });
+    }
+    setState(() => isLoadingCategory = false);
+  }
 
   Widget _buildCategoryCard(Map<String, String> categoryItem) {
     return GestureDetector(
-      onTap: () =>
-          _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
+      onTap: () => _handleCategoryPress(categoryItem['id']!),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -337,7 +282,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Replace decorated icon with image loading from asset
             Container(
               height: 40,
               width: 40,
@@ -356,49 +300,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  Future<void> _handleCategoryPress(
-    String categoryID,
-    String categoryName,
-  ) async {
-    setState(() => isLoadingCategory = true);
-
-    try {
-      final response = await http.get(
-        Uri.parse(
-          '${Globals.SERVER_URL_BPP}/api/batches?product_type=${categoryID.toLowerCase()}',
-        ),
-        headers: {'Content-Type': 'application/json'},
-        // body: jsonEncode({
-        //   'productName': '',
-        //   'category': categoryID.toLowerCase(),
-        //   'lat': '23.2599',
-        //   'lon': '79.0882',
-        //   'radius': 1000,
-        // }),
-      );
-
-      final jsonResponse = jsonDecode(response.body);
-      final catalog = jsonResponse['catalog'];
-
-      final items = catalog?['items'] ?? catalog?['products']?['items'] ?? [];
-      final providers = catalog?['providers'] ?? [];
-
-      setState(() {
-        categories = [
-          CategoryData(
-            category: categoryName,
-            items: items,
-            providers: providers,
-          ),
-        ];
-      });
-    } catch (error) {
-      debugPrint("❌ Error fetching category \"$categoryName\": $error");
-    } finally {
-      setState(() => isLoading = false);
-    }
   }
 
   @override
@@ -468,7 +369,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(width: 8),
                 ElevatedButton(
-                  onPressed: () => _searchProductsByName(searchTerm),
+                  onPressed: () => _searchProducts(searchTerm),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green.shade700,
                     shape: RoundedRectangleBorder(
@@ -490,33 +391,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-
-          // OLD Categories
-          // Container(
-          //   height: 55,
-          //   margin: const EdgeInsets.symmetric(vertical: 10),
-          //   child: ListView.builder(
-          //     scrollDirection: Axis.horizontal,
-          //     itemCount: categoryList.length,
-          //     itemBuilder: (context, index) {
-          //       final categoryItem = categoryList[index];
-          //       return Padding(
-          //         padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          //         child: ElevatedButton(
-          //           onPressed: () => _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
-          //           style: ElevatedButton.styleFrom(
-          //             backgroundColor: Colors.green.shade300,
-          //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-          //             padding: const EdgeInsets.symmetric(horizontal: 20),
-          //           ),
-          //           child: Text(categoryItem['name']!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
-
-          //New
+          // Category Grid
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: GridView.builder(
@@ -527,25 +402,106 @@ class _HomePageState extends State<HomePage> {
                 crossAxisCount: 4,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 0.78, // Slightly taller cards!
+                childAspectRatio: 0.78,
               ),
               itemBuilder: (context, index) =>
                   _buildCategoryCard(categoryList[index]),
             ),
           ),
-
-          // Products
+          // Products List
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Column(
-                children: categories.map<Widget>((section) {
-                  return CategorySection(
-                    category: section.category,
-                    items: section.items,
-                    providers: section.providers,
-                  );
-                }).toList(),
+                children: [
+                  if (!category_selected) ...[
+                    // Render all categories horizontally
+                    ...allCategories.entries.map((entry) {
+                      return CategorySection(
+                        category: entry.key,
+                        products: entry.value,
+                      );
+                    }).toList(),
+                  ] else if (selectedCategory.isNotEmpty) ...[
+                    // Render only the selected category vertically (one card per InventoryItem)
+                    ...selectedCategory.entries.map((entry) {
+                      final productsMap =
+                          entry.value; // Map<String, List<InventoryItem>>
+                      final List<InventoryItem> allItems = [];
+                      productsMap.forEach((_, items) => allItems.addAll(items));
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: allItems.map((item) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
+                            ),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade300,
+                                  blurRadius: 5,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.productName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text("Farmer: ${item.farmerName}"),
+                                Text("Batch: ${item.batchCode}"),
+                                Text(
+                                  "Available: ${item.availableQty} ${item.unit}",
+                                ),
+                                Text("Price: ₹${item.pricePerUnit}"),
+                                Text("Location: ${item.locationName}"),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      // Add to cart function
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      "Add to Cart",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    }).toList(),
+                  ],
+
+                  // Display search results if available
+                  if (searchedItems.isNotEmpty)
+                    CategorySection(
+                      category: 'Search Results',
+                      products: {'Results': searchedItems},
+                    ),
+                ],
               ),
             ),
           ),
@@ -557,19 +513,18 @@ class _HomePageState extends State<HomePage> {
 
 class CategorySection extends StatelessWidget {
   final String category;
-  final List<dynamic> items;
-  final List<dynamic> providers;
+  final Map<String, List<InventoryItem>>
+  products; // productName -> List<InventoryItem>
 
   const CategorySection({
     super.key,
     required this.category,
-    required this.items,
-    required this.providers,
+    required this.products,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) {
+    if (products.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Text(
@@ -594,182 +549,208 @@ class CategorySection extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 250,
-          child: ListView.builder(
+          height: 220,
+          child: ListView(
             scrollDirection: Axis.horizontal,
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              final item = items[index];
+            children: products.entries.map((entry) {
+              final productName = entry.key;
+              final productItems = entry.value;
+
+              // Get first item for display (for image, provider, etc.)
+              final firstItem = productItems.first;
 
               // Provider name
-              String providerName = "";
-              if (item['provider']?['descriptor']?['name'] != null) {
-                providerName = item['provider']['descriptor']['name'];
-              } else if (providers.isNotEmpty) {
-                providerName = providers.first['descriptor']?['name'] ?? "";
-              }
+              final providerName = firstItem.farmerName;
 
-              // Image handling
+              // Image URL from descriptor if available
               String? imageUrl;
-              if (item['descriptor']?['images'] != null &&
-                  item['descriptor']['images'].isNotEmpty) {
-                final firstImage = item['descriptor']['images'][0];
-                if (firstImage is String) {
-                  imageUrl = firstImage;
-                } else if (firstImage is Map && firstImage.containsKey('url')) {
-                  imageUrl = firstImage['url'];
-                }
-              } else if (item['descriptor']?['image'] != null) {
-                if (item['descriptor']['image'] is String) {
-                  imageUrl = item['descriptor']['image'];
-                } else if (item['descriptor']['image'] is Map &&
-                    item['descriptor']['image'].containsKey('url')) {
-                  imageUrl = item['descriptor']['image']['url'];
-                }
+              if (firstItem is InventoryItem) {
+                // Replace with your logic if InventoryItem has image field
+                imageUrl = firstItem.metaHash; // Example placeholder
               }
 
-              if (imageUrl != null &&
-                  !(imageUrl.startsWith("http://") ||
-                      imageUrl.startsWith("https://"))) {
-                imageUrl = "${Globals.SERVER_URL_BAP}/$imageUrl";
-              }
-
-              return Container(
-                width: 160,
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade300,
-                      blurRadius: 5,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Image
-                    Container(
-                      height: 120,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
+              return GestureDetector(
+                onTap: () {
+                  // Navigate to product details with full list
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ProductDetailsScreen(
+                        productName: productName,
+                        items: productItems,
                       ),
-                      child: imageUrl != null
-                          ? Image.network(
-                              imageUrl,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Container(
-                                    color: Colors.green[100],
-                                    child: const Icon(
-                                      Icons.shopping_bag,
-                                      size: 60,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                            )
-                          : Container(
-                              color: Colors.green[100],
-                              child: const Icon(
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 160,
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade300,
+                        blurRadius: 5,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Image
+                      Container(
+                        height: 100,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12),
+                          ),
+                          color: Colors.green[100],
+                        ),
+                        child: imageUrl != null
+                            ? Image.network(imageUrl, fit: BoxFit.cover)
+                            : const Icon(
                                 Icons.shopping_bag,
                                 size: 60,
                                 color: Colors.green,
                               ),
-                            ),
-                    ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          productName,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          providerName,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+}
 
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        item['descriptor']?['name'] ?? "Unnamed",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+class ProductDetailsScreen extends StatelessWidget {
+  final String productName;
+  final List<InventoryItem> items;
+
+  const ProductDetailsScreen({
+    super.key,
+    required this.productName,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(productName), backgroundColor: Colors.green),
+      body: items.isEmpty
+          ? const Center(
+              child: Text(
+                "No items available",
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade300,
+                        blurRadius: 5,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Product info
+                      Text(
+                        "Batch: ${item.batchCode}",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
                       ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        providerName,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
+                      const SizedBox(height: 4),
+                      Text("Farmer: ${item.farmerName}"),
+                      Text("Available Qty: ${item.availableQty} ${item.unit}"),
+                      Text("Price per Unit: ₹${item.pricePerUnit}"),
+                      Text(
+                        "Manufactured On: ${item.manufacturedOn.toLocal().toString().split(' ')[0]}",
                       ),
-                    ),
-
-                    // Add to Cart
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 4,
+                      Text(
+                        "Expiry Date: ${item.expiryDate.toLocal().toString().split(' ')[0]}",
                       ),
-                      child: SizedBox(
+                      Text(
+                        "Harvest Date: ${item.harvestDate.toLocal().toString().split(' ')[0]}",
+                      ),
+                      Text("Location: ${item.locationName}"),
+                      const SizedBox(height: 8),
+                      // Add to cart button
+                      SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () async {
-                            final product = {
-                              "provider_name": providerName.isNotEmpty
-                                  ? providerName
-                                  : "Unknown",
-                              "provider_name": providerName.isNotEmpty
-                                  ? providerName
-                                  : "Unknown",
-                              "provider_address": "",
-                              "items": [
-                                {
-                                  "id":
-                                      item['id'] ??
-                                      item['descriptor']?['id'] ??
-                                      "",
-                                  "name":
-                                      item['descriptor']?['name'] ?? "Unnamed",
-                                  "qty": 1,
-                                  "price": item['price'] ?? 0,
-                                },
-                              ],
-                            };
-                            await addToGlobalCart(product);
-
+                          onPressed: () {
+                            // Call your addToCart function
+                            // Example:
+                            // addToCart(item);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  "${item['descriptor']?['name']} added to cart",
+                                  "${item.productName} from ${item.farmerName} added to cart",
                                 ),
                               ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green.shade600,
+                            backgroundColor: Colors.green,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                           ),
                           child: const Text(
                             "Add to Cart",
-                            style: TextStyle(fontSize: 12, color: Colors.white),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+                    ],
+                  ),
+                );
+              },
+            ),
     );
   }
 }
