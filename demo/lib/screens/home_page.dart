@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
         categories = [trendingCategory, ...results];
       });
     } catch (e) {
-      debugPrint("Error loading initial categories: $e");
+      debugPrint("❌ Error loading initial categories: $e");
     } finally {
       setState(() => isLoading = false);
     }
@@ -102,15 +102,23 @@ class _HomePageState extends State<HomePage> {
       }
 
       final jsonResponse = jsonDecode(response.body);
+      debugPrint("🔎 Response for $category: $jsonResponse");
+
       final catalog = jsonResponse['catalog'];
+
+      final items =
+          catalog?['items'] ?? catalog?['products']?['items'] ?? [];
+      final providers = catalog?['providers'] ?? [];
+
+      debugPrint("✅ ${items.length} items fetched for $category");
 
       return CategoryData(
         category: category.toUpperCase(),
-        items: catalog?['items'] ?? [],
-        providers: catalog?['providers'] ?? [],
+        items: items,
+        providers: providers,
       );
     } catch (error) {
-      debugPrint("Error fetching $category products: $error");
+      debugPrint("❌ Error fetching $category products: $error");
       return CategoryData(category: category.toUpperCase(), items: [], providers: []);
     }
   }
@@ -139,17 +147,21 @@ class _HomePageState extends State<HomePage> {
       final jsonResponse = jsonDecode(response.body);
       final catalog = jsonResponse['catalog'];
 
+      final items =
+          catalog?['items'] ?? catalog?['products']?['items'] ?? [];
+      final providers = catalog?['providers'] ?? [];
+
       setState(() {
         categories = [
           CategoryData(
             category: 'Results for "$name"',
-            items: catalog?['items'] ?? [],
-            providers: catalog?['providers'] ?? [],
+            items: items,
+            providers: providers,
           ),
         ];
       });
     } catch (error) {
-      debugPrint("Error searching product name: $error");
+      debugPrint("❌ Error searching product name: $error");
     } finally {
       setState(() => isLoading = false);
     }
@@ -174,17 +186,21 @@ class _HomePageState extends State<HomePage> {
       final jsonResponse = jsonDecode(response.body);
       final catalog = jsonResponse['catalog'];
 
+      final items =
+          catalog?['items'] ?? catalog?['products']?['items'] ?? [];
+      final providers = catalog?['providers'] ?? [];
+
       setState(() {
         categories = [
           CategoryData(
             category: categoryName,
-            items: catalog?['items'] ?? [],
-            providers: catalog?['providers'] ?? [],
+            items: items,
+            providers: providers,
           ),
         ];
       });
     } catch (error) {
-      debugPrint("Error fetching category \"$categoryName\": $error");
+      debugPrint("❌ Error fetching category \"$categoryName\": $error");
     } finally {
       setState(() => isLoading = false);
     }
@@ -333,7 +349,13 @@ class CategorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) return const SizedBox.shrink();
+    if (items.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text("No products available in $category",
+            style: const TextStyle(color: Colors.grey)),
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -356,10 +378,16 @@ class CategorySection extends StatelessWidget {
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
-              final providerName = providers.isNotEmpty
-                  ? (providers.first['descriptor']?['name'] ?? "")
-                  : "";
 
+              // Provider name
+              String providerName = "";
+              if (item['provider']?['descriptor']?['name'] != null) {
+                providerName = item['provider']['descriptor']['name'];
+              } else if (providers.isNotEmpty) {
+                providerName = providers.first['descriptor']?['name'] ?? "";
+              }
+
+              // Image handling
               String? imageUrl;
               if (item['descriptor']?['images'] != null &&
                   item['descriptor']['images'].isNotEmpty) {
@@ -369,6 +397,18 @@ class CategorySection extends StatelessWidget {
                 } else if (firstImage is Map && firstImage.containsKey('url')) {
                   imageUrl = firstImage['url'];
                 }
+              } else if (item['descriptor']?['image'] != null) {
+                if (item['descriptor']['image'] is String) {
+                  imageUrl = item['descriptor']['image'];
+                } else if (item['descriptor']['image'] is Map &&
+                    item['descriptor']['image'].containsKey('url')) {
+                  imageUrl = item['descriptor']['image']['url'];
+                }
+              }
+
+              if (imageUrl != null &&
+                  !(imageUrl.startsWith("http://") || imageUrl.startsWith("https://"))) {
+                imageUrl = "$SERVER_URL/$imageUrl";
               }
 
               return Container(
