@@ -28,18 +28,62 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<CategoryData> categories = [];
   bool isLoading = true;
+  bool isLoadingCategory = false;
   String searchTerm = "";
   final TextEditingController _searchController = TextEditingController();
 
+  // final List<Map<String, String>> categoryList = [
+  //   {'id': 'seed', 'name': 'Seeds'},
+  //   {'id': 'micro', 'name': 'Micro Nutrient'},
+  //   {'id': 'fertilizer', 'name': 'Fertilizer'},
+  //   {'id': 'fungicide', 'name': 'Fungicide'},
+  //   {'id': 'growth_promoter', 'name': 'Growth Promoter'},
+  //   {'id': 'growth_regulator', 'name': 'Growth Regulators'},
+  //   {'id': 'herbicide', 'name': 'Herbicide'},
+  //   {'id': 'land', 'name': 'Land Lease & Sale'},
+  // ];
+
   final List<Map<String, String>> categoryList = [
-    {'id': 'seed', 'name': 'Seeds'},
-    {'id': 'micro', 'name': 'Micro Nutrient'},
-    {'id': 'fertilizer', 'name': 'Fertilizer'},
-    {'id': 'fungicide', 'name': 'Fungicide'},
-    {'id': 'growth_promoter', 'name': 'Growth Promoter'},
-    {'id': 'growth_regulator', 'name': 'Growth Regulators'},
-    {'id': 'herbicide', 'name': 'Herbicide'},
-    {'id': 'land', 'name': 'Land Lease & Sale'},
+    {
+      'id': 'seed',
+      'name': 'Seeds',
+      'image': 'assets/FarmerUIAssets/images/seeds.png',
+    },
+    {
+      'id': 'micro',
+      'name': 'Micro Nutrient',
+      'image': 'assets/FarmerUIAssets/images/micronutrients.png',
+    },
+    {
+      'id': 'fertilizer',
+      'name': 'Fertilizer',
+      'image': 'assets/FarmerUIAssets/images/fertilizer.png',
+    },
+    {
+      'id': 'fungicide',
+      'name': 'Fungicide',
+      'image': 'assets/FarmerUIAssets/images/fungicide.png',
+    },
+    {
+      'id': 'growth_promoter',
+      'name': 'Growth Promoter',
+      'image': 'assets/FarmerUIAssets/images/growthpromoter.png',
+    },
+    {
+      'id': 'growth_regulator',
+      'name': 'Growth Regulators',
+      'image': 'assets/FarmerUIAssets/images/growthregulator.png',
+    },
+    {
+      'id': 'herbicide',
+      'name': 'Herbicide',
+      'image': 'assets/FarmerUIAssets/images/herbicide.png',
+    },
+    {
+      'id': 'land',
+      'name': 'Land Lease & Sale',
+      'image': 'assets/FarmerUIAssets/images/landlease.png',
+    },
   ];
 
   @override
@@ -111,7 +155,11 @@ class _HomePageState extends State<HomePage> {
       );
     } catch (error) {
       debugPrint("Error fetching $category products: $error");
-      return CategoryData(category: category.toUpperCase(), items: [], providers: []);
+      return CategoryData(
+        category: category.toUpperCase(),
+        items: [],
+        providers: [],
+      );
     }
   }
 
@@ -154,9 +202,97 @@ class _HomePageState extends State<HomePage> {
       setState(() => isLoading = false);
     }
   }
+  // OLD
+  // Widget _buildCategoryCard(Map<String, dynamic> categoryItem) {
+  //   return GestureDetector(
+  //     onTap: () =>
+  //         _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         color: Colors.white,
+  //         borderRadius: BorderRadius.circular(12),
+  //         boxShadow: [
+  //           BoxShadow(
+  //             color: Colors.grey.shade200,
+  //             blurRadius: 4,
+  //             offset: const Offset(0, 2),
+  //           ),
+  //         ],
+  //       ),
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           Container(
+  //             padding: const EdgeInsets.all(12),
+  //             decoration: BoxDecoration(
+  //               color: categoryItem['color'].withOpacity(0.1),
+  //               borderRadius: BorderRadius.circular(8),
+  //             ),
+  //             child: Icon(
+  //               categoryItem['icon'],
+  //               size: 24,
+  //               color: categoryItem['color'],
+  //             ),
+  //           ),
+  //           const SizedBox(height: 8),
+  //           Text(
+  //             categoryItem['name'],
+  //             textAlign: TextAlign.center,
+  //             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+  //             maxLines: 2,
+  //             overflow: TextOverflow.ellipsis,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Future<void> _handleCategoryPress(String categoryID, String categoryName) async {
-    setState(() => isLoading = true);
+  Widget _buildCategoryCard(Map<String, String> categoryItem) {
+    return GestureDetector(
+      onTap: () =>
+          _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Replace decorated icon with image loading from asset
+            Container(
+              height: 40,
+              width: 40,
+              padding: const EdgeInsets.all(6),
+              child: Image.asset(categoryItem['image']!, fit: BoxFit.contain),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              categoryItem['name']!,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleCategoryPress(
+    String categoryID,
+    String categoryName,
+  ) async {
+    setState(() => isLoadingCategory = true);
 
     try {
       final response = await http.post(
@@ -195,9 +331,7 @@ class _HomePageState extends State<HomePage> {
     if (isLoading) {
       return const Scaffold(
         backgroundColor: Colors.white,
-        body: Center(
-          child: CircularProgressIndicator(color: Colors.green),
-        ),
+        body: Center(child: CircularProgressIndicator(color: Colors.green)),
       );
     }
 
@@ -250,7 +384,10 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(25),
                         borderSide: BorderSide.none,
                       ),
-                      prefixIcon: Icon(Icons.search, color: Colors.green.shade700),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.green.shade700,
+                      ),
                     ),
                   ),
                 ),
@@ -262,39 +399,63 @@ class _HomePageState extends State<HomePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
                   ),
                   child: const Text(
                     "Search",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
 
-          // Categories
+          // OLD Categories
+          // Container(
+          //   height: 55,
+          //   margin: const EdgeInsets.symmetric(vertical: 10),
+          //   child: ListView.builder(
+          //     scrollDirection: Axis.horizontal,
+          //     itemCount: categoryList.length,
+          //     itemBuilder: (context, index) {
+          //       final categoryItem = categoryList[index];
+          //       return Padding(
+          //         padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          //         child: ElevatedButton(
+          //           onPressed: () => _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
+          //           style: ElevatedButton.styleFrom(
+          //             backgroundColor: Colors.green.shade300,
+          //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          //             padding: const EdgeInsets.symmetric(horizontal: 20),
+          //           ),
+          //           child: Text(categoryItem['name']!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
+
+          //New
           Container(
-            height: 55,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: GridView.builder(
               itemCount: categoryList.length,
-              itemBuilder: (context, index) {
-                final categoryItem = categoryList[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: ElevatedButton(
-                    onPressed: () => _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade300,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                    ),
-                    child: Text(categoryItem['name']!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                  ),
-                );
-              },
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.78, // Slightly taller cards!
+              ),
+              itemBuilder: (context, index) =>
+                  _buildCategoryCard(categoryList[index]),
             ),
           ),
 
@@ -393,20 +554,31 @@ class CategorySection extends StatelessWidget {
                       height: 120,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
                       ),
                       child: imageUrl != null
                           ? Image.network(
                               imageUrl,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => Container(
-                                color: Colors.green[100],
-                                child: const Icon(Icons.shopping_bag, size: 60, color: Colors.green),
-                              ),
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    color: Colors.green[100],
+                                    child: const Icon(
+                                      Icons.shopping_bag,
+                                      size: 60,
+                                      color: Colors.green,
+                                    ),
+                                  ),
                             )
                           : Container(
                               color: Colors.green[100],
-                              child: const Icon(Icons.shopping_bag, size: 60, color: Colors.green),
+                              child: const Icon(
+                                Icons.shopping_bag,
+                                size: 60,
+                                color: Colors.green,
+                              ),
                             ),
                     ),
 
@@ -416,7 +588,10 @@ class CategorySection extends StatelessWidget {
                         item['descriptor']?['name'] ?? "Unnamed",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
 
@@ -424,38 +599,56 @@ class CategorySection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         providerName,
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
 
                     // Add to Cart
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 4,
+                      ),
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
                             final product = {
-                              "provider_name": providerName.isNotEmpty ? providerName : "Unknown",
+                              "provider_name": providerName.isNotEmpty
+                                  ? providerName
+                                  : "Unknown",
                               "provider_address": "",
                               "items": [
                                 {
-                                  "id": item['id'] ?? item['descriptor']?['id'] ?? "",
-                                  "name": item['descriptor']?['name'] ?? "Unnamed",
+                                  "id":
+                                      item['id'] ??
+                                      item['descriptor']?['id'] ??
+                                      "",
+                                  "name":
+                                      item['descriptor']?['name'] ?? "Unnamed",
                                   "qty": 1,
-                                  "price": item['price'] ?? 0
-                                }
-                              ]
+                                  "price": item['price'] ?? 0,
+                                },
+                              ],
                             };
                             await addToGlobalCart(product);
 
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("${item['descriptor']?['name']} added to cart")),
+                              SnackBar(
+                                content: Text(
+                                  "${item['descriptor']?['name']} added to cart",
+                                ),
+                              ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green.shade600,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             padding: const EdgeInsets.symmetric(vertical: 8),
                           ),
                           child: const Text(
