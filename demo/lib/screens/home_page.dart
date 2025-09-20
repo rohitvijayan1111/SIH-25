@@ -4,8 +4,6 @@ import 'package:demo/global.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-const String SERVER_URL = Globals.SERVER_URL_BAP;
-
 class CategoryData {
   final String category;
   final List<dynamic> items;
@@ -86,15 +84,15 @@ class _HomePageState extends State<HomePage> {
   Future<CategoryData> _fetchCategoryProducts(String category) async {
     try {
       final response = await http.post(
-        Uri.parse('$SERVER_URL/bap/search'),
+        Uri.parse('${Globals.SERVER_URL_BPP}/api/batch?category?${category}'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'productName': '',
-          'category': category,
-          'lat': '23.2599',
-          'lon': '79.0882',
-          'radius': 1000,
-        }),
+        // body: jsonEncode({
+        //   'productName': '',
+        //   'category': category,
+        //   'lat': '23.2599',
+        //   'lon': '79.0882',
+        //   'radius': 1000,
+        // }),
       );
 
       if (response.statusCode != 200) {
@@ -111,7 +109,11 @@ class _HomePageState extends State<HomePage> {
       );
     } catch (error) {
       debugPrint("Error fetching $category products: $error");
-      return CategoryData(category: category.toUpperCase(), items: [], providers: []);
+      return CategoryData(
+        category: category.toUpperCase(),
+        items: [],
+        providers: [],
+      );
     }
   }
 
@@ -155,7 +157,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _handleCategoryPress(String categoryID, String categoryName) async {
+  Future<void> _handleCategoryPress(
+    String categoryID,
+    String categoryName,
+  ) async {
     setState(() => isLoading = true);
 
     try {
@@ -195,9 +200,7 @@ class _HomePageState extends State<HomePage> {
     if (isLoading) {
       return const Scaffold(
         backgroundColor: Colors.white,
-        body: Center(
-          child: CircularProgressIndicator(color: Colors.green),
-        ),
+        body: Center(child: CircularProgressIndicator(color: Colors.green)),
       );
     }
 
@@ -250,7 +253,10 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(25),
                         borderSide: BorderSide.none,
                       ),
-                      prefixIcon: Icon(Icons.search, color: Colors.green.shade700),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.green.shade700,
+                      ),
                     ),
                   ),
                 ),
@@ -262,11 +268,17 @@ class _HomePageState extends State<HomePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
                   ),
                   child: const Text(
                     "Search",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -285,13 +297,24 @@ class _HomePageState extends State<HomePage> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: ElevatedButton(
-                    onPressed: () => _handleCategoryPress(categoryItem['id']!, categoryItem['name']!),
+                    onPressed: () => _handleCategoryPress(
+                      categoryItem['id']!,
+                      categoryItem['name']!,
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green.shade300,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                     ),
-                    child: Text(categoryItem['name']!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                    child: Text(
+                      categoryItem['name']!,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
                   ),
                 );
               },
@@ -393,20 +416,31 @@ class CategorySection extends StatelessWidget {
                       height: 120,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
                       ),
                       child: imageUrl != null
                           ? Image.network(
                               imageUrl,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => Container(
-                                color: Colors.green[100],
-                                child: const Icon(Icons.shopping_bag, size: 60, color: Colors.green),
-                              ),
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    color: Colors.green[100],
+                                    child: const Icon(
+                                      Icons.shopping_bag,
+                                      size: 60,
+                                      color: Colors.green,
+                                    ),
+                                  ),
                             )
                           : Container(
                               color: Colors.green[100],
-                              child: const Icon(Icons.shopping_bag, size: 60, color: Colors.green),
+                              child: const Icon(
+                                Icons.shopping_bag,
+                                size: 60,
+                                color: Colors.green,
+                              ),
                             ),
                     ),
 
@@ -416,7 +450,10 @@ class CategorySection extends StatelessWidget {
                         item['descriptor']?['name'] ?? "Unnamed",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
 
@@ -424,38 +461,56 @@ class CategorySection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         providerName,
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
 
                     // Add to Cart
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 4,
+                      ),
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
                             final product = {
-                              "provider_name": providerName.isNotEmpty ? providerName : "Unknown",
+                              "provider_name": providerName.isNotEmpty
+                                  ? providerName
+                                  : "Unknown",
                               "provider_address": "",
                               "items": [
                                 {
-                                  "id": item['id'] ?? item['descriptor']?['id'] ?? "",
-                                  "name": item['descriptor']?['name'] ?? "Unnamed",
+                                  "id":
+                                      item['id'] ??
+                                      item['descriptor']?['id'] ??
+                                      "",
+                                  "name":
+                                      item['descriptor']?['name'] ?? "Unnamed",
                                   "qty": 1,
-                                  "price": item['price'] ?? 0
-                                }
-                              ]
+                                  "price": item['price'] ?? 0,
+                                },
+                              ],
                             };
                             await addToGlobalCart(product);
 
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("${item['descriptor']?['name']} added to cart")),
+                              SnackBar(
+                                content: Text(
+                                  "${item['descriptor']?['name']} added to cart",
+                                ),
+                              ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green.shade600,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             padding: const EdgeInsets.symmetric(vertical: 8),
                           ),
                           child: const Text(
