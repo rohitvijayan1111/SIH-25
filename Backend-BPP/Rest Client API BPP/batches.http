@@ -89,3 +89,7 @@ Accept: application/json
 ### 🔎 Get batches by multiple filters (product type + min qty)
 GET http://localhost:3000/api/batches?product_type=herbicide&min_qty=50
 Accept: application/json
+
+### Search by product name (case-insensitive, partial match)
+GET http://localhost:3000/api/batches?product_name=C
+Accept: application/json

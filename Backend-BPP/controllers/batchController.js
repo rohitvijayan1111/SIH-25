@@ -373,7 +373,7 @@ const anchorMetadata = async (req, res) => {
 // GET /api/discovery
 const getInventory = async (req, res) => {
   try {
-    const { product_type, farmer_id, min_qty } = req.query;
+    const { product_type, farmer_id, min_qty ,product_name } = req.query;
 
     let query = `SELECT * FROM inventory_view WHERE 1=1`;
     const values = [];
@@ -392,6 +392,10 @@ const getInventory = async (req, res) => {
     if (min_qty) {
       query += ` AND available_qty >= $${idx++}`;
       values.push(Number(min_qty)); 
+    }
+    if (product_name) {
+      query += ` AND LOWER(product_name) LIKE LOWER($${idx++})`;
+      values.push(`%${product_name}%`); // partial case-insensitive match
     }
 
     query += ` ORDER BY available_qty DESC`;

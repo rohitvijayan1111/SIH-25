@@ -11,7 +11,7 @@ Content-Type: application/json
 ###
 
 ### 2️⃣ Release Escrow
-PUT http://localhost:3000/api/escrows/bfc0f1a1-5678-43a9-9d22-59b1fa123456/release
+PUT http://localhost:3000/api/escrows/6c5b2a15-7314-4288-ae3c-e3e859344b83/release
 Content-Type: application/json
 
 {
@@ -21,7 +21,7 @@ Content-Type: application/json
 ###
 
 ### 3️⃣ Refund Escrow
-PUT http://localhost:3000/api/escrows/bfc0f1a1-5678-43a9-9d22-59b1fa123456/refund
+PUT http://localhost:3000/api/escrows/6c5b2a15-7314-4288-ae3c-e3e859344b83/refund
 Content-Type: application/json
 
 {
@@ -32,7 +32,7 @@ Content-Type: application/json
 ###
 
 ### 4️⃣ Upload Blockchain Proof
-PUT http://localhost:3000/api/escrows/bfc0f1a1-5678-43a9-9d22-59b1fa123456/proof
+PUT http://localhost:3000/api/escrows/6c5b2a15-7314-4288-ae3c-e3e859344b83/proof
 Content-Type: application/json
 
 {
@@ -42,7 +42,7 @@ Content-Type: application/json
 ###
 
 ### 5️⃣ Get Escrow by ID
-GET http://localhost:3000/api/escrows/bfc0f1a1-5678-43a9-9d22-59b1fa123456
+GET http://localhost:3000/api/escrows/6c5b2a15-7314-4288-ae3c-e3e859344b83
 
 ###
 
@@ -52,7 +52,7 @@ GET http://localhost:3000/api/escrows?status=locked
 
 ###
 # Released escrows for a specific order
-GET http://localhost:3000/api/escrows?status=released&order_id=11111111-1111-1111-1111-111111111111
+GET http://localhost:3000/api/escrows?status=locked&order_id=835c5e25-9ed7-4625-9f4d-387a20a04524
 
 ###
 # Search by escrow_ref
