@@ -1,0 +1,95 @@
+### 1️⃣ Create a New Batch
+POST http://localhost:3000/api/batches
+Content-Type: application/json
+
+{
+  "product_id": "2dc41188-64b0-4b14-93de-f8121c774b88",
+  "farmer_id": "dbd62bb4-618d-454a-9a90-523317ab3734",
+  "initial_qty_kg": 100,
+  "unit": "KG",
+  "harvest_date": "2025-09-16T12:29:43.932Z",
+  "geo_lat": 23.0225,
+  "geo_lon": 72.5714,
+  "location_name": "Thiruninravur High Road, Thiruninravur, Thiruvallur District, Tamil Nadu, India",
+  "meta_hash": "QmXyzCornGluten123abc"
+}
+
+### 2️⃣ Update Batch Status
+PATCH http://localhost:3000/api/batches/af7df286-383c-44d1-8132-5f523c3e1cbe/status
+Content-Type: application/json
+
+{
+  "status": "VERIFIED"
+}
+
+### 3️⃣ Split Batch
+POST http://localhost:3000/api/batches/c36b06dd-ac5d-4065-8878-70cf78cc2962/split
+Content-Type: application/json
+
+{
+  "split_qty": 25,
+  "unit": "KG"
+}
+
+
+### 4️⃣ Merge Batches
+POST http://localhost:3000/api/batches/merge
+Content-Type: application/json
+
+{
+  "batch_ids": [
+    "c36b06dd-ac5d-4065-8878-70cf78cc2962",
+    "7c60aa51-27fe-4119-8732-ee1eafc01d2c"
+  ],
+  "new_batch_code": "MERGED-BATCH-001"
+}
+
+
+### 4️⃣ Update Harvest/Location/Meta Info
+PATCH http://localhost:3000/api/batches/d5c23cee-c10d-4f8b-826f-72d0e369058e
+Content-Type: application/json
+
+{
+  "geo_lat": 23.0300,
+  "geo_lon": 72.5800,
+  "location_name": "New Warehouse Location, Thiruvallur, Tamil Nadu, India",
+  "meta_hash": "QmUpdatedMetaHash123xyz"
+}
+
+
+###
+
+### Anchor Metadata (Blockchain Simulation)
+PATCH http://localhost:3000/api/batches/d5c23cee-c10d-4f8b-826f-72d0e369058e/anchor
+Content-Type: application/json
+
+{
+  "meta_hash": "QmXyzCornGluten123abc"
+}
+
+
+
+
+### 🔎 Get all available batches (ONDC Discovery)
+GET http://localhost:3000/api/batches
+Accept: application/json
+
+### 🔎 Get batches by product type
+GET http://localhost:3000/api/batches?product_type=herbicide
+Accept: application/json
+
+### 🔎 Get batches by farmer
+GET http://localhost:3000/api/batches?farmer_id=dbd62bb4-618d-454a-9a90-523317ab3734
+Accept: application/json
+
+### 🔎 Get batches by minimum available quantity
+GET http://localhost:3000/api/batches?min_qty=50
+Accept: application/json
+
+### 🔎 Get batches by multiple filters (product type + min qty)
+GET http://localhost:3000/api/batches?product_type=herbicide&min_qty=50
+Accept: application/json
+
+### Search by product name (case-insensitive, partial match)
+GET http://localhost:3000/api/batches?product_name=C
+Accept: application/json

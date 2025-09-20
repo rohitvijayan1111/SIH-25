@@ -11,6 +11,7 @@ import 'view_cart_screen.dart';
 import 'procurements_screen.dart';
 import '../auth/signin.dart';
 import 'CustomerScreens/signin_screen.dart';
+import 'navigation_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -95,6 +96,16 @@ class WelcomeScreen extends StatelessWidget {
           );
         },
         label: "Go to Home Page",
+        color: Colors.green,
+      ),
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NavigationScreen()),
+          );
+        },
+        label: "Go to Navigation Page",
         color: Colors.green,
       ),
       _buildButton(
