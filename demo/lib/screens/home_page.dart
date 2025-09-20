@@ -4,6 +4,7 @@ import 'package:demo/global.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+<<<<<<< HEAD
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -30,114 +31,53 @@ class InventoryItem {
   final String status;
   final String metaHash;
   final String? chainTx;
+=======
+const String SERVER_URL = Globals.SERVER_URL_BAP;
+>>>>>>> 7bfa51467d7594b96269f627359f629ce9f2b287
 
-  InventoryItem({
-    required this.batchId,
-    required this.batchCode,
-    required this.productId,
-    required this.productName,
-    required this.productType,
-    required this.farmerId,
-    required this.farmerName,
-    required this.availableQty,
-    required this.unit,
-    required this.pricePerUnit,
-    required this.batchQuantity,
-    required this.manufacturedOn,
-    required this.expiryDate,
-    required this.harvestDate,
-    required this.locationName,
-    required this.geoLat,
-    required this.geoLon,
-    required this.status,
-    required this.metaHash,
-    this.chainTx,
+class CategoryData {
+  final String category;
+  final List<dynamic> items;
+  final List<dynamic> providers;
+
+  CategoryData({
+    required this.category,
+    required this.items,
+    required this.providers,
   });
-
-  factory InventoryItem.fromJson(Map<String, dynamic> json) {
-    return InventoryItem(
-      batchId: json['batch_id'],
-      batchCode: json['batch_code'],
-      productId: json['product_id'],
-      productName: json['product_name'],
-      productType: json['product_type'],
-      farmerId: json['farmer_id'],
-      farmerName: json['farmer_name'],
-      availableQty: json['available_qty'],
-      unit: json['unit'],
-      pricePerUnit: json['price_per_unit'],
-      batchQuantity: json['batch_quantity'],
-      manufacturedOn: DateTime.parse(json['manufactured_on']),
-      expiryDate: DateTime.parse(json['expiry_date']),
-      harvestDate: DateTime.parse(json['harvest_date']),
-      locationName: json['location_name'],
-      geoLat: (json['geo_lat'] as num).toDouble(),
-      geoLon: (json['geo_lon'] as num).toDouble(),
-      status: json['status'],
-      metaHash: json['meta_hash'],
-      chainTx: json['chain_tx'],
-    );
-  }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+<<<<<<< HEAD
   Map<String, Map<String, List<InventoryItem>>> allCategories = {};
   Map<String, Map<String, List<InventoryItem>>> selectedCategory = {};
   List<InventoryItem> searchedItems = [];
   bool isLoading = true;
   bool isLoadingCategory = false;
   bool category_selected = false;
+=======
+  List<CategoryData> categories = [];
+  bool isLoading = true;
+>>>>>>> 7bfa51467d7594b96269f627359f629ce9f2b287
   String searchTerm = "";
   final TextEditingController _searchController = TextEditingController();
 
   final List<Map<String, String>> categoryList = [
-    {
-      'id': 'seed',
-      'name': 'Seeds',
-      'image': 'assets/FarmerUIAssets/images/seeds.png',
-    },
-    {
-      'id': 'micro',
-      'name': 'Micro Nutrient',
-      'image': 'assets/FarmerUIAssets/images/micronutrients.png',
-    },
-    {
-      'id': 'fertilizer',
-      'name': 'Fertilizer',
-      'image': 'assets/FarmerUIAssets/images/fertilizer.png',
-    },
-    {
-      'id': 'fungicide',
-      'name': 'Fungicide',
-      'image': 'assets/FarmerUIAssets/images/fungicide.png',
-    },
-    {
-      'id': 'growth_promoter',
-      'name': 'Growth Promoter',
-      'image': 'assets/FarmerUIAssets/images/growthpromoter.png',
-    },
-    {
-      'id': 'growth_regulator',
-      'name': 'Growth Regulators',
-      'image': 'assets/FarmerUIAssets/images/growthregulator.png',
-    },
-    {
-      'id': 'herbicide',
-      'name': 'Herbicide',
-      'image': 'assets/FarmerUIAssets/images/herbicide.png',
-    },
-    {
-      'id': 'land',
-      'name': 'Land Lease & Sale',
-      'image': 'assets/FarmerUIAssets/images/landlease.png',
-    },
+    {'id': 'seed', 'name': 'Seeds'},
+    {'id': 'micro', 'name': 'Micro Nutrient'},
+    {'id': 'fertilizer', 'name': 'Fertilizer'},
+    {'id': 'fungicide', 'name': 'Fungicide'},
+    {'id': 'growth_promoter', 'name': 'Growth Promoter'},
+    {'id': 'growth_regulator', 'name': 'Growth Regulators'},
+    {'id': 'herbicide', 'name': 'Herbicide'},
+    {'id': 'land', 'name': 'Land Lease & Sale'},
   ];
 
   @override
@@ -149,6 +89,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadInitialCategories() async {
     setState(() => isLoading = true);
     try {
+<<<<<<< HEAD
       final results =
           await Future.wait<Map<String, Map<String, List<InventoryItem>>>>([
             _fetchCategoryProducts("seed"),
@@ -156,6 +97,14 @@ class _HomePageState extends State<HomePage> {
             _fetchCategoryProducts("fungicide"),
             _fetchCategoryProducts("herbicide"),
           ]);
+=======
+      final results = await Future.wait<CategoryData>([
+        _fetchCategoryProducts("seed"),
+        _fetchCategoryProducts("fertilizer"),
+        _fetchCategoryProducts("fungicide"),
+        _fetchCategoryProducts("herbicide"),
+      ]);
+>>>>>>> 7bfa51467d7594b96269f627359f629ce9f2b287
 
       final Map<String, Map<String, List<InventoryItem>>> categoryMap = {};
       for (var result in results) {
@@ -166,7 +115,7 @@ class _HomePageState extends State<HomePage> {
         allCategories = categoryMap;
       });
     } catch (e) {
-      debugPrint("❌ Error loading initial categories: $e");
+      debugPrint("Error loading initial categories: $e");
     } finally {
       setState(() => isLoading = false);
     }
@@ -176,11 +125,21 @@ class _HomePageState extends State<HomePage> {
     String category,
   ) async {
     try {
-      final response = await http.get(
-        Uri.parse(
-          '${Globals.SERVER_URL_BPP}/api/batches?product_type=$category',
-        ),
+      // final response = await http.get(
+      //   Uri.parse(
+      //     '${Globals.SERVER_URL_BPP}/api/batches?product_type=$category',
+      //   ),
+      //   headers: {'Content-Type': 'application/json'},
+      final response = await http.post(
+        Uri.parse('$SERVER_URL/bap/search'),
         headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'productName': '',
+          'category': category,
+          'lat': '23.2599',
+          'lon': '79.0882',
+          'radius': 1000,
+        }),
       );
 
       if (response.statusCode != 200) {
@@ -307,7 +266,9 @@ class _HomePageState extends State<HomePage> {
     if (isLoading) {
       return const Scaffold(
         backgroundColor: Colors.white,
-        body: Center(child: CircularProgressIndicator(color: Colors.green)),
+        body: Center(
+          child: CircularProgressIndicator(color: Colors.green),
+        ),
       );
     }
 
@@ -360,10 +321,7 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(25),
                         borderSide: BorderSide.none,
                       ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Colors.green.shade700,
-                      ),
+                      prefixIcon: Icon(Icons.search, color: Colors.green.shade700),
                     ),
                   ),
                 ),
@@ -375,17 +333,11 @@ class _HomePageState extends State<HomePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   ),
                   child: const Text(
                     "Search",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -393,8 +345,10 @@ class _HomePageState extends State<HomePage> {
           ),
           // Category Grid
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            child: GridView.builder(
+            height: 55,
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
               itemCount: categoryList.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -517,7 +471,7 @@ class CategorySection extends StatelessWidget {
   products; // productName -> List<InventoryItem>
 
   const CategorySection({
-    super.key,
+    Key? key,
     required this.category,
     required this.products,
   });
