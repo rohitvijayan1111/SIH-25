@@ -1,17 +1,17 @@
 // Welcome Screen
-
+import 'package:demo/screens/CSC_interaction_screen.dart';
+import 'package:demo/screens/CustomerScreens/agent.dart';
+import 'package:demo/screens/CustomerScreens/customer_main_screen.dart';
+import 'package:demo/screens/CustomerScreens/logistic.dart';
+import 'package:demo/screens/navigation_screen.dart';
 import 'package:demo/screens/payment_details.dart';
-import 'package:flutter/material.dart';
+import 'package:demo/screens/scanned_details.dart';
+import 'package:demo/screens/voice_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'home_page.dart';
-import 'voice_page.dart';
-import 'view_cart_screen.dart';
-import 'procurements_screen.dart';
 import '../auth/signin.dart';
-import 'CustomerScreens/signin_screen.dart';
-import 'navigation_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -22,12 +22,10 @@ class WelcomeScreen extends StatelessWidget {
       backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(), // smooth scroll
+          physics: const BouncingScrollPhysics(),
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              // Check if the screen is wide enough for a desktop layout
               bool isWideScreen = constraints.maxWidth > 600;
-
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
@@ -45,10 +43,7 @@ class WelcomeScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 40),
-
-                      // Buttons
                       _buildButtons(isWideScreen, context),
-
                       const SizedBox(height: 40),
                     ],
                   ),
@@ -61,14 +56,12 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  // 🔑 Sign out function
   Future<void> _signOut(BuildContext context) async {
     try {
-      await GoogleSignIn().signOut(); // Google sign out
+      await GoogleSignIn().signOut();
     } catch (_) {}
-    await FirebaseAuth.instance.signOut(); // Firebase sign out
+    await FirebaseAuth.instance.signOut();
 
-    // Navigate back to SignIn page
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => SignInPage()),
@@ -76,7 +69,6 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   Widget _buildButtons(bool isWideScreen, BuildContext context) {
-    // Buttons list
     final buttonWidgets = [
       _buildButton(
         onPressed: () {
@@ -92,7 +84,8 @@ class WelcomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(
+                builder: (context) =>  CustomerMainScreen(value: 1)),
           );
         },
         label: "Go to Home Page",
@@ -109,34 +102,46 @@ class WelcomeScreen extends StatelessWidget {
         color: Colors.green,
       ),
       _buildButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const SignInScreen()),
-        ),
-        label: 'Customer App',
-        color: Colors.blue,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const LogisticsDetailsPage()),
+          );
+        },
+        label: "Logistics",
+        color: Colors.teal,
       ),
       _buildButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const ViewCartScreen()),
+            MaterialPageRoute(builder: (context) => const AgentsPage()),
           );
         },
-        label: "View My Cart",
-        color: Colors.blue,
+        label: "Agent",
+        color: Colors.orange,
       ),
       _buildButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const ProcurementsScreen()),
+            MaterialPageRoute(builder: (context) => const CSCSupportScreen()),
           );
         },
-        label: "Procurements",
-        color: Colors.indigo,
+        label: "CSC Interaction Screen",
+        color: Colors.green,
       ),
-      // 🔴 New Sign Out button
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ScannedDetails()),
+          );
+        },
+        label: "Scanned Product Details",
+        color: Colors.green,
+      ),
       _buildButton(
         onPressed: () async {
           await _signOut(context);
@@ -144,8 +149,6 @@ class WelcomeScreen extends StatelessWidget {
         label: "Sign Out",
         color: Colors.red,
       ),
-
-      // Inside _buildButtons in welcome_screen.dart
       _buildButton(
         onPressed: () {
           Navigator.push(
@@ -174,7 +177,6 @@ class WelcomeScreen extends StatelessWidget {
     ];
 
     if (isWideScreen) {
-      // Wide screens: side by side
       return Wrap(
         spacing: 16.0,
         runSpacing: 16.0,
@@ -182,7 +184,6 @@ class WelcomeScreen extends StatelessWidget {
         children: buttonWidgets,
       );
     } else {
-      // Mobile: stacked
       return Column(
         children: [
           ...buttonWidgets.map(

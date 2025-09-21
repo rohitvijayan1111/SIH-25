@@ -4,9 +4,9 @@ class Product {
   final String price;
   final String imageUrl;
   final String category;
-  final bool isFavorite;
   final String description;
   final String farmerName;
+  final bool isFavorite;
 
   const Product({
     required this.id,
@@ -14,9 +14,9 @@ class Product {
     required this.price,
     required this.imageUrl,
     required this.category,
-    this.isFavorite = false,
     this.description = '',
     this.farmerName = '',
+    this.isFavorite = false,
   });
 
   // Create a copy of product with updated favorite status
@@ -27,15 +27,447 @@ class Product {
       price: price,
       imageUrl: imageUrl,
       category: category,
-      isFavorite: isFavorite ?? this.isFavorite,
       description: description,
       farmerName: farmerName,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 }
 
 // Sample data for demonstration
 class ProductData {
+  static List<Product> getAllServices() {
+    return [
+      // 🌱 Herbicide
+      Product(
+        id: 'H1',
+        name: 'Glyphosate',
+        price: '350',
+        imageUrl: 'https://www.pomais.com/wp-content/uploads/2024/08/6-1.jpg',
+        category: 'Herbicide',
+        description: 'Broad-spectrum systemic herbicide for weed control',
+        farmerName: 'AgroChem Pvt Ltd',
+      ),
+      Product(
+        id: 'H2',
+        name: 'Paraquat',
+        price: '280',
+        imageUrl:
+            'https://image.made-in-china.com/2f0j00ilzktfLqRQou/Chinese-Factory-Herbicides-Paraquat-20-SL-276g-L-SL.jpg',
+        category: 'Herbicide',
+        description: 'Fast-acting herbicide for non-selective weed removal',
+        farmerName: 'GreenGrow Solutions',
+      ),
+      Product(
+        id: 'H3',
+        name: '2,4-D Amine Salt',
+        price: '300',
+        imageUrl:
+            'https://tse1.mm.bing.net/th/id/OIP.fJL4INSjcI66D-EH5_K9oAHaHa?pid=Api&P=0&h=180',
+        category: 'Herbicide',
+        description: 'Selective weed killer for cereal crops',
+        farmerName: 'FarmWell',
+      ),
+      Product(
+        id: 'H4',
+        name: 'Atrazine',
+        price: '270',
+        imageUrl:
+            'https://5.imimg.com/data5/SELLER/Default/2021/9/XY/MW/TG/78974752/atrazine-50-wp-selective-herbicide-1000x1000.jpg',
+        category: 'Herbicide',
+        description: 'Pre- and post-emergence herbicide for maize & sugarcane',
+        farmerName: 'CropCare Agro',
+      ),
+      Product(
+        id: 'H5',
+        name: 'Pendimethalin',
+        price: '320',
+        imageUrl:
+            'https://image.made-in-china.com/2f0j00jJpiablIAUkw/Agrochemical-Herbicide-Pendimethalin-95-Tc-330-G-L-Ec-33-Ec.jpg',
+        category: 'Herbicide',
+        description: 'Pre-emergent herbicide effective for grasses and weeds',
+        farmerName: 'Farmer Supply Co',
+      ),
+
+      // 🌿 Growth Regulators
+      Product(
+        id: 'GR1',
+        name: 'Gibberellic Acid',
+        price: '150',
+        imageUrl:
+            'https://5.imimg.com/data5/SELLER/Default/2024/2/385609168/ZO/YL/VH/28119585/img-20240209-wa0169-1000x1000.jpg',
+        category: 'Growth Regulators',
+        description: 'Stimulates stem elongation and seed germination',
+        farmerName: 'BioAgro Labs',
+      ),
+      Product(
+        id: 'GR2',
+        name: 'Cytokinin Spray',
+        price: '180',
+        imageUrl:
+            'https://www.plantgrowthhormones.com/uploads/15034/small/hot-sale-plant-growth-regulators-cytokininecdaa.png',
+        category: 'Growth Regulators',
+        description: 'Promotes cell division and leaf expansion',
+        farmerName: 'AgriBioTech',
+      ),
+      Product(
+        id: 'GR3',
+        name: 'Ethrel',
+        price: '200',
+        imageUrl:
+            'https://5.imimg.com/data5/ECOM/Default/2023/11/361147881/XM/DA/JH/59373149/ethrel-4-500x500.png',
+        category: 'Growth Regulators',
+        description: 'Regulates fruit ripening and flower induction',
+        farmerName: 'FarmChem India',
+      ),
+      Product(
+        id: 'GR4',
+        name: 'Naphthalene Acetic Acid (NAA)',
+        price: '170',
+        imageUrl:
+            'https://image.made-in-china.com/2f0j00ZJqaLMNPfkrH/Naphthalene-Acetic-Acid-Naa-Plant-Growth-Regulator.jpg',
+        category: 'Growth Regulators',
+        description: 'Helps in root initiation and fruit thinning',
+        farmerName: 'AgroLife Sciences',
+      ),
+      Product(
+        id: 'GR5',
+        name: 'Paclobutrazol',
+        price: '220',
+        imageUrl:
+            'https://image.made-in-china.com/2f0j00VjalAcTZhWur/Agriculture-Paclobutrazol-Powder-15-Wp-Paclobutrazol-for-Mango.jpg',
+        category: 'Growth Regulators',
+        description: 'Plant growth retardant for uniform flowering',
+        farmerName: 'GrowTech Agro',
+      ),
+
+      // 🍄 Fungicide
+      Product(
+        id: 'F1',
+        name: 'Mancozeb',
+        price: '250',
+        imageUrl:
+            'https://5.imimg.com/data5/SELLER/Default/2022/1/HY/IX/IN/4089734/carbendazim-12-mancozeb-63-wp-500x500.jpg',
+        category: 'Fungicide',
+        description: 'Broad-spectrum fungicide for fruits and vegetables',
+        farmerName: 'SafeCrop Ltd',
+      ),
+      Product(
+        id: 'F2',
+        name: 'Carbendazim',
+        price: '200',
+        imageUrl:
+            'https://5.imimg.com/data5/SELLER/Default/2023/5/310342696/YQ/WZ/GO/148816997/carbendazim-systemic-fungicide-500x500.jpg',
+        category: 'Fungicide',
+        description: 'Systemic fungicide effective against seed-borne diseases',
+        farmerName: 'BioCrop Care',
+      ),
+      Product(
+        id: 'F3',
+        name: 'Copper Oxychloride',
+        price: '220',
+        imageUrl:
+            'https://media.prod.bunnings.com.au/api/public/content/969c55089f4e480ba87035443aba8f92?v=f0d4a702&t=w500dpr1',
+        category: 'Fungicide',
+        description: 'Contact fungicide for vegetables and fruits',
+        farmerName: 'AgriGuard',
+      ),
+      Product(
+        id: 'F4',
+        name: 'Sulphur Dust',
+        price: '180',
+        imageUrl:
+            'http://superarbor.io/cdn/shop/products/07d953bc-9423-47e9-bf46-40d7d54199e4.jpg?v=1709790663',
+        category: 'Fungicide',
+        description: 'Effective for powdery mildew control',
+        farmerName: 'AgroSafe',
+      ),
+      Product(
+        id: 'F5',
+        name: 'Hexaconazole',
+        price: '300',
+        imageUrl:
+            'https://5.imimg.com/data5/SELLER/Default/2022/2/NQ/RN/AF/21021813/image-29-1000x1000.jpg',
+        category: 'Fungicide',
+        description: 'Systemic fungicide for rice and groundnut crops',
+        farmerName: 'GreenCrop Agro',
+      ),
+
+      // 🌱 Growth Promoter
+      Product(
+        id: 'GP1',
+        name: 'Seaweed Extract',
+        price: '280',
+        imageUrl:
+            'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400',
+        category: 'Growth Promoter',
+        description: 'Natural plant growth promoter',
+        farmerName: 'BioGrow Organics',
+      ),
+      Product(
+        id: 'GP2',
+        name: 'Humic Acid',
+        price: '240',
+        imageUrl:
+            'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400',
+        category: 'Growth Promoter',
+        description: 'Improves soil fertility and root growth',
+        farmerName: 'EcoFarm Solutions',
+      ),
+      Product(
+        id: 'GP3',
+        name: 'Amino Acid Spray',
+        price: '300',
+        imageUrl:
+            'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400',
+        category: 'Growth Promoter',
+        description: 'Enhances nutrient uptake and stress tolerance',
+        farmerName: 'AgroBoost',
+      ),
+      Product(
+        id: 'GP4',
+        name: 'Organic Compost Tea',
+        price: '200',
+        imageUrl:
+            'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400',
+        category: 'Growth Promoter',
+        description: 'Boosts microbial activity in soil',
+        farmerName: 'FarmPure',
+      ),
+      Product(
+        id: 'GP5',
+        name: 'Silicon Spray',
+        price: '260',
+        imageUrl:
+            'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400',
+        category: 'Growth Promoter',
+        description: 'Improves plant resistance against stress',
+        farmerName: 'CropShield',
+      ),
+
+      // 🌾 Fertilizer
+      Product(
+        id: 'FT1',
+        name: 'Urea',
+        price: '550',
+        imageUrl:
+            'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400',
+        category: 'Fertilizer',
+        description: 'Nitrogen-based fertilizer for all crops',
+        farmerName: 'AgriInput Suppliers',
+      ),
+      Product(
+        id: 'FT2',
+        name: 'DAP (Diammonium Phosphate)',
+        price: '1200',
+        imageUrl:
+            'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400',
+        category: 'Fertilizer',
+        description: 'Source of phosphorus and nitrogen',
+        farmerName: 'CropCare Inputs',
+      ),
+      Product(
+        id: 'FT3',
+        name: 'MOP (Muriate of Potash)',
+        price: '1000',
+        imageUrl:
+            'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400',
+        category: 'Fertilizer',
+        description: 'Potassium-rich fertilizer for crop growth',
+        farmerName: 'Kisan Agro',
+      ),
+      Product(
+        id: 'FT4',
+        name: 'Ammonium Sulphate',
+        price: '900',
+        imageUrl:
+            'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400',
+        category: 'Fertilizer',
+        description: 'Nitrogen and sulphur source',
+        farmerName: 'FarmChem Industries',
+      ),
+      Product(
+        id: 'FT5',
+        name: 'Organic Manure',
+        price: '400',
+        imageUrl:
+            'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400',
+        category: 'Fertilizer',
+        description: 'Eco-friendly soil enhancer',
+        farmerName: 'EcoGrow Farms',
+      ),
+
+      // ⚡ Micro Nutrient
+      Product(
+        id: 'MN1',
+        name: 'Zinc Sulphate',
+        price: '350',
+        imageUrl:
+            'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400',
+        category: 'Micro Nutrient',
+        description: 'Corrects zinc deficiency in crops',
+        farmerName: 'MicroGrow',
+      ),
+      Product(
+        id: 'MN2',
+        name: 'Boron Spray',
+        price: '280',
+        imageUrl:
+            'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400',
+        category: 'Micro Nutrient',
+        description: 'Enhances fruit and seed development',
+        farmerName: 'NutriCrop',
+      ),
+      Product(
+        id: 'MN3',
+        name: 'Ferrous Sulphate',
+        price: '260',
+        imageUrl:
+            'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400',
+        category: 'Micro Nutrient',
+        description: 'Treats iron deficiency chlorosis',
+        farmerName: 'AgriNutra',
+      ),
+      Product(
+        id: 'MN4',
+        name: 'Manganese Sulphate',
+        price: '270',
+        imageUrl:
+            'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400',
+        category: 'Micro Nutrient',
+        description: 'Essential for enzyme activity in plants',
+        farmerName: 'CropBalance',
+      ),
+      Product(
+        id: 'MN5',
+        name: 'Copper Sulphate',
+        price: '290',
+        imageUrl:
+            'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400',
+        category: 'Micro Nutrient',
+        description: 'Improves plant metabolism',
+        farmerName: 'AgriMicro',
+      ),
+
+      // 🌱 Seeds
+      Product(
+        id: 'S1',
+        name: 'Hybrid Maize Seeds',
+        price: '800',
+        imageUrl:
+            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400',
+        category: 'Seeds',
+        description: 'High-yielding hybrid maize variety',
+        farmerName: 'SeedWorld',
+      ),
+      Product(
+        id: 'S2',
+        name: 'Paddy Seeds',
+        price: '900',
+        imageUrl:
+            'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400',
+        category: 'Seeds',
+        description: 'Quality rice seeds for better yield',
+        farmerName: 'Kisan Seeds',
+      ),
+      Product(
+        id: 'S3',
+        name: 'Vegetable Seeds Pack',
+        price: '600',
+        imageUrl:
+            'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400',
+        category: 'Seeds',
+        description: 'Mix of tomato, chili, and okra seeds',
+        farmerName: 'AgriSeed Co',
+      ),
+      Product(
+        id: 'S4',
+        name: 'Wheat Seeds',
+        price: '750',
+        imageUrl:
+            'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400',
+        category: 'Seeds',
+        description: 'Improved wheat seed variety',
+        farmerName: 'GrainSeed Corp',
+      ),
+      Product(
+        id: 'S5',
+        name: 'Cotton Seeds',
+        price: '950',
+        imageUrl:
+            'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400',
+        category: 'Seeds',
+        description: 'BT cotton seeds for high yield',
+        farmerName: 'AgroSeed India',
+      ),
+
+      // 🏞️ Land Lease & Sale
+      Product(
+        id: 'LL1',
+        name: '2 Acre Fertile Land - Lease',
+        price: '50000',
+        imageUrl:
+            'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
+        category: 'Land Lease & Sale',
+        description: 'Well-irrigated land suitable for vegetables',
+        farmerName: 'Farmer Prakash',
+      ),
+      Product(
+        id: 'LL2',
+        name: '5 Acre Paddy Land - Sale',
+        price: '1200000',
+        imageUrl:
+            'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=400',
+        category: 'Land Lease & Sale',
+        description: 'Prime land with water source',
+        farmerName: 'Farmer Suresh',
+      ),
+      Product(
+        id: 'LL3',
+        name: '3 Acre Orchard Land - Lease',
+        price: '70000',
+        imageUrl:
+            'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
+        category: 'Land Lease & Sale',
+        description: 'Land suited for mango & guava orchards',
+        farmerName: 'Farmer Radha',
+      ),
+      Product(
+        id: 'LL4',
+        name: '10 Acre Farmland - Sale',
+        price: '2500000',
+        imageUrl:
+            'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=400',
+        category: 'Land Lease & Sale',
+        description: 'Irrigated fertile soil, ideal for cash crops',
+        farmerName: 'Farmer Nanda',
+      ),
+      Product(
+        id: 'LL5',
+        name: '1 Acre Vegetable Plot - Lease',
+        price: '30000',
+        imageUrl:
+            'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400',
+        category: 'Land Lease & Sale',
+        description: 'Small plot for seasonal vegetables',
+        farmerName: 'Farmer Rekha',
+      ),
+    ];
+  }
+
+  static List<String> getServiceCategories() {
+    return [
+      'Herbicide',
+      'Growth Regulators',
+      'Fungicide',
+      'Growth Promoter',
+      'Fertilizer',
+      'Micro Nutrient',
+      'Seeds',
+      'Land Lease & Sale',
+    ];
+  }
+
   static List<Product> getAllProducts() {
     return [
       const Product(
@@ -53,7 +485,8 @@ class ProductData {
         id: '2',
         name: 'Papaya',
         price: '80',
-        imageUrl: 'assets/CustomerUIAssets/images/papaya.jpg',
+        imageUrl:
+            'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400',
         category: 'Fruits',
         description: 'Sweet and juicy papaya',
         farmerName: 'Farmer Mary',
@@ -63,7 +496,8 @@ class ProductData {
         id: '3',
         name: 'Tomatoes',
         price: '60',
-        imageUrl: 'assets/CustomerUIAssets/images/tomato.jpg',
+        imageUrl:
+            'https://images.unsplash.com/photo-1546470427-e5da6d49e348?w=400',
         category: 'Vegetables',
         description: 'Red ripe tomatoes',
         farmerName: 'Farmer Bob',
@@ -84,18 +518,19 @@ class ProductData {
         id: '6',
         name: 'Banana',
         price: '30',
-        imageUrl: 'assets/CustomerUIAssets/images/banana.jpg',
+        imageUrl:
+            'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400',
         category: 'Fruits',
         description: 'Fresh bananas, source of potassium',
         farmerName: 'Farmer Kumar',
         isFavorite: false,
       ),
-
       const Product(
         id: '8',
         name: 'Wheat',
         price: '25',
-        imageUrl: 'assets/CustomerUIAssets/images/wheat.jpg',
+        imageUrl:
+            'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400',
         category: 'Grains',
         description: 'High-quality wheat grains',
         farmerName: 'Farmer Ramesh',
@@ -105,7 +540,8 @@ class ProductData {
         id: '9',
         name: 'Rice',
         price: '50',
-        imageUrl: 'assets/CustomerUIAssets/images/rice.jpg',
+        imageUrl:
+            'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400',
         category: 'Grains',
         description: 'Premium basmati rice',
         farmerName: 'Farmer Devi',
@@ -115,7 +551,8 @@ class ProductData {
         id: '10',
         name: 'Maize',
         price: '32',
-        imageUrl: 'assets/CustomerUIAssets/images/maize.jpg',
+        imageUrl:
+            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400',
         category: 'Grains',
         description: 'Fresh maize from the farm',
         farmerName: 'Farmer Mohan',
@@ -126,7 +563,8 @@ class ProductData {
         id: '11',
         name: 'Milk',
         price: '52',
-        imageUrl: 'assets/CustomerUIAssets/images/milk.jpg',
+        imageUrl:
+            'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400',
         category: 'Dairy',
         description: 'Fresh cow milk delivered daily',
         farmerName: 'Dairy Farmhouse',
@@ -136,7 +574,8 @@ class ProductData {
         id: '12',
         name: 'Paneer',
         price: '210',
-        imageUrl: 'assets/CustomerUIAssets/images/paneer.jpg',
+        imageUrl:
+            'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400',
         category: 'Dairy',
         description: 'Soft cottage cheese, homemade',
         farmerName: 'Farmer Shanti',
@@ -145,7 +584,8 @@ class ProductData {
         id: '13',
         name: 'Curd',
         price: '50',
-        imageUrl: 'assets/CustomerUIAssets/images/curd.jpg',
+        imageUrl:
+            'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400',
         category: 'Dairy',
         description: 'Thick curd from desi cows',
         farmerName: 'Farmer Anil',
@@ -155,7 +595,8 @@ class ProductData {
         id: '14',
         name: 'Butter',
         price: '380',
-        imageUrl: 'assets/CustomerUIAssets/images/butter.webp',
+        imageUrl:
+            'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400',
         category: 'Dairy',
         description: 'Freshly churned yellow butter',
         farmerName: 'Dairy Collective',
