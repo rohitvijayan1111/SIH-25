@@ -1,3 +1,4 @@
+import 'package:demo/screens/payment_details.dart'; // ✅ Import your payment details screen
 import 'package:flutter/material.dart';
 
 class LogisticsDetailsPage extends StatefulWidget {
@@ -188,10 +189,17 @@ class _LogisticsDetailsPageState extends State<LogisticsDetailsPage> {
                   backgroundColor: Colors.green,
                 ),
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        "Proceeding with $selectedDelivery on $selectedDate at $selectedTimeSlot",
+                  // Navigate to PaymentDetailsScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PaymentDetailsScreen(
+                        paymentDetails: {
+                          "totalAmount": totalAmount,
+                          "paidAmount": 0,
+                          "dueAmount": totalAmount,
+                          "transactions": [],
+                        },
                       ),
                     ),
                   );
