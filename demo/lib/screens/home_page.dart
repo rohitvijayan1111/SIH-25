@@ -4,12 +4,9 @@ import 'package:demo/global.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-<<<<<<< HEAD
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:demo/global.dart';
+const String SERVER_URL = Globals.SERVER_URL_BAP;
 
+// Add the missing InventoryItem class
 class InventoryItem {
   final String batchId;
   final String batchCode;
@@ -31,9 +28,55 @@ class InventoryItem {
   final String status;
   final String metaHash;
   final String? chainTx;
-=======
-const String SERVER_URL = Globals.SERVER_URL_BAP;
->>>>>>> 7bfa51467d7594b96269f627359f629ce9f2b287
+
+  InventoryItem({
+    required this.batchId,
+    required this.batchCode,
+    required this.productId,
+    required this.productName,
+    required this.productType,
+    required this.farmerId,
+    required this.farmerName,
+    required this.availableQty,
+    required this.unit,
+    required this.pricePerUnit,
+    required this.batchQuantity,
+    required this.manufacturedOn,
+    required this.expiryDate,
+    required this.harvestDate,
+    required this.locationName,
+    required this.geoLat,
+    required this.geoLon,
+    required this.status,
+    required this.metaHash,
+    this.chainTx,
+  });
+
+  factory InventoryItem.fromJson(Map<String, dynamic> json) {
+    return InventoryItem(
+      batchId: json['batch_id']?.toString() ?? '',
+      batchCode: json['batch_code']?.toString() ?? '',
+      productId: json['product_id']?.toString() ?? '',
+      productName: json['product_name']?.toString() ?? '',
+      productType: json['product_type']?.toString() ?? '',
+      farmerId: json['farmer_id']?.toString() ?? '',
+      farmerName: json['farmer_name']?.toString() ?? '',
+      availableQty: json['available_qty']?.toString() ?? '',
+      unit: json['unit']?.toString() ?? '',
+      pricePerUnit: json['price_per_unit']?.toString() ?? '',
+      batchQuantity: json['batch_quantity'] ?? 0,
+      manufacturedOn: DateTime.tryParse(json['manufactured_on']?.toString() ?? '') ?? DateTime.now(),
+      expiryDate: DateTime.tryParse(json['expiry_date']?.toString() ?? '') ?? DateTime.now(),
+      harvestDate: DateTime.tryParse(json['harvest_date']?.toString() ?? '') ?? DateTime.now(),
+      locationName: json['location_name']?.toString() ?? '',
+      geoLat: double.tryParse(json['geo_lat']?.toString() ?? '0') ?? 0.0,
+      geoLon: double.tryParse(json['geo_lon']?.toString() ?? '0') ?? 0.0,
+      status: json['status']?.toString() ?? '',
+      metaHash: json['meta_hash']?.toString() ?? '',
+      chainTx: json['chain_tx']?.toString(),
+    );
+  }
+}
 
 class CategoryData {
   final String category;
@@ -55,29 +98,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-<<<<<<< HEAD
-  Map<String, Map<String, List<InventoryItem>>> allCategories = {};
-  Map<String, Map<String, List<InventoryItem>>> selectedCategory = {};
-  List<InventoryItem> searchedItems = [];
+  List<CategoryData> categories = [];
   bool isLoading = true;
   bool isLoadingCategory = false;
   bool category_selected = false;
-=======
-  List<CategoryData> categories = [];
-  bool isLoading = true;
->>>>>>> 7bfa51467d7594b96269f627359f629ce9f2b287
   String searchTerm = "";
   final TextEditingController _searchController = TextEditingController();
 
+  // Add missing state variables
+  Map<String, Map<String, List<InventoryItem>>> allCategories = {};
+  Map<String, Map<String, List<InventoryItem>>> selectedCategory = {};
+  List<InventoryItem> searchedItems = [];
+
   final List<Map<String, String>> categoryList = [
-    {'id': 'seed', 'name': 'Seeds'},
-    {'id': 'micro', 'name': 'Micro Nutrient'},
-    {'id': 'fertilizer', 'name': 'Fertilizer'},
-    {'id': 'fungicide', 'name': 'Fungicide'},
-    {'id': 'growth_promoter', 'name': 'Growth Promoter'},
-    {'id': 'growth_regulator', 'name': 'Growth Regulators'},
-    {'id': 'herbicide', 'name': 'Herbicide'},
-    {'id': 'land', 'name': 'Land Lease & Sale'},
+    {'id': 'seed', 'name': 'Seeds', 'image': 'assets/images/seed.png'},
+    {'id': 'micro', 'name': 'Micro Nutrient', 'image': 'assets/images/micro.png'},
+    {'id': 'fertilizer', 'name': 'Fertilizer', 'image': 'assets/images/fertilizer.png'},
+    {'id': 'fungicide', 'name': 'Fungicide', 'image': 'assets/images/fungicide.png'},
+    {'id': 'growth_promoter', 'name': 'Growth Promoter', 'image': 'assets/images/growth_promoter.png'},
+    {'id': 'growth_regulator', 'name': 'Growth Regulators', 'image': 'assets/images/growth_regulator.png'},
+    {'id': 'herbicide', 'name': 'Herbicide', 'image': 'assets/images/herbicide.png'},
+    {'id': 'land', 'name': 'Land Lease & Sale', 'image': 'assets/images/land.png'},
   ];
 
   @override
@@ -89,22 +130,12 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadInitialCategories() async {
     setState(() => isLoading = true);
     try {
-<<<<<<< HEAD
-      final results =
-          await Future.wait<Map<String, Map<String, List<InventoryItem>>>>([
-            _fetchCategoryProducts("seed"),
-            _fetchCategoryProducts("fertilizer"),
-            _fetchCategoryProducts("fungicide"),
-            _fetchCategoryProducts("herbicide"),
-          ]);
-=======
-      final results = await Future.wait<CategoryData>([
+      final results = await Future.wait([
         _fetchCategoryProducts("seed"),
         _fetchCategoryProducts("fertilizer"),
         _fetchCategoryProducts("fungicide"),
         _fetchCategoryProducts("herbicide"),
       ]);
->>>>>>> 7bfa51467d7594b96269f627359f629ce9f2b287
 
       final Map<String, Map<String, List<InventoryItem>>> categoryMap = {};
       for (var result in results) {
@@ -125,11 +156,6 @@ class _HomePageState extends State<HomePage> {
     String category,
   ) async {
     try {
-      // final response = await http.get(
-      //   Uri.parse(
-      //     '${Globals.SERVER_URL_BPP}/api/batches?product_type=$category',
-      //   ),
-      //   headers: {'Content-Type': 'application/json'},
       final response = await http.post(
         Uri.parse('$SERVER_URL/bap/search'),
         headers: {'Content-Type': 'application/json'},
@@ -245,7 +271,9 @@ class _HomePageState extends State<HomePage> {
               height: 40,
               width: 40,
               padding: const EdgeInsets.all(6),
-              child: Image.asset(categoryItem['image']!, fit: BoxFit.contain),
+              child: categoryItem['image'] != null 
+                ? Image.asset(categoryItem['image']!, fit: BoxFit.contain)
+                : const Icon(Icons.category, size: 30, color: Colors.green),
             ),
             const SizedBox(height: 8),
             Text(
@@ -343,20 +371,20 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          // Category Grid
+          // Category Grid - Fixed to use GridView instead of ListView with gridDelegate
           Container(
-            height: 55,
+            height: 120,
             margin: const EdgeInsets.symmetric(vertical: 10),
-            child: ListView.builder(
+            child: GridView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: categoryList.length,
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: const ScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
+                crossAxisCount: 1,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 0.78,
+                childAspectRatio: 1.2,
               ),
               itemBuilder: (context, index) =>
                   _buildCategoryCard(categoryList[index]),
@@ -428,6 +456,13 @@ class _HomePageState extends State<HomePage> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       // Add to cart function
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "${item.productName} added to cart",
+                                          ),
+                                        ),
+                                      );
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.green,
@@ -468,13 +503,36 @@ class _HomePageState extends State<HomePage> {
 class CategorySection extends StatelessWidget {
   final String category;
   final Map<String, List<InventoryItem>>
-  products; // productName -> List<InventoryItem>
+      products; // productName -> List<InventoryItem>
 
   const CategorySection({
     Key? key,
     required this.category,
     required this.products,
-  });
+  }) : super(key: key);
+
+  Widget _getProductIcon(String productName) {
+    // Return appropriate icons based on product name/type
+    final lowerName = productName.toLowerCase();
+    
+    if (lowerName.contains('seed')) {
+      return const Icon(Icons.eco, size: 60, color: Colors.green);
+    } else if (lowerName.contains('fertilizer')) {
+      return const Icon(Icons.grass, size: 60, color: Colors.green);
+    } else if (lowerName.contains('fungicide') || lowerName.contains('pesticide')) {
+      return const Icon(Icons.bug_report, size: 60, color: Colors.green);
+    } else if (lowerName.contains('herbicide')) {
+      return const Icon(Icons.local_florist, size: 60, color: Colors.green);
+    } else if (lowerName.contains('growth')) {
+      return const Icon(Icons.trending_up, size: 60, color: Colors.green);
+    } else if (lowerName.contains('micro') || lowerName.contains('nutrient')) {
+      return const Icon(Icons.science, size: 60, color: Colors.green);
+    } else if (lowerName.contains('land') || lowerName.contains('lease')) {
+      return const Icon(Icons.landscape, size: 60, color: Colors.green);
+    } else {
+      return const Icon(Icons.shopping_bag, size: 60, color: Colors.green);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -516,13 +574,6 @@ class CategorySection extends StatelessWidget {
               // Provider name
               final providerName = firstItem.farmerName;
 
-              // Image URL from descriptor if available
-              String? imageUrl;
-              if (firstItem is InventoryItem) {
-                // Replace with your logic if InventoryItem has image field
-                imageUrl = firstItem.metaHash; // Example placeholder
-              }
-
               return GestureDetector(
                 onTap: () {
                   // Navigate to product details with full list
@@ -553,7 +604,7 @@ class CategorySection extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Image
+                      // Image - Using placeholder instead of network images
                       Container(
                         height: 100,
                         width: double.infinity,
@@ -563,13 +614,7 @@ class CategorySection extends StatelessWidget {
                           ),
                           color: Colors.green[100],
                         ),
-                        child: imageUrl != null
-                            ? Image.network(imageUrl, fit: BoxFit.cover)
-                            : const Icon(
-                                Icons.shopping_bag,
-                                size: 60,
-                                color: Colors.green,
-                              ),
+                        child: _getProductIcon(productName),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
