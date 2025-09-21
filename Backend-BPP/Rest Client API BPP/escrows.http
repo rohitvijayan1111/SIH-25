@@ -1,0 +1,59 @@
+### 1️⃣ Create & Lock Escrow
+POST http://localhost:3000/api/escrows
+Content-Type: application/json
+
+{
+  "escrow_ref": "ESCROW12345",
+  "order_id": "835c5e25-9ed7-4625-9f4d-387a20a04524",
+  "amount": 500.00
+}
+
+###
+
+### 2️⃣ Release Escrow
+PUT http://localhost:3000/api/escrows/6c5b2a15-7314-4288-ae3c-e3e859344b83/release
+Content-Type: application/json
+
+{
+  "chain_tx": "0xblockchainReleaseTxHash"
+}
+
+###
+
+### 3️⃣ Refund Escrow
+PUT http://localhost:3000/api/escrows/6c5b2a15-7314-4288-ae3c-e3e859344b83/refund
+Content-Type: application/json
+
+{
+  "chain_tx": "0xblockchainRefundTxHash",
+  "reason": "Order cancelled by buyer"
+}
+
+###
+
+### 4️⃣ Upload Blockchain Proof
+PUT http://localhost:3000/api/escrows/6c5b2a15-7314-4288-ae3c-e3e859344b83/proof
+Content-Type: application/json
+
+{
+  "chain_tx": "0xproofTxHash"
+}
+
+###
+
+### 5️⃣ Get Escrow by ID
+GET http://localhost:3000/api/escrows/6c5b2a15-7314-4288-ae3c-e3e859344b83
+
+###
+
+### 6️⃣ List Escrows (filters)
+# Locked escrows
+GET http://localhost:3000/api/escrows?status=locked
+
+###
+# Released escrows for a specific order
+GET http://localhost:3000/api/escrows?status=locked&order_id=835c5e25-9ed7-4625-9f4d-387a20a04524
+
+###
+# Search by escrow_ref
+GET http://localhost:3000/api/escrows?escrow_ref=ESCROW12345

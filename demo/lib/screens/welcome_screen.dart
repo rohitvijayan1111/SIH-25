@@ -1,5 +1,8 @@
 // Welcome Screen
 
+import 'package:demo/screens/CSC_interaction_screen.dart';
+import 'package:demo/screens/Scanned_details.dart';
+import 'package:demo/screens/CustomerScreens/product_details_screen.dart';
 import 'package:demo/screens/coop_dashboard.dart';
 import 'package:demo/screens/coop_members.dart';
 import 'package:demo/screens/earnings.dart';
@@ -9,16 +12,16 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'CustomerScreens/customer_main_screen.dart';
 import 'home_page.dart';
 import 'voice_page.dart';
 import 'view_cart_screen.dart';
 import 'procurements_screen.dart';
 import '../auth/signin.dart';
 import 'CustomerScreens/signin_screen.dart';
-import 'coop_dashboard.dart';
-import 'coop_members.dart';
+import 'navigation_screen.dart';
 import 'upload_produce.dart';
-import 'earnings.dart';
+
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -99,10 +102,23 @@ class WelcomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            // MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(
+              builder: (context) => const CustomerMainScreen(value: 1),
+            ),
           );
         },
         label: "Go to Home Page",
+        color: Colors.green,
+      ),
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NavigationScreen()),
+          );
+        },
+        label: "Go to Navigation Page",
         color: Colors.green,
       ),
       _buildButton(
@@ -192,6 +208,30 @@ class WelcomeScreen extends StatelessWidget {
         },
         label: "Co-op members",
         color: Colors.red,
+      ),
+
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CSCSupportScreen()),
+          );
+        },
+        label: "CSC Interaction Screen",
+        color: Colors.green,
+      ),
+
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ScannedDetails(),
+            ),
+          );
+        },
+        label: "Scanned Product Details",
+        color: Colors.green,
       ),
 
       // 🔴 New Sign Out button
