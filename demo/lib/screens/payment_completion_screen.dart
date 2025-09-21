@@ -1,3 +1,4 @@
+import 'package:demo/screens/CustomerScreens/customer_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'home_page.dart'; // <-- make sure this path matches your project
 
@@ -74,7 +75,8 @@ class PaymentCompletionScreen extends StatelessWidget {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const HomePage()),
+                            builder: (context) => CustomerMainScreen(value: 1),
+                          ),
                           (route) => false, // clears navigation stack
                         );
                       },
