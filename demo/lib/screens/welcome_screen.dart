@@ -15,10 +15,15 @@ import '../auth/signin.dart';
 import 'CustomerScreens/customer_main_screen.dart';
 import 'CustomerScreens/signin_screen.dart';
 import 'navigation_screen.dart';
+<<<<<<< HEAD
 import 'procurements_screen.dart';
 import 'upload_produce.dart';
 import 'view_cart_screen.dart';
 import 'voice_page.dart';
+=======
+import 'upload_produce.dart';
+
+>>>>>>> 8ce9a008d7989f8d008713773994ca6ea662c747
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -216,6 +221,35 @@ class WelcomeScreen extends StatelessWidget {
         label: "Co-op members",
         color: Colors.red,
       ),
+<<<<<<< HEAD
+=======
+
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CSCSupportScreen()),
+          );
+        },
+        label: "CSC Interaction Screen",
+        color: Colors.green,
+      ),
+
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ScannedDetails(),
+            ),
+          );
+        },
+        label: "Scanned Product Details",
+        color: Colors.green,
+      ),
+
+      // 🔴 New Sign Out button
+>>>>>>> 8ce9a008d7989f8d008713773994ca6ea662c747
       _buildButton(
         onPressed: () async {
           await _signOut(context);
