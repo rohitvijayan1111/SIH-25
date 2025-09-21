@@ -581,13 +581,14 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'models/product_model.dart';
-import 'widgets/product_card.dart';
-import 'widgets/category_card.dart';
-import 'widgets/search_bar.dart';
 
 import './cart_screen.dart';
+import './notification.dart'; // 👈 import your NotificationPage
 import './product_details_screen.dart';
+import 'models/product_model.dart';
+import 'widgets/category_card.dart';
+import 'widgets/product_card.dart';
+import 'widgets/search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   final int value;
@@ -682,7 +683,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotificationPage(),
+                ),
+              );
+            },
             icon: const Icon(Icons.notifications_outlined),
           ),
           IconButton(
