@@ -79,7 +79,9 @@ class HomeScreen extends StatelessWidget {
   void navigateToFarmerServices(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CustomerMainScreen()),
+      MaterialPageRoute(
+        builder: (context) => const CustomerMainScreen(value: 1),
+      ),
     );
   }
 
