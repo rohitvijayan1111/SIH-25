@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'customer_main_screen.dart';
+import 'verification_screen.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
@@ -12,7 +13,9 @@ class ForgotPasswordScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Enter your email and we\'ll send you instructions on how to reset it'),
+            const Text(
+              'Enter your email and we\'ll send you instructions on how to reset it',
+            ),
             const SizedBox(height: 16),
             const TextField(decoration: InputDecoration(labelText: 'Email')),
             const SizedBox(height: 24),
@@ -21,7 +24,12 @@ class ForgotPasswordScreen extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CustomerMainScreen()));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const VerificationScreen(),
+                    ),
+                  );
                 },
                 child: const Text('Send'),
               ),

@@ -1,5 +1,9 @@
 // Welcome Screen
 
+import 'package:demo/screens/coop_dashboard.dart';
+import 'package:demo/screens/coop_members.dart';
+import 'package:demo/screens/earnings.dart';
+import 'package:demo/screens/farmer_profile.dart';
 import 'package:demo/screens/payment_details.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,6 +15,10 @@ import 'view_cart_screen.dart';
 import 'procurements_screen.dart';
 import '../auth/signin.dart';
 import 'CustomerScreens/signin_screen.dart';
+import 'coop_dashboard.dart';
+import 'coop_members.dart';
+import 'upload_produce.dart';
+import 'earnings.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -125,6 +133,67 @@ class WelcomeScreen extends StatelessWidget {
         label: "Procurements",
         color: Colors.indigo,
       ),
+
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const DashboardScreen()),
+          );
+        },
+        label: "Co-op MainScreen",
+        color: Colors.red,
+      ),
+
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const EarningsScreen()),
+          );
+        },
+        label: "Earnings Screen",
+        color: Colors.red,
+      ),
+
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const FarmerProfileScreen(),
+            ),
+          );
+        },
+        label: "Farmer's Profile",
+        color: Colors.red,
+      ),
+
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const UploadProduceScreen(),
+            ),
+          );
+        },
+        label: "Upload Produce",
+        color: Colors.red,
+      ),
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CooperativeMembersScreen(),
+            ),
+          );
+        },
+        label: "Co-op members",
+        color: Colors.red,
+      ),
+
       // 🔴 New Sign Out button
       _buildButton(
         onPressed: () async {
