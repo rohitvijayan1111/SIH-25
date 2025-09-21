@@ -1,3 +1,4 @@
+import 'package:demo/screens/CustomerScreens/agent.dart'; // make sure the path is correct
 import 'package:flutter/material.dart';
 
 class UploadProduceScreen extends StatelessWidget {
@@ -13,7 +14,7 @@ class UploadProduceScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// Header
+              /// Header with mic button
               Row(
                 children: [
                   IconButton(
@@ -30,7 +31,24 @@ class UploadProduceScreen extends StatelessWidget {
                           fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const SizedBox(width: 48), // to balance back button space
+                  // ✅ Round mic button
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.green.withOpacity(0.1),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.mic, color: Colors.green),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AgentsPage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -211,6 +229,7 @@ class UploadProduceScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
+
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
