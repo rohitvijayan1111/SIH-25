@@ -1,6 +1,7 @@
+import 'package:demo/screens/upload_produce.dart'; // Make sure this is the path to your UploadProduceScreen
 import 'package:flutter/material.dart';
+
 import 'CustomerScreens/customer_main_screen.dart';
-import 'welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -60,12 +61,9 @@ class HomeScreen extends StatelessWidget {
 
   // Navigation methods
   void navigateToUploadProduce(BuildContext context) {
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(content: Text('Navigate to Upload Produce page')),
-    // );
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+      MaterialPageRoute(builder: (context) => UploadProduceScreen()),
     );
   }
 
@@ -97,9 +95,7 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black87),
-          onPressed: () {
-            // Handle back button
-          },
+          onPressed: () {},
         ),
       ),
       body: Padding(
@@ -113,7 +109,7 @@ class HomeScreen extends StatelessWidget {
                 height: 120,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF8B5CF6), // Purple
+                  color: const Color(0xFF8B5CF6),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -128,7 +124,6 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header with title and arrow
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -168,32 +163,17 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       const Spacer(),
-
-                      // Icons and bottom text in same row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Row(
                             children: [
-                              Icon(
-                                Icons.upload,
-                                color: Colors.white70,
-                                size: 20,
-                              ),
+                              Icon(Icons.upload, color: Colors.white70, size: 20),
                               SizedBox(width: 16),
-                              Icon(
-                                Icons.agriculture,
-                                color: Colors.white70,
-                                size: 20,
-                              ),
+                              Icon(Icons.agriculture, color: Colors.white70, size: 20),
                               SizedBox(width: 16),
-                              Icon(
-                                Icons.inventory_2,
-                                color: Colors.white70,
-                                size: 20,
-                              ),
+                              Icon(Icons.inventory_2, color: Colors.white70, size: 20),
                             ],
                           ),
                           const Text(
@@ -211,9 +191,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
             // Browse Products Card
             GestureDetector(
               onTap: () => navigateToBrowseProducts(context),
@@ -221,7 +199,7 @@ class HomeScreen extends StatelessWidget {
                 height: 120,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF7DD3FC), // Light blue
+                  color: const Color(0xFF7DD3FC),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -236,7 +214,6 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header with title and arrow
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -276,10 +253,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       const Spacer(),
-
-                      // Icons and bottom text in same row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -328,9 +302,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
             // Farmer Services Card
             GestureDetector(
               onTap: () => navigateToFarmerServices(context),
@@ -338,7 +310,7 @@ class HomeScreen extends StatelessWidget {
                 height: 120,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10B981), // Green
+                  color: const Color(0xFF10B981),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -353,7 +325,6 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header with title and arrow
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -393,32 +364,17 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       const Spacer(),
-
-                      // Icons and bottom text in same row
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
-                              Icon(
-                                Icons.agriculture,
-                                color: Colors.white70,
-                                size: 20,
-                              ),
+                              Icon(Icons.agriculture, color: Colors.white70, size: 20),
                               SizedBox(width: 16),
-                              Icon(
-                                Icons.local_grocery_store,
-                                color: Colors.white70,
-                                size: 20,
-                              ),
+                              Icon(Icons.local_grocery_store, color: Colors.white70, size: 20),
                               SizedBox(width: 16),
-                              Icon(
-                                Icons.handshake,
-                                color: Colors.white70,
-                                size: 20,
-                              ),
+                              Icon(Icons.handshake, color: Colors.white70, size: 20),
                             ],
                           ),
                           Text(
