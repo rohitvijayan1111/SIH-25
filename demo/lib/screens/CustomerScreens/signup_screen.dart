@@ -1,5 +1,6 @@
+import 'package:demo/screens/CustomerScreens/location_screen.dart';
 import 'package:flutter/material.dart';
-import 'verification_screen.dart';
+import 'location_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -24,7 +25,7 @@ class SignUpScreen extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const VerificationScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const LocationScreen()));
                 },
                 child: const Text('Sign Up'),
               ),
