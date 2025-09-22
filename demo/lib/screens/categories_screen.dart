@@ -7,11 +7,6 @@ import '../widgets/service_card.dart';
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({Key? key}) : super(key: key);
 
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +50,7 @@ class CategoriesScreen extends StatelessWidget {
             ServiceCard(
               title: 'Browse Products',
               subtitle: 'Fruits & Veggies',
-              icons: const [Icons.circle, Icons.circle, Icons.circle],
+              icons: const [Icons.shopping_basket, Icons.eco],
               rightText: 'Lowest prices',
               gradient: const LinearGradient(
                 colors: [Color(0xFF2196F3), Color(0xFF03DAC6)],
@@ -69,12 +64,30 @@ class CategoriesScreen extends StatelessWidget {
               },
             ),
             ServiceCard(
+              title: 'Source and Sell',
+              subtitle: 'Buy and Sell produce',
+
+              icons: const [Icons.handshake, Icons.storefront, Icons.inventory],
+              rightText: 'Best quality guaranteed',
+              gradient: const LinearGradient(
+                colors: [Color(0xFF09203f), Color(0xFF537895)],
+
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              onTap: () {
+                context.read<AppController>().navigateToSection(
+                  ServiceSection.farmerServices,
+                );
+              },
+            ),
+            ServiceCard(
               title: 'Farmer Services',
               subtitle: 'Tools & Fertilizers',
               icons: const [Icons.handyman, Icons.agriculture, Icons.store],
               rightText: 'Best quality guaranteed',
               gradient: const LinearGradient(
-                colors: [Color(0xFF4CAF50), Color(0xFF8BC34A)],
+                colors: [Color(0xFF006400), Color(0xFF228B22)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),

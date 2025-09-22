@@ -77,7 +77,7 @@ class ServiceCard extends StatelessWidget {
                           .map(
                             (icon) => Padding(
                               padding: const EdgeInsets.only(right: 8),
-                              child: Icon(icon, color: Colors.white, size: 16),
+                              child: Icon(icon, color: Colors.white, size: 26),
                             ),
                           )
                           .toList(),
