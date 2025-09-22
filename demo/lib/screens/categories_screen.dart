@@ -77,7 +77,7 @@ class CategoriesScreen extends StatelessWidget {
               ),
               onTap: () {
                 context.read<AppController>().navigateToSection(
-                  ServiceSection.farmerServices,
+                  ServiceSection.sourceAndSell,
                 );
               },
             ),
@@ -93,7 +93,7 @@ class CategoriesScreen extends StatelessWidget {
               ),
               onTap: () {
                 context.read<AppController>().navigateToSection(
-                  ServiceSection.farmerServices,
+                  ServiceSection.farmerEssentials,
                 );
               },
             ),

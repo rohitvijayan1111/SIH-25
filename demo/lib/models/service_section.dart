@@ -4,7 +4,7 @@ enum ServiceSection {
   categories,
   uploadProduce,
   browseProducts,
-  farmerServices,
+  sourceAndSell,
   farmerEssentials,
 }
 
@@ -99,8 +99,8 @@ class ServiceSections {
         ),
       ],
     ),
-    ServiceSection.farmerServices: ServiceSectionConfig(
-      title: 'Farmer Services',
+    ServiceSection.sourceAndSell: ServiceSectionConfig(
+      title: 'Source and Sell',
       tabs: [
         TabConfig(
           label: 'Home',
