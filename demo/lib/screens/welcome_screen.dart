@@ -1,22 +1,16 @@
 // Welcome Screen
-
 import 'package:demo/screens/CSC_interaction_screen.dart';
-import 'package:demo/screens/Scanned_details.dart';
-import 'package:demo/screens/CustomerScreens/product_details_screen.dart';
-import 'package:demo/screens/coop_dashboard.dart';
-import 'package:demo/screens/coop_members.dart';
-import 'package:demo/screens/earnings.dart';
-import 'package:demo/screens/farmer_profile.dart';
+import 'package:demo/screens/CustomerScreens/agent.dart';
+import 'package:demo/screens/CustomerScreens/customer_main_screen.dart';
+import 'package:demo/screens/CustomerScreens/logistic.dart';
+import 'package:demo/screens/navigation_screen.dart';
 import 'package:demo/screens/payment_details.dart';
-import 'package:flutter/material.dart';
+import 'package:demo/screens/scanned_details.dart';
+import 'package:demo/screens/voice_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'CustomerScreens/customer_main_screen.dart';
-import 'home_page.dart';
-import 'voice_page.dart';
-import 'view_cart_screen.dart';
-import 'procurements_screen.dart';
 import '../auth/signin.dart';
 import 'CustomerScreens/signin_screen.dart';
 import 'coop_dashboard.dart';
@@ -34,12 +28,10 @@ class WelcomeScreen extends StatelessWidget {
       backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(), // smooth scroll
+          physics: const BouncingScrollPhysics(),
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              // Check if the screen is wide enough for a desktop layout
               bool isWideScreen = constraints.maxWidth > 600;
-
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
@@ -57,10 +49,7 @@ class WelcomeScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 40),
-
-                      // Buttons
                       _buildButtons(isWideScreen, context),
-
                       const SizedBox(height: 40),
                     ],
                   ),
@@ -73,14 +62,12 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  // 🔑 Sign out function
   Future<void> _signOut(BuildContext context) async {
     try {
-      await GoogleSignIn().signOut(); // Google sign out
+      await GoogleSignIn().signOut();
     } catch (_) {}
-    await FirebaseAuth.instance.signOut(); // Firebase sign out
+    await FirebaseAuth.instance.signOut();
 
-    // Navigate back to SignIn page
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => SignInPage()),
@@ -88,7 +75,6 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   Widget _buildButtons(bool isWideScreen, BuildContext context) {
-    // Buttons list
     final buttonWidgets = [
       _buildButton(
         onPressed: () {
@@ -104,10 +90,8 @@ class WelcomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            // MaterialPageRoute(builder: (context) => const HomePage()),
             MaterialPageRoute(
-              builder: (context) => const CustomerMainScreen(value: 1),
-            ),
+                builder: (context) =>  CustomerMainScreen(value: 1)),
           );
         },
         label: "Go to Home Page",
@@ -124,94 +108,30 @@ class WelcomeScreen extends StatelessWidget {
         color: Colors.green,
       ),
       _buildButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const SignInScreen()),
-        ),
-        label: 'Customer App',
-        color: Colors.blue,
-      ),
-      _buildButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ViewCartScreen()),
-          );
-        },
-        label: "View My Cart",
-        color: Colors.blue,
-      ),
-      _buildButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ProcurementsScreen()),
-          );
-        },
-        label: "Procurements",
-        color: Colors.indigo,
-      ),
-
-      _buildButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const DashboardScreen()),
-          );
-        },
-        label: "Co-op MainScreen",
-        color: Colors.red,
-      ),
-
-      _buildButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const EarningsScreen()),
-          );
-        },
-        label: "Earnings Screen",
-        color: Colors.red,
-      ),
-
-      _buildButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const FarmerProfileScreen(),
-            ),
+                builder: (context) => const LogisticsDetailsPage()),
           );
         },
-        label: "Farmer's Profile",
-        color: Colors.red,
+        label: "Logistics",
+        color: Colors.teal,
       ),
 
+
+
+   
       _buildButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const UploadProduceScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const AgentsPage()),
           );
         },
-        label: "Upload Produce",
-        color: Colors.red,
+        label: "Agent",
+        color: Colors.orange,
       ),
-      _buildButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CooperativeMembersScreen(),
-            ),
-          );
-        },
-        label: "Co-op members",
-        color: Colors.red,
-      ),
-
       _buildButton(
         onPressed: () {
           Navigator.push(
@@ -222,19 +142,17 @@ class WelcomeScreen extends StatelessWidget {
         label: "CSC Interaction Screen",
         color: Colors.green,
       ),
-
       _buildButton(
         onPressed: () {
           Navigator.push(
             context,
+            MaterialPageRoute(builder: (context) => const ScannedDetails()),
             MaterialPageRoute(builder: (context) => const ScannedDetails()),
           );
         },
         label: "Scanned Product Details",
         color: Colors.green,
       ),
-
-      // 🔴 New Sign Out button
       _buildButton(
         onPressed: () async {
           await _signOut(context);
@@ -242,8 +160,6 @@ class WelcomeScreen extends StatelessWidget {
         label: "Sign Out",
         color: Colors.red,
       ),
-
-      // Inside _buildButtons in welcome_screen.dart
       _buildButton(
         onPressed: () {
           Navigator.push(
@@ -272,7 +188,6 @@ class WelcomeScreen extends StatelessWidget {
     ];
 
     if (isWideScreen) {
-      // Wide screens: side by side
       return Wrap(
         spacing: 16.0,
         runSpacing: 16.0,
@@ -280,7 +195,6 @@ class WelcomeScreen extends StatelessWidget {
         children: buttonWidgets,
       );
     } else {
-      // Mobile: stacked
       return Column(
         children: [
           ...buttonWidgets.map(

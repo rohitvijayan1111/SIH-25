@@ -17,15 +17,17 @@ class UploadProduceScreen extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context); // Navigate back
+                    },
                     icon: const Icon(Icons.arrow_back),
                   ),
                   const Expanded(
                     child: Text(
                       "Upload Produce",
                       textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(width: 48), // to balance back button space
@@ -34,24 +36,29 @@ class UploadProduceScreen extends StatelessWidget {
               const SizedBox(height: 12),
 
               /// Upload Box
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.green[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.green.shade100),
-                ),
-                child: Column(
-                  children: const [
-                    Icon(Icons.camera_alt, color: Colors.green, size: 36),
-                    SizedBox(height: 8),
-                    Text(
-                      "Tap to capture or pick photo\nYour crop photo is required",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.green),
-                    ),
-                  ],
+              GestureDetector(
+                onTap: () {
+                  // TODO: Implement camera or gallery picker
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.green[50],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.green.shade100),
+                  ),
+                  child: Column(
+                    children: const [
+                      Icon(Icons.camera_alt, color: Colors.green, size: 36),
+                      SizedBox(height: 8),
+                      Text(
+                        "Tap to capture or pick photo\nYour crop photo is required",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.green),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -93,8 +100,8 @@ class UploadProduceScreen extends StatelessWidget {
                 child: Row(
                   children: List.generate(
                     5,
-                    (index) => const Icon(Icons.star,
-                        color: Colors.amber, size: 28),
+                    (index) =>
+                        const Icon(Icons.star, color: Colors.amber, size: 28),
                   ),
                 ),
               ),
@@ -197,7 +204,9 @@ class UploadProduceScreen extends StatelessWidget {
                       backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8))),
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: Add upload functionality
+                  },
                   child: const Text("+ Add to Cooperative Pool"),
                 ),
               ),
@@ -208,7 +217,9 @@ class UploadProduceScreen extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       side: const BorderSide(color: Colors.grey)),
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: Save draft functionality
+                  },
                   child: const Text("Save as Draft"),
                 ),
               ),
@@ -222,7 +233,6 @@ class UploadProduceScreen extends StatelessWidget {
 }
 
 /// --- Helper Widgets ---
-
 class _LabeledField extends StatelessWidget {
   final String label;
   final Widget child;
@@ -290,8 +300,7 @@ class _UploadTile extends StatelessWidget {
             ),
           ),
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               color: statusColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
