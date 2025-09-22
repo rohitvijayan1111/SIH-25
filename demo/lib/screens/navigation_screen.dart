@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'CustomerScreens/customer_main_screen.dart';
+import 'upload_produce.dart';
 import 'welcome_screen.dart';
 
 void main() {
@@ -65,7 +66,7 @@ class HomeScreen extends StatelessWidget {
     // );
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+      MaterialPageRoute(builder: (context) => const UploadProduceScreen()),
     );
   }
 

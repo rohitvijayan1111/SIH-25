@@ -16,14 +16,11 @@ import 'view_cart_screen.dart';
 import 'procurements_screen.dart';
 import '../auth/signin.dart';
 import 'CustomerScreens/signin_screen.dart';
-<<<<<<< HEAD
 import 'navigation_screen.dart';
-=======
 import 'coop_dashboard.dart';
 import 'coop_members.dart';
 import 'upload_produce.dart';
 import 'earnings.dart';
->>>>>>> b739b9daf4fc4ca75e4856ec845971798b77c87e
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
