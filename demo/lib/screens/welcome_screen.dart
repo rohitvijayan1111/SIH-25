@@ -13,6 +13,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:demo/screens/categories_screen.dart';
 
 import '../auth/signin.dart';
+import 'CustomerScreens/signin_screen.dart';
+import 'coop_dashboard.dart';
+import 'coop_members.dart';
+import 'upload_produce.dart';
+import 'earnings.dart';
+import 'navigation_screen.dart';
+import 'merge_products_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -125,6 +132,20 @@ class WelcomeScreen extends StatelessWidget {
         label: "Logistics",
         color: Colors.teal,
       ),
+
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const BundleCreationScreen(),
+            ),
+          );
+        },
+        label: "Merge Products",
+        color: Colors.teal,
+      ),
+
       _buildButton(
         onPressed: () {
           Navigator.push(
