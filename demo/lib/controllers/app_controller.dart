@@ -139,7 +139,7 @@ class AppController extends ChangeNotifier {
           case 0:
             return const CategoriesScreen(); // Home tab
           case 1:
-            return const ProcurementScreen(); // Tool Renting tab
+            return const HomeScreen(value: 1); // Tool Renting tab
           case 2:
             return const BusinessDashboard(); // Farmer Shop tab
           case 3:
