@@ -2,6 +2,8 @@ import 'package:demo/screens/upload_produce.dart'; // Make sure this is the path
 import 'package:flutter/material.dart';
 
 import 'CustomerScreens/customer_main_screen.dart';
+import 'welcome_screen.dart';
+import 'VendorScreens/vendor_main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -71,6 +73,13 @@ class HomeScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const CustomerMainScreen()),
+    );
+  }
+
+  void navigateToProcureSupplies(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const VendorApp()),
     );
   }
 
@@ -302,6 +311,122 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
+
+            const SizedBox(height: 16),
+            GestureDetector(
+              onTap: () => navigateToProcureSupplies(context),
+              child: Container(
+                height: 120,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF7DD3FC), // Light blue
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header with title and arrow
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Procure Supplies',
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Seeds & Fertilizers',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            width: 32,
+                            height: 32,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Icon(
+                              Icons.arrow_forward,
+                              color: Colors.black87,
+                              size: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const Spacer(),
+
+                      // Icons and bottom text in same row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.yellow,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Text(
+                            'Lowest prices',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
             const SizedBox(height: 16),
             // Farmer Services Card
             GestureDetector(

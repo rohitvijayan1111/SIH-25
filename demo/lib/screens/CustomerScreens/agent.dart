@@ -19,12 +19,15 @@ class _AgentsPageState extends State<AgentsPage> {
     {"name": "Carrots", "details": "20 kg • ₹30/kg • 1 week ago"},
   ];
 
+  // Define a constant light green for consistent usage
+  final Color lightGreen = const Color(0xFF4CAF50);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2196F3),
+        backgroundColor: lightGreen,
         title: const Text(
           "Add Produce",
           style: TextStyle(color: Colors.white),
@@ -84,7 +87,7 @@ class _AgentsPageState extends State<AgentsPage> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       shape: const CircleBorder(),
-                      backgroundColor: const Color(0xFF4CAF50),
+                      backgroundColor: lightGreen,
                       padding: const EdgeInsets.all(24),
                     ),
                     onPressed: () {
@@ -109,7 +112,7 @@ class _AgentsPageState extends State<AgentsPage> {
                         style: TextStyle(color: Color(0xFF616161)),
                       ),
                       trailing: IconButton(
-                        icon: const Icon(Icons.edit, color: Color(0xFF2196F3)),
+                        icon: Icon(Icons.edit, color: lightGreen),
                         onPressed: () {
                           // TODO: Allow manual editing
                         },
@@ -163,7 +166,7 @@ class _AgentsPageState extends State<AgentsPage> {
                           ),
                           trailing: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF2196F3),
+                              backgroundColor: lightGreen,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
@@ -190,7 +193,7 @@ class _AgentsPageState extends State<AgentsPage> {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF4CAF50),
+            backgroundColor: lightGreen,
             minimumSize: const Size(double.infinity, 50),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
