@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import '../models/service_section.dart';
 import '../screens/categories_screen.dart';
-import '../screens/upload_produce.dart';
+import '../screens/upload_produce_screen.dart';
 import '../screens/coop_dashboard.dart';
 import '../screens/CustomerScreens/home_screen.dart';
 import '../screens/CustomerScreens/orders_screen.dart';
 import '../screens/CustomerScreens/cart_screen.dart';
 import '../screens/VendorScreens/procurement/procurement_screen.dart';
 import '../screens/VendorScreens/dashboard/business_dashboard.dart';
+import '../screens/VendorScreens/dashboard/inventory_screen.dart';
+import '../screens/farmer_profile.dart';
 
 class AppController extends ChangeNotifier {
   ServiceSection _currentSection = ServiceSection.categories;
@@ -99,7 +101,7 @@ class AppController extends ChangeNotifier {
           case 2:
             return const DashboardScreen(); // Cooperative tab
           case 3:
-            return const ProfilePlaceholderScreen(); // Profile tab
+            return const FarmerProfileScreen(); // Profile tab
           default:
             return const CategoriesScreen();
         }
@@ -127,8 +129,10 @@ class AppController extends ChangeNotifier {
           case 1:
             return const BusinessDashboard(); // Farmer Shop tab
           case 2:
-            return const ProcurementScreen(); // Tool Renting tab
+            return const ProcurementScreen();
           case 3:
+            return const InventoryScreen(); // Tool Renting tab
+          case 4:
             return const ProfilePlaceholderScreen(); // Profile tab
           default:
             return const CategoriesScreen();

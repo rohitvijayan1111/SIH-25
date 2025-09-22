@@ -19,7 +19,7 @@ import 'CustomerScreens/signin_screen.dart';
 import 'navigation_screen.dart';
 import 'coop_dashboard.dart';
 import 'coop_members.dart';
-import 'upload_produce.dart';
+import 'upload_produce_coop.dart';
 import 'earnings.dart';
 
 import 'merge_products_screen.dart';

@@ -589,6 +589,7 @@ import 'models/product_model.dart';
 import 'widgets/category_card.dart';
 import 'widgets/product_card.dart';
 import 'widgets/search_bar.dart';
+import './favorites_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final int value;
@@ -697,10 +698,12 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CartScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const FavoritesScreen(),
+                ),
               );
             },
-            icon: const Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.favorite),
           ),
         ],
       ),

@@ -109,13 +109,18 @@ class ServiceSections {
         ),
         TabConfig(
           label: 'Dashboard',
-          icon: Icons.handyman_outlined,
-          activeIcon: Icons.handyman,
+          icon: Icons.dashboard_outlined,
+          activeIcon: Icons.dashboard,
         ),
         TabConfig(
           label: 'Procurement',
-          icon: Icons.store_outlined,
-          activeIcon: Icons.store,
+          icon: Icons.receipt_long_outlined,
+          activeIcon: Icons.receipt_long,
+        ),
+        TabConfig(
+          label: 'Inventory',
+          icon: Icons.inventory_2_outlined,
+          activeIcon: Icons.inventory,
         ),
         TabConfig(
           label: 'Profile',
@@ -134,8 +139,8 @@ class ServiceSections {
         ),
         TabConfig(
           label: 'Farmer Shop',
-          icon: Icons.handyman_outlined,
-          activeIcon: Icons.handyman,
+          icon: Icons.store_outlined,
+          activeIcon: Icons.store,
         ),
         TabConfig(
           label: 'Other Services',
