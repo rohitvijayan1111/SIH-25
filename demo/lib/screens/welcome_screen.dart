@@ -18,6 +18,7 @@ import 'coop_members.dart';
 import 'upload_produce.dart';
 import 'earnings.dart';
 import 'navigation_screen.dart';
+import 'merge_products_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -91,7 +92,8 @@ class WelcomeScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>  CustomerMainScreen(value: 1)),
+              builder: (context) => CustomerMainScreen(value: 1),
+            ),
           );
         },
         label: "Go to Home Page",
@@ -112,16 +114,27 @@ class WelcomeScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const LogisticsDetailsPage()),
+              builder: (context) => const LogisticsDetailsPage(),
+            ),
           );
         },
         label: "Logistics",
         color: Colors.teal,
       ),
 
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const BundleCreationScreen(),
+            ),
+          );
+        },
+        label: "Merge Products",
+        color: Colors.teal,
+      ),
 
-
-   
       _buildButton(
         onPressed: () {
           Navigator.push(
@@ -146,7 +159,6 @@ class WelcomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const ScannedDetails()),
             MaterialPageRoute(builder: (context) => const ScannedDetails()),
           );
         },
