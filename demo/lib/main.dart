@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/signin': (context) => SignInPage(),
-        '/productHistory': (context) => const ProductHistoryPage(),
+        // '/productHistory': (context) => const ProductHistoryPage(),
       },
       home: const MainScreen(),
     );

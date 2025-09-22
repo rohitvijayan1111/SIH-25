@@ -177,21 +177,19 @@ class WelcomeScreen extends StatelessWidget {
         label: "Scanned Product Details",
         color: Colors.green,
       ),
-
       // ✅ New Product History Button
-      _buildButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ProductHistoryPage(),
-            ),
-          );
-        },
-        label: "Product History",
-        color: Colors.blueGrey,
-      ),
-
+      // _buildButton(
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) => const ProductHistoryPage(),
+      //       ),
+      //     );
+      //   },
+      //   label: "Product History",
+      //   color: Colors.blueGrey,
+      // ),
       _buildButton(
         onPressed: () async {
           await _signOut(context);

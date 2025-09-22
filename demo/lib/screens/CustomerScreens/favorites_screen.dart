@@ -287,7 +287,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       context,
       MaterialPageRoute(
         builder: (_) =>
-            ProductDetailsScreen(product: product, products: favoriteProducts),
+            ProductDetailsScreen(product: product, products: [product]),
       ),
     );
   }

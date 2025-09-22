@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
@@ -253,25 +254,6 @@ class DashboardScreen extends StatelessWidget {
               const SizedBox(height: 80), // space for bottom nav
             ],
           ),
-        ),
-
-        /// Bottom Navigation Bar
-        bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: Colors.green,
-          unselectedItemColor: Colors.grey,
-          showUnselectedLabels: true,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.analytics),
-              label: "Analytics",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code_scanner),
-              label: "Scan",
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-          ],
         ),
       ),
     );
