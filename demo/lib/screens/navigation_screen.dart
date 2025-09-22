@@ -2,6 +2,7 @@ import 'package:demo/screens/upload_produce.dart'; // Make sure this is the path
 import 'package:flutter/material.dart';
 
 import 'CustomerScreens/customer_main_screen.dart';
+import 'upload_produce.dart';
 import 'welcome_screen.dart';
 import 'VendorScreens/vendor_main_screen.dart';
 
@@ -178,11 +179,23 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           const Row(
                             children: [
-                              Icon(Icons.upload, color: Colors.white70, size: 20),
+                              Icon(
+                                Icons.upload,
+                                color: Colors.white70,
+                                size: 20,
+                              ),
                               SizedBox(width: 16),
-                              Icon(Icons.agriculture, color: Colors.white70, size: 20),
+                              Icon(
+                                Icons.agriculture,
+                                color: Colors.white70,
+                                size: 20,
+                              ),
                               SizedBox(width: 16),
-                              Icon(Icons.inventory_2, color: Colors.white70, size: 20),
+                              Icon(
+                                Icons.inventory_2,
+                                color: Colors.white70,
+                                size: 20,
+                              ),
                             ],
                           ),
                           const Text(
@@ -495,11 +508,23 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.agriculture, color: Colors.white70, size: 20),
+                              Icon(
+                                Icons.agriculture,
+                                color: Colors.white70,
+                                size: 20,
+                              ),
                               SizedBox(width: 16),
-                              Icon(Icons.local_grocery_store, color: Colors.white70, size: 20),
+                              Icon(
+                                Icons.local_grocery_store,
+                                color: Colors.white70,
+                                size: 20,
+                              ),
                               SizedBox(width: 16),
-                              Icon(Icons.handshake, color: Colors.white70, size: 20),
+                              Icon(
+                                Icons.handshake,
+                                color: Colors.white70,
+                                size: 20,
+                              ),
                             ],
                           ),
                           Text(
