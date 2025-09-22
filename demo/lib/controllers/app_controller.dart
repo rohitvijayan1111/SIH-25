@@ -120,7 +120,20 @@ class AppController extends ChangeNotifier {
             return const CategoriesScreen();
         }
 
-      case ServiceSection.farmerServices:
+      case ServiceSection.sourceAndSell:
+        switch (_currentTabIndex) {
+          case 0:
+            return const CategoriesScreen(); // Home tab
+          case 1:
+            return const BusinessDashboard(); // Farmer Shop tab
+          case 2:
+            return const ProcurementScreen(); // Tool Renting tab
+          case 3:
+            return const ProfilePlaceholderScreen(); // Profile tab
+          default:
+            return const CategoriesScreen();
+        }
+      case ServiceSection.farmerEssentials:
         switch (_currentTabIndex) {
           case 0:
             return const CategoriesScreen(); // Home tab

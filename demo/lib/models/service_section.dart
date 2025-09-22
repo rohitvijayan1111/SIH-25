@@ -1,134 +1,11 @@
-// import 'package:flutter/material.dart';
-
-// enum ServiceSection {
-//   categories,
-//   uploadProduce,
-//   browseProducts,
-//   farmerServices,
-// }
-
-// class ServiceSectionConfig {
-//   final String title;
-//   final List<TabConfig> tabs;
-
-//   ServiceSectionConfig({required this.title, required this.tabs});
-// }
-
-// class TabConfig {
-//   final String label;
-//   final IconData icon;
-//   final IconData activeIcon;
-
-//   TabConfig({
-//     required this.label,
-//     required this.icon,
-//     required this.activeIcon,
-//   });
-// }
-
-// class ServiceSections {
-//   static Map<ServiceSection, ServiceSectionConfig> configs = {
-//     ServiceSection.categories: ServiceSectionConfig(
-//       title: 'Categories',
-//       tabs: [
-//         TabConfig(
-//           label: 'Home',
-//           icon: Icons.home_outlined,
-//           activeIcon: Icons.home,
-//         ),
-//         TabConfig(
-//           label: 'Profile',
-//           icon: Icons.person_outline,
-//           activeIcon: Icons.person,
-//         ),
-//       ],
-//     ),
-//     // ServiceSection.uploadProduce: ServiceSectionConfig(
-//     //   title: 'Upload Produce',
-//     //   tabs: [
-//     //     TabConfig(
-//     //       label: 'Upload Product',
-//     //       icon: Icons.upload_outlined,
-//     //       activeIcon: Icons.upload,
-//     //     ),
-//     //     TabConfig(
-//     //       label: 'Cooperative',
-//     //       icon: Icons.group_outlined,
-//     //       activeIcon: Icons.group,
-//     //     ),
-//     //   ],
-//     // ),
-//     ServiceSection.uploadProduce: ServiceSectionConfig(
-//       title: 'Upload Produce',
-//       tabs: [
-//         TabConfig(
-//           label: 'Home',
-//           icon: Icons.home_outlined,
-//           activeIcon: Icons.home,
-//         ),
-//         TabConfig(
-//           label: 'Upload Product',
-//           icon: Icons.upload_outlined,
-//           activeIcon: Icons.upload,
-//         ),
-//         TabConfig(
-//           label: 'Cooperative',
-//           icon: Icons.group_outlined,
-//           activeIcon: Icons.group,
-//         ),
-//         TabConfig(
-//           label: 'Profile',
-//           icon: Icons.person_outline,
-//           activeIcon: Icons.person,
-//         ),
-//       ],
-//     ),
-
-//     ServiceSection.browseProducts: ServiceSectionConfig(
-//       title: 'Browse Products',
-//       tabs: [
-//         TabConfig(
-//           label: 'Browse',
-//           icon: Icons.search_outlined,
-//           activeIcon: Icons.search,
-//         ),
-//         TabConfig(
-//           label: 'Order',
-//           icon: Icons.shopping_bag_outlined,
-//           activeIcon: Icons.shopping_bag,
-//         ),
-//         TabConfig(
-//           label: 'Cart',
-//           icon: Icons.shopping_cart_outlined,
-//           activeIcon: Icons.shopping_cart,
-//         ),
-//       ],
-//     ),
-//     ServiceSection.farmerServices: ServiceSectionConfig(
-//       title: 'Farmer Services',
-//       tabs: [
-//         TabConfig(
-//           label: 'Tool Renting',
-//           icon: Icons.handyman_outlined,
-//           activeIcon: Icons.handyman,
-//         ),
-//         TabConfig(
-//           label: 'Farmer Shop',
-//           icon: Icons.store_outlined,
-//           activeIcon: Icons.store,
-//         ),
-//       ],
-//     ),
-//   };
-// }
-
 import 'package:flutter/material.dart';
 
 enum ServiceSection {
   categories,
   uploadProduce,
   browseProducts,
-  farmerServices,
+  sourceAndSell,
+  farmerEssentials,
 }
 
 class ServiceSectionConfig {
@@ -222,8 +99,8 @@ class ServiceSections {
         ),
       ],
     ),
-    ServiceSection.farmerServices: ServiceSectionConfig(
-      title: 'Farmer Services',
+    ServiceSection.sourceAndSell: ServiceSectionConfig(
+      title: 'Source and Sell',
       tabs: [
         TabConfig(
           label: 'Home',
@@ -231,12 +108,37 @@ class ServiceSections {
           activeIcon: Icons.home,
         ),
         TabConfig(
-          label: 'Tool Renting',
+          label: 'Dashboard',
           icon: Icons.handyman_outlined,
           activeIcon: Icons.handyman,
         ),
         TabConfig(
+          label: 'Procurement',
+          icon: Icons.store_outlined,
+          activeIcon: Icons.store,
+        ),
+        TabConfig(
+          label: 'Profile',
+          icon: Icons.person_outline,
+          activeIcon: Icons.person,
+        ),
+      ],
+    ),
+    ServiceSection.farmerEssentials: ServiceSectionConfig(
+      title: 'Farmer Essentials',
+      tabs: [
+        TabConfig(
+          label: 'Home',
+          icon: Icons.home_outlined,
+          activeIcon: Icons.home,
+        ),
+        TabConfig(
           label: 'Farmer Shop',
+          icon: Icons.handyman_outlined,
+          activeIcon: Icons.handyman,
+        ),
+        TabConfig(
+          label: 'Other Services',
           icon: Icons.store_outlined,
           activeIcon: Icons.store,
         ),
