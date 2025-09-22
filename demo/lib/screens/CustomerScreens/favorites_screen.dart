@@ -286,7 +286,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => ProductDetailsScreen(productName: product.name),
+        builder: (_) =>
+            ProductDetailsScreen(product: product, products: [product]),
       ),
     );
   }

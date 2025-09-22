@@ -11,6 +11,8 @@ class Globals {
 
 // Global user state
 String? globalUserId;
+Map<String, Map<String, List<int>>> gcart = {};
+
 String? globalUsername;
 String? globalEmail;
 int? globaltheme = 1;
@@ -25,7 +27,6 @@ Future<void> addToGlobalCart(Map<String, dynamic> product) async {
   await prefs.setString('cart', jsonEncode(globalCart));
 }
 
-/// Clear the global cart
 Future<void> clearGlobalCart() async {
   globalCart.clear();
   final prefs = await SharedPreferences.getInstance();

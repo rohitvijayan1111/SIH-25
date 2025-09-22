@@ -1,479 +1,26 @@
-// import 'package:flutter/material.dart';
-// import 'Widgets/product_card.dart';
-// import 'models/product_model.dart';
-
-// class ProductDetailsScreen extends StatefulWidget {
-//   final Product product;
-//   final List<Product> products;
-
-//   const ProductDetailsScreen({
-//     super.key,
-//     required this.product,
-//     required this.products,
-//   });
-
-//   @override
-//   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
-// }
-
-// class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-//   int quantity = 1;
-
-//   void _toggleFavorite(Product product) {
-//     setState(() {
-//       product.isFavorite = !product.isFavorite;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final product = widget.product;
-
-//     double price = double.tryParse(product.price) ?? 0.0;
-//     double total = price * quantity;
-
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       appBar: AppBar(
-//         title: Text(
-//           product.name,
-//           style: const TextStyle(
-//             color: Colors.black87,
-//             fontWeight: FontWeight.w600,
-//           ),
-//         ),
-//         backgroundColor: Colors.white,
-//         elevation: 0,
-//         iconTheme: const IconThemeData(color: Colors.black87),
-//         actions: [
-//           IconButton(
-//             onPressed: () => _toggleFavorite(product),
-//             icon: Icon(
-//               product.isFavorite ? Icons.favorite : Icons.favorite_border,
-//               color: Colors.redAccent,
-//             ),
-//           ),
-//         ],
-//       ),
-//       body: SingleChildScrollView(
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Product Image
-//             AspectRatio(
-//               aspectRatio: 16 / 9,
-//               child: Image.network(product.imageUrl, fit: BoxFit.cover),
-//             ),
-
-//             // Product Info
-//             Padding(
-//               padding: const EdgeInsets.all(16),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(
-//                     product.name,
-//                     style: const TextStyle(
-//                       fontSize: 22,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.black87,
-//                     ),
-//                   ),
-//                   const SizedBox(height: 8),
-//                   Text(
-//                     "Category: ${product.category}",
-//                     style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-//                   ),
-//                   const SizedBox(height: 4),
-//                   Text(
-//                     "Farmer: ${product.farmerName}",
-//                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-//                   ),
-//                   const SizedBox(height: 16),
-//                   Text(
-//                     product.description,
-//                     style: const TextStyle(
-//                       fontSize: 15,
-//                       color: Colors.black87,
-//                       height: 1.4,
-//                     ),
-//                   ),
-//                   const SizedBox(height: 20),
-
-//                   // Quantity Selector & Price
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       // Quantity
-//                       Row(
-//                         children: [
-//                           IconButton(
-//                             onPressed: () {
-//                               setState(() {
-//                                 if (quantity > 1) quantity--;
-//                               });
-//                             },
-//                             icon: const Icon(Icons.remove_circle_outline),
-//                           ),
-//                           Text(
-//                             "$quantity",
-//                             style: const TextStyle(
-//                               fontSize: 18,
-//                               fontWeight: FontWeight.w600,
-//                             ),
-//                           ),
-//                           IconButton(
-//                             onPressed: () {
-//                               setState(() {
-//                                 quantity++;
-//                               });
-//                             },
-//                             icon: const Icon(Icons.add_circle_outline),
-//                           ),
-//                         ],
-//                       ),
-
-//                       // Price
-//                       Column(
-//                         crossAxisAlignment: CrossAxisAlignment.end,
-//                         children: [
-//                           Text(
-//                             "₹${price.toStringAsFixed(2)} each",
-//                             style: const TextStyle(
-//                               fontSize: 14,
-//                               color: Colors.grey,
-//                             ),
-//                           ),
-//                           Text(
-//                             "₹${total.toStringAsFixed(2)}",
-//                             style: const TextStyle(
-//                               fontSize: 20,
-//                               fontWeight: FontWeight.bold,
-//                               color: Color(0xFF4CAF50),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                   const SizedBox(height: 20),
-
-//                   // Add to Cart Button
-//                   SizedBox(
-//                     width: double.infinity,
-//                     child: ElevatedButton.icon(
-//                       onPressed: () {
-//                         ScaffoldMessenger.of(context).showSnackBar(
-//                           SnackBar(
-//                             content: Text(
-//                               "${product.name} added to cart (x$quantity)",
-//                             ),
-//                             duration: const Duration(seconds: 2),
-//                           ),
-//                         );
-//                       },
-//                       icon: const Icon(Icons.shopping_cart),
-//                       label: const Text(
-//                         "Add to Cart",
-//                         style: TextStyle(fontSize: 16),
-//                       ),
-//                       style: ElevatedButton.styleFrom(
-//                         backgroundColor: const Color(0xFF4CAF50),
-//                         foregroundColor: Colors.white,
-//                         padding: const EdgeInsets.symmetric(vertical: 14),
-//                         shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(12),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   const SizedBox(height: 30),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// import 'package:flutter/material.dart';
-// import 'Widgets/product_card.dart';
-// import 'models/product_model.dart';
-
-// class ProductDetailsScreen extends StatefulWidget {
-//   final Product product;
-//   final List<Product> products;
-
-//   const ProductDetailsScreen({
-//     super.key,
-//     required this.product,
-//     required this.products,
-//   });
-
-//   @override
-//   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
-// }
-
-// class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-//   int quantity = 1;
-
-//   void _toggleFavorite(Product product) {
-//     setState(() {
-//       product.isFavorite = !product.isFavorite;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final product = widget.product;
-
-//     double price = double.tryParse(product.price) ?? 0.0;
-//     double total = price * quantity;
-
-//     // Dummy batches based on the product price
-//     final List<Map<String, dynamic>> batches = [
-//       {"batch": "Small Pack", "multiplier": 0.5},
-//       {"batch": "Medium Pack", "multiplier": 1.0},
-//       {"batch": "Large Pack", "multiplier": 2.0},
-//       {"batch": "Family Pack", "multiplier": 5.0},
-//     ];
-
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       appBar: AppBar(
-//         title: Text(
-//           product.name,
-//           style: const TextStyle(
-//             color: Colors.black87,
-//             fontWeight: FontWeight.w600,
-//           ),
-//         ),
-//         backgroundColor: Colors.white,
-//         elevation: 0,
-//         iconTheme: const IconThemeData(color: Colors.black87),
-//         actions: [
-//           IconButton(
-//             onPressed: () => _toggleFavorite(product),
-//             icon: Icon(
-//               product.isFavorite ? Icons.favorite : Icons.favorite_border,
-//               color: Colors.redAccent,
-//             ),
-//           ),
-//         ],
-//       ),
-//       body: SingleChildScrollView(
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Product Image
-//             AspectRatio(
-//               aspectRatio: 16 / 9,
-//               child: Image.network(product.imageUrl, fit: BoxFit.cover),
-//             ),
-
-//             // Product Info
-//             Padding(
-//               padding: const EdgeInsets.all(16),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(
-//                     product.name,
-//                     style: const TextStyle(
-//                       fontSize: 22,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.black87,
-//                     ),
-//                   ),
-//                   const SizedBox(height: 8),
-//                   Text(
-//                     "Category: ${product.category}",
-//                     style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-//                   ),
-//                   const SizedBox(height: 4),
-//                   Text(
-//                     "Farmer: ${product.farmerName}",
-//                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-//                   ),
-//                   const SizedBox(height: 16),
-//                   Text(
-//                     product.description,
-//                     style: const TextStyle(
-//                       fontSize: 15,
-//                       color: Colors.black87,
-//                       height: 1.4,
-//                     ),
-//                   ),
-//                   const SizedBox(height: 20),
-
-//                   // Quantity Selector & Price
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       // Quantity
-//                       Row(
-//                         children: [
-//                           IconButton(
-//                             onPressed: () {
-//                               setState(() {
-//                                 if (quantity > 1) quantity--;
-//                               });
-//                             },
-//                             icon: const Icon(Icons.remove_circle_outline),
-//                           ),
-//                           Text(
-//                             "$quantity",
-//                             style: const TextStyle(
-//                               fontSize: 18,
-//                               fontWeight: FontWeight.w600,
-//                             ),
-//                           ),
-//                           IconButton(
-//                             onPressed: () {
-//                               setState(() {
-//                                 quantity++;
-//                               });
-//                             },
-//                             icon: const Icon(Icons.add_circle_outline),
-//                           ),
-//                         ],
-//                       ),
-
-//                       // Price
-//                       Column(
-//                         crossAxisAlignment: CrossAxisAlignment.end,
-//                         children: [
-//                           Text(
-//                             "₹${price.toStringAsFixed(2)} each",
-//                             style: const TextStyle(
-//                               fontSize: 14,
-//                               color: Colors.grey,
-//                             ),
-//                           ),
-//                           Text(
-//                             "₹${total.toStringAsFixed(2)}",
-//                             style: const TextStyle(
-//                               fontSize: 20,
-//                               fontWeight: FontWeight.bold,
-//                               color: Color(0xFF4CAF50),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                   const SizedBox(height: 20),
-
-//                   // Add to Cart Button
-//                   SizedBox(
-//                     width: double.infinity,
-//                     child: ElevatedButton.icon(
-//                       onPressed: () {
-//                         ScaffoldMessenger.of(context).showSnackBar(
-//                           SnackBar(
-//                             content: Text(
-//                               "${product.name} added to cart (x$quantity)",
-//                             ),
-//                             duration: const Duration(seconds: 2),
-//                           ),
-//                         );
-//                       },
-//                       icon: const Icon(Icons.shopping_cart),
-//                       label: const Text(
-//                         "Add to Cart",
-//                         style: TextStyle(fontSize: 16),
-//                       ),
-//                       style: ElevatedButton.styleFrom(
-//                         backgroundColor: const Color(0xFF4CAF50),
-//                         foregroundColor: Colors.white,
-//                         padding: const EdgeInsets.symmetric(vertical: 14),
-//                         shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(12),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   const SizedBox(height: 30),
-
-//                   // Available Batches Section
-//                   const Text(
-//                     "Available Batches",
-//                     style: TextStyle(
-//                       fontSize: 18,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.black87,
-//                     ),
-//                   ),
-//                   const SizedBox(height: 12),
-//                   ListView.builder(
-//                     shrinkWrap: true,
-//                     physics: const NeverScrollableScrollPhysics(),
-//                     itemCount: batches.length,
-//                     itemBuilder: (context, index) {
-//                       final batch = batches[index];
-//                       double batchPrice = price * batch["multiplier"];
-
-//                       return Card(
-//                         margin: const EdgeInsets.symmetric(vertical: 8),
-//                         shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(12),
-//                         ),
-//                         elevation: 2,
-//                         child: ListTile(
-//                           contentPadding: const EdgeInsets.all(12),
-//                           title: Text(
-//                             batch["batch"],
-//                             style: const TextStyle(
-//                               fontWeight: FontWeight.w600,
-//                               fontSize: 16,
-//                             ),
-//                           ),
-//                           subtitle: Text(
-//                             "₹${batchPrice.toStringAsFixed(2)}",
-//                             style: const TextStyle(
-//                               fontSize: 14,
-//                               color: Colors.black54,
-//                             ),
-//                           ),
-//                           trailing: ElevatedButton(
-//                             onPressed: () {
-//                               ScaffoldMessenger.of(context).showSnackBar(
-//                                 SnackBar(
-//                                   content: Text(
-//                                     "${batch["batch"]} added to cart",
-//                                   ),
-//                                   duration: const Duration(seconds: 2),
-//                                 ),
-//                               );
-//                             },
-//                             style: ElevatedButton.styleFrom(
-//                               backgroundColor: const Color(0xFF4CAF50),
-//                               foregroundColor: Colors.white,
-//                               shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(8),
-//                               ),
-//                             ),
-//                             child: const Text("Add"),
-//                           ),
-//                         ),
-//                       );
-//                     },
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 // import 'dart:math';
 // import 'package:flutter/material.dart';
+// import '../../global.dart';
 // import 'models/product_model.dart';
+// import 'product_history.dart';
+
+// class LogisticProvider {
+//   final String name;
+//   final double baseValue;
+//   final double ratio;
+
+//   LogisticProvider({
+//     required this.name,
+//     required this.baseValue,
+//     required this.ratio,
+//   });
+
+//   double calculateCharge(int daysFromNow, int qty) {
+//     // service charge = baseValue + ratio * days + random factor
+//     return (baseValue + (ratio * daysFromNow) + Random().nextDouble() * 10) *
+//         qty;
+//   }
+// }
 
 // class ProductDetailsScreen extends StatefulWidget {
 //   final Product product;
@@ -490,42 +37,53 @@
 // }
 
 // class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-//   int selectedBatchIndex = 0; // Track which batch is selected
-
 //   final Random random = Random();
-
 //   late List<Map<String, dynamic>> batches;
+//   Product? product;
+//   Map<int, int> cartQuantities = {}; // batchIndex -> quantity
+//   Map<int, int> selectedProviders = {}; // batchIndex -> providerIndex
+//   Map<int, DateTime> selectedDates = {}; // batchIndex -> date
+//   Map<int, double> selectedCharges = {}; // batchIndex -> charge
+
+//   final List<LogisticProvider> logisticsProviders = List.generate(5, (i) {
+//     double base = (40 + Random().nextInt(30)) as double; // base 40–70
+//     double ratio = (5 + Random().nextInt(10)) as double; // ratio 5–15
+//     return LogisticProvider(
+//       name: "Provider ${i + 1}",
+//       baseValue: base.toDouble(),
+//       ratio: ratio.toDouble(),
+//     );
+//   });
 
 //   @override
 //   void initState() {
 //     super.initState();
-
 //     double basePrice = double.tryParse(widget.product.price) ?? 0.0;
+//     product = widget.product;
+//     DateTime today = DateTime.now();
 
-//     // Dummy sellers/batches
-//     batches = [
-//       {
-//         "seller": "Farmer Nanda",
-//         "price": basePrice,
-//         "stock": 100,
-//         "expiry": "21/03/2026",
+//     // Generate dummy batches with dynamic arrival & expiry dates
+//     batches = List.generate(3, (i) {
+//       // Expiry: 200–700 days from today
+//       DateTime expiry = today.add(Duration(days: 10 + random.nextInt(40)));
+
+//       // Arrival: 3–30 days from today (but < expiry)
+//       DateTime arrival = today.add(Duration(days: 3 + random.nextInt(20)));
+
+//       if (arrival.isAfter(expiry)) {
+//         arrival = expiry.subtract(const Duration(days: 10));
+//       }
+
+//       return {
+//         "seller": ["Farmer Nanda", "AgroMart", "Green Valley"][i],
+//         "price": basePrice * (1 + (i - 1) * 0.2), // vary price
+//         "stock": [100, 190, 50][i],
+//         "unit": ["2kg per pack", "1kg per pack", "500g per pack"][i],
+//         "expiry": expiry,
+//         "arrival": arrival,
 //         "stars": random.nextInt(5) + 1,
-//       },
-//       {
-//         "seller": "AgroMart",
-//         "price": basePrice * 0.8,
-//         "stock": 190,
-//         "expiry": "25/11/2025",
-//         "stars": random.nextInt(5) + 1,
-//       },
-//       {
-//         "seller": "Green Valley",
-//         "price": basePrice * 1.1,
-//         "stock": 50,
-//         "expiry": "10/08/2026",
-//         "stars": random.nextInt(5) + 1,
-//       },
-//     ];
+//       };
+//     });
 //   }
 
 //   Widget buildStars(int count) {
@@ -539,6 +97,24 @@
 //         ),
 //       ),
 //     );
+//   }
+
+//   double calculateTotal() {
+//     double total = 0.0;
+//     cartQuantities.forEach((index, qty) {
+//       total += batches[index]["price"] * qty;
+//     });
+//     return total;
+//   }
+
+//   void updateCart(int index, int qty) {
+//     setState(() {
+//       if (qty > 0) {
+//         cartQuantities[index] = qty;
+//       } else {
+//         cartQuantities.remove(index);
+//       }
+//     });
 //   }
 
 //   @override
@@ -556,168 +132,472 @@
 //         elevation: 0,
 //         iconTheme: const IconThemeData(color: Colors.black87),
 //       ),
-//       body: SingleChildScrollView(
-//         padding: const EdgeInsets.all(16),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Product Image
-//             AspectRatio(
-//               aspectRatio: 16 / 9,
-//               child: Image.network(product.imageUrl, fit: BoxFit.cover),
-//             ),
-//             const SizedBox(height: 20),
-
-//             // Available Batches
-//             const Text(
-//               "Available Batches",
-//               style: TextStyle(
-//                 fontSize: 18,
-//                 fontWeight: FontWeight.bold,
-//                 color: Colors.black87,
-//               ),
-//             ),
-//             const SizedBox(height: 12),
-
-//             ListView.builder(
-//               shrinkWrap: true,
-//               physics: const NeverScrollableScrollPhysics(),
-//               itemCount: batches.length,
-//               itemBuilder: (context, index) {
-//                 final batch = batches[index];
-//                 bool isSelected = index == selectedBatchIndex;
-
-//                 return GestureDetector(
-//                   onTap: () {
-//                     setState(() {
-//                       selectedBatchIndex = index;
-//                     });
-//                   },
-//                   child: Card(
-//                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(12),
-//                       side: BorderSide(
-//                         color: isSelected
-//                             ? const Color(0xFF4CAF50)
-//                             : Colors.grey.shade300,
-//                         width: 2,
-//                       ),
+//       body: Column(
+//         children: [
+//           Expanded(
+//             child: SingleChildScrollView(
+//               padding: const EdgeInsets.all(16),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   // Product Image
+//                   AspectRatio(
+//                     aspectRatio: 16 / 9,
+//                     child: Image.network(product.imageUrl, fit: BoxFit.cover),
+//                   ),
+//                   const SizedBox(height: 20),
+//                   // Product Details Section
+//                   Padding(
+//                     padding: const EdgeInsets.symmetric(vertical: 16),
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Text(
+//                           product.name,
+//                           style: const TextStyle(
+//                             fontSize: 20,
+//                             fontWeight: FontWeight.bold,
+//                             color: Colors.black87,
+//                           ),
+//                         ),
+//                         const SizedBox(height: 4),
+//                         Text(
+//                           product.category,
+//                           style: const TextStyle(
+//                             fontSize: 14,
+//                             color: Colors.black54,
+//                           ),
+//                         ),
+//                         const SizedBox(height: 8),
+//                         Text(
+//                           product.description,
+//                           style: const TextStyle(
+//                             fontSize: 14,
+//                             color: Colors.black87,
+//                           ),
+//                         ),
+//                       ],
 //                     ),
-//                     elevation: isSelected ? 4 : 1,
-//                     margin: const EdgeInsets.symmetric(vertical: 8),
-//                     child: Padding(
-//                       padding: const EdgeInsets.all(16),
-//                       child: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           // Price + Stars
-//                           Row(
-//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   ),
+//                   const SizedBox(height: 20),
+
+//                   // Available Batches
+//                   const Text(
+//                     "Available Batches",
+//                     style: TextStyle(
+//                       fontSize: 18,
+//                       fontWeight: FontWeight.bold,
+//                       color: Colors.black87,
+//                     ),
+//                   ),
+//                   const SizedBox(height: 12),
+
+//                   ListView.builder(
+//                     shrinkWrap: true,
+//                     physics: const NeverScrollableScrollPhysics(),
+//                     itemCount: batches.length,
+//                     itemBuilder: (context, index) {
+//                       final batch = batches[index];
+//                       int qty = cartQuantities[index] ?? 0;
+
+//                       DateTime expiry = batch["expiry"];
+//                       DateTime arrival = batch["arrival"];
+//                       int expiryDays = expiry.difference(DateTime.now()).inDays;
+//                       int arrivalDays = arrival
+//                           .difference(DateTime.now())
+//                           .inDays;
+
+//                       // Date options: tomorrow → 10 days
+//                       List<DateTime> dateOptions = List.generate(
+//                         10,
+//                         (i) => DateTime.now().add(Duration(days: i + 1)),
+//                       );
+
+//                       return Card(
+//                         shape: RoundedRectangleBorder(
+//                           borderRadius: BorderRadius.circular(16),
+//                         ),
+//                         elevation: qty > 0 ? 6 : 2,
+//                         margin: const EdgeInsets.symmetric(vertical: 10),
+//                         child: Padding(
+//                           padding: const EdgeInsets.all(16),
+//                           child: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
 //                             children: [
-//                               Text(
-//                                 "₹${batch["price"].toStringAsFixed(2)}",
-//                                 style: const TextStyle(
-//                                   fontSize: 18,
-//                                   fontWeight: FontWeight.bold,
-//                                   color: Color(0xFF4CAF50),
-//                                 ),
+//                               // Row: Price + Stars
+//                               Row(
+//                                 mainAxisAlignment:
+//                                     MainAxisAlignment.spaceBetween,
+//                                 children: [
+//                                   Text(
+//                                     "₹${batch["price"].toStringAsFixed(2)}",
+//                                     style: const TextStyle(
+//                                       fontSize: 20,
+//                                       fontWeight: FontWeight.bold,
+//                                       color: Color(0xFF4CAF50),
+//                                     ),
+//                                   ),
+//                                   buildStars(batch["stars"]),
+//                                 ],
 //                               ),
-//                               buildStars(batch["stars"]),
+//                               const SizedBox(height: 12),
+
+//                               // Seller Info
+//                               Row(
+//                                 children: [
+//                                   const Icon(
+//                                     Icons.storefront,
+//                                     size: 18,
+//                                     color: Colors.grey,
+//                                   ),
+//                                   const SizedBox(width: 6),
+//                                   Text(
+//                                     batch["seller"],
+//                                     style: const TextStyle(
+//                                       fontWeight: FontWeight.w600,
+//                                       fontSize: 14,
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
+//                               const SizedBox(height: 6),
+
+//                               // Stock + Unit
+//                               Row(
+//                                 children: [
+//                                   const Icon(
+//                                     Icons.inventory,
+//                                     size: 18,
+//                                     color: Colors.grey,
+//                                   ),
+//                                   const SizedBox(width: 6),
+//                                   Text(
+//                                     "${batch["stock"]} packs • ${batch["unit"]}",
+//                                   ),
+//                                 ],
+//                               ),
+//                               const SizedBox(height: 6),
+
+//                               // Expiry Date
+//                               Row(
+//                                 children: [
+//                                   const Icon(
+//                                     Icons.event_busy,
+//                                     size: 18,
+//                                     color: Colors.redAccent,
+//                                   ),
+//                                   const SizedBox(width: 6),
+//                                   Text(
+//                                     "Expiry: ${expiry.day}/${expiry.month}/${expiry.year} "
+//                                     "(${expiryDays}d left)",
+//                                     style: const TextStyle(
+//                                       color: Colors.redAccent,
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
+//                               const SizedBox(height: 6),
+
+//                               // Arrival Date
+//                               Row(
+//                                 children: [
+//                                   const Icon(
+//                                     Icons.local_shipping,
+//                                     size: 18,
+//                                     color: Colors.blue,
+//                                   ),
+//                                   const SizedBox(width: 6),
+//                                   Text(
+//                                     "Arrival: ${arrival.day}/${arrival.month}/${arrival.year} "
+//                                     "(${arrivalDays}d left)",
+//                                     style: const TextStyle(color: Colors.blue),
+//                                   ),
+//                                 ],
+//                               ),
+
+//                               const Divider(height: 20, thickness: 1),
+
+//                               // Logistics Date Dropdown
+//                               DropdownButton<DateTime>(
+//                                 value: selectedDates[index],
+//                                 hint: const Text(
+//                                   "Select Expected Arrival Date",
+//                                 ),
+//                                 onChanged: (date) {
+//                                   setState(() {
+//                                     selectedDates[index] = date!;
+//                                     int daysFromNow = date
+//                                         .difference(DateTime.now())
+//                                         .inDays;
+
+//                                     // calculate charges for all providers
+//                                     List<double> charges = logisticsProviders
+//                                         .map(
+//                                           (p) => p.calculateCharge(
+//                                             daysFromNow,
+//                                             qty > 0 ? qty : 1,
+//                                           ),
+//                                         )
+//                                         .toList();
+
+//                                     // pick cheapest provider as default
+//                                     int minIndex = charges.indexOf(
+//                                       charges.reduce(min),
+//                                     );
+//                                     selectedProviders[index] = minIndex;
+//                                     selectedCharges[index] = charges[minIndex];
+//                                   });
+//                                 },
+//                                 items: dateOptions.map((d) {
+//                                   return DropdownMenuItem(
+//                                     value: d,
+//                                     child: Text(
+//                                       "${d.day}/${d.month}/${d.year}",
+//                                     ),
+//                                   );
+//                                 }).toList(),
+//                               ),
+
+//                               // Provider Dropdown (only show if date selected)
+//                               if (selectedDates.containsKey(index)) ...[
+//                                 DropdownButton<int>(
+//                                   value: selectedProviders[index],
+//                                   hint: const Text("Select Logistic Provider"),
+//                                   onChanged: (providerIndex) {
+//                                     setState(() {
+//                                       selectedProviders[index] = providerIndex!;
+//                                       int daysFromNow = selectedDates[index]!
+//                                           .difference(DateTime.now())
+//                                           .inDays;
+//                                       selectedCharges[index] =
+//                                           logisticsProviders[providerIndex]
+//                                               .calculateCharge(
+//                                                 daysFromNow,
+//                                                 qty > 0 ? qty : 1,
+//                                               );
+//                                     });
+//                                   },
+//                                   items: List.generate(
+//                                     logisticsProviders.length,
+//                                     (i) {
+//                                       int daysFromNow = selectedDates[index]!
+//                                           .difference(DateTime.now())
+//                                           .inDays;
+//                                       double charge = logisticsProviders[i]
+//                                           .calculateCharge(
+//                                             daysFromNow,
+//                                             qty > 0 ? qty : 1,
+//                                           );
+//                                       return DropdownMenuItem(
+//                                         value: i,
+//                                         child: Text(
+//                                           "${logisticsProviders[i].name} - ₹${charge.toStringAsFixed(2)}",
+//                                         ),
+//                                       );
+//                                     },
+//                                   ),
+//                                 ),
+//                               ],
+
+//                               // Show current selected charge
+//                               if (selectedCharges.containsKey(index))
+//                                 Text(
+//                                   "Selected Logistics Charge: ₹${selectedCharges[index]!.toStringAsFixed(2)}",
+//                                   style: const TextStyle(
+//                                     fontWeight: FontWeight.w600,
+//                                     color: Color(0xFF4CAF50),
+//                                   ),
+//                                 ),
+
+//                               const Divider(height: 20, thickness: 1),
+
+//                               // Quantity Selector + History Button
+//                               Row(
+//                                 mainAxisAlignment:
+//                                     MainAxisAlignment.spaceBetween,
+//                                 children: [
+//                                   // Quantity Selector
+//                                   Row(
+//                                     children: [
+//                                       IconButton(
+//                                         onPressed: () {
+//                                           if (qty > 0)
+//                                             updateCart(index, qty - 1);
+//                                         },
+//                                         icon: const Icon(
+//                                           Icons.remove_circle,
+//                                           color: Colors.red,
+//                                         ),
+//                                       ),
+//                                       Text(
+//                                         "$qty",
+//                                         style: const TextStyle(
+//                                           fontSize: 16,
+//                                           fontWeight: FontWeight.w600,
+//                                         ),
+//                                       ),
+//                                       IconButton(
+//                                         onPressed: () {
+//                                           if (qty < batch["stock"])
+//                                             updateCart(index, qty + 1);
+//                                         },
+//                                         icon: const Icon(
+//                                           Icons.add_circle,
+//                                           color: Colors.green,
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   ),
+
+//                                   // Blockchain History Button
+//                                   OutlinedButton.icon(
+//                                     style: OutlinedButton.styleFrom(
+//                                       side: const BorderSide(
+//                                         color: Color(0xFF4CAF50),
+//                                       ),
+//                                       shape: RoundedRectangleBorder(
+//                                         borderRadius: BorderRadius.circular(12),
+//                                       ),
+//                                     ),
+//                                     onPressed: () {
+//                                       Navigator.push(
+//                                         context,
+//                                         MaterialPageRoute(
+//                                           builder: (_) => ProductHistoryPage(
+//                                             product: product,
+//                                             batchid: "batch#1673abhgi@bh",
+//                                           ),
+//                                         ),
+//                                       );
+//                                     },
+//                                     icon: const Icon(
+//                                       Icons.history,
+//                                       color: Color(0xFF4CAF50),
+//                                     ),
+//                                     label: const Text(
+//                                       "View History",
+//                                       style: TextStyle(
+//                                         color: Color(0xFF4CAF50),
+//                                       ),
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
 //                             ],
 //                           ),
-//                           const SizedBox(height: 8),
-//                           Text(
-//                             "Seller: ${batch["seller"]}",
-//                             style: const TextStyle(
-//                               fontSize: 14,
-//                               fontWeight: FontWeight.w500,
-//                             ),
-//                           ),
-//                           const SizedBox(height: 4),
-//                           Text(
-//                             "Stock: ${batch["stock"]} packs",
-//                             style: TextStyle(
-//                               fontSize: 13,
-//                               color: Colors.grey[700],
-//                             ),
-//                           ),
-//                           Text(
-//                             "Expiry Date: ${batch["expiry"]}",
-//                             style: TextStyle(
-//                               fontSize: 13,
-//                               color: Colors.grey[700],
-//                             ),
-//                           ),
-//                           if (isSelected)
-//                             const Padding(
-//                               padding: EdgeInsets.only(top: 8),
-//                               child: Text(
-//                                 "✓ Selected",
-//                                 style: TextStyle(
-//                                   fontSize: 13,
-//                                   fontWeight: FontWeight.w600,
-//                                   color: Color(0xFF4CAF50),
-//                                 ),
+//                         ),
+//                       );
+//                     },
+//                   ),
+
+//                   const SizedBox(height: 20),
+
+//                   // Pickup Location
+//                   const Text(
+//                     "Pickup Location",
+//                     style: TextStyle(
+//                       fontSize: 16,
+//                       fontWeight: FontWeight.bold,
+//                       color: Colors.black87,
+//                     ),
+//                   ),
+//                   const SizedBox(height: 6),
+//                   const Text(
+//                     "Ludhiana Central, Punjab\nGPS: 30.9005, 75.8573",
+//                     style: TextStyle(fontSize: 14, color: Colors.black87),
+//                   ),
+//                   const SizedBox(height: 30),
+//                 ],
+//               ),
+//             ),
+//           ),
+
+//           // Bottom Cart Bar
+//           Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+//             decoration: BoxDecoration(
+//               color: Colors.white,
+//               border: Border(top: BorderSide(color: Colors.grey.shade300)),
+//               boxShadow: [
+//                 BoxShadow(
+//                   color: Colors.black12,
+//                   blurRadius: 4,
+//                   offset: const Offset(0, -2),
+//                 ),
+//               ],
+//             ),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 // Total Price
+//                 Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     const Text(
+//                       "Total",
+//                       style: TextStyle(fontSize: 14, color: Colors.black54),
+//                     ),
+//                     Text(
+//                       "₹${calculateTotal().toStringAsFixed(2)}",
+//                       style: const TextStyle(
+//                         fontSize: 18,
+//                         fontWeight: FontWeight.bold,
+//                         color: Colors.black87,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//                 ElevatedButton.icon(
+//                   onPressed: cartQuantities.isNotEmpty
+//                       ? () {
+//                           if (!gcart.containsKey(product.id)) {
+//                             gcart[product.id] = {};
+//                           }
+
+//                           cartQuantities.forEach((batchIndex, qty) {
+//                             double price = batches[batchIndex]["price"];
+//                             int providerIndex =
+//                                 selectedProviders[batchIndex] ?? 0;
+//                             double charge = selectedCharges[batchIndex] ?? 0;
+
+//                             gcart[product.id]!["batch_$batchIndex"] = [
+//                               price.toInt(),
+//                               qty,
+//                               providerIndex,
+//                               charge.toInt(),
+//                             ];
+//                           });
+
+//                           ScaffoldMessenger.of(context).showSnackBar(
+//                             SnackBar(
+//                               content: Text(
+//                                 "Added ${cartQuantities.length} batch(es) to cart!",
 //                               ),
+//                               duration: const Duration(seconds: 2),
 //                             ),
-//                         ],
-//                       ),
+//                           );
+
+//                           print(gcart);
+//                         }
+//                       : null,
+//                   icon: const Icon(Icons.shopping_cart),
+//                   label: const Text("Add to Cart"),
+//                   style: ElevatedButton.styleFrom(
+//                     backgroundColor: const Color(0xFF4CAF50),
+//                     foregroundColor: Colors.white,
+//                     padding: const EdgeInsets.symmetric(
+//                       horizontal: 20,
+//                       vertical: 12,
+//                     ),
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(12),
 //                     ),
 //                   ),
-//                 );
-//               },
-//             ),
-//             const SizedBox(height: 20),
-
-//             // Pickup Location
-//             const Text(
-//               "Pickup Location",
-//               style: TextStyle(
-//                 fontSize: 16,
-//                 fontWeight: FontWeight.bold,
-//                 color: Colors.black87,
-//               ),
-//             ),
-//             const SizedBox(height: 6),
-//             const Text(
-//               "Ludhiana Central, Punjab\nGPS: 30.9005, 75.8573",
-//               style: TextStyle(fontSize: 14, color: Colors.black87),
-//             ),
-//             const SizedBox(height: 30),
-
-//             // Add to Cart
-//             SizedBox(
-//               width: double.infinity,
-//               child: ElevatedButton.icon(
-//                 onPressed: () {
-//                   final batch = batches[selectedBatchIndex];
-//                   ScaffoldMessenger.of(context).showSnackBar(
-//                     SnackBar(
-//                       content: Text(
-//                         "${batch["seller"]}'s batch added to cart @ ₹${batch["price"]}",
-//                       ),
-//                       duration: const Duration(seconds: 2),
-//                     ),
-//                   );
-//                 },
-//                 icon: const Icon(Icons.shopping_cart),
-//                 label: const Text(
-//                   "Add to Cart",
-//                   style: TextStyle(fontSize: 16),
 //                 ),
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: const Color(0xFF4CAF50),
-//                   foregroundColor: Colors.white,
-//                   padding: const EdgeInsets.symmetric(vertical: 14),
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(12),
-//                   ),
-//                 ),
-//               ),
+//               ],
 //             ),
-//             const SizedBox(height: 20),
-//           ],
-//         ),
+//           ),
+//         ],
 //       ),
 //     );
 //   }
@@ -725,7 +605,27 @@
 
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../../global.dart';
 import 'models/product_model.dart';
+import 'product_history.dart';
+
+class LogisticProvider {
+  final String name;
+  final double baseValue;
+  final double ratio;
+
+  LogisticProvider({
+    required this.name,
+    required this.baseValue,
+    required this.ratio,
+  });
+
+  double calculateCharge(int daysFromNow, int qty) {
+    // service charge = baseValue + ratio * days + random factor
+    return (baseValue + (ratio * daysFromNow) + Random().nextDouble() * 10) *
+        qty;
+  }
+}
 
 class ProductDetailsScreen extends StatefulWidget {
   final Product product;
@@ -743,45 +643,49 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final Random random = Random();
-
   late List<Map<String, dynamic>> batches;
+  Product? product;
   Map<int, int> cartQuantities = {}; // batchIndex -> quantity
+  Map<int, int> selectedProviders = {}; // batchIndex -> providerIndex
+  Map<int, DateTime> selectedDates = {}; // batchIndex -> date
+  Map<int, double> selectedCharges = {}; // batchIndex -> charge
+
+  final List<LogisticProvider> logisticsProviders = List.generate(5, (i) {
+    double base = (40 + Random().nextInt(30)).toDouble(); // base 40–70
+    double ratio = (5 + Random().nextInt(10)).toDouble(); // ratio 5–15
+    return LogisticProvider(
+      name: "Provider ${i + 1}",
+      baseValue: base,
+      ratio: ratio,
+    );
+  });
 
   @override
   void initState() {
     super.initState();
     double basePrice = double.tryParse(widget.product.price) ?? 0.0;
+    product = widget.product;
+    DateTime today = DateTime.now();
 
-    // Dummy seller batches
-    batches = [
-      {
-        "seller": "Farmer Nanda",
-        "price": basePrice,
-        "stock": 100,
-        "expiry": "21/03/2026",
-        "arrival": "25/09/2025",
-        "unit": "2kg per pack",
+    // Generate dummy batches
+    batches = List.generate(3, (i) {
+      DateTime expiry = today.add(Duration(days: 10 + random.nextInt(40)));
+      DateTime arrival = today.add(Duration(days: 3 + random.nextInt(20)));
+
+      if (arrival.isAfter(expiry)) {
+        arrival = expiry.subtract(const Duration(days: 10));
+      }
+
+      return {
+        "seller": ["Farmer Nanda", "AgroMart", "Green Valley"][i],
+        "price": basePrice * (1 + (i - 1) * 0.2),
+        "stock": [100, 190, 50][i],
+        "unit": ["2kg per pack", "1kg per pack", "500g per pack"][i],
+        "expiry": expiry,
+        "arrival": arrival,
         "stars": random.nextInt(5) + 1,
-      },
-      {
-        "seller": "AgroMart",
-        "price": basePrice * 0.8,
-        "stock": 190,
-        "expiry": "25/11/2025",
-        "arrival": "28/09/2025",
-        "unit": "1kg per pack",
-        "stars": random.nextInt(5) + 1,
-      },
-      {
-        "seller": "Green Valley",
-        "price": basePrice * 1.1,
-        "stock": 50,
-        "expiry": "10/08/2026",
-        "arrival": "30/09/2025",
-        "unit": "500g per pack",
-        "stars": random.nextInt(5) + 1,
-      },
-    ];
+      };
+    });
   }
 
   Widget buildStars(int count) {
@@ -838,14 +742,44 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product Image
                   AspectRatio(
                     aspectRatio: 16 / 9,
                     child: Image.network(product.imageUrl, fit: BoxFit.cover),
                   ),
                   const SizedBox(height: 20),
-
-                  // Available Batches
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.name,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          product.category,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          product.description,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   const Text(
                     "Available Batches",
                     style: TextStyle(
@@ -864,24 +798,29 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       final batch = batches[index];
                       int qty = cartQuantities[index] ?? 0;
 
+                      DateTime expiry = batch["expiry"];
+                      DateTime arrival = batch["arrival"];
+                      int expiryDays = expiry.difference(DateTime.now()).inDays;
+                      int arrivalDays = arrival
+                          .difference(DateTime.now())
+                          .inDays;
+
+                      List<DateTime> dateOptions = List.generate(10, (i) {
+                        final d = DateTime.now().add(Duration(days: i + 1));
+                        return DateTime(d.year, d.month, d.day); // normalize
+                      });
+
                       return Card(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: qty > 0
-                                ? const Color(0xFF4CAF50)
-                                : Colors.grey.shade300,
-                            width: 2,
-                          ),
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        elevation: qty > 0 ? 4 : 1,
-                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        elevation: qty > 0 ? 6 : 2,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Price + Stars
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -889,7 +828,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   Text(
                                     "₹${batch["price"].toStringAsFixed(2)}",
                                     style: const TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xFF4CAF50),
                                     ),
@@ -897,36 +836,177 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   buildStars(batch["stars"]),
                                 ],
                               ),
-                              const SizedBox(height: 8),
-                              Text("Seller: ${batch["seller"]}"),
-                              Text("Stock: ${batch["stock"]} packs"),
-                              Text("Unit: ${batch["unit"]}"),
-                              Text("Expiry Date: ${batch["expiry"]}"),
-                              Text("Arrival Date: ${batch["arrival"]}"),
+                              const SizedBox(height: 12),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.storefront,
+                                    size: 18,
+                                    color: Colors.grey,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    batch["seller"],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.inventory,
+                                    size: 18,
+                                    color: Colors.grey,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    "${batch["stock"]} packs • ${batch["unit"]}",
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.event_busy,
+                                    size: 18,
+                                    color: Colors.redAccent,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    "Expiry: ${expiry.day}/${expiry.month}/${expiry.year} "
+                                    "(${expiryDays}d left)",
+                                    style: const TextStyle(
+                                      color: Colors.redAccent,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              // Row(
+                              //   children: [
+                              //     const Icon(
+                              //       Icons.local_shipping,
+                              //       size: 18,
+                              //       color: Colors.blue,
+                              //     ),
+                              //     const SizedBox(width: 6),
+                              //     Text(
+                              //       "Arrival: ${arrival.day}/${arrival.month}/${arrival.year} "
+                              //       "(${arrivalDays}d left)",
+                              //       style: const TextStyle(color: Colors.blue),
+                              //     ),
+                              //   ],
+                              // ),
+                              const Divider(height: 20, thickness: 1),
 
-                              const SizedBox(height: 10),
+                              // Logistics Date Dropdown
+                              DropdownButton<DateTime>(
+                                value: selectedDates[index],
+                                hint: const Text(
+                                  "Select Expected Arrival Date",
+                                ),
+                                onChanged: (date) {
+                                  setState(() {
+                                    selectedDates[index] = DateTime(
+                                      date!.year,
+                                      date.month,
+                                      date.day,
+                                    );
+                                    int daysFromNow = selectedDates[index]!
+                                        .difference(DateTime.now())
+                                        .inDays;
 
-                              // Quantity Selector
+                                    List<double> charges = logisticsProviders
+                                        .map(
+                                          (p) => p.calculateCharge(
+                                            daysFromNow,
+                                            qty > 0 ? qty : 1,
+                                          ),
+                                        )
+                                        .toList();
+
+                                    int minIndex = charges.indexOf(
+                                      charges.reduce(min),
+                                    );
+                                    selectedProviders[index] = minIndex;
+                                    selectedCharges[index] = charges[minIndex];
+                                  });
+                                },
+                                items: dateOptions.map((d) {
+                                  return DropdownMenuItem(
+                                    value: d,
+                                    child: Text(
+                                      "${d.day}/${d.month}/${d.year}",
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+
+                              if (selectedDates.containsKey(index)) ...[
+                                DropdownButton<int>(
+                                  value: selectedProviders[index],
+                                  hint: const Text("Select Logistic Provider"),
+                                  onChanged: (providerIndex) {
+                                    setState(() {
+                                      selectedProviders[index] = providerIndex!;
+                                      int daysFromNow = selectedDates[index]!
+                                          .difference(DateTime.now())
+                                          .inDays;
+                                      selectedCharges[index] =
+                                          logisticsProviders[providerIndex]
+                                              .calculateCharge(
+                                                daysFromNow,
+                                                qty > 0 ? qty : 1,
+                                              );
+                                    });
+                                  },
+                                  items: List.generate(
+                                    logisticsProviders.length,
+                                    (i) {
+                                      int daysFromNow = selectedDates[index]!
+                                          .difference(DateTime.now())
+                                          .inDays;
+                                      double charge = logisticsProviders[i]
+                                          .calculateCharge(
+                                            daysFromNow,
+                                            qty > 0 ? qty : 1,
+                                          );
+                                      return DropdownMenuItem(
+                                        value: i,
+                                        child: Text(
+                                          "${logisticsProviders[i].name} - ₹${charge.toStringAsFixed(2)}",
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+
+                              if (selectedCharges.containsKey(index))
+                                Text(
+                                  "Selected Logistics Charge: ₹${selectedCharges[index]!.toStringAsFixed(2)}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF4CAF50),
+                                  ),
+                                ),
+
+                              const Divider(height: 20, thickness: 1),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  qty > 0
-                                      ? Text(
-                                          "Selected: $qty packs",
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.green,
-                                          ),
-                                        )
-                                      : const SizedBox(),
                                   Row(
                                     children: [
                                       IconButton(
                                         onPressed: () {
-                                          if (qty > 0) {
+                                          if (qty > 0)
                                             updateCart(index, qty - 1);
-                                          }
                                         },
                                         icon: const Icon(
                                           Icons.remove_circle,
@@ -935,7 +1015,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       ),
                                       Text(
                                         "$qty",
-                                        style: const TextStyle(fontSize: 16),
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                       IconButton(
                                         onPressed: () {
@@ -950,6 +1033,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       ),
                                     ],
                                   ),
+                                  OutlinedButton.icon(
+                                    style: OutlinedButton.styleFrom(
+                                      side: const BorderSide(
+                                        color: Color(0xFF4CAF50),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => ProductHistoryPage(
+                                            product: product,
+                                            batchid: "batch#1673abhgi@bh",
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.history,
+                                      color: Color(0xFF4CAF50),
+                                    ),
+                                    label: const Text(
+                                      "View History",
+                                      style: TextStyle(
+                                        color: Color(0xFF4CAF50),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -958,23 +1072,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
-
-                  // Pickup Location
-                  const Text(
-                    "Pickup Location",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    "Ludhiana Central, Punjab\nGPS: 30.9005, 75.8573",
-                    style: TextStyle(fontSize: 14, color: Colors.black87),
-                  ),
-                  const SizedBox(height: 30),
                 ],
               ),
             ),
@@ -986,18 +1083,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border(top: BorderSide(color: Colors.grey.shade300)),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 4,
-                  offset: const Offset(0, -2),
+                  offset: Offset(0, -2),
                 ),
               ],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Total Price
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1015,11 +1111,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   ],
                 ),
-
-                // Add to Cart
                 ElevatedButton.icon(
                   onPressed: cartQuantities.isNotEmpty
                       ? () {
+                          gcart ??= {};
+                          gcart![product.id] ??= {};
+
+                          cartQuantities.forEach((batchIndex, qty) {
+                            double price = batches[batchIndex]["price"];
+                            int providerIndex =
+                                selectedProviders[batchIndex] ?? 0;
+                            double charge = selectedCharges[batchIndex] ?? 0;
+
+                            gcart![product.id]!["batch_$batchIndex"] = [
+                              price.toInt(),
+                              qty,
+                              providerIndex,
+                              charge.toInt(),
+                            ];
+                          });
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -1028,6 +1139,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               duration: const Duration(seconds: 2),
                             ),
                           );
+                          print(gcart);
                         }
                       : null,
                   icon: const Icon(Icons.shopping_cart),

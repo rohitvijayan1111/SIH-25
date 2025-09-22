@@ -32,6 +32,19 @@ class Product {
       isFavorite: isFavorite ?? this.isFavorite,
     );
   }
+
+  factory Product.empty() {
+    return Product(
+      id: '',
+      name: 'Unknown Product',
+      price: '0',
+      imageUrl: '',
+      category: 'Unknown',
+      description: '',
+      farmerName: '',
+      isFavorite: false,
+    );
+  }
 }
 
 // Sample data for demonstration
