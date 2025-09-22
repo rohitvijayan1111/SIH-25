@@ -55,27 +55,17 @@
 //   }
 // }
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/home_page.dart';
-import 'screens/voice_page.dart';
-import 'screens/view_cart_screen.dart';
-import 'screens/procurements_screen.dart';
-
 import 'auth/signin.dart';
-import 'auth/splashscreen.dart';
-import 'global.dart';
+// ✅ Import your Product History page
+import 'screens/CustomerScreens/product_history.dart';
 import 'screens/welcome_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Initialize Firebase
-  // await Firebase.initializeApp(
-  //   // options: DefaultFirebaseOptions.currentPlatform, // if you used flutterfire configure
-  // );
+  // await Firebase.initializeApp();
 
   runApp(const MyApp());
 }
@@ -103,21 +93,34 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: currentTheme == 1 ? ThemeData.light() : ThemeData.dark(),
-      routes: {'/signin': (context) => SignInPage()},
-      home: WelcomeScreen(),
-      // home: StreamBuilder<User?>(
-      //   stream: FirebaseAuth.instance.authStateChanges(),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       return SplashScreen();
-      //     }
-      //     if (snapshot.hasData) {
-      //       return WelcomeScreen();
-      //     } else {
-      //       return SignInPage();
-      //     }
-      //   },
-      // ),
+      routes: {
+        '/signin': (context) => SignInPage(),
+        '/productHistory': (context) => const ProductHistoryPage(), // ✅ Route still exists
+      },
+      // ✅ WelcomeScreen as home (button removed)
+      home: Scaffold(
+        appBar: AppBar(title: const Text("Main Page")),
+        body: const WelcomeScreen(),
+      ),
+
+      // If you want auth flow back, uncomment this instead of home:
+      /*
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SplashScreen();
+          }
+          if (snapshot.hasData) {
+            return const Scaffold(
+              body: WelcomeScreen(),
+            );
+          } else {
+            return SignInPage();
+          }
+        },
+      ),
+      */
     );
   }
 }
