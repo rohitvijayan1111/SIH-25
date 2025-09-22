@@ -54,91 +54,21 @@
 //     );
 //   }
 // }
-
-// CURRENT
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-
-// import 'screens/home_page.dart';
-// import 'screens/voice_page.dart';
-// import 'screens/view_cart_screen.dart';
-// import 'screens/procurements_screen.dart';
-
-// import 'auth/signin.dart';
-// import 'auth/splashscreen.dart';
-// import 'global.dart';
-// import 'screens/welcome_screen.dart';
-// import 'controllers/app_controller.dart';
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   // ✅ Initialize Firebase
-//   // await Firebase.initializeApp(
-//   //   // options: DefaultFirebaseOptions.currentPlatform, // if you used flutterfire configure
-//   // );
-
-//   // runApp(const MyApp());
-//   runApp(
-//     ChangeNotifierProvider(
-//       create: (_) => AppController(),
-//       child: const MyApp(),
-//     ),
-//   );
-// }
-
-// class MyApp extends StatefulWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   _MyAppState createState() => _MyAppState();
-// }
-
-// class _MyAppState extends State<MyApp> {
-//   int currentTheme = 1;
-
-//   void toggleTheme(int controll) {
-//     if (controll == 1) {
-//       setState(() {
-//         currentTheme = (currentTheme == 1) ? 0 : 1;
-//       });
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       theme: currentTheme == 1 ? ThemeData.light() : ThemeData.dark(),
-//       routes: {'/signin': (context) => SignInPage()},
-//       home: WelcomeScreen(),
-//       // home: StreamBuilder<User?>(
-//       //   stream: FirebaseAuth.instance.authStateChanges(),
-//       //   builder: (context, snapshot) {
-//       //     if (snapshot.connectionState == ConnectionState.waiting) {
-//       //       return SplashScreen();
-//       //     }
-//       //     if (snapshot.hasData) {
-//       //       return WelcomeScreen();
-//       //     } else {
-//       //       return SignInPage();
-//       //     }
-//       //   },
-//       // ),
-//     );
-//   }
-// }
-
-
-// NEW ONE WITH DYNAMIC TAB LAYOUT
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
-import 'controllers/app_controller.dart';
-import 'screens/categories_screen.dart';
 
-void main() {
+import 'auth/signin.dart';
+import 'controllers/app_controller.dart';
+import 'screens/CustomerScreens/product_history.dart';
+import 'screens/categories_screen.dart';
+import 'screens/welcome_screen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // await Firebase.initializeApp();
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => AppController(),
@@ -163,15 +93,13 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.black87,
           elevation: 0,
         ),
-        cardTheme: CardThemeData(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
       ),
-      home: const MainScreen(),
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/signin': (context) => SignInPage(),
+        '/productHistory': (context) => const ProductHistoryPage(),
+      },
+      home: const MainScreen(),
     );
   }
 }

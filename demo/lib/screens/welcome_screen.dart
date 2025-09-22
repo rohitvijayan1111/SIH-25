@@ -3,6 +3,7 @@ import 'package:demo/screens/CSC_interaction_screen.dart';
 import 'package:demo/screens/CustomerScreens/agent.dart';
 import 'package:demo/screens/CustomerScreens/customer_main_screen.dart';
 import 'package:demo/screens/CustomerScreens/logistic.dart';
+import 'package:demo/screens/CustomerScreens/product_history.dart'; // ✅ Import product history
 import 'package:demo/screens/navigation_screen.dart';
 import 'package:demo/screens/payment_details.dart';
 import 'package:demo/screens/scanned_details.dart';
@@ -13,6 +14,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:demo/screens/categories_screen.dart';
 
 import '../auth/signin.dart';
+
 import 'CustomerScreens/signin_screen.dart';
 import 'navigation_screen.dart';
 import 'coop_dashboard.dart';
@@ -133,7 +135,6 @@ class WelcomeScreen extends StatelessWidget {
         label: "Logistics",
         color: Colors.teal,
       ),
-
       _buildButton(
         onPressed: () {
           Navigator.push(
@@ -146,7 +147,6 @@ class WelcomeScreen extends StatelessWidget {
         label: "Merge Products",
         color: Colors.teal,
       ),
-
       _buildButton(
         onPressed: () {
           Navigator.push(
@@ -177,6 +177,21 @@ class WelcomeScreen extends StatelessWidget {
         label: "Scanned Product Details",
         color: Colors.green,
       ),
+
+      // ✅ New Product History Button
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ProductHistoryPage(),
+            ),
+          );
+        },
+        label: "Product History",
+        color: Colors.blueGrey,
+      ),
+
       _buildButton(
         onPressed: () async {
           await _signOut(context);
