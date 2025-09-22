@@ -87,7 +87,9 @@ class _AgentsPageState extends State<AgentsPage> {
                       backgroundColor: const Color(0xFF4CAF50),
                       padding: const EdgeInsets.all(24),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      // TODO: Hook voice recognition logic here
+                    },
                     child: const Icon(Icons.mic, color: Colors.white, size: 40),
                   ),
                   const SizedBox(height: 10),
@@ -108,7 +110,9 @@ class _AgentsPageState extends State<AgentsPage> {
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.edit, color: Color(0xFF2196F3)),
-                        onPressed: () {},
+                        onPressed: () {
+                          // TODO: Allow manual editing
+                        },
                       ),
                     ),
                   ),
@@ -164,7 +168,9 @@ class _AgentsPageState extends State<AgentsPage> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              // TODO: Re-add produce
+                            },
                             child: const Text(
                               "Add Again",
                               style: TextStyle(color: Colors.white),
@@ -190,7 +196,9 @@ class _AgentsPageState extends State<AgentsPage> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            // TODO: Submit produce action
+          },
           child: const Text(
             "Submit Produce",
             style: TextStyle(color: Colors.white, fontSize: 16),
