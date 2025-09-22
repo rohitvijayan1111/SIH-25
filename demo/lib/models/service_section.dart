@@ -133,12 +133,12 @@ class ServiceSections {
           activeIcon: Icons.home,
         ),
         TabConfig(
-          label: 'Tool Renting',
+          label: 'Farmer Shop',
           icon: Icons.handyman_outlined,
           activeIcon: Icons.handyman,
         ),
         TabConfig(
-          label: 'Farmer Shop',
+          label: 'Other Services',
           icon: Icons.store_outlined,
           activeIcon: Icons.store,
         ),
