@@ -1,3 +1,4 @@
+import 'package:demo/screens/my_coops_screen.dart';
 import 'package:flutter/material.dart';
 import '../models/service_section.dart';
 import '../screens/categories_screen.dart';
@@ -97,7 +98,7 @@ class AppController extends ChangeNotifier {
           case 1:
             return const UploadProduceScreen(); // Upload Product tab
           case 2:
-            return const DashboardScreen(); // Cooperative tab
+            return MyCoopsScreen(); // Cooperative tab
           case 3:
             return const ProfilePlaceholderScreen(); // Profile tab
           default:
