@@ -14,8 +14,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:demo/screens/categories_screen.dart';
 
 import '../auth/signin.dart';
-<<<<<<< HEAD
-=======
+
 import 'CustomerScreens/signin_screen.dart';
 import 'navigation_screen.dart';
 import 'coop_dashboard.dart';
@@ -23,7 +22,6 @@ import 'coop_members.dart';
 import 'upload_produce.dart';
 import 'earnings.dart';
 
->>>>>>> a5cd8fc71c4f24f3c31b6b4f89bd1a5ef69f210c
 import 'merge_products_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
