@@ -6,9 +6,9 @@ class Product {
   final String category;
   final String description;
   final String farmerName;
-  final bool isFavorite;
+  bool isFavorite;
 
-  const Product({
+  Product({
     required this.id,
     required this.name,
     required this.price,
@@ -511,7 +511,7 @@ class ProductData {
 
   static List<Product> getAllProducts() {
     return [
-      const Product(
+      Product(
         id: '1',
         name: 'Broccoli',
         price: '120',
@@ -522,7 +522,7 @@ class ProductData {
         farmerName: 'Farmer John',
         isFavorite: true,
       ),
-      const Product(
+      Product(
         id: '2',
         name: 'Papaya',
         price: '80',
@@ -532,7 +532,7 @@ class ProductData {
         farmerName: 'Farmer Mary',
         isFavorite: false,
       ),
-      const Product(
+      Product(
         id: '3',
         name: 'Tomatoes',
         price: '60',
@@ -542,7 +542,7 @@ class ProductData {
         farmerName: 'Farmer Bob',
         isFavorite: false,
       ),
-      const Product(
+      Product(
         id: '4',
         name: 'Carrots',
         price: '45',
@@ -553,7 +553,7 @@ class ProductData {
         farmerName: 'Farmer Alice',
         isFavorite: true,
       ),
-      const Product(
+      Product(
         id: '6',
         name: 'Banana',
         price: '30',
@@ -564,7 +564,7 @@ class ProductData {
         isFavorite: false,
       ),
 
-      const Product(
+      Product(
         id: '8',
         name: 'Wheat',
         price: '25',
@@ -574,7 +574,7 @@ class ProductData {
         farmerName: 'Farmer Ramesh',
         isFavorite: false,
       ),
-      const Product(
+      Product(
         id: '9',
         name: 'Rice',
         price: '50',
@@ -584,7 +584,7 @@ class ProductData {
         farmerName: 'Farmer Devi',
         isFavorite: true,
       ),
-      const Product(
+      Product(
         id: '10',
         name: 'Maize',
         price: '32',
@@ -595,7 +595,7 @@ class ProductData {
         isFavorite: false,
       ),
       // Dairy
-      const Product(
+      Product(
         id: '11',
         name: 'Milk',
         price: '52',
@@ -605,7 +605,7 @@ class ProductData {
         farmerName: 'Dairy Farmhouse',
         isFavorite: true,
       ),
-      const Product(
+      Product(
         id: '12',
         name: 'Paneer',
         price: '210',
@@ -614,7 +614,7 @@ class ProductData {
         description: 'Soft cottage cheese, homemade',
         farmerName: 'Farmer Shanti',
       ),
-      const Product(
+      Product(
         id: '13',
         name: 'Curd',
         price: '50',
@@ -624,7 +624,7 @@ class ProductData {
         farmerName: 'Farmer Anil',
         isFavorite: true,
       ),
-      const Product(
+      Product(
         id: '14',
         name: 'Butter',
         price: '380',
