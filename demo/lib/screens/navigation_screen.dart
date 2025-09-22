@@ -1,7 +1,10 @@
+import 'package:demo/screens/upload_produce.dart'; // Make sure this is the path to your UploadProduceScreen
 import 'package:flutter/material.dart';
+
 import 'CustomerScreens/customer_main_screen.dart';
 import 'upload_produce.dart';
 import 'welcome_screen.dart';
+import 'VendorScreens/vendor_main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,12 +64,9 @@ class HomeScreen extends StatelessWidget {
 
   // Navigation methods
   void navigateToUploadProduce(BuildContext context) {
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(content: Text('Navigate to Upload Produce page')),
-    // );
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const UploadProduceScreen()),
+      MaterialPageRoute(builder: (context) => UploadProduceScreen()),
     );
   }
 
@@ -77,12 +77,17 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  void navigateToProcureSupplies(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const VendorApp()),
+    );
+  }
+
   void navigateToFarmerServices(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const CustomerMainScreen(value: 1),
-      ),
+      MaterialPageRoute(builder: (context) => const CustomerMainScreen()),
     );
   }
 
@@ -100,9 +105,7 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black87),
-          onPressed: () {
-            // Handle back button
-          },
+          onPressed: () {},
         ),
       ),
       body: Padding(
@@ -116,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                 height: 120,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF8B5CF6), // Purple
+                  color: const Color(0xFF8B5CF6),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -131,7 +134,6 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header with title and arrow
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -171,10 +173,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       const Spacer(),
-
-                      // Icons and bottom text in same row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -214,12 +213,121 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
             // Browse Products Card
             GestureDetector(
               onTap: () => navigateToBrowseProducts(context),
+              child: Container(
+                height: 120,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF7DD3FC),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Browse Products',
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Fruits & Veggies',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            width: 32,
+                            height: 32,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Icon(
+                              Icons.arrow_forward,
+                              color: Colors.black87,
+                              size: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.yellow,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Text(
+                            'Lowest prices',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+            GestureDetector(
+              onTap: () => navigateToProcureSupplies(context),
               child: Container(
                 height: 120,
                 width: double.infinity,
@@ -247,7 +355,7 @@ class HomeScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Browse Products',
+                                'Procure Supplies',
                                 style: TextStyle(
                                   color: Colors.black87,
                                   fontSize: 20,
@@ -256,7 +364,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 4),
                               Text(
-                                'Fruits & Veggies',
+                                'Seeds & Fertilizers',
                                 style: TextStyle(
                                   color: Colors.black54,
                                   fontSize: 14,
@@ -333,7 +441,6 @@ class HomeScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 16),
-
             // Farmer Services Card
             GestureDetector(
               onTap: () => navigateToFarmerServices(context),
@@ -341,7 +448,7 @@ class HomeScreen extends StatelessWidget {
                 height: 120,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10B981), // Green
+                  color: const Color(0xFF10B981),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -356,7 +463,6 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header with title and arrow
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -396,10 +502,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       const Spacer(),
-
-                      // Icons and bottom text in same row
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
