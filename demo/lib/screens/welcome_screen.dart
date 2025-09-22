@@ -10,6 +10,7 @@ import 'package:demo/screens/voice_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:demo/screens/categories_screen.dart';
 
 import '../auth/signin.dart';
 
@@ -84,8 +85,19 @@ class WelcomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
+            MaterialPageRoute(builder: (context) => const CategoriesScreen()),
+          );
+        },
+        label: "New Categories Screen",
+        color: Colors.blue,
+      ),
+      _buildButton(
+        onPressed: () {
+          Navigator.push(
+            context,
             MaterialPageRoute(
-                builder: (context) =>  CustomerMainScreen(value: 1)),
+              builder: (context) => CustomerMainScreen(value: 1),
+            ),
           );
         },
         label: "Go to Home Page",
@@ -106,7 +118,8 @@ class WelcomeScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const LogisticsDetailsPage()),
+              builder: (context) => const LogisticsDetailsPage(),
+            ),
           );
         },
         label: "Logistics",
