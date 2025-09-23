@@ -316,8 +316,8 @@ class BidCard extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: onAccept,
-                    icon: const Icon(Icons.check, size: 16),
-                    label: const Text('Accept'),
+                    // icon: const Icon(Icons.check, size: 16),
+                    label: const Text('Request'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstants.primaryGreen,
                       foregroundColor: Colors.white,

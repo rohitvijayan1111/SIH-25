@@ -10,7 +10,8 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  String? selectedPaymentMethod = "Apple Pay";
+  String? selectedPaymentMethod;
+  String? selectedPaymentIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(Icons.arrow_back, color: Colors.black),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.arrow_back, color: Colors.black),
+                  ),
                   const Text(
                     "Checkout",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -47,21 +51,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               sectionTile(
                 label: "Delivery Address",
                 title: "Home",
-                subtitle: "43 Bourke Street, Newbridge NSW 837 Raffles City Tower ...",
+                subtitle:
+                    "43 Bourke Street, Newbridge NSW 837 Raffles City Tower ...",
               ),
 
-              // Payment
+              // Payment Section - Updated
               GestureDetector(
                 onTap: () async {
-                  final method = await Navigator.push(
+                  final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const PaymentScreen(),
                     ),
                   );
-                  if (method != null) {
+
+                  if (result != null && result is Map<String, String>) {
                     setState(() {
-                      selectedPaymentMethod = method;
+                      selectedPaymentMethod = result['method'];
+                      selectedPaymentIcon = result['icon'];
                     });
                   }
                 },
@@ -86,23 +93,60 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          Image.network(
-                            "https://img.icons8.com/ios-filled/50/apple-pay.png",
-                            width: 40,
-                            height: 25,
-                          ),
+                          // Payment icon or + button
+                          if (selectedPaymentMethod != null &&
+                              selectedPaymentIcon != null)
+                            Container(
+                              width: 40,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                color: Colors.green.shade50,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: Colors.green.shade200,
+                                ),
+                              ),
+                              child: Icon(
+                                _getPaymentIcon(selectedPaymentIcon!),
+                                color: Colors.green.shade600,
+                                size: 16,
+                              ),
+                            )
+                          else
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                color: Colors.green.shade100,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.green.shade300,
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.green.shade600,
+                                size: 16,
+                              ),
+                            ),
+
                           const SizedBox(width: 10),
+
                           Expanded(
                             child: Text(
-                              selectedPaymentMethod ?? "Choose Payment",
-                              style: const TextStyle(
+                              selectedPaymentMethod ?? "Choose Payment Method",
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                color: selectedPaymentMethod != null
+                                    ? Colors.black
+                                    : Colors.grey.shade600,
                               ),
                               maxLines: 1,
-                              overflow: TextOverflow.ellipsis, // ✅ Prevent overflow
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
+
                           const Icon(
                             Icons.chevron_right,
                             color: Colors.grey,
@@ -202,14 +246,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SuccessScreen(),
-                    ),
-                  );
-                },
+                onPressed: selectedPaymentMethod != null
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SuccessScreen(),
+                          ),
+                        );
+                      }
+                    : null,
                 child: const Center(
                   child: Text(
                     "Place Order",
@@ -226,6 +272,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
       ),
     );
+  }
+
+  IconData _getPaymentIcon(String iconType) {
+    switch (iconType) {
+      case 'card':
+        return Icons.credit_card;
+      case 'bank':
+        return Icons.account_balance;
+      case 'upi':
+        return Icons.account_balance_wallet;
+      default:
+        return Icons.payment;
+    }
   }
 
   Widget sectionTile({
@@ -253,7 +312,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded( // ✅ Fix overflow
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -267,7 +326,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                     Text(
                       subtitle,
-                      style: const TextStyle(fontSize: 14, color: Colors.black54),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
