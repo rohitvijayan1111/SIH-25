@@ -61,6 +61,8 @@ import 'package:provider/provider.dart';
 import 'auth/signin.dart';
 import 'controllers/app_controller.dart';
 import 'screens/CustomerScreens/product_history.dart';
+import 'screens/VendorScreens/farmer_side_request.dart';
+import 'screens/VendorScreens/request_detail_status.dart';
 import 'screens/categories_screen.dart';
 import 'screens/welcome_screen.dart';
 
@@ -99,7 +101,9 @@ class MyApp extends StatelessWidget {
         '/signin': (context) => SignInPage(),
         // '/productHistory': (context) => const ProductHistoryPage(),
       },
-      home: const MainScreen(),
+      // home: const MainScreen(),
+      // home: BuyerRequestsScreen(),
+      home: RequestDetailsScreen(),
     );
   }
 }

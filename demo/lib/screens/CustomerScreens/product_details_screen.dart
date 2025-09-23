@@ -653,11 +653,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final List<LogisticProvider> logisticsProviders = List.generate(5, (i) {
     double base = (40 + Random().nextInt(30)).toDouble(); // base 40–70
     double ratio = (5 + Random().nextInt(10)).toDouble(); // ratio 5–15
-    return LogisticProvider(
-      name: "Provider ${i + 1}",
-      baseValue: base,
-      ratio: ratio,
-    );
+    List<dynamic> lp = [
+      "DTDC",
+      "LoadShare Networks",
+      "Shiprocket",
+      "Mahindra Logistics",
+      "iThink Logistics",
+    ];
+    return LogisticProvider(name: "${lp[i]}", baseValue: base, ratio: ratio);
   });
 
   @override
