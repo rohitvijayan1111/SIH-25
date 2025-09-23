@@ -78,7 +78,7 @@ class _ProcurementScreenState extends State<ProcurementScreen>
                   text: 'Create Request',
                   icon: Icon(Icons.add_circle, size: 20),
                 ),
-                Tab(text: 'Bidding', icon: Icon(Icons.gavel, size: 20)),
+                // Tab(text: 'Bidding', icon: Icon(Icons.gavel, size: 20)),
               ],
             ),
           ),
