@@ -13,7 +13,10 @@ class FarmerProfileScreen extends StatelessWidget {
             children: [
               /// Header
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -24,7 +27,10 @@ class FarmerProfileScreen extends StatelessWidget {
                       child: Text(
                         "Farmer Profile",
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     IconButton(
@@ -44,9 +50,10 @@ class FarmerProfileScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.grey.shade200,
-                        blurRadius: 6,
-                        spreadRadius: 2),
+                      color: Colors.grey.shade200,
+                      blurRadius: 6,
+                      spreadRadius: 2,
+                    ),
                   ],
                 ),
                 child: Column(
@@ -56,7 +63,8 @@ class FarmerProfileScreen extends StatelessWidget {
                         const CircleAvatar(
                           radius: 30,
                           backgroundImage: AssetImage(
-                              "assets/CustomerUIAssets/images/Farmer_image.png"), // Farmer profile
+                            "assets/CustomerUIAssets/images/Farmer_image.png",
+                          ), // Farmer profile
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -65,22 +73,36 @@ class FarmerProfileScreen extends StatelessWidget {
                             children: [
                               Row(
                                 children: const [
-                                  Text("Rajesh Kumar",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold, fontSize: 16)),
+                                  Text(
+                                    "Rajesh Kumar",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
                                   SizedBox(width: 4),
-                                  Icon(Icons.verified, color: Colors.green, size: 18),
+                                  Icon(
+                                    Icons.verified,
+                                    color: Colors.green,
+                                    size: 18,
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 4),
                               const Text(
                                 "Age 45 · Khora Village",
-                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
                               ),
                               const SizedBox(height: 2),
                               const Text(
                                 "Member since March 2022",
-                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
@@ -91,17 +113,16 @@ class FarmerProfileScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: const [
-                        _ProfileActionButton(
-                          icon: Icons.call,
-                          label: "Call",
-                          color: Colors.green,
-                        ),
-                        _ProfileActionButton(
-                          icon: Icons.sms,
-                          label: "SMS",
-                          color: Colors.blue,
-                        ),
-                        
+                        // _ProfileActionButton(
+                        //   icon: Icons.call,
+                        //   label: "Call",
+                        //   color: Colors.green,
+                        // ),
+                        // _ProfileActionButton(
+                        //   icon: Icons.sms,
+                        //   label: "SMS",
+                        //   color: Colors.blue,
+                        // ),
                       ],
                     ),
                   ],
@@ -111,54 +132,57 @@ class FarmerProfileScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               /// Overview Section
-const _SectionHeader(title: "Overview"),
-const SizedBox(height: 12),
-Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 16),
-  child: GridView.count(
-    crossAxisCount: 2,        // 2 columns → 2x2 layout
-    shrinkWrap: true,         // so GridView takes only needed space
-    crossAxisSpacing: 12,     // horizontal spacing
-    mainAxisSpacing: 12,      // vertical spacing
-    physics: const NeverScrollableScrollPhysics(), // disable scrolling
-    children: const [
-      _StatCard(
-        title: "Total Contribution",
-        value: "₹45,230",
-        subText: "+12%",
-        icon: Icons.savings_outlined,
-        iconColor: Colors.orange,
-      ),
-      _StatCard(
-        title: "Active Batches",
-        value: "23",
-        subText: "+8%",
-        icon: Icons.inventory_outlined,
-        iconColor: Colors.blue,
-      ),
-      _StatCard(
-        title: "Quality Score",
-        value: "4.8",
-        subText: "★",
-        icon: Icons.star,
-        iconColor: Colors.amber,
-      ),
-      _StatCard(
-        title: "Earnings This Month",
-        value: "₹8,940",
-        subText: "+15%",
-        icon: Icons.attach_money,
-        iconColor: Colors.green,
-      ),
-    ],
-  ),
-),
+              const _SectionHeader(title: "Overview"),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: GridView.count(
+                  crossAxisCount: 2, // 2 columns → 2x2 layout
+                  shrinkWrap: true, // so GridView takes only needed space
+                  crossAxisSpacing: 12, // horizontal spacing
+                  mainAxisSpacing: 12, // vertical spacing
+                  physics:
+                      const NeverScrollableScrollPhysics(), // disable scrolling
+                  children: const [
+                    _StatCard(
+                      title: "Total Contribution",
+                      value: "₹45,230",
+                      subText: "+12%",
+                      icon: Icons.savings_outlined,
+                      iconColor: Colors.orange,
+                    ),
+                    _StatCard(
+                      title: "Active Batches",
+                      value: "23",
+                      subText: "+8%",
+                      icon: Icons.inventory_outlined,
+                      iconColor: Colors.blue,
+                    ),
+                    _StatCard(
+                      title: "Quality Score",
+                      value: "4.8",
+                      subText: "★",
+                      icon: Icons.star,
+                      iconColor: Colors.amber,
+                    ),
+                    _StatCard(
+                      title: "Earnings This Month",
+                      value: "₹8,940",
+                      subText: "+15%",
+                      icon: Icons.attach_money,
+                      iconColor: Colors.green,
+                    ),
+                  ],
+                ),
+              ),
 
-const SizedBox(height: 20),
-
+              const SizedBox(height: 20),
 
               /// Recent Contributions
-              const _SectionHeader(title: "Recent Contributions", action: "View All"),
+              const _SectionHeader(
+                title: "Recent Contributions",
+                action: "View All",
+              ),
               const SizedBox(height: 12),
               const _ContributionTile(
                 image: "assets/CustomerUIAssets/images/Wheat.png", // Wheat
@@ -193,9 +217,10 @@ const SizedBox(height: 20),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.grey.shade200,
-                          blurRadius: 6,
-                          spreadRadius: 2),
+                        color: Colors.grey.shade200,
+                        blurRadius: 6,
+                        spreadRadius: 2,
+                      ),
                     ],
                   ),
                   child: Row(
@@ -277,7 +302,8 @@ const SizedBox(height: 20),
                         backgroundColor: Colors.green,
                         minimumSize: const Size(double.infinity, 48),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       onPressed: () {},
                       child: const Text("Send Payment"),
@@ -288,7 +314,8 @@ const SizedBox(height: 20),
                         backgroundColor: Colors.blue,
                         minimumSize: const Size(double.infinity, 48),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       onPressed: () {},
                       child: const Text("View Full History"),
@@ -303,7 +330,8 @@ const SizedBox(height: 20),
                               side: const BorderSide(color: Colors.red),
                               minimumSize: const Size(double.infinity, 48),
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                             onPressed: () {},
                             child: const Text("Remove Member"),
@@ -317,7 +345,8 @@ const SizedBox(height: 20),
                               side: const BorderSide(color: Colors.black),
                               minimumSize: const Size(double.infinity, 48),
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                             onPressed: () {},
                             child: const Text("Block User"),
@@ -378,12 +407,15 @@ class _SectionHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title,
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+          Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
           if (action != null)
-            Text(action!,
-                style: const TextStyle(color: Colors.green, fontSize: 12)),
+            Text(
+              action!,
+              style: const TextStyle(color: Colors.green, fontSize: 12),
+            ),
         ],
       ),
     );
@@ -414,7 +446,11 @@ class _StatCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
-          BoxShadow(color: Colors.grey.shade200, blurRadius: 6, spreadRadius: 2),
+          BoxShadow(
+            color: Colors.grey.shade200,
+            blurRadius: 6,
+            spreadRadius: 2,
+          ),
         ],
       ),
       child: Column(
@@ -431,7 +467,7 @@ class _StatCard extends StatelessWidget {
               Text(
                 subText,
                 style: TextStyle(color: iconColor, fontWeight: FontWeight.bold),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -481,8 +517,10 @@ class _ContributionTile extends StatelessWidget {
           Row(
             children: [
               const Icon(Icons.star, color: Colors.amber, size: 14),
-              Text(rating.toString(),
-                  style: const TextStyle(fontSize: 12, color: Colors.grey)),
+              Text(
+                rating.toString(),
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
             ],
           ),
         ],
@@ -498,8 +536,10 @@ class _ContributionTile extends StatelessWidget {
               color: statusColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(status,
-                style: TextStyle(color: statusColor, fontSize: 12)),
+            child: Text(
+              status,
+              style: TextStyle(color: statusColor, fontSize: 12),
+            ),
           ),
         ],
       ),
@@ -516,9 +556,13 @@ class _PerformanceStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(value,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.green)),
+        Text(
+          value,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.green,
+          ),
+        ),
         const SizedBox(height: 4),
         Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey)),
       ],
@@ -548,8 +592,10 @@ class _ActivityTile extends StatelessWidget {
         child: Icon(icon, color: iconColor),
       ),
       title: Text(title, style: const TextStyle(fontSize: 14)),
-      subtitle: Text(subtitle,
-          style: const TextStyle(fontSize: 12, color: Colors.grey)),
+      subtitle: Text(
+        subtitle,
+        style: const TextStyle(fontSize: 12, color: Colors.grey),
+      ),
     );
   }
 }
@@ -576,7 +622,11 @@ class _DocumentTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
         boxShadow: [
-          BoxShadow(color: Colors.grey.shade200, blurRadius: 6, spreadRadius: 2),
+          BoxShadow(
+            color: Colors.grey.shade200,
+            blurRadius: 6,
+            spreadRadius: 2,
+          ),
         ],
       ),
       child: Column(
@@ -585,9 +635,14 @@ class _DocumentTile extends StatelessWidget {
           const SizedBox(height: 6),
           Text(label, style: const TextStyle(fontSize: 12)),
           const SizedBox(height: 4),
-          Text(status,
-              style: TextStyle(
-                  color: color, fontSize: 10, fontWeight: FontWeight.bold)),
+          Text(
+            status,
+            style: TextStyle(
+              color: color,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );

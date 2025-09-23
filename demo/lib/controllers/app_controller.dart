@@ -106,7 +106,7 @@ class AppController extends ChangeNotifier {
             return const MyApp();
           case 3:
             return MyCoopsScreen(); // Cooperative tab
-          case 3:
+          case 4:
             return const FarmerProfileScreen(); // Profile tab
           default:
             return const CategoriesScreen();

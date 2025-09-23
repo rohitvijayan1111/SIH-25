@@ -130,8 +130,8 @@ class ServiceSections {
         ),
         TabConfig(
           label: 'Inventory',
-          icon: Icons.inventory_2_outlined,
-          activeIcon: Icons.inventory,
+          icon: Icons.warehouse_outlined,
+          activeIcon: Icons.warehouse,
         ),
         TabConfig(
           label: 'Profile',
