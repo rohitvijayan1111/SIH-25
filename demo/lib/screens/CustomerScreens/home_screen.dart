@@ -582,14 +582,13 @@
 
 import 'package:flutter/material.dart';
 
-import './cart_screen.dart';
-import './notification.dart'; // 👈 import your NotificationPage
+import './favorites_screen.dart';
+import './notification.dart';
 import './product_details_screen.dart';
 import 'models/product_model.dart';
 import 'widgets/category_card.dart';
+// Import the fixed ProductCard
 import 'widgets/product_card.dart';
-import 'widgets/search_bar.dart';
-import './favorites_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final int value;
@@ -612,7 +611,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     valuet = widget.value;
 
-    // Initialize products & filteredProducts here
     if (valuet == 0) {
       products = ProductData.getAllProducts();
     } else {
@@ -633,9 +631,19 @@ class _HomeScreenState extends State<HomeScreen> {
             // Search Bar
             Padding(
               padding: const EdgeInsets.all(16),
-              child: CustomSearchBar(
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search products...",
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.filter_list),
+                    onPressed: _showFilterDialog,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
                 onChanged: _filterProducts,
-                onFilterTap: _showFilterDialog,
               ),
             ),
 
@@ -785,9 +793,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 8),
                         ElevatedButton(
-                          onPressed: () {
-                            // Navigate to Products page
-                          },
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: const Color(0xFF4CAF50),
@@ -818,9 +824,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 8),
                         ElevatedButton(
-                          onPressed: () {
-                            // Navigate to Services page
-                          },
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: const Color(0xFF4CAF50),
@@ -849,7 +853,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.8,
+          childAspectRatio: 0.7, // ✅ More height for images + text
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
         ),

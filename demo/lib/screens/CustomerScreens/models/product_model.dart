@@ -18,6 +18,8 @@ class Product {
     this.farmerName = '',
     this.isFavorite = false,
   });
+   String get displayPrice => 'Average price: \$${double.tryParse(price)?.toStringAsFixed(0) ?? price}';
+
 
   // Create a copy of product with updated favorite status
   Product copyWith({bool? isFavorite}) {

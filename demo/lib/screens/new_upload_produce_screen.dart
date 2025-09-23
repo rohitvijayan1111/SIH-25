@@ -1,10 +1,11 @@
 import 'dart:io';
+
 import 'package:demo/screens/CustomerScreens/agent.dart'; // make sure the path is correct
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-
 import 'package:path/path.dart' as p;
+// ignore: depend_on_referenced_packages
+import 'package:path_provider/path_provider.dart';
 
 class UploadProduceScreen extends StatefulWidget {
   const UploadProduceScreen({super.key});
