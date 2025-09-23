@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../models/service_section.dart';
 import 'home_screen.dart'; // 👈 make sure this file exists
+import 'package:provider/provider.dart';
+import '../../controllers/app_controller.dart';
 
 class SuccessScreen extends StatelessWidget {
   const SuccessScreen({super.key});
@@ -15,9 +18,10 @@ class SuccessScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("Success!",
-                    style:
-                        TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                const Text(
+                  "Success!",
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 20),
                 Container(
                   width: 120,
@@ -26,8 +30,11 @@ class SuccessScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(color: Color(0xFF77C043), width: 3),
                   ),
-                  child: const Icon(Icons.check,
-                      size: 60, color: Color(0xFF77C043)),
+                  child: const Icon(
+                    Icons.check,
+                    size: 60,
+                    color: Color(0xFF77C043),
+                  ),
                 ),
                 const SizedBox(height: 25),
                 const Text(
@@ -40,41 +47,59 @@ class SuccessScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF77C043),
                     padding: const EdgeInsets.symmetric(
-                        vertical: 14, horizontal: 50),
+                      vertical: 14,
+                      horizontal: 50,
+                    ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   onPressed: () {
                     // TODO: implement track order
                   },
-                  child: const Text("Track Order",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600)),
+                  child: const Text(
+                    "Track Order",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 15),
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Color(0xFF77C043)),
                     padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 50),
+                      vertical: 12,
+                      horizontal: 50,
+                    ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   onPressed: () {
-                    // 👇 Navigate directly to HomePage
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const HomeScreen()),
-                      (route) => false,
+                    //   // 👇 Navigate directly to HomePage
+                    //   Navigator.pushAndRemoveUntil(
+                    //     context,
+                    //     MaterialPageRoute(builder: (_) => const HomeScreen()),
+                    //     (route) => false,
+                    //   );
+                    // Navigator.of(context).pop();
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    context.read<AppController>().navigateToSection(
+                      ServiceSection.browseProducts,
+                      initialTab: 1,
                     );
                   },
-                  child: const Text("Back to Shop",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500)),
+                  child: const Text(
+                    "Back to Shop",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
               ],
             ),
