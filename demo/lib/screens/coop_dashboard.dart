@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import './upload_produce_coop.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -15,13 +15,29 @@ class DashboardScreen extends StatelessWidget {
             children: [
               /// Header
               Container(
+                color: Colors.green,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 12,
                 ),
+
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      ),
+                      iconSize: 20, // Smaller icon to fit height
+                      padding:
+                          EdgeInsets.zero, // Remove default internal padding
+                      constraints:
+                          BoxConstraints(), // Remove min size constraints
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    const SizedBox(width: 4),
+
                     /// App Logo
                     CircleAvatar(
                       radius: 20,
@@ -37,6 +53,7 @@ class DashboardScreen extends StatelessWidget {
                           const Text(
                             "Green Valley Co-op",
                             style: TextStyle(
+                              color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -44,10 +61,7 @@ class DashboardScreen extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             "248 Members · \$125,400 Pooled",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
+                            style: TextStyle(fontSize: 12, color: Colors.white),
                           ),
                         ],
                       ),
@@ -59,14 +73,17 @@ class DashboardScreen extends StatelessWidget {
                         IconButton(
                           onPressed: () {},
                           icon: const Icon(Icons.notifications_outlined),
+                          color: Colors.white,
                         ),
                         IconButton(
                           onPressed: () {},
                           icon: const Icon(Icons.settings_outlined),
+                          color: Colors.white,
                         ),
                         IconButton(
                           onPressed: () {},
                           icon: const Icon(Icons.more_vert),
+                          color: Colors.white,
                         ),
                       ],
                     ),
@@ -148,23 +165,51 @@ class DashboardScreen extends StatelessWidget {
                       runSpacing: 12,
                       children: [
                         _QuickActionButton(
-                          label: "Scan QR",
-                          color: Colors.green,
+                          label: 'Scan QR',
+                          color: Colors.teal.shade600, // Rich teal
                           icon: Icons.qr_code_scanner,
                         ),
-                        _QuickActionButton(
-                          label: "Add Batch",
-                          color: Colors.greenAccent,
-                          icon: Icons.add_box_outlined,
+                        //
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Navigator.of(context).push(
+                        //       MaterialPageRoute(
+                        //         builder: (_) => UploadProduceScreen(),
+                        //       ),
+                        //     );
+                        //   },
+                        //   child: _QuickActionButton(
+                        //     label: 'Add Batch',
+                        //     color: Colors.teal.shade300,
+                        //     icon: Icons.add_box_outlined,
+                        //   ),
+                        // ),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => UploadProduceScreen(),
+                                ),
+                              );
+                            },
+                            child: _QuickActionButton(
+                              label: 'Add Batch',
+                              color: Colors.teal.shade300,
+                              icon: Icons.add_box_outlined,
+                            ),
+                          ),
                         ),
                         _QuickActionButton(
-                          label: "Export",
-                          color: Colors.orangeAccent,
+                          label: 'Export',
+                          color: Colors.amber.shade600, // Warm amber
                           icon: Icons.upload_file,
                         ),
                         _QuickActionButton(
-                          label: "Add Farmer",
-                          color: Colors.blueAccent,
+                          label: 'Add Farmer',
+                          color: Colors.deepPurple.shade400, // Subtle purple
                           icon: Icons.person_add_alt,
                         ),
                       ],
@@ -202,7 +247,7 @@ class DashboardScreen extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white70,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Text(
