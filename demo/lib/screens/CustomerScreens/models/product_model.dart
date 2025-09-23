@@ -56,7 +56,8 @@ class ProductData {
         id: 'H1',
         name: 'Glyphosate',
         price: '350',
-        imageUrl: 'https://www.pomais.com/wp-content/uploads/2024/08/6-1.jpg',
+        imageUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQX_h4_fnBVxubY3QkeC1fTDUZQM1YQj-WaXg&s',
         category: 'Herbicide',
         description: 'Broad-spectrum systemic herbicide for weed control',
         farmerName: 'AgroChem Pvt Ltd',
@@ -124,7 +125,7 @@ class ProductData {
         name: 'Cytokinin Spray',
         price: '180',
         imageUrl:
-            'https://www.plantgrowthhormones.com/uploads/15034/small/hot-sale-plant-growth-regulators-cytokininecdaa.png',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA8BjHvhJaofV5DngwKdAMfrwKvddIVW5uYA&s',
         category: 'Growth Regulators',
         description: 'Promotes cell division and leaf expansion',
         farmerName: 'AgriBioTech',
@@ -203,7 +204,7 @@ class ProductData {
         name: 'Sulphur Dust',
         price: '180',
         imageUrl:
-            'http://superarbor.io/cdn/shop/products/07d953bc-9423-47e9-bf46-40d7d54199e4.jpg?v=1709790663',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYcYseOqOiWGW1tHCwSIaWbb7vHXhQOVJZxw&s',
         category: 'Fungicide',
         description: 'Effective for powdery mildew control',
         farmerName: 'AgroSafe',
