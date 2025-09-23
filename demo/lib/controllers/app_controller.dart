@@ -12,6 +12,7 @@ import '../screens/VendorScreens/procurement/procurement_screen.dart';
 import '../screens/VendorScreens/dashboard/business_dashboard.dart';
 import '../screens/VendorScreens/dashboard/inventory_screen.dart';
 import '../screens/farmer_profile.dart';
+import '../screens/scan_qr_screen.dart';
 
 class AppController extends ChangeNotifier {
   ServiceSection _currentSection = ServiceSection.categories;
@@ -115,10 +116,13 @@ class AppController extends ChangeNotifier {
           case 1:
             return const HomeScreen(); // Browse tab
           case 2:
-            return const OrdersScreen(); // Order tab
+            return const CameraQRScreen(); // Scan QR tab
+
           case 3:
-            return const CartScreen(); // Cart tab
+            return const OrdersScreen(); // Order tab
           case 4:
+            return const CartScreen(); // Cart tab
+          case 5:
             return const ProfilePlaceholderScreen(); // Profile tab
           default:
             return const CategoriesScreen();
