@@ -1,3 +1,4 @@
+import 'package:demo/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/welcome_screen.dart';
@@ -30,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
             if (context.mounted) {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                MaterialPageRoute(builder: (context) => MainScreen()),
               );
             }
           });
