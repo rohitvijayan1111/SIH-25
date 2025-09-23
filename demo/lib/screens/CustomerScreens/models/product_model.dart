@@ -540,7 +540,8 @@ class ProductData {
         id: '2',
         name: 'Papaya',
         price: '80',
-        imageUrl: 'assets/CustomerUIAssets/images/papaya.jpg',
+        imageUrl:
+            'https://m.media-amazon.com/images/I/61CuiyI4aBL._UF894,1000_QL80_.jpg',
         category: 'Fruits',
         description: 'Sweet and juicy papaya',
         farmerName: 'Farmer Mary',
@@ -550,7 +551,8 @@ class ProductData {
         id: '3',
         name: 'Tomatoes',
         price: '60',
-        imageUrl: 'assets/CustomerUIAssets/images/tomato.jpg',
+        imageUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN9-OuOtsl4iecwrOQ4c00iOqngoUdBz1dzQ&s',
         category: 'Vegetables',
         description: 'Red ripe tomatoes',
         farmerName: 'Farmer Bob',
@@ -571,7 +573,8 @@ class ProductData {
         id: '6',
         name: 'Banana',
         price: '30',
-        imageUrl: 'assets/CustomerUIAssets/images/banana.jpg',
+        imageUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAiE9BZy3SyV4Xb83a3V-e8Ywq6z1bVZlGsA&s',
         category: 'Fruits',
         description: 'Fresh bananas, source of potassium',
         farmerName: 'Farmer Kumar',
@@ -582,7 +585,8 @@ class ProductData {
         id: '8',
         name: 'Wheat',
         price: '25',
-        imageUrl: 'assets/CustomerUIAssets/images/wheat.jpg',
+        imageUrl:
+            'https://rukminim2.flixcart.com/image/704/844/kmf7ki80/grain-millet/z/o/r/1-whole-wheat-sharbati-sabut-gehu-1kg-whole-wheat-producer-original-imagfbx7fbwwygyc.jpeg?q=90&crop=false',
         category: 'Grains',
         description: 'High-quality wheat grains',
         farmerName: 'Farmer Ramesh',
@@ -592,7 +596,8 @@ class ProductData {
         id: '9',
         name: 'Rice',
         price: '50',
-        imageUrl: 'assets/CustomerUIAssets/images/rice.jpg',
+        imageUrl:
+            'https://images.getrecipekit.com/20230113172320-whiterice.jpg?aspect_ratio=16:9&quality=90&',
         category: 'Grains',
         description: 'Premium basmati rice',
         farmerName: 'Farmer Devi',
@@ -602,7 +607,7 @@ class ProductData {
         id: '10',
         name: 'Maize',
         price: '32',
-        imageUrl: 'assets/CustomerUIAssets/images/maize.jpg',
+        imageUrl: 'https://5.imimg.com/data5/QO/FL/MY-7388904/maize-seeds.jpg',
         category: 'Grains',
         description: 'Fresh maize from the farm',
         farmerName: 'Farmer Mohan',
@@ -613,7 +618,8 @@ class ProductData {
         id: '11',
         name: 'Milk',
         price: '52',
-        imageUrl: 'assets/CustomerUIAssets/images/milk.jpg',
+        imageUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDTbFoz8U5IKKDd2KBg2uOcOnJRm1-Zdm9NQ&s',
         category: 'Dairy',
         description: 'Fresh cow milk delivered daily',
         farmerName: 'Dairy Farmhouse',
@@ -623,7 +629,8 @@ class ProductData {
         id: '12',
         name: 'Paneer',
         price: '210',
-        imageUrl: 'assets/CustomerUIAssets/images/paneer.jpg',
+        imageUrl:
+            'https://www.indianhealthyrecipes.com/wp-content/uploads/2024/05/how-to-make-paneer-recipe.jpg',
         category: 'Dairy',
         description: 'Soft cottage cheese, homemade',
         farmerName: 'Farmer Shanti',
@@ -632,7 +639,8 @@ class ProductData {
         id: '13',
         name: 'Curd',
         price: '50',
-        imageUrl: 'assets/CustomerUIAssets/images/curd.jpg',
+        imageUrl:
+            'https://www.vegrecipesofindia.com/wp-content/uploads/2012/05/how-to-make-curd-recipe-1.jpg',
         category: 'Dairy',
         description: 'Thick curd from desi cows',
         farmerName: 'Farmer Anil',
@@ -642,7 +650,8 @@ class ProductData {
         id: '14',
         name: 'Butter',
         price: '380',
-        imageUrl: 'assets/CustomerUIAssets/images/butter.webp',
+        imageUrl:
+            'https://cdn.britannica.com/27/122027-050-EAA86783/Butter.jpg',
         category: 'Dairy',
         description: 'Freshly churned yellow butter',
         farmerName: 'Dairy Collective',
