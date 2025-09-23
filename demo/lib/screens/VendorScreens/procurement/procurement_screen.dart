@@ -24,7 +24,7 @@ class _ProcurementScreenState extends State<ProcurementScreen>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 3,
+      length: 2,
       vsync: this,
       initialIndex: widget.initialTab,
     );
@@ -41,12 +41,12 @@ class _ProcurementScreenState extends State<ProcurementScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppConstants.primaryBlue,
         elevation: 0,
         title: const Text(
           'Procurement',
           style: TextStyle(
-            color: Colors.black87,
+            color: Colors.white,
             fontSize: AppConstants.titleFontSize,
             fontWeight: FontWeight.bold,
           ),
@@ -71,14 +71,14 @@ class _ProcurementScreenState extends State<ProcurementScreen>
               ),
               tabs: const [
                 Tab(
-                  text: 'Active Requests',
-                  icon: Icon(Icons.assignment, size: 20),
+                  text: 'Available Supplies',
+                  icon: Icon(Icons.inventory_2_outlined, size: 20),
                 ),
                 Tab(
-                  text: 'Create Request',
+                  text: 'Create Procurement',
                   icon: Icon(Icons.add_circle, size: 20),
                 ),
-                Tab(text: 'Bidding', icon: Icon(Icons.gavel, size: 20)),
+                // Tab(text: 'Bidding', icon: Icon(Icons.gavel, size: 20)),
               ],
             ),
           ),
@@ -86,7 +86,7 @@ class _ProcurementScreenState extends State<ProcurementScreen>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const [ActiveRequestsTab(), CreateRequestTab(), BiddingTab()],
+        children: const [ActiveRequestsTab(), CreateRequestTab()],
       ),
       floatingActionButton: _tabController.index == 0
           ? FloatingActionButton.extended(

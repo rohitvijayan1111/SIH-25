@@ -18,7 +18,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 900),
     );
 
     _fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -65,17 +65,21 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F5F9), // Light blue-gray background
+      backgroundColor: const Color(0xFFF9FAFB), // Very light background
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.green),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF6A994E)),
           onPressed: () {},
         ),
         title: const Text(
           "Request Details",
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Color(0xFF2C3E50),
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+          ),
         ),
       ),
       body: SafeArea(
@@ -179,8 +183,30 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
     Duration delay = Duration.zero,
   }) {
     return FadeTransition(
-      opacity: _fadeInAnimation,
-      child: SlideTransition(position: _slideInAnimation, child: child),
+      opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: Interval(
+            delay.inMilliseconds / 900,
+            (delay.inMilliseconds + 700) / 900,
+            curve: Curves.easeIn,
+          ),
+        ),
+      ),
+      child: SlideTransition(
+        position: Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero)
+            .animate(
+              CurvedAnimation(
+                parent: _controller,
+                curve: Interval(
+                  delay.inMilliseconds / 900,
+                  (delay.inMilliseconds + 700) / 900,
+                  curve: Curves.easeOut,
+                ),
+              ),
+            ),
+        child: child,
+      ),
     );
   }
 
@@ -189,13 +215,13 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+            color: const Color(0xFF6A994E).withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -204,7 +230,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundColor: Colors.green.shade100,
+            backgroundColor: const Color(0xFFB4E4A4),
             backgroundImage: NetworkImage(request.avatarUrl),
           ),
           const SizedBox(width: 16),
@@ -215,9 +241,9 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
                 Text(
                   request.middlemanName,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Color(0xFF2C3E50),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -255,12 +281,12 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withOpacity(0.08),
             spreadRadius: 1,
-            blurRadius: 5,
+            blurRadius: 8,
             offset: const Offset(0, 3),
           ),
         ],
@@ -271,12 +297,12 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
           Text(
             title,
             style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF2C3E50),
             ),
           ),
-          const Divider(height: 16, color: Colors.black12),
+          const Divider(height: 24, color: Colors.black12),
           ...children,
         ],
       ),
@@ -285,24 +311,27 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
 
   Widget _buildDetailRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
             style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black54,
+              fontSize: 15,
+              color: Color(0xFF5E6B7A),
               fontWeight: FontWeight.w500,
             ),
           ),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black87,
-              fontWeight: FontWeight.w600,
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Color(0xFF2C3E50),
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
@@ -315,12 +344,12 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withOpacity(0.08),
             spreadRadius: 1,
-            blurRadius: 5,
+            blurRadius: 8,
             offset: const Offset(0, 3),
           ),
         ],
@@ -331,7 +360,11 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
           _buildStatusBadge(request.status),
           Text(
             "Submitted ${_getFormattedTime(request.submittedTimestamp)}",
-            style: const TextStyle(fontSize: 12, color: Colors.black45),
+            style: const TextStyle(
+              fontSize: 13,
+              color: Color(0xFF8B9CB0),
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
@@ -344,33 +377,33 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
     switch (status) {
       case RequestStatus.pending:
         text = "Pending";
-        color = Colors.orange;
+        color = const Color(0xFFFFA500);
         break;
       case RequestStatus.accepted:
         text = "Accepted";
-        color = Colors.green;
+        color = const Color(0xFF6A994E);
         break;
       case RequestStatus.declined:
         text = "Declined";
-        color = Colors.red;
+        color = const Color(0xFFE53935);
         break;
       case RequestStatus.countered:
         text = "Countered";
-        color = Colors.blue;
+        color = const Color(0xFF0077C0);
         break;
     }
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
+        color: color.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         text,
         style: TextStyle(
           color: color,
           fontWeight: FontWeight.bold,
-          fontSize: 12,
+          fontSize: 13,
         ),
       ),
     );
@@ -391,69 +424,137 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen>
   Widget _buildActionButtons(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.check, color: Colors.white),
-            label: const Text(
-              "Accept Request",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+        _AnimatedButton(
+          onTap: () {},
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+              label: const Text(
+                "Accept Request",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
               ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          width: double.infinity,
-          child: OutlinedButton(
-            onPressed: () {},
-            child: const Text("Make Counter-offer"),
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: Colors.blue),
-              foregroundColor: Colors.blue,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF6A994E),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 5,
+                shadowColor: const Color(0xFF6A994E).withOpacity(0.3),
               ),
             ),
           ),
         ),
         const SizedBox(height: 12),
-        SizedBox(
-          width: double.infinity,
-          child: OutlinedButton(
-            onPressed: () {},
-            child: const Text("Decline"),
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: Colors.red),
-              foregroundColor: Colors.red,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+        _AnimatedButton(
+          onTap: () {},
+          child: SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {},
+              child: const Text("Make Counter-offer"),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Color(0xFF0077C0), width: 2),
+                foregroundColor: const Color(0xFF0077C0),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
               ),
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        _AnimatedButton(
+          onTap: () {},
+          child: SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {},
+              child: const Text("Decline"),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Color(0xFFE53935), width: 2),
+                foregroundColor: const Color(0xFFE53935),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
               ),
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _AnimatedButton extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onTap;
+
+  const _AnimatedButton({required this.child, required this.onTap});
+
+  @override
+  _AnimatedButtonState createState() => _AnimatedButtonState();
+}
+
+class _AnimatedButtonState extends State<_AnimatedButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+      lowerBound: 0.95,
+      upperBound: 1.0,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTapDown(TapDownDetails details) {
+    _controller.reverse();
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    _controller.forward();
+    widget.onTap();
+  }
+
+  void _onTapCancel() {
+    _controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      onTapCancel: _onTapCancel,
+      child: ScaleTransition(scale: _scaleAnimation, child: widget.child),
     );
   }
 }

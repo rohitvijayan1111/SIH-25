@@ -117,10 +117,10 @@ class _CameraQRScreenState extends State<CameraQRScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF1A1A2E),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back, color: Colors.white),
+        //   onPressed: () => Navigator.pop(context),
+        // ),
         title: const Text(
           'Scan QR Code',
           style: TextStyle(
