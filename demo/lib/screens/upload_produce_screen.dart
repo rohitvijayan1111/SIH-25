@@ -8,39 +8,76 @@ class UploadProduceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Header with mic button
-              Row(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(70),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade600, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.green.withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Navigate back
-                    },
-                    icon: const Icon(Icons.arrow_back),
+                  // Back button with white icon
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
                   ),
+
+                  // Title with white text
                   const Expanded(
                     child: Text(
                       "Upload Produce",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),
-                  // ✅ Round mic button
+
+                  // Mic button with enhanced styling
                   Container(
                     decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
                       shape: BoxShape.circle,
-                      color: Colors.green.withOpacity(0.1),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.3),
+                        width: 1,
+                      ),
                     ),
                     child: IconButton(
-                      icon: const Icon(Icons.mic, color: Colors.green),
+                      icon: const Icon(
+                        Icons.mic,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -53,7 +90,56 @@ class UploadProduceScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+            ),
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Header with mic button
+              // Row(
+              //   children: [
+              //     IconButton(
+              //       onPressed: () {
+              //         Navigator.pop(context); // Navigate back
+              //       },
+              //       icon: const Icon(Icons.arrow_back),
+              //     ),
+              //     const Expanded(
+              //       child: Text(
+              //         "Upload Produce",
+              //         textAlign: TextAlign.center,
+              //         style: TextStyle(
+              //           fontSize: 16,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //       ),
+              //     ),
+              //     // ✅ Round mic button
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         shape: BoxShape.circle,
+              //         color: Colors.green.withOpacity(0.1),
+              //       ),
+              //       child: IconButton(
+              //         icon: const Icon(Icons.mic, color: Colors.green),
+              //         onPressed: () {
+              //           Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //               builder: (context) => const AgentsPage(),
+              //             ),
+              //           );
+              //         },
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // const SizedBox(height: 12),
 
               /// Upload Box
               GestureDetector(
