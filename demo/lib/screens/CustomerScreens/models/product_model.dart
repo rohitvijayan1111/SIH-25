@@ -18,8 +18,9 @@ class Product {
     this.farmerName = '',
     this.isFavorite = false,
   });
-   String get displayPrice => 'Average price: \$${double.tryParse(price)?.toStringAsFixed(0) ?? price}';
 
+  // Updated displayPrice getter to format as "Average price: X"
+  String get displayPrice => 'Average price: ${double.tryParse(price)?.toStringAsFixed(0) ?? price}';
 
   // Create a copy of product with updated favorite status
   Product copyWith({bool? isFavorite}) {
@@ -345,7 +346,6 @@ class ProductData {
         price: '350',
         imageUrl:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjY36-GOK0vfea5BX8MRiDCCnJ1pH1ixf9eQ&s',
-
         category: 'Micro Nutrient',
         description: 'Corrects zinc deficiency in crops',
         farmerName: 'MicroGrow',
@@ -579,7 +579,6 @@ class ProductData {
         farmerName: 'Farmer Kumar',
         isFavorite: false,
       ),
-
       Product(
         id: '8',
         name: 'Wheat',
@@ -629,6 +628,7 @@ class ProductData {
         category: 'Dairy',
         description: 'Soft cottage cheese, homemade',
         farmerName: 'Farmer Shanti',
+        isFavorite: false,
       ),
       Product(
         id: '13',
