@@ -41,22 +41,36 @@ class ProductDetails extends StatelessWidget {
             Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: imageUrl != null
+                child: product.imageUrl.startsWith('http')
                     ? Image.network(
-                        imageUrl,
-                        height: 240,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+                        product.imageUrl,
+                        fit: BoxFit.contain,
+                        alignment: Alignment.center,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[200],
+                            child: const Icon(
+                              Icons.broken_image,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                          );
+                        },
                       )
-                    : Container(
-                        height: 200,
-                        width: 200,
-                        color: Colors.green[50],
-                        child: const Icon(
-                          Icons.shopping_bag,
-                          size: 100,
-                          color: Colors.green,
-                        ),
+                    : Image.asset(
+                        product.imageUrl,
+                        fit: BoxFit.contain,
+                        alignment: Alignment.center,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[200],
+                            child: const Icon(
+                              Icons.broken_image,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                          );
+                        },
                       ),
               ),
             ),
