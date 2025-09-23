@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demo/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../screens/welcome_screen.dart';
@@ -55,7 +56,7 @@ class _SignInPageState extends State<SignInPage> {
           // ✅ User already exists → go to WelcomeScreen
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => WelcomeScreen()),
+            MaterialPageRoute(builder: (context) => MainScreen()),
           );
         } else {
           // ✅ New user → redirect to CollectDetails
