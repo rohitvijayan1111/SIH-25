@@ -11,48 +11,11 @@ class CategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      // appBar: AppBar(
-      //   backgroundColor: Colors.white,
-      //   elevation: 0,
-      //   title: const Text(
-      //     'Categories',
-      //     style: TextStyle(
-      //       color: Colors.black87,
-      //       fontSize: 20,
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   ),
-      // ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // const SizedBox(height: 8),
-
-            // // App Name
-            // const Text(
-            //   'ABC (Agri Bharat Connect)',
-            //   style: TextStyle(
-            //     fontSize: 28,
-            //     fontWeight: FontWeight.bold,
-            //     color: Color(0xFF2e384d),
-            //   ),
-            //   textAlign: TextAlign.center,
-            // ),
-
-            // const SizedBox(height: 6),
-
-            // // Powered by description
-            // const Text(
-            //   'Powered by ONDC and Beckn protocol, secured with Hyperledger blockchain',
-            //   style: TextStyle(
-            //     fontSize: 14,
-            //     color: Color(0xFF586690),
-            //     height: 1.3,
-            //   ),
-            //   textAlign: TextAlign.center,
-            // ),
-
+            
             // const SizedBox(height: 20),
             Container(
               width: double.infinity,
@@ -93,7 +56,7 @@ class CategoriesScreen extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 16),
+                  SizedBox(height: 8),
 
                   // App Name with enhanced styling
                   Text(
@@ -115,7 +78,7 @@ class CategoriesScreen extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 12),
+                  SizedBox(height: 4),
 
                   // Powered by section with enhanced design
                   Container(
