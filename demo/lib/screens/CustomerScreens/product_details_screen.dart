@@ -745,10 +745,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Image.network(product.imageUrl, fit: BoxFit.cover),
-                  ),
+                  SizedBox(
+  height: 200, // or a suitable height for your layout
+  width: double.infinity,
+  child: Image.network(
+    product.imageUrl,
+    fit: BoxFit.contain, // ensures the full image fits without cropping
+    alignment: Alignment.center,
+  ),
+),
+
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
