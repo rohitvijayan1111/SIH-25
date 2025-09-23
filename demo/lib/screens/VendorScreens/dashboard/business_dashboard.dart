@@ -17,16 +17,16 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppConstants.primaryBlue,
         elevation: 0,
         title: const Row(
           children: [
-            Icon(Icons.analytics, color: AppConstants.primaryBlue, size: 24),
+            Icon(Icons.analytics, color: AppConstants.white, size: 24),
             SizedBox(width: 8),
             Text(
-              'Business Dashboard',
+              'Dashboard',
               style: TextStyle(
-                color: Colors.black87,
+                color: Colors.white,
                 fontSize: AppConstants.titleFontSize,
                 fontWeight: FontWeight.bold,
               ),
