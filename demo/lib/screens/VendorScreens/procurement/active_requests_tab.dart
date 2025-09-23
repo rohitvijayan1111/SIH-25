@@ -305,7 +305,9 @@ class _ActiveRequestsTabState extends State<ActiveRequestsTab> {
                         );
                       },
                       icon: const Icon(Icons.visibility, size: 16),
-                      label: Text('View Bids (${procurement.bids.length})'),
+                      label: Text(
+                        'View Farmer Supplies (${procurement.bids.length})',
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppConstants.primaryBlue,
                         foregroundColor: Colors.white,
@@ -319,7 +321,7 @@ class _ActiveRequestsTabState extends State<ActiveRequestsTab> {
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('No bids received yet'),
+                            content: Text('No Supplies received yet'),
                             duration: Duration(seconds: 2),
                           ),
                         );

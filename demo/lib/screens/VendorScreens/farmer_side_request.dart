@@ -31,33 +31,31 @@ class BuyerRequestsScreen extends StatelessWidget {
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFFFFFFFF), Color(0xFFF9FAFB)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+            // gradient: LinearGradient(
+            //   colors: [Color(0xFFFFFFFF), Color(0xFFF9FAFB)],
+            //   begin: Alignment.topCenter,
+            //   end: Alignment.bottomCenter,
+            // ),
+            color: Colors.green,
           ),
         ),
         elevation: 1,
         surfaceTintColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFF4B5563)),
-          onPressed: () {},
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFF4B5563)),
+        //   onPressed: () => Navigator.of(context).pop(),
+        // ),
         title: const Text(
           'Buyer Requests',
-          style: TextStyle(
-            color: Color(0xFF1F2937),
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.menu, color: Color(0xFF4B5563)),
-            onPressed: () {},
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.menu, color: Color(0xFF4B5563)),
+        //     onPressed: () {},
+        //   ),
+        // ],
       ),
       body: Column(
         children: [
@@ -184,37 +182,37 @@ class BuyerRequestsScreen extends StatelessWidget {
           ),
         ],
       ),
-      // Persistent Tab Bar with subtle shadow
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xFF16A34A),
-        unselectedItemColor: const Color(0xFF9CA3AF),
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag_outlined),
-            label: 'Listings',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.request_page_rounded),
-            label: 'Requests',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message_outlined),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      // // Persistent Tab Bar with subtle shadow
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Colors.white,
+      //   selectedItemColor: const Color(0xFF16A34A),
+      //   unselectedItemColor: const Color(0xFF9CA3AF),
+      //   showSelectedLabels: true,
+      //   showUnselectedLabels: true,
+      //   selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+      //   items: const [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home_outlined),
+      //       label: 'Home',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.shopping_bag_outlined),
+      //       label: 'Listings',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.request_page_rounded),
+      //       label: 'Requests',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.message_outlined),
+      //       label: 'Messages',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person_outline),
+      //       label: 'Profile',
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

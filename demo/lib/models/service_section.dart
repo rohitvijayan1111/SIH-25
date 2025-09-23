@@ -58,6 +58,11 @@ class ServiceSections {
           activeIcon: Icons.upload,
         ),
         TabConfig(
+          label: 'Seller Requests',
+          icon: Icons.list_alt_outlined,
+          activeIcon: Icons.list_alt,
+        ),
+        TabConfig(
           label: 'Cooperative',
           icon: Icons.group_outlined,
           activeIcon: Icons.group,
@@ -89,15 +94,15 @@ class ServiceSections {
         ),
 
         TabConfig(
-          label: 'Order',
+          label: 'Orders',
           icon: Icons.shopping_bag_outlined,
           activeIcon: Icons.shopping_bag,
         ),
-        TabConfig(
-          label: 'Cart',
-          icon: Icons.shopping_cart_outlined,
-          activeIcon: Icons.shopping_cart,
-        ),
+        // TabConfig(
+        //   label: 'Cart',
+        //   icon: Icons.shopping_cart_outlined,
+        //   activeIcon: Icons.shopping_cart,
+        // ),
         TabConfig(
           label: 'Profile',
           icon: Icons.person_outline,
@@ -125,8 +130,8 @@ class ServiceSections {
         ),
         TabConfig(
           label: 'Inventory',
-          icon: Icons.inventory_2_outlined,
-          activeIcon: Icons.inventory,
+          icon: Icons.warehouse_outlined,
+          activeIcon: Icons.warehouse,
         ),
         TabConfig(
           label: 'Profile',
