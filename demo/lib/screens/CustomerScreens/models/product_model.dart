@@ -124,7 +124,7 @@ class ProductData {
         name: 'Cytokinin Spray',
         price: '180',
         imageUrl:
-            'https://www.plantgrowthhormones.com/uploads/15034/small/hot-sale-plant-growth-regulators-cytokininecdaa.png',
+            'https://5.imimg.com/data5/AS/OP/MY-6709866/angel-500x500.jpg',
         category: 'Growth Regulators',
         description: 'Promotes cell division and leaf expansion',
         farmerName: 'AgriBioTech',
@@ -203,7 +203,7 @@ class ProductData {
         name: 'Sulphur Dust',
         price: '180',
         imageUrl:
-            'http://superarbor.io/cdn/shop/products/07d953bc-9423-47e9-bf46-40d7d54199e4.jpg?v=1709790663',
+            'https://growitnaturally.com/cdn/shop/products/sulfurfungicidefamily.jpg?v=1660443671',
         category: 'Fungicide',
         description: 'Effective for powdery mildew control',
         farmerName: 'AgroSafe',
