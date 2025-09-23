@@ -291,7 +291,7 @@ class _BiddingDetailScreenState extends State<BiddingDetailScreen> {
               ),
               const SizedBox(width: 8),
               Text(
-                '${_bids.length} Farmer Bids',
+                '${_bids.length} Supplies',
                 style: const TextStyle(
                   fontSize: AppConstants.subtitleFontSize,
                   fontWeight: FontWeight.bold,

@@ -83,6 +83,12 @@ class ServiceSections {
           activeIcon: Icons.search,
         ),
         TabConfig(
+          label: 'Scan QR',
+          icon: Icons.qr_code_scanner_outlined,
+          activeIcon: Icons.qr_code_scanner,
+        ),
+
+        TabConfig(
           label: 'Order',
           icon: Icons.shopping_bag_outlined,
           activeIcon: Icons.shopping_bag,
