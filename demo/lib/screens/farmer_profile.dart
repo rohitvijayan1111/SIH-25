@@ -19,10 +19,10 @@ class FarmerProfileScreen extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.arrow_back),
-                    ),
+                    // IconButton(
+                    //   onPressed: () {},
+                    //   icon: const Icon(Icons.arrow_back),
+                    // ),
                     const Expanded(
                       child: Text(
                         "Farmer Profile",
@@ -297,17 +297,17 @@ class FarmerProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        minimumSize: const Size(double.infinity, 48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {},
-                      child: const Text("Send Payment"),
-                    ),
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.green,
+                    //     minimumSize: const Size(double.infinity, 48),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(8),
+                    //     ),
+                    //   ),
+                    //   onPressed: () {},
+                    //   child: const Text("Send Payment"),
+                    // ),
                     const SizedBox(height: 12),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -321,39 +321,39 @@ class FarmerProfileScreen extends StatelessWidget {
                       child: const Text("View Full History"),
                     ),
                     const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.red,
-                              side: const BorderSide(color: Colors.red),
-                              minimumSize: const Size(double.infinity, 48),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: const Text("Remove Member"),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.black,
-                              side: const BorderSide(color: Colors.black),
-                              minimumSize: const Size(double.infinity, 48),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: const Text("Block User"),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: OutlinedButton(
+                    //         style: OutlinedButton.styleFrom(
+                    //           foregroundColor: Colors.red,
+                    //           side: const BorderSide(color: Colors.red),
+                    //           minimumSize: const Size(double.infinity, 48),
+                    //           shape: RoundedRectangleBorder(
+                    //             borderRadius: BorderRadius.circular(8),
+                    //           ),
+                    //         ),
+                    //         onPressed: () {},
+                    //         child: const Text("Remove Member"),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(width: 12),
+                    //     Expanded(
+                    //       child: OutlinedButton(
+                    //         style: OutlinedButton.styleFrom(
+                    //           foregroundColor: Colors.black,
+                    //           side: const BorderSide(color: Colors.black),
+                    //           minimumSize: const Size(double.infinity, 48),
+                    //           shape: RoundedRectangleBorder(
+                    //             borderRadius: BorderRadius.circular(8),
+                    //           ),
+                    //         ),
+                    //         onPressed: () {},
+                    //         child: const Text("Block User"),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
