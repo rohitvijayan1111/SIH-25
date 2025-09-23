@@ -41,12 +41,12 @@ class _ProcurementScreenState extends State<ProcurementScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppConstants.primaryBlue,
         elevation: 0,
         title: const Text(
           'Procurement',
           style: TextStyle(
-            color: Colors.black87,
+            color: Colors.white,
             fontSize: AppConstants.titleFontSize,
             fontWeight: FontWeight.bold,
           ),

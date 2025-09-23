@@ -44,16 +44,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppConstants.primaryBlue,
         elevation: 0,
         title: const Row(
           children: [
-            Icon(Icons.inventory_2, color: AppConstants.primaryGreen, size: 24),
+            Icon(Icons.inventory_2, color: AppConstants.white, size: 24),
             SizedBox(width: 8),
             Text(
               'My Inventory',
               style: TextStyle(
-                color: Colors.black87,
+                color: Colors.white,
                 fontSize: AppConstants.titleFontSize,
                 fontWeight: FontWeight.bold,
               ),
