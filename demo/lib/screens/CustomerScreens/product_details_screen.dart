@@ -1090,7 +1090,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   children: [
                     const Text(
                       "Total",
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                      style: TextStyle(fontSize: 14, color: Color.fromARGB(137, 22, 21, 21)),
                     ),
                     Text(
                       "Average Price: ₹${calculateTotal().toStringAsFixed(2)}",
