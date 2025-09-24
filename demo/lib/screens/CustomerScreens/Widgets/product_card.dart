@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
@@ -47,9 +48,10 @@ class ProductCard extends StatelessWidget {
                       ),
                       image: DecorationImage(
                         image: product.imageUrl.startsWith('http')
-                            ? NetworkImage(product.imageUrl) as ImageProvider
-                            : AssetImage(product.imageUrl),
-                        fit: BoxFit.cover,
+                              ? NetworkImage(product.imageUrl) as ImageProvider
+                              : AssetImage(product.imageUrl),
+                          fit: BoxFit.contain, // ✅ prevents cropping & keeps proportions
+
                       ),
                     ),
                   ),
@@ -105,14 +107,16 @@ class ProductCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     // Product Price
+                    // Product Price
                     Text(
-                      '₹${product.price}',
+                      product.displayPrice,   // ✅ use formatted price
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF4CAF50),
                       ),
                     ),
+
                   ],
                 ),
               ),
