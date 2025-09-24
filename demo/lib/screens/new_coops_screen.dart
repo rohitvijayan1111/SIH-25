@@ -11,7 +11,16 @@ class NewCoopScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColor,
-        title: Text('New Co-op'),
+        title: Text(
+    'New Co-op',
+    style: TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 22,
+      fontWeight: FontWeight.bold, // Bold text
+      color: Colors.white,         // White color
+    ),
+    textAlign: TextAlign.center,   // Center align inside its box
+  ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -20,7 +29,10 @@ class NewCoopScreen extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
-          Text('Create Your Co-op', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(
+            'Create Your Co-op',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
           SizedBox(height: 12),
           Text('Co-op Name'),
           SizedBox(height: 4),
@@ -41,7 +53,10 @@ class NewCoopScreen extends StatelessWidget {
               hintText: "Describe your co-op's mission and goals...",
               border: OutlineInputBorder(),
               isDense: true,
-              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 16,
+                horizontal: 12,
+              ),
             ),
             maxLines: 3,
           ),
@@ -58,13 +73,31 @@ class NewCoopScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          Text('Join Existing Co-ops', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(
+            'Join Existing Co-ops',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
           SizedBox(height: 12),
-          JoinCoopTile(title: 'Green Valley Co-op', description: 'Sustainable farming practices'),
-          JoinCoopTile(title: 'Agri Co-op', description: 'Modern agricultural solutions'),
-          JoinCoopTile(title: 'FreshHarvest Co-op', description: 'Farm to table excellence'),
-          JoinCoopTile(title: 'Village Unity Co-op', description: 'Community-driven farming'),
-          JoinCoopTile(title: 'EcoFarmers Co-op', description: 'Organic and eco-friendly methods'),
+          JoinCoopTile(
+            title: 'Green Valley Co-op',
+            description: 'Sustainable farming practices',
+          ),
+          JoinCoopTile(
+            title: 'Agri Co-op',
+            description: 'Modern agricultural solutions',
+          ),
+          JoinCoopTile(
+            title: 'FreshHarvest Co-op',
+            description: 'Farm to table excellence',
+          ),
+          JoinCoopTile(
+            title: 'Village Unity Co-op',
+            description: 'Community-driven farming',
+          ),
+          JoinCoopTile(
+            title: 'EcoFarmers Co-op',
+            description: 'Organic and eco-friendly methods',
+          ),
         ],
       ),
     );

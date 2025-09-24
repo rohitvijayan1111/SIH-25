@@ -10,7 +10,16 @@ class MyCoopsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColor,
-        title: Text('My Co-ops'),
+        title: Text(
+    'My Co-ops',
+    style: TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 22,
+      fontWeight: FontWeight.bold, // Bold text
+      color: Colors.white,         // White color
+    ),
+    textAlign: TextAlign.center,   // Center align inside its box
+  ),
         actions: [IconButton(icon: Icon(Icons.settings), onPressed: () {})],
       ),
       body: ListView(

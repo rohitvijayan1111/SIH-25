@@ -311,7 +311,7 @@ class FarmerProfileScreen extends StatelessWidget {
                     const SizedBox(height: 12),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: const Color.fromARGB(255, 76, 175, 80),
                         minimumSize: const Size(double.infinity, 48),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),

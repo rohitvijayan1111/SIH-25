@@ -589,6 +589,7 @@ import 'models/product_model.dart';
 import 'widgets/category_card.dart';
 // Import the fixed ProductCard
 import 'widgets/product_card.dart';
+import 'cart_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final int value;

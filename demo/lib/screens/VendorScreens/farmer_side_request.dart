@@ -46,7 +46,7 @@ class BuyerRequestsScreen extends StatelessWidget {
         //   onPressed: () => Navigator.of(context).pop(),
         // ),
         title: const Text(
-          'Buyer Requests',
+          'Seller Requests',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
