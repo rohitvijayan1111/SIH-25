@@ -604,7 +604,9 @@
 // }
 
 import 'dart:math';
+
 import 'package:flutter/material.dart';
+
 import '../../global.dart';
 import 'models/product_model.dart';
 import 'product_history.dart';
@@ -746,15 +748,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-  height: 200, // or a suitable height for your layout
-  width: double.infinity,
-  child: Image.network(
-    product.imageUrl,
-    fit: BoxFit.contain, // ensures the full image fits without cropping
-    alignment: Alignment.center,
-  ),
-),
-
+                    height: 200,
+                    width: double.infinity,
+                    child: Image.network(
+                      product.imageUrl,
+                      fit: BoxFit.contain,
+                      alignment: Alignment.center,
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -808,11 +809,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       int qty = cartQuantities[index] ?? 0;
 
                       DateTime expiry = batch["expiry"];
-                      DateTime arrival = batch["arrival"];
                       int expiryDays = expiry.difference(DateTime.now()).inDays;
-                      int arrivalDays = arrival
-                          .difference(DateTime.now())
-                          .inDays;
 
                       List<DateTime> dateOptions = List.generate(10, (i) {
                         final d = DateTime.now().add(Duration(days: i + 1));
@@ -835,9 +832,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "₹${batch["price"].toStringAsFixed(2)}",
+                                    "Average Price: ₹${batch["price"].toStringAsFixed(2)}",
                                     style: const TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xFF4CAF50),
                                     ),
@@ -895,22 +892,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 6),
-                              // Row(
-                              //   children: [
-                              //     const Icon(
-                              //       Icons.local_shipping,
-                              //       size: 18,
-                              //       color: Colors.blue,
-                              //     ),
-                              //     const SizedBox(width: 6),
-                              //     Text(
-                              //       "Arrival: ${arrival.day}/${arrival.month}/${arrival.year} "
-                              //       "(${arrivalDays}d left)",
-                              //       style: const TextStyle(color: Colors.blue),
-                              //     ),
-                              //   ],
-                              // ),
                               const Divider(height: 20, thickness: 1),
 
                               // Logistics Date Dropdown
@@ -1014,8 +995,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     children: [
                                       IconButton(
                                         onPressed: () {
-                                          if (qty > 0)
+                                          if (qty > 0) {
                                             updateCart(index, qty - 1);
+                                          }
                                         },
                                         icon: const Icon(
                                           Icons.remove_circle,
@@ -1111,7 +1093,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       style: TextStyle(fontSize: 14, color: Colors.black54),
                     ),
                     Text(
-                      "₹${calculateTotal().toStringAsFixed(2)}",
+                      "Average Price: ₹${calculateTotal().toStringAsFixed(2)}",
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
