@@ -1,18 +1,16 @@
 import 'package:demo/screens/my_coops_screen.dart';
 import 'package:flutter/material.dart';
+
 import '../models/service_section.dart';
-import '../screens/categories_screen.dart';
-// import '../screens/upload_produce_screen.dart';
-import '../screens/new_upload_produce_screen.dart';
-import '../screens/coop_dashboard.dart';
 import '../screens/CustomerScreens/home_screen.dart';
 import '../screens/CustomerScreens/orders_screen.dart';
-import '../screens/CustomerScreens/cart_screen.dart';
-import '../screens/VendorScreens/procurement/procurement_screen.dart';
 import '../screens/VendorScreens/dashboard/business_dashboard.dart';
 import '../screens/VendorScreens/dashboard/inventory_screen.dart';
-import '../screens/farmer_profile.dart';
 import '../screens/VendorScreens/farmer_side_request.dart';
+import '../screens/VendorScreens/procurement/procurement_screen.dart';
+import '../screens/categories_screen.dart';
+import '../screens/farmer_profile.dart';
+import '../screens/new_upload_produce_screen.dart';
 import '../screens/scan_qr_screen.dart';
 
 class AppController extends ChangeNotifier {
@@ -22,20 +20,18 @@ class AppController extends ChangeNotifier {
   ServiceSection get currentSection => _currentSection;
   int get currentTabIndex => _currentTabIndex;
 
-  List<TabConfig> get currentTabs =>
-      ServiceSections.configs[_currentSection]!.tabs;
-  String get currentTitle => ServiceSections.configs[_currentSection]!.title;
+  // Updated to require BuildContext
+  List<TabConfig> currentTabs(BuildContext context) =>
+      ServiceSections.configs(context)[_currentSection]!.tabs;
+
+  String currentTitle(BuildContext context) =>
+      ServiceSections.configs(context)[_currentSection]!.title;
 
   void navigateToSection(ServiceSection section, {int initialTab = 1}) {
     _currentSection = section;
     _currentTabIndex = initialTab;
     notifyListeners();
   }
-
-  // void changeTab(int index) {
-  //   _currentTabIndex = index;
-  //   notifyListeners();
-  // }
 
   void changeTab(int index) {
     // If “Home” is tapped, always go back to Categories section
@@ -52,42 +48,6 @@ class AppController extends ChangeNotifier {
   void navigateHome() {
     navigateToSection(ServiceSection.categories);
   }
-
-  // Widget getCurrentScreen() {
-  //   switch (_currentSection) {
-  //     case ServiceSection.categories:
-  //       return _currentTabIndex == 0
-  //           ? const CategoriesScreen()
-  //           : const ProfilePlaceholderScreen();
-
-  //     case ServiceSection.uploadProduce:
-  //       return _currentTabIndex == 0
-  //           ? const UploadProduceScreen()
-  //           : const DashboardScreen();
-
-  //     case ServiceSection.browseProducts:
-  //       switch (_currentTabIndex) {
-  //         case 0:
-  //           return const HomeScreen(); // Browse tab
-  //         case 1:
-  //         case 2:
-  //           return const OrdersScreen(); // Order tab
-  //         case 3:
-  //           return const CartScreen(); // Cart tab
-  //         case 4:
-  //           return const ProfilePlaceholderScreen();
-  //         case 5:
-  //           return const CategoriesScreen(); // Home tab
-  //         default:
-  //           return const CategoriesScreen();
-  //       }
-
-  //     case ServiceSection.farmerServices:
-  //       return _currentTabIndex == 0
-  //           ? const ProcurementScreen()
-  //           : const BusinessDashboard();
-  //   }
-  // }
 
   Widget getCurrentScreen() {
     switch (_currentSection) {
@@ -120,11 +80,8 @@ class AppController extends ChangeNotifier {
             return const HomeScreen(); // Browse tab
           case 2:
             return const CameraQRScreen(); // Scan QR tab
-
-          // case 3:
-          // return const OrdersScreen(); // Order tab
           case 3:
-            return const OrdersScreen(); // Cart tab
+            return const OrdersScreen(); // Orders tab
           case 4:
             return const ProfilePlaceholderScreen(); // Profile tab
           default:
@@ -138,14 +95,15 @@ class AppController extends ChangeNotifier {
           case 1:
             return const BusinessDashboard(); // Farmer Shop tab
           case 2:
-            return const ProcurementScreen();
+            return const ProcurementScreen(); // Procurement tab
           case 3:
-            return const InventoryScreen(); // Tool Renting tab
+            return const InventoryScreen(); // Inventory tab
           case 4:
             return const ProfilePlaceholderScreen(); // Profile tab
           default:
             return const CategoriesScreen();
         }
+
       case ServiceSection.farmerEssentials:
         switch (_currentTabIndex) {
           case 0:

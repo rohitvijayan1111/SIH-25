@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'new_coops_screen.dart';
+
 import 'coop_dashboard.dart';
+import 'new_coops_screen.dart';
 
 const Color themeColor = Color.fromARGB(255, 76, 175, 80);
 
@@ -9,10 +10,22 @@ class MyCoopsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: themeColor,
-        title: Text('My Co-ops'),
-        actions: [IconButton(icon: Icon(Icons.settings), onPressed: () {})],
-      ),
+                backgroundColor: themeColor,
+                title: Text('My Co-ops'),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 12.0),
+                    child: IconButton(
+                      iconSize: 36, // Bigger size
+                      icon: Icon(Icons.account_circle),
+                      onPressed: () {
+                        // Navigate to profile screen if needed
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
       body: ListView(
         children: [
           CoopTile(
@@ -32,7 +45,7 @@ class MyCoopsScreen extends StatelessWidget {
             description: 'Traditional agriculture with modern techniques',
             members: 89,
             icon: Icons.spa,
-            onTap: () {}, // No navigation or action
+            onTap: () {},
           ),
           CoopTile(
             title: 'FreshHarvest Co-op',

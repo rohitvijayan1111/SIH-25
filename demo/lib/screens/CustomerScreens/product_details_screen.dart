@@ -1105,7 +1105,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ElevatedButton.icon(
                   onPressed: cartQuantities.isNotEmpty
                       ? () {
-                          gcart ??= {};
                           gcart![product.id] ??= {};
 
                           cartQuantities.forEach((batchIndex, qty) {
