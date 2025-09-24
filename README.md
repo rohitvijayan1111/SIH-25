@@ -1,4 +1,4 @@
-# 🚜 FairAgri Supply Chain – SIH 2025
+# 🚜 AgriBharat Connect – SIH 2025
 
 [![Made with Node.js](https://img.shields.io/badge/Backend-Node.js-blue)](https://nodejs.org/) 
 [![Flutter](https://img.shields.io/badge/Frontend-Flutter-blueviolet)](https://flutter.dev/) 
