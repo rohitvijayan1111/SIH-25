@@ -658,8 +658,11 @@ class _ProductHistoryPageState extends State<ProductHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Product History"),
-        backgroundColor: Colors.green.shade700,
+        title: const Text(
+          "Product Trace",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),

@@ -585,6 +585,7 @@ import 'package:flutter/material.dart';
 import './favorites_screen.dart';
 import './notification.dart';
 import './product_details_screen.dart';
+import 'cart_screen.dart';
 import 'models/product_model.dart';
 import 'widgets/category_card.dart';
 // Import the fixed ProductCard
