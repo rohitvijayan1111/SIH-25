@@ -16,16 +16,12 @@ class MyCoopsScreen extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Roboto',
             fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+            fontWeight: FontWeight.bold, // Bold text
+            color: Colors.white,         // White color
           ),
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.center,   // Center align inside its box
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.settings), // Fixed Icon syntax
-            onPressed: () {},
-          ),
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: IconButton(
@@ -38,6 +34,7 @@ class MyCoopsScreen extends StatelessWidget {
           ),
         ],
       ),
+
       body: ListView(
         children: [
           CoopTile(
@@ -82,6 +79,7 @@ class MyCoopsScreen extends StatelessWidget {
           ),
         ],
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
