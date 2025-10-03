@@ -12,33 +12,32 @@ class MyCoopsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: themeColor,
         title: Text(
-    'My Co-ops',
-    style: TextStyle(
-      fontFamily: 'Roboto',
-      fontSize: 22,
-      fontWeight: FontWeight.bold, // Bold text
-      color: Colors.white,         // White color
-    ),
-    textAlign: TextAlign.center,   // Center align inside its box
-  ),
-        actions: [IconButton(icon: Icon(Icons.settings), onPressed: () {})],
+          'My Co-ops',
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings), // Fixed Icon syntax
+            onPressed: () {},
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: IconButton(
+              iconSize: 36, // Bigger size
+              icon: Icon(Icons.account_circle),
+              onPressed: () {
+                // Navigate to profile screen if needed
+              },
+            ),
+          ),
+        ],
       ),
-                backgroundColor: themeColor,
-                title: Text('My Co-ops'),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
-                    child: IconButton(
-                      iconSize: 36, // Bigger size
-                      icon: Icon(Icons.account_circle),
-                      onPressed: () {
-                        // Navigate to profile screen if needed
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
       body: ListView(
         children: [
           CoopTile(
@@ -93,7 +92,7 @@ class MyCoopsScreen extends StatelessWidget {
         backgroundColor: themeColor,
         child: Icon(Icons.add),
       ),
-    );
+    ); // Scaffold closing
   }
 }
 

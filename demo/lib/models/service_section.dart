@@ -73,9 +73,9 @@ class ServiceSections {
               activeIcon: Icons.group,
             ),
             TabConfig(
-              label: 'Earnings',
-              icon: Icons.monetization_on_outlined,
-              activeIcon: Icons.monetization_on,
+              label: 'Profile',
+              icon: Icons.person_outline,
+              activeIcon: Icons.person,
               onTap: () {
                 Navigator.push(
                   context,
