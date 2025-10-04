@@ -1,0 +1,80 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../models/product.dart';
+
+class ApiService {
+  static const String baseUrl = 'http://10.0.2.2:3000/api'; // Android emulator
+  // Use 'http://localhost:3000/api' for iOS simulator
+  // Use your actual IP address for physical device
+
+  // Get available products for dropdown
+  static Future<List<Product>> getProducts() async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/products'),
+            headers: {'Content-Type': 'application/json'},
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List productsData = data['products'] ?? [];
+        return productsData.map((json) => Product.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to load products: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Network error: $e');
+    }
+  }
+
+  // Submit batch to backend
+  static Future<BatchSubmissionResult> createBatch(
+    BatchFormData formData,
+  ) async {
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/batches'),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode(formData.toJson()),
+          )
+          .timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 201) {
+        final data = json.decode(response.body);
+        return BatchSubmissionResult(
+          success: true,
+          batchCode: data['batch']['batch_code'],
+          batchId: data['batch']['id'],
+          message: data['message'],
+        );
+      } else {
+        final error = json.decode(response.body);
+        return BatchSubmissionResult(
+          success: false,
+          error: error['error'] ?? 'Unknown error occurred',
+        );
+      }
+    } catch (e) {
+      return BatchSubmissionResult(success: false, error: 'Network error: $e');
+    }
+  }
+}
+
+class BatchSubmissionResult {
+  final bool success;
+  final String? batchCode;
+  final String? batchId;
+  final String? message;
+  final String? error;
+
+  BatchSubmissionResult({
+    required this.success,
+    this.batchCode,
+    this.batchId,
+    this.message,
+    this.error,
+  });
+}

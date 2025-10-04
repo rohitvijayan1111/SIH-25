@@ -10,7 +10,8 @@ import '../screens/VendorScreens/farmer_side_request.dart';
 import '../screens/VendorScreens/procurement/procurement_screen.dart';
 import '../screens/categories_screen.dart';
 import '../screens/farmer_profile.dart';
-import '../screens/new_upload_produce_screen.dart';
+// import '../screens/new_upload_produce_screen.dart';
+import '../screens/vcnew_upload_screen.dart';
 import '../screens/scan_qr_screen.dart';
 
 class AppController extends ChangeNotifier {
