@@ -1,4 +1,4 @@
-const db = require("../config/db"); 
+const db = require('../config/db');
 // 1️⃣ Farmer Creates a New Batch (BatchCreated)
 const createBatch = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ const createBatch = async (req, res) => {
       geo_lat,
       geo_lon,
       location_name,
-      meta_hash
+      meta_hash,
     } = req.body;
 
     farmer_id = farmer_id.replace(/^farmer-/, '');
@@ -32,52 +32,51 @@ const createBatch = async (req, res) => {
       product_id,
       farmer_id,
       initial_qty_kg,
-      unit || "KG",
+      unit || 'KG',
       harvest_date,
       geo_lat,
       geo_lon,
       location_name,
-      meta_hash
+      meta_hash,
     ];
 
     const result = await db.query(query, values);
 
-    console.log("📢 Blockchain Event: BatchCreated", {
+    console.log('📢 Blockchain Event: BatchCreated', {
       batch_id: result.rows[0].id,
       batch_code,
       product_id,
       farmer_id,
-      qty: initial_qty_kg
+      qty: initial_qty_kg,
     });
 
     res.status(201).json({
-      message: "Batch created successfully",
-      batch: result.rows[0]
+      message: 'Batch created successfully',
+      batch: result.rows[0],
     });
   } catch (err) {
-    console.error("Error creating batch:", err.message);
-    res.status(500).json({ error: "Failed to create batch" });
+    console.error('Error creating batch:', err.message);
+    res.status(500).json({ error: 'Failed to create batch' });
   }
 };
-
 
 // 2️⃣ Update Batch Status
 const updateStatus = async (req, res) => {
   try {
-    const { id } = req.params;     
-    const { status } = req.body;    
+    const { id } = req.params;
+    const { status } = req.body;
 
     const allowedStatuses = [
-      "PENDING",
-      "VERIFIED",
-      "LISTED",
-      "LOCKED",
-      "INVALIDATED"
+      'PENDING',
+      'VERIFIED',
+      'LISTED',
+      'LOCKED',
+      'INVALIDATED',
     ];
 
     if (!allowedStatuses.includes(status)) {
       return res.status(400).json({
-        error: `Invalid status. Allowed: ${allowedStatuses.join(", ")}`
+        error: `Invalid status. Allowed: ${allowedStatuses.join(', ')}`,
       });
     }
 
@@ -91,24 +90,24 @@ const updateStatus = async (req, res) => {
     const result = await db.query(query, [status, id]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Batch not found" });
+      return res.status(404).json({ error: 'Batch not found' });
     }
 
     const updatedBatch = result.rows[0];
 
-    console.log("📢 Blockchain Event:", {
+    console.log('📢 Blockchain Event:', {
       event: `Batch${status.charAt(0) + status.slice(1).toLowerCase()}`, // e.g., BatchVerified
       batch_id: id,
-      status
+      status,
     });
 
     res.json({
       message: `Batch status updated to ${status}`,
-      batch: updatedBatch
+      batch: updatedBatch,
     });
   } catch (err) {
-    console.error("Error updating batch status:", err.message);
-    res.status(500).json({ error: "Failed to update batch status" });
+    console.error('Error updating batch status:', err.message);
+    res.status(500).json({ error: 'Failed to update batch status' });
   }
 };
 
@@ -116,29 +115,29 @@ const updateStatus = async (req, res) => {
 const splitBatch = async (req, res) => {
   const client = await db.connect();
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
     const { split_qty, unit } = req.body;
 
-    await client.query("BEGIN");
+    await client.query('BEGIN');
     const parentResult = await client.query(
-      "SELECT * FROM batches WHERE id = $1",
+      'SELECT * FROM batches WHERE id = $1',
       [id]
     );
 
     if (parentResult.rows.length === 0) {
-      return res.status(404).json({ error: "Parent batch not found" });
+      return res.status(404).json({ error: 'Parent batch not found' });
     }
 
     const parent = parentResult.rows[0];
 
     if (split_qty > parent.current_qty_kg) {
       return res.status(400).json({
-        error: `Split quantity exceeds available stock (${parent.current_qty_kg} ${parent.unit})`
+        error: `Split quantity exceeds available stock (${parent.current_qty_kg} ${parent.unit})`,
       });
     }
 
     await client.query(
-      "UPDATE batches SET current_qty_kg = current_qty_kg - $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2",
+      'UPDATE batches SET current_qty_kg = current_qty_kg - $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
       [split_qty, id]
     );
 
@@ -160,29 +159,32 @@ const splitBatch = async (req, res) => {
         parent.geo_lon,
         parent.location_name,
         parent.meta_hash,
-        parent.id
+        parent.id,
       ]
     );
 
     const childBatch = childResult.rows[0];
 
-    await client.query("COMMIT");
+    await client.query('COMMIT');
 
-    console.log("📢 Blockchain Event: BatchSplit", {
+    console.log('📢 Blockchain Event: BatchSplit', {
       parent_batch_id: parent.id,
       child_batch_id: childBatch.id,
-      split_qty
+      split_qty,
     });
 
     res.status(201).json({
-      message: "Batch split successfully",
-      parent_batch: { id: parent.id, remaining_qty: parent.current_qty_kg - split_qty },
-      child_batch: childBatch
+      message: 'Batch split successfully',
+      parent_batch: {
+        id: parent.id,
+        remaining_qty: parent.current_qty_kg - split_qty,
+      },
+      child_batch: childBatch,
     });
   } catch (err) {
-    await client.query("ROLLBACK");
-    console.error("Error splitting batch:", err.message);
-    res.status(500).json({ error: "Failed to split batch" });
+    await client.query('ROLLBACK');
+    console.error('Error splitting batch:', err.message);
+    res.status(500).json({ error: 'Failed to split batch' });
   } finally {
     client.release();
   }
@@ -195,10 +197,12 @@ const mergeBatches = async (req, res) => {
     const { batch_ids, new_batch_code } = req.body;
 
     if (!batch_ids || batch_ids.length < 2) {
-      return res.status(400).json({ error: "Provide at least two batches to merge" });
+      return res
+        .status(400)
+        .json({ error: 'Provide at least two batches to merge' });
     }
 
-    await client.query("BEGIN");
+    await client.query('BEGIN');
 
     const result = await client.query(
       `SELECT * FROM batches WHERE id = ANY($1::uuid[])`,
@@ -206,12 +210,15 @@ const mergeBatches = async (req, res) => {
     );
 
     if (result.rows.length !== batch_ids.length) {
-      return res.status(404).json({ error: "One or more batches not found" });
+      return res.status(404).json({ error: 'One or more batches not found' });
     }
 
     const parents = result.rows;
 
-    const totalQty = parents.reduce((sum, b) => sum + Number(b.current_qty_kg), 0);
+    const totalQty = parents.reduce(
+      (sum, b) => sum + Number(b.current_qty_kg),
+      0
+    );
 
     await client.query(
       `UPDATE batches SET status = 'LOCKED', updated_at = CURRENT_TIMESTAMP WHERE id = ANY($1::uuid[])`,
@@ -229,47 +236,46 @@ const mergeBatches = async (req, res) => {
       [
         new_batch_code || `BATCH-MERGED-${Date.now()}`,
         parents[0].product_id, // assumes same product
-        parents[0].farmer_id,  // assumes same farmer/FPO
+        parents[0].farmer_id, // assumes same farmer/FPO
         totalQty,
         parents[0].unit,
         parents[0].harvest_date,
         parents[0].geo_lat,
         parents[0].geo_lon,
         parents[0].location_name,
-        parents[0].meta_hash
+        parents[0].meta_hash,
       ]
     );
 
     const mergedBatch = mergedResult.rows[0];
 
-    await client.query("COMMIT");
+    await client.query('COMMIT');
 
     // ✅ Blockchain log
-    console.log("📢 Blockchain Event: BatchMerged", {
+    console.log('📢 Blockchain Event: BatchMerged', {
       parent_batch_ids: batch_ids,
       merged_batch_id: mergedBatch.id,
-      totalQty
+      totalQty,
     });
 
     res.status(201).json({
-      message: "Batches merged successfully",
+      message: 'Batches merged successfully',
       merged_batch: mergedBatch,
-      locked_parents: batch_ids
+      locked_parents: batch_ids,
     });
   } catch (err) {
-    await client.query("ROLLBACK");
-    console.error("Error merging batches:", err.message);
-    res.status(500).json({ error: "Failed to merge batches" });
+    await client.query('ROLLBACK');
+    console.error('Error merging batches:', err.message);
+    res.status(500).json({ error: 'Failed to merge batches' });
   } finally {
     client.release();
   }
 };
 
-
 // 4️⃣ Update Harvest/Location/Meta Info
 const updateBatch = async (req, res) => {
   try {
-    const { id } = req.params;   // batch_id
+    const { id } = req.params; // batch_id
     const { geo_lat, geo_lon, location_name, meta_hash } = req.body;
 
     const fields = [];
@@ -294,14 +300,16 @@ const updateBatch = async (req, res) => {
     }
 
     if (fields.length === 0) {
-      return res.status(400).json({ error: "No valid fields provided for update" });
+      return res
+        .status(400)
+        .json({ error: 'No valid fields provided for update' });
     }
 
     fields.push(`updated_at = CURRENT_TIMESTAMP`);
 
     const query = `
       UPDATE batches
-      SET ${fields.join(", ")}
+      SET ${fields.join(', ')}
       WHERE id = $${idx}
       RETURNING *;
     `;
@@ -311,26 +319,25 @@ const updateBatch = async (req, res) => {
     const result = await db.query(query, values);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Batch not found" });
+      return res.status(404).json({ error: 'Batch not found' });
     }
 
     const updatedBatch = result.rows[0];
 
-    console.log("📢 Blockchain Event: BatchUpdated", {
+    console.log('📢 Blockchain Event: BatchUpdated', {
       batch_id: id,
-      updated_fields: Object.keys(req.body)
+      updated_fields: Object.keys(req.body),
     });
 
     res.json({
-      message: "Batch updated successfully",
-      batch: updatedBatch
+      message: 'Batch updated successfully',
+      batch: updatedBatch,
     });
   } catch (err) {
-    console.error("Error updating batch:", err.message);
-    res.status(500).json({ error: "Failed to update batch" });
+    console.error('Error updating batch:', err.message);
+    res.status(500).json({ error: 'Failed to update batch' });
   }
 };
-
 
 // Anchor metadata for a batch
 const anchorMetadata = async (req, res) => {
@@ -357,7 +364,9 @@ const anchorMetadata = async (req, res) => {
     }
 
     const updatedBatch = result.rows[0];
-    console.log(`✅ Blockchain Event: BatchAnchored - Batch ID: ${updatedBatch.id}, Meta Hash: ${updatedBatch.meta_hash}`);
+    console.log(
+      `✅ Blockchain Event: BatchAnchored - Batch ID: ${updatedBatch.id}, Meta Hash: ${updatedBatch.meta_hash}`
+    );
 
     res.json({
       message: 'Metadata anchored successfully',
@@ -369,11 +378,10 @@ const anchorMetadata = async (req, res) => {
   }
 };
 
-
 // GET /api/discovery
 const getInventory = async (req, res) => {
   try {
-    const { product_type, farmer_id, min_qty ,product_name } = req.query;
+    const { product_type, farmer_id, min_qty, product_name } = req.query;
 
     let query = `SELECT * FROM inventory_view WHERE 1=1`;
     const values = [];
@@ -391,7 +399,7 @@ const getInventory = async (req, res) => {
 
     if (min_qty) {
       query += ` AND available_qty >= $${idx++}`;
-      values.push(Number(min_qty)); 
+      values.push(Number(min_qty));
     }
     if (product_name) {
       query += ` AND LOWER(product_name) LIKE LOWER($${idx++})`;
@@ -404,10 +412,39 @@ const getInventory = async (req, res) => {
 
     res.json({ inventory: result.rows });
   } catch (err) {
-    console.error("Error fetching inventory:", err.message);
-    res.status(500).json({ error: "Failed to fetch inventory" });
+    console.error('Error fetching inventory:', err.message);
+    res.status(500).json({ error: 'Failed to fetch inventory' });
   }
 };
 
+const getProduceProducts = async (req, res) => {
+  try {
+    // Adjust this WHERE clause to fit how your db categorizes produce
+    // If you use category, change 'type' to 'category' below.
+    const query = `
+      SELECT id, name, type, unit, description
+      FROM products
+      WHERE type NOT IN ('grain', 'fruit', 'vegetable', 'pulse', 'cereal')
+      ORDER BY name;
+    `;
+    const result = await db.query(query);
 
-module.exports = { createBatch, updateStatus, splitBatch, mergeBatches, updateBatch, anchorMetadata ,getInventory};
+    res.status(200).json({
+      products: result.rows,
+    });
+  } catch (err) {
+    console.error('Error fetching produce products:', err.message);
+    res.status(500).json({ error: 'Failed to fetch produce products' });
+  }
+};
+
+module.exports = {
+  createBatch,
+  updateStatus,
+  splitBatch,
+  mergeBatches,
+  updateBatch,
+  anchorMetadata,
+  getInventory,
+  getProduceProducts,
+};

@@ -25,29 +25,31 @@ class Product {
   }
 }
 
+// Add this class at the top of your file (after imports)
 class BatchFormData {
+  String? selectedCategory;
   String? productId;
   String productName = '';
+  String productType = '';
   double quantity = 0.0;
   int qualityRating = 5;
   DateTime? harvestDate;
-  double? geoLat;
-  double? geoLon;
-  String locationName = '';
+  double geoLat = 12.9716;
+  double geoLon = 77.5946;
+  String locationName = "Bangalore, India";
   String notes = '';
 
   bool get isValid {
     return productId != null &&
+        productId!.isNotEmpty &&
         quantity > 0 &&
-        harvestDate != null &&
-        geoLat != null &&
-        geoLon != null &&
-        locationName.isNotEmpty;
+        harvestDate != null;
   }
 
   Map<String, dynamic> toJson() {
     return {
       'product_id': productId,
+      'farmer_id': 'dbd62bb4-618d-454a-9a90-523317ab3734',
       'initial_qty_kg': quantity,
       'unit': 'KG',
       'harvest_date': harvestDate?.toIso8601String(),
@@ -56,5 +58,10 @@ class BatchFormData {
       'location_name': locationName,
       'meta_hash': 'hash-${DateTime.now().millisecondsSinceEpoch}',
     };
+  }
+
+  @override
+  String toString() {
+    return 'BatchFormData{productId: $productId, productName: $productName, quantity: $quantity, harvestDate: $harvestDate, qualityRating: $qualityRating, isValid: $isValid}';
   }
 }

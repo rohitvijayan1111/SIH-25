@@ -6,7 +6,8 @@ const {
   mergeBatches,
   updateBatch,
   anchorMetadata,
-  getInventory 
+  getInventory,
+  getProduceProducts,
 } = require('../controllers/batchController'); // no .js extension needed in CommonJS
 
 const router = express.Router();
@@ -30,6 +31,8 @@ router.patch('/:id', updateBatch);
 router.patch('/:batchId/anchor', anchorMetadata);
 
 // GET /api/discovery
-router.get('/', getInventory)
+router.get('/', getInventory);
+
+router.get('/product/categories', getProduceProducts);
 
 module.exports = router;

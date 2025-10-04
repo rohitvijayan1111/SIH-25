@@ -58,12 +58,14 @@ import 'package:demo/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'controllers/app_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
+  print('BASE_URL: ${dotenv.env['BASE_URL']}');
+
+  // await dotenv.load();
 
   // Initialize Firebase
   // await Firebase.initializeApp();

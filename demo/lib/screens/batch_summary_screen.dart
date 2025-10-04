@@ -10,7 +10,7 @@ class BatchSummaryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           "Review Batch Details",
@@ -53,18 +53,14 @@ class BatchSummaryScreen extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     // Product Information
-                    _buildSummaryCard(
-                      "Product Information",
-                      Icons.agriculture,
-                      [
-                        SummaryItem("Product", formData.productName),
-                        SummaryItem("Quantity", "${formData.quantity} kg"),
-                        SummaryItem(
-                          "Quality Rating",
-                          "${formData.qualityRating}/5 stars",
-                        ),
-                      ],
-                    ),
+                    _buildSummaryCard("Product Information", Icons.sell, [
+                      SummaryItem("Product", formData.productName),
+                      SummaryItem("Quantity", "${formData.quantity} kg"),
+                      SummaryItem(
+                        "Quality Rating",
+                        "${formData.qualityRating}/5 stars",
+                      ),
+                    ]),
 
                     const SizedBox(height: 16),
 
@@ -272,7 +268,7 @@ class BatchSummaryScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop(); // Close dialog
                   Navigator.of(context).pop(); // Back to summary
-                  Navigator.of(context).pop(); // Back to upload screen
+                  // Navigator.of(context).pop(); // Back to upload screen
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 child: const Text(

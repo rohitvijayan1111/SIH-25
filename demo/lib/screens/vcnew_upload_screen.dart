@@ -6,7 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 // ignore: depend_on_referenced_packages
 import 'package:path_provider/path_provider.dart';
-
+import '../services/api_service.dart';
+import 'batch_summary_screen.dart';
 
 class UploadProduceScreen extends StatefulWidget {
   const UploadProduceScreen({super.key});
@@ -16,6 +17,30 @@ class UploadProduceScreen extends StatefulWidget {
 }
 
 class _UploadProduceScreenState extends State<UploadProduceScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      final products = await ApiService.getProducts();
+      setState(() {
+        _availableProducts = products;
+        _isLoadingProducts = false;
+      });
+      _extractUniqueTypes();
+    } catch (e) {
+      setState(() {
+        _isLoadingProducts = false;
+      });
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Failed to load products: $e")));
+    }
+  }
+
   // Form key for validation
   final _formKey = GlobalKey<FormState>();
   final BatchFormData _formData = BatchFormData();
@@ -34,8 +59,12 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
   // Form state variables
   String? _selectedProductId;
   List<Product> _availableProducts = [];
+  List<String> _availableTypes = [];
+  List<Product> _filteredProducts = [];
   DateTime? _selectedHarvestDate;
   int _qualityRating = 5;
+  String? _selectedType;
+
   // double? _geoLat;
   // double? _geoLon;
   // String _locationName = "Detecting location...";
@@ -43,6 +72,19 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
   bool _isLoadingProducts = true;
 
   // Inside your _UploadProduceScreenState class
+  void _extractUniqueTypes() {
+    final types = _availableProducts.map((p) => p.type).toSet().toList();
+    print("types:");
+    print(types);
+    print(_availableProducts.map((p) => p.type).toList());
+
+    setState(() {
+      _availableTypes = types;
+      _filteredProducts = [];
+      _selectedType = null;
+      _selectedProductId = null;
+    });
+  }
 
   // Opens bottom sheet to choose camera or gallery
   Future<void> _showImageSourceActionSheet() async {
@@ -225,6 +267,55 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
     super.dispose();
   }
 
+  void _proceedToSummary() {
+    print("=== FORM DATA DEBUG ===");
+    print("Selected Product ID: ${_selectedProductId ?? 'NULL'}");
+    print("Form Data Product ID: ${_formData.productId ?? 'NULL'}");
+    print("Form Data Product Name: '${_formData.productName}'");
+    print("Quantity: ${_formData.quantity}");
+    print("Harvest Date: ${_formData.harvestDate}");
+    print("Is Valid: ${_formData.isValid}");
+    print("========================");
+
+    // Add null check before validation
+    if (_formKey.currentState?.validate() ?? false) {
+      if (_formData.isValid) {
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text("Form is valid! Product: ${_formData.productName}"),
+        //     backgroundColor: Colors.green,
+        //   ),
+        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BatchSummaryScreen(formData: _formData),
+          ),
+        );
+      } else {
+        List<String> missingFields = [];
+        if (_formData.productId == null || _formData.productId!.isEmpty) {
+          missingFields.add("Product not selected");
+        }
+        if (_formData.quantity <= 0) {
+          missingFields.add("Invalid quantity");
+        }
+        if (_formData.harvestDate == null) {
+          missingFields.add("Harvest date not set");
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Missing: ${missingFields.join(', ')}"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
+      print("Form validation failed - form key or validation returned null");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -298,378 +389,373 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Upload Box with Image Preview
-              GestureDetector(
-                onTap: _showImageSourceActionSheet,
-                child: Container(
-                  width: double.infinity,
-                  height: 180,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.green[50],
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.green.shade100),
-                  ),
-                  child: _selectedImage == null
-                      ? const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.camera_alt,
-                              color: Colors.green,
-                              size: 36,
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              "Tap to capture or pick photo\nYour crop photo is required",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.green),
-                            ),
-                          ],
-                        )
-                      : Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.file(
-                                _selectedImage!,
-                                width: double.infinity,
-                                height: double.infinity,
-                                fit: BoxFit.cover,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// Upload Box with Image Preview
+                GestureDetector(
+                  onTap: _showImageSourceActionSheet,
+                  child: Container(
+                    width: double.infinity,
+                    height: 180,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.green[50],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.green.shade100),
+                    ),
+                    child: _selectedImage == null
+                        ? const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.camera_alt,
+                                color: Colors.green,
+                                size: 36,
                               ),
-                            ),
-                            Positioned(
-                              top: 8,
-                              right: 8,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedImage = null;
-                                  });
-                                },
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  padding: const EdgeInsets.all(4),
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 16,
+                              SizedBox(height: 8),
+                              Text(
+                                "Tap to capture or pick photo\nYour crop photo is required",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.green),
+                              ),
+                            ],
+                          )
+                        : Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.file(
+                                  _selectedImage!,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedImage = null;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: const EdgeInsets.all(4),
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              /// Crop Type Dropdown
-              _LabeledField(
-                label: "Crop Type *",
-                child: DropdownButtonFormField<String>(
-                  value: _selectedCropType,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                    hintText: "Select crop type",
+                            ],
+                          ),
                   ),
-                  items: const [
-                    DropdownMenuItem(value: "Rice", child: Text("Rice")),
-                    DropdownMenuItem(value: "Wheat", child: Text("Wheat")),
-                    DropdownMenuItem(value: "Tomato", child: Text("Tomato")),
-                    DropdownMenuItem(value: "Corn", child: Text("Corn")),
-                    DropdownMenuItem(value: "Potato", child: Text("Potato")),
-                    DropdownMenuItem(value: "Onion", child: Text("Onion")),
-                  ],
-                  onChanged: (val) {
-                    setState(() {
-                      _selectedCropType = val;
-                    });
-                  },
                 ),
-              ),
-              const SizedBox(height: 16),
-
-              /// Quantity
-              _LabeledField(
-                label: "Quantity",
-                child: TextFormField(
-                  controller: _quantityController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: "Enter quantity",
-                    suffixText: "kg",
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter quantity';
-                    }
-                    final qty = double.tryParse(value);
-                    if (qty == null || qty <= 0) {
-                      return 'Please enter valid quantity';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    final qty = double.tryParse(value) ?? 0.0;
-                    _formData.quantity = qty;
-                  },
-                ),
-              ),
-
-              /// Quality Grade with Interactive Stars
-              // _LabeledField(
-              //   label: "Quality Grade",
-              //   child: Row(
-              //     children: [
-              //       ...List.generate(5, (index) {
-              //         return GestureDetector(
-              //           onTap: () {
-              //             setState(() {
-              //               _qualityRating = index + 1;
-              //             });
-              //           },
-              //           child: Padding(
-              //             padding: const EdgeInsets.only(right: 4),
-              //             child: Icon(
-              //               Icons.star,
-              //               color: index < _qualityRating
-              //                   ? Colors.amber
-              //                   : Colors.grey[300],
-              //               size: 32,
-              //             ),
-              //           ),
-              //         );
-              //       }),
-              //       const SizedBox(width: 8),
-              //       Text(
-              //         "$_qualityRating/5",
-              //         style: TextStyle(
-              //           color: Colors.grey[600],
-              //           fontWeight: FontWeight.w500,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              _LabeledField(
-                label: "Quality Grade",
-                child: Row(
-                  children: [
-                    Row(
-                      children: List.generate(5, (index) {
-                        return GestureDetector(
-                          onTap: () {
+                const SizedBox(height: 16),
+                _LabeledField(
+                  label: "Select Product Type",
+                  child: _isLoadingProducts
+                      ? Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Row(
+                            children: [
+                              SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                              SizedBox(width: 12),
+                              Text("Loading products..."),
+                            ],
+                          ),
+                        )
+                      : DropdownButtonFormField<String>(
+                          value: _selectedType,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            isDense: true,
+                          ),
+                          hint: const Text("Choose a product type"),
+                          items: _availableTypes.map((type) {
+                            return DropdownMenuItem<String>(
+                              value: type,
+                              child: Text(type.toUpperCase()),
+                            );
+                          }).toList(),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select a product type';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
                             setState(() {
-                              _qualityRating = index + 1;
-                              _formData.qualityRating = _qualityRating;
+                              _selectedType = value;
+                              _filteredProducts = _availableProducts
+                                  .where((p) => p.type == value)
+                                  .toList();
+                              _selectedProductId = null;
+                              _formData.selectedCategory = value;
                             });
                           },
-                          child: Icon(
-                            index < _qualityRating
-                                ? Icons.star
-                                : Icons.star_border,
-                            color: Colors.amber,
-                            size: 28,
-                          ),
-                        );
-                      }),
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      "$_qualityRating/5",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              /// Harvest Date with Date Picker
-              // _LabeledField(
-              //   label: "Harvest Date",
-              //   child: TextFormField(
-              //     controller: _dateController,
-              //     readOnly: true,
-              //     onTap: _selectDate,
-              //     decoration: const InputDecoration(
-              //       border: OutlineInputBorder(),
-              //       hintText: "mm/dd/yyyy",
-              //       suffixIcon: Icon(Icons.calendar_today),
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(height: 16),
-              _LabeledField(
-                label: "Harvest Date",
-                child: GestureDetector(
-                  onTap: () async {
-                    final date = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now().subtract(
-                        const Duration(days: 90),
-                      ),
-                      lastDate: DateTime.now(),
-                    );
-                    if (date != null) {
-                      setState(() {
-                        _selectedHarvestDate = date;
-                        _formData.harvestDate = date;
-                      });
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _selectedHarvestDate != null
-                              ? "${_selectedHarvestDate!.day}/${_selectedHarvestDate!.month}/${_selectedHarvestDate!.year}"
-                              : "Select harvest date",
-                          style: TextStyle(
-                            color: _selectedHarvestDate != null
-                                ? Colors.black87
-                                : Colors.grey.shade600,
-                            fontSize: 16,
-                          ),
                         ),
-                        const Icon(Icons.calendar_today, color: Colors.grey),
-                      ],
+                ),
+                const SizedBox(height: 16),
+
+                // Add second dropdown for specific product
+                _LabeledField(
+                  label: "Select Specific Product",
+                  child: _selectedType == null
+                      ? Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text(
+                            "Please select a product type first",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        )
+                      : DropdownButtonFormField<String>(
+                          value: _selectedProductId,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            isDense: true,
+                          ),
+                          hint: const Text("Choose specific product"),
+                          items: _filteredProducts.map((product) {
+                            return DropdownMenuItem<String>(
+                              value: product.id,
+                              child: Text(product.name),
+                            );
+                          }).toList(),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select a specific product';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedProductId = value;
+                              // Find selected product details
+                              final product = _filteredProducts.firstWhere(
+                                (p) => p.id == value,
+                                orElse: () => Product(
+                                  id: '',
+                                  name: '',
+                                  type: '',
+                                  unit: '',
+                                ),
+                              );
+                              _formData.productId = value;
+                              _formData.productName = product.name;
+                              _formData.productType = product.type;
+                            });
+
+                            print(
+                              "Selected product: ${_formData.productName} (${_formData.productId})",
+                            );
+                          },
+                        ),
+                ),
+
+                /// Quantity
+                _LabeledField(
+                  label: "Quantity",
+                  child: TextFormField(
+                    controller: _quantityController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Enter quantity",
+                      suffixText: "kg",
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter quantity';
+                      }
+                      final qty = double.tryParse(value);
+                      if (qty == null || qty <= 0) {
+                        return 'Please enter valid quantity';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      final qty = double.tryParse(value) ?? 0.0;
+                      _formData.quantity = qty;
+                    },
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
 
-              /// GPS Location
-              // _LabeledField(
-              //   label: "GPS Location",
-              //   child: Container(
-              //     padding: const EdgeInsets.symmetric(
-              //       horizontal: 12,
-              //       vertical: 14,
-              //     ),
-              //     decoration: BoxDecoration(
-              //       color: Colors.green[50],
-              //       border: Border.all(color: Colors.green.shade200),
-              //       borderRadius: BorderRadius.circular(8),
-              //     ),
-              //     child: Row(
-              //       children: [
-              //         const Expanded(
-              //           child: Text(
-              //             "Auto-detected\nFarm location, Dhaka",
-              //             style: TextStyle(color: Colors.black87, fontSize: 13),
-              //           ),
-              //         ),
-              //         TextButton(
-              //           onPressed: () {
-              //             // TODO: Implement location editing
-              //             ScaffoldMessenger.of(context).showSnackBar(
-              //               const SnackBar(
-              //                 content: Text(
-              //                   'Location editing feature coming soon!',
-              //                 ),
-              //               ),
-              //             );
-              //           },
-              //           style: TextButton.styleFrom(
-              //             backgroundColor: Colors.green[100],
-              //             padding: const EdgeInsets.symmetric(horizontal: 12),
-              //           ),
-              //           child: const Text(
-              //             "Edit",
-              //             style: TextStyle(color: Colors.green),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+                _LabeledField(
+                  label: "Quality Grade",
+                  child: Row(
+                    children: [
+                      Row(
+                        children: List.generate(5, (index) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _qualityRating = index + 1;
+                                _formData.qualityRating = _qualityRating;
+                              });
+                            },
+                            child: Icon(
+                              index < _qualityRating
+                                  ? Icons.star
+                                  : Icons.star_border,
+                              color: Colors.amber,
+                              size: 28,
+                            ),
+                          );
+                        }),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        "$_qualityRating/5",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-              //LOCATION
-              _LabeledField(
-                label: "Location",
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _locationName,
-                      style: TextStyle(fontSize: 13, color: Colors.black87),
-                    ),
-                    Text(
-                      "Lat: $_geoLat, Lon: $_geoLon",
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.grey.shade600,
+                _LabeledField(
+                  label: "Harvest Date",
+                  child: GestureDetector(
+                    onTap: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now().subtract(
+                          const Duration(days: 90),
+                        ),
+                        lastDate: DateTime.now(),
+                      );
+                      if (date != null) {
+                        setState(() {
+                          _selectedHarvestDate = date;
+                          _formData.harvestDate = date;
+                        });
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade400),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _selectedHarvestDate != null
+                                ? "${_selectedHarvestDate!.day}/${_selectedHarvestDate!.month}/${_selectedHarvestDate!.year}"
+                                : "Select harvest date",
+                            style: TextStyle(
+                              color: _selectedHarvestDate != null
+                                  ? Colors.black87
+                                  : Colors.grey.shade600,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const Icon(Icons.calendar_today, color: Colors.grey),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                const SizedBox(height: 16),
 
-              const SizedBox(height: 16),
+                //LOCATION
+                _LabeledField(
+                  label: "Location",
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _locationName,
+                        style: TextStyle(fontSize: 13, color: Colors.black87),
+                      ),
+                      Text(
+                        "Lat: $_geoLat, Lon: $_geoLon",
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
 
-              /// Buttons
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                const SizedBox(height: 16),
+
+                /// Buttons
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: _proceedToSummary,
+                    child: const Text(
+                      "Review & Submit Batch",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
-                  onPressed: _submitForm,
-                  child: const Text(
-                    "+ Add Produce",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      side: const BorderSide(color: Colors.grey),
+                    ),
+                    onPressed: () {
+                      // TODO: Save draft functionality
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Draft saved successfully!'),
+                          backgroundColor: Colors.blue,
+                        ),
+                      );
+                    },
+                    child: const Text("Save as Draft"),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    side: const BorderSide(color: Colors.grey),
-                  ),
-                  onPressed: () {
-                    // TODO: Save draft functionality
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Draft saved successfully!'),
-                        backgroundColor: Colors.blue,
-                      ),
-                    );
-                  },
-                  child: const Text("Save as Draft"),
-                ),
-              ),
-              const SizedBox(height: 40),
-            ],
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),
