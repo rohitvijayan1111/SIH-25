@@ -1103,35 +1103,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ],
                 ),
                 ElevatedButton.icon(
-                  onPressed: cartQuantities.isNotEmpty
-                      ? () {
-                          gcart![product.id] ??= {};
+                  // When adding batch(es) to the cart:
+                  onPressed: () {
+                      if (!gcart.containsKey(product.id) || gcart[product.id] == null) {
+                        gcart[product.id] = <String, List<int>>{};
+                      }
+                      cartQuantities.forEach((batchIndex, qty) {
+                        double price = batches[batchIndex]['price'];
+                        int providerIndex = selectedProviders[batchIndex] ?? 0;
+                        double charge = selectedCharges[batchIndex] ?? 0;
+                        gcart[product.id]!['batch$batchIndex'] = [
+                          price.toInt(),
+                          qty,
+                          providerIndex,
+                          charge.toInt(),
+                        ];
+                      });
 
-                          cartQuantities.forEach((batchIndex, qty) {
-                            double price = batches[batchIndex]["price"];
-                            int providerIndex =
-                                selectedProviders[batchIndex] ?? 0;
-                            double charge = selectedCharges[batchIndex] ?? 0;
-
-                            gcart![product.id]!["batch_$batchIndex"] = [
-                              price.toInt(),
-                              qty,
-                              providerIndex,
-                              charge.toInt(),
-                            ];
-                          });
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "Added ${cartQuantities.length} batch(es) to cart!",
+                            // Confirm with user
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Added ${cartQuantities.length} batches to cart!'),
+                                duration: const Duration(seconds: 2),
                               ),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
-                          print(gcart);
-                        }
-                      : null,
+                            );
+                          },        
                   icon: const Icon(Icons.shopping_cart),
                   label: const Text("Add to Cart"),
                   style: ElevatedButton.styleFrom(

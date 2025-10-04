@@ -590,7 +590,6 @@ import 'models/product_model.dart';
 import 'widgets/category_card.dart';
 // Import the fixed ProductCard
 import 'widgets/product_card.dart';
-import 'cart_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final int value;
@@ -625,11 +624,91 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(76),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade600, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.green.withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.grey[300],
+                    child: const Icon(Icons.person, color: Colors.grey),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello, Customer!',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        const Text(
+                          'Find fresh products',
+                          style: TextStyle(fontSize: 14, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const NotificationPage()),
+                      );
+                    },
+                    icon: const Icon(Icons.notifications_outlined, color: Colors.white),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const FavoritesScreen()),
+                      );
+                    },
+                    icon: const Icon(Icons.favorite, color: Colors.white),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CartScreen()),
+                      );
+                    },
+                    icon: const Icon(Icons.shopping_cart, color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            _buildHeader(),
-
             // Search Bar
             Padding(
               padding: const EdgeInsets.all(16),
@@ -648,84 +727,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 onChanged: _filterProducts,
               ),
             ),
-
             // Categories
             _buildCategories(),
-
             // Featured Section
             _buildFeaturedSection(),
-
             // Products Grid
             Expanded(child: _buildProductsGrid()),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      color: Colors.green,
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.grey[300],
-            child: const Icon(Icons.person, color: Colors.grey),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Hello, Customer!',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-                const Text(
-                  'Find fresh products',
-                  style: TextStyle(fontSize: 14, color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationPage(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.notifications_outlined, color: Colors.white),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FavoritesScreen(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.favorite, color: Colors.white),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CartScreen()),
-              );
-            },
-            icon: const Icon(Icons.shopping_cart, color: Colors.white),
-          ),
-        ],
       ),
     );
   }
@@ -736,7 +745,7 @@ class _HomeScreenState extends State<HomeScreen> {
         : ProductData.getServiceCategories();
 
     return Container(
-      height: 50,
+      height: 40,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -762,7 +771,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Container(
-        height: 120,
+        height: 100,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [Color(0xFF4CAF50), Color(0xFF66BB6A)],
@@ -781,7 +790,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: widget.value == 0
                     ? [
                         const Text(
-                          'Fresh & Vegetables',
+                          'Fruits & Vegetables',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -792,22 +801,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         const Text(
                           'Produced by local farmers\n& it\'s safe to eat',
                           style: TextStyle(color: Colors.white70, fontSize: 12),
-                        ),
-                        const SizedBox(height: 8),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: const Color(0xFF4CAF50),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                          ),
-                          child: const Text(
-                            'Shop Now',
-                            style: TextStyle(fontSize: 12),
-                          ),
                         ),
                       ]
                     : [
@@ -823,22 +816,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         const Text(
                           'Affordable and reliable\nfrom trusted professionals',
                           style: TextStyle(color: Colors.white70, fontSize: 12),
-                        ),
-                        const SizedBox(height: 8),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: const Color(0xFF4CAF50),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                          ),
-                          child: const Text(
-                            'Book Now',
-                            style: TextStyle(fontSize: 12),
-                          ),
                         ),
                       ],
               ),

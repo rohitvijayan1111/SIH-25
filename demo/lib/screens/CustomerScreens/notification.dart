@@ -181,74 +181,91 @@ class _NotificationPageState extends State<NotificationPage>
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            const Text(
-              "Notifications",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
-              ),
-            ),
-            if (unreadCount > 0) ...[
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  "$unreadCount",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ],
+  backgroundColor: Colors.transparent,
+  elevation: 0,
+  title: Row(
+    children: [
+      const Text(
+        "Notifications",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 22,
+          color: Colors.white,
         ),
-        actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert),
-            onSelected: (value) {
-              if (value == 'mark_read') {
-                _markAllAsRead();
-              } else if (value == 'clear_all') {
-                _clearAll();
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'mark_read',
-                child: Row(
-                  children: [
-                    Icon(Icons.done_all, size: 20),
-                    SizedBox(width: 8),
-                    Text('Mark all as read'),
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: 'clear_all',
-                child: Row(
-                  children: [
-                    Icon(Icons.clear_all, size: 20),
-                    SizedBox(width: 8),
-                    Text('Clear all'),
-                  ],
-                ),
-              ),
+      ),
+      if (unreadCount > 0) ...[
+        const SizedBox(width: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            "$unreadCount",
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    ],
+  ),
+  actions: [
+    PopupMenuButton<String>(
+      icon: const Icon(Icons.more_vert, color: Colors.white),
+      onSelected: (value) {
+        if (value == 'mark_read') {
+          _markAllAsRead();
+        } else if (value == 'clear_all') {
+          _clearAll();
+        }
+      },
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: 'mark_read',
+          child: Row(
+            children: [
+              Icon(Icons.done_all, size: 20),
+              SizedBox(width: 8),
+              Text('Mark all as read'),
             ],
           ),
-        ],
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        shadowColor: Colors.grey.shade300,
+        ),
+        const PopupMenuItem(
+          value: 'clear_all',
+          child: Row(
+            children: [
+              Icon(Icons.clear_all, size: 20),
+              SizedBox(width: 8),
+              Text('Clear all'),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ],
+  flexibleSpace: Container(
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Colors.green.shade600, Colors.green.shade400],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
       ),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.green.withOpacity(0.3),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    ),
+  ),
+  iconTheme: const IconThemeData(color: Colors.white),
+),
+
       body: notifications.isEmpty
           ? Center(
               child: Column(

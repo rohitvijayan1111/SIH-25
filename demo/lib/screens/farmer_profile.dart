@@ -5,49 +5,202 @@ class FarmerProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey[50],
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              /// Header
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                child: Row(
-                  children: [
-                    // IconButton(
-                    //   onPressed: () {},
-                    //   icon: const Icon(Icons.arrow_back),
-                    // ),
-                    const Expanded(
-                      child: Text(
-                        "Farmer Profile",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        title: Text(
+          "Farmer Profile",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            letterSpacing: 0.5,
+          ),
+        ),
+        centerTitle: true,
+        elevation: 2,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 76, 175, 80),
+                Color(0xFF66BB6A),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(0),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(64, 76, 175, 80),
+                blurRadius: 0,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+          ),
+        ],
+        backgroundColor: Colors.transparent,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade200,
+                    blurRadius: 6,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage(
+                          "assets/CustomerUIAssets/images/Farmer_image.png",
                         ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.more_vert),
-                    ),
-                  ],
-                ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: const [
+                                Text(
+                                  "Rajesh Kumar",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                SizedBox(width: 4),
+                                Icon(
+                                  Icons.verified,
+                                  color: Colors.green,
+                                  size: 18,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              "Age 45 · Khora Village",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            const Text(
+                              "Member since March 2022",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [],
+                  ),
+                ],
               ),
-
-              /// Profile Card
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
+            ),
+            const SizedBox(height: 20),
+            const _SectionHeader(title: "Overview"),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                physics: const NeverScrollableScrollPhysics(),
+                children: const [
+                  _StatCard(
+                    title: "Total Contribution",
+                    value: "₹45,230",
+                    subText: "+12%",
+                    icon: Icons.savings_outlined,
+                    iconColor: Colors.orange,
+                  ),
+                  _StatCard(
+                    title: "Active Batches",
+                    value: "23",
+                    subText: "+8%",
+                    icon: Icons.inventory_outlined,
+                    iconColor: Colors.blue,
+                  ),
+                  _StatCard(
+                    title: "Quality Score",
+                    value: "4.8",
+                    subText: "★",
+                    icon: Icons.star,
+                    iconColor: Colors.amber,
+                  ),
+                  _StatCard(
+                    title: "Earnings This Month",
+                    value: "₹8,940",
+                    subText: "+15%",
+                    icon: Icons.attach_money,
+                    iconColor: Colors.green,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            const _SectionHeader(title: "Recent Contributions", action: "View All"),
+            const SizedBox(height: 12),
+            const _ContributionTile(
+              image: "assets/CustomerUIAssets/images/Wheat.png",
+              title: "Wheat - Grade A",
+              quantity: "250 kg delivered",
+              status: "Approved",
+              statusColor: Colors.green,
+              rating: 5.0,
+              time: "2 days ago",
+            ),
+            const _ContributionTile(
+              image: "assets/CustomerUIAssets/images/Rice.png",
+              title: "Rice - Premium",
+              quantity: "180 kg delivered",
+              status: "Processing",
+              statusColor: Colors.orange,
+              rating: 4.2,
+              time: "5 days ago",
+            ),
+            const SizedBox(height: 20),
+            const _SectionHeader(title: "Performance Overview"),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.shade200,
@@ -56,344 +209,96 @@ class FarmerProfileScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 30,
-                          backgroundImage: AssetImage(
-                            "assets/CustomerUIAssets/images/Farmer_image.png",
-                          ), // Farmer profile
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: const [
-                                  Text(
-                                    "Rajesh Kumar",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Icon(
-                                    Icons.verified,
-                                    color: Colors.green,
-                                    size: 18,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                "Age 45 · Khora Village",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              const Text(
-                                "Member since March 2022",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
-                        // _ProfileActionButton(
-                        //   icon: Icons.call,
-                        //   label: "Call",
-                        //   color: Colors.green,
-                        // ),
-                        // _ProfileActionButton(
-                        //   icon: Icons.sms,
-                        //   label: "SMS",
-                        //   color: Colors.blue,
-                        // ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              /// Overview Section
-              const _SectionHeader(title: "Overview"),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: GridView.count(
-                  crossAxisCount: 2, // 2 columns → 2x2 layout
-                  shrinkWrap: true, // so GridView takes only needed space
-                  crossAxisSpacing: 12, // horizontal spacing
-                  mainAxisSpacing: 12, // vertical spacing
-                  physics:
-                      const NeverScrollableScrollPhysics(), // disable scrolling
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: const [
-                    _StatCard(
-                      title: "Total Contribution",
-                      value: "₹45,230",
-                      subText: "+12%",
-                      icon: Icons.savings_outlined,
-                      iconColor: Colors.orange,
-                    ),
-                    _StatCard(
-                      title: "Active Batches",
-                      value: "23",
-                      subText: "+8%",
-                      icon: Icons.inventory_outlined,
-                      iconColor: Colors.blue,
-                    ),
-                    _StatCard(
-                      title: "Quality Score",
-                      value: "4.8",
-                      subText: "★",
-                      icon: Icons.star,
-                      iconColor: Colors.amber,
-                    ),
-                    _StatCard(
-                      title: "Earnings This Month",
-                      value: "₹8,940",
-                      subText: "+15%",
-                      icon: Icons.attach_money,
-                      iconColor: Colors.green,
-                    ),
+                    _PerformanceStat(title: "Contribution", value: "85%"),
+                    _PerformanceStat(title: "Quality", value: "92%"),
+                    _PerformanceStat(title: "Timeliness", value: "78%"),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 20),
-
-              /// Recent Contributions
-              const _SectionHeader(
-                title: "Recent Contributions",
-                action: "View All",
-              ),
-              const SizedBox(height: 12),
-              const _ContributionTile(
-                image: "assets/CustomerUIAssets/images/Wheat.png", // Wheat
-                title: "Wheat - Grade A",
-                quantity: "250 kg delivered",
-                status: "Approved",
-                statusColor: Colors.green,
-                rating: 5.0,
-                time: "2 days ago",
-              ),
-              const _ContributionTile(
-                image: "assets/CustomerUIAssets/images/Rice.png", // Rice
-                title: "Rice - Premium",
-                quantity: "180 kg delivered",
-                status: "Processing",
-                statusColor: Colors.orange,
-                rating: 4.2,
-                time: "5 days ago",
-              ),
-
-              const SizedBox(height: 20),
-
-              /// Performance Overview
-              const _SectionHeader(title: "Performance Overview"),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade200,
-                        blurRadius: 6,
-                        spreadRadius: 2,
-                      ),
-                    ],
+            ),
+            const SizedBox(height: 20),
+            const _SectionHeader(title: "Recent Activity"),
+            const SizedBox(height: 12),
+            const _ActivityTile(
+              icon: Icons.upload,
+              title: "Uploaded wheat batch",
+              subtitle: "2 hours ago",
+              iconColor: Colors.green,
+            ),
+            const _ActivityTile(
+              icon: Icons.currency_rupee,
+              title: "Payment received ₹2,450",
+              subtitle: "1 day ago",
+              iconColor: Colors.blue,
+            ),
+            const _ActivityTile(
+              icon: Icons.verified,
+              title: "Quality certification updated",
+              subtitle: "3 days ago",
+              iconColor: Colors.orange,
+            ),
+            const SizedBox(height: 20),
+            const _SectionHeader(title: "Documents"),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Wrap(
+                spacing: 12,
+                children: const [
+                  _DocumentTile(
+                    icon: Icons.description,
+                    label: "Land Papers",
+                    status: "Verified",
+                    color: Colors.blue,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: const [
-                      _PerformanceStat(title: "Contribution", value: "85%"),
-                      _PerformanceStat(title: "Quality", value: "92%"),
-                      _PerformanceStat(title: "Timeliness", value: "78%"),
-                    ],
+                  _DocumentTile(
+                    icon: Icons.eco,
+                    label: "Organic Cert",
+                    status: "Verified",
+                    color: Colors.green,
                   ),
-                ),
+                  _DocumentTile(
+                    icon: Icons.badge,
+                    label: "Govt ID",
+                    status: "Verified",
+                    color: Colors.purple,
+                  ),
+                ],
               ),
-
-              const SizedBox(height: 20),
-
-              /// Recent Activity
-              const _SectionHeader(title: "Recent Activity"),
-              const SizedBox(height: 12),
-              const _ActivityTile(
-                icon: Icons.upload,
-                title: "Uploaded wheat batch",
-                subtitle: "2 hours ago",
-                iconColor: Colors.green,
-              ),
-              const _ActivityTile(
-                icon: Icons.currency_rupee,
-                title: "Payment received ₹2,450",
-                subtitle: "1 day ago",
-                iconColor: Colors.blue,
-              ),
-              const _ActivityTile(
-                icon: Icons.verified,
-                title: "Quality certification updated",
-                subtitle: "3 days ago",
-                iconColor: Colors.orange,
-              ),
-
-              const SizedBox(height: 20),
-
-              /// Documents
-              const _SectionHeader(title: "Documents"),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Wrap(
-                  spacing: 12,
-                  children: const [
-                    _DocumentTile(
-                      icon: Icons.description,
-                      label: "Land Papers",
-                      status: "Verified",
-                      color: Colors.blue,
-                    ),
-                    _DocumentTile(
-                      icon: Icons.eco,
-                      label: "Organic Cert",
-                      status: "Verified",
-                      color: Colors.green,
-                    ),
-                    _DocumentTile(
-                      icon: Icons.badge,
-                      label: "Govt ID",
-                      status: "Verified",
-                      color: Colors.purple,
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              /// Buttons
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    // ElevatedButton(
-                    //   style: ElevatedButton.styleFrom(
-                    //     backgroundColor: Colors.green,
-                    //     minimumSize: const Size(double.infinity, 48),
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(8),
-                    //     ),
-                    //   ),
-                    //   onPressed: () {},
-                    //   child: const Text("Send Payment"),
-                    // ),
-                    const SizedBox(height: 12),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 76, 175, 80),
-                        minimumSize: const Size(double.infinity, 48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  const SizedBox(height: 12),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 76, 175, 80),
+                      minimumSize: const Size(double.infinity, 48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      onPressed: () {},
-                      child: const Text("View Full History"),
                     ),
-                    const SizedBox(height: 12),
-                    // Row(
-                    //   children: [
-                    //     Expanded(
-                    //       child: OutlinedButton(
-                    //         style: OutlinedButton.styleFrom(
-                    //           foregroundColor: Colors.red,
-                    //           side: const BorderSide(color: Colors.red),
-                    //           minimumSize: const Size(double.infinity, 48),
-                    //           shape: RoundedRectangleBorder(
-                    //             borderRadius: BorderRadius.circular(8),
-                    //           ),
-                    //         ),
-                    //         onPressed: () {},
-                    //         child: const Text("Remove Member"),
-                    //       ),
-                    //     ),
-                    //     const SizedBox(width: 12),
-                    //     Expanded(
-                    //       child: OutlinedButton(
-                    //         style: OutlinedButton.styleFrom(
-                    //           foregroundColor: Colors.black,
-                    //           side: const BorderSide(color: Colors.black),
-                    //           minimumSize: const Size(double.infinity, 48),
-                    //           shape: RoundedRectangleBorder(
-                    //             borderRadius: BorderRadius.circular(8),
-                    //           ),
-                    //         ),
-                    //         onPressed: () {},
-                    //         child: const Text("Block User"),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                  ],
-                ),
+                    onPressed: () {},
+                    child: const Text("View Full History"),
+                  ),
+                  const SizedBox(height: 12),
+                ],
               ),
-
-              const SizedBox(height: 40),
-            ],
-          ),
+            ),
+            const SizedBox(height: 40),
+          ],
         ),
       ),
     );
   }
 }
 
-/// --- Reusable Widgets ---
-
-class _ProfileActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  const _ProfileActionButton({
-    required this.icon,
-    required this.label,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 20,
-          backgroundColor: color.withOpacity(0.2),
-          child: Icon(icon, color: color),
-        ),
-        const SizedBox(height: 6),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
-    );
-  }
-}
+//...The rest of your stateless widget classes remain unchanged as below.
 
 class _SectionHeader extends StatelessWidget {
   final String title;

@@ -169,7 +169,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     super.initState();
     valuet = widget.value;
 
-    // Get favorite products (in real app, this would come from state management)
     favoriteProducts =
         (valuet == 0
                 ? ProductData.getAllProducts()
@@ -185,18 +184,31 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       appBar: AppBar(
         title: const Text(
           'Favorites',
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade600, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.green.withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white), // Back arrow color
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.sort, color: Colors.black87),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.filter_list, color: Colors.black87),
+            icon: const Icon(Icons.filter_list, color: Colors.white),
           ),
         ],
       ),
@@ -230,7 +242,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context); // Navigate back to browse products
+              Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4CAF50),
@@ -252,7 +264,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.8,
+          childAspectRatio: 0.7,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
         ),
@@ -292,3 +304,4 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 }
+
