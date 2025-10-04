@@ -90,7 +90,7 @@ class MyCoopsScreen extends StatelessWidget {
         backgroundColor: themeColor,
         child: Icon(Icons.add),
       ),
-    );
+    ); // Scaffold closing
   }
 }
 

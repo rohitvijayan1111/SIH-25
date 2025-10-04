@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
 import './upload_produce_coop.dart';
+import 'package:http/http.dart' as http;
+import 'merge_products_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
+
+import 'package:demo/models/batch_model.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
+  Future<List<BatchModel>> fetchBatches() async {
+    final baseUrl = dotenv.env['API_BASE_URL']!;
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/batches'), // Replace with your backend endpoint
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List<dynamic> inventory = data['inventory'];
+      return inventory.map((json) => BatchModel.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load batches');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,70 +41,66 @@ class DashboardScreen extends StatelessWidget {
                   horizontal: 16,
                   vertical: 12,
                 ),
-
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     IconButton(
                       icon: const Icon(
                         Icons.arrow_back_ios,
                         color: Colors.white,
                       ),
-                      iconSize: 20, // Smaller icon to fit height
-                      padding:
-                          EdgeInsets.zero, // Remove default internal padding
-                      constraints:
-                          BoxConstraints(), // Remove min size constraints
+                      iconSize: 20,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
-                    const SizedBox(width: 4),
-
-                    /// App Logo
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.green[100],
-                      child: const Icon(Icons.eco, color: Colors.green),
-                      // TODO: Replace with your asset image
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Green Valley Co-op",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "248 Members · \$125,400 Pooled",
-                            style: TextStyle(fontSize: 12, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    /// Top Icons
-                    Row(
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.notifications_outlined),
-                          color: Colors.white,
+                        const Text(
+                          "Green Valley Co-op",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.settings_outlined),
-                          color: Colors.white,
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Text(
+                              "248 Members · ",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                            Text(
+                              "125,400 Pooled",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
+                      ],
+                    ),
+                    const Spacer(),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         IconButton(
                           onPressed: () {},
                           icon: const Icon(Icons.more_vert),
                           color: Colors.white,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          iconSize: 24,
                         ),
                       ],
                     ),
@@ -108,13 +125,13 @@ class DashboardScreen extends StatelessWidget {
 
               const SizedBox(height: 12),
 
-              /// Stats Cards
+              /// Stats Cards (2x2 grid)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Wrap(
                   spacing: 12,
                   runSpacing: 12,
-                  children: const [
+                  children: [
                     _StatCard(
                       title: "Total Produce (kg)",
                       value: "24.5K",
@@ -169,21 +186,6 @@ class DashboardScreen extends StatelessWidget {
                           color: Colors.teal.shade600, // Rich teal
                           icon: Icons.qr_code_scanner,
                         ),
-                        //
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Navigator.of(context).push(
-                        //       MaterialPageRoute(
-                        //         builder: (_) => UploadProduceScreen(),
-                        //       ),
-                        //     );
-                        //   },
-                        //   child: _QuickActionButton(
-                        //     label: 'Add Batch',
-                        //     color: Colors.teal.shade300,
-                        //     icon: Icons.add_box_outlined,
-                        //   ),
-                        // ),
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
@@ -202,11 +204,47 @@ class DashboardScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        _QuickActionButton(
-                          label: 'Export',
-                          color: Colors.amber.shade600, // Warm amber
-                          icon: Icons.upload_file,
+                        // Merge button with FutureBuilder to fetch batches
+                        FutureBuilder<List<BatchModel>>(
+                          future: fetchBatches(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return _QuickActionButton(
+                                label: 'Loading...',
+                                color: Colors.amber.shade600,
+                                icon: Icons.hourglass_empty,
+                              );
+                            } else if (snapshot.hasError) {
+                              return const Text('Error loading batches');
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return const Text('No batches found');
+                            } else {
+                              final batches = snapshot.data!;
+                              return Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(12),
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            MergeScreen(batches: batches),
+                                      ),
+                                    );
+                                  },
+                                  child: _QuickActionButton(
+                                    label: 'Merge',
+                                    color: Colors.amber.shade600,
+                                    icon: Icons.upload_file,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
                         ),
+
                         _QuickActionButton(
                           label: 'Add Farmer',
                           color: Colors.deepPurple.shade400, // Subtle purple
@@ -277,26 +315,23 @@ class DashboardScreen extends StatelessWidget {
                     _ActivityTile(
                       name: "John Martinez uploaded 150kg tomatoes",
                       time: "2 hours ago · Grade A · Verified",
-                      imagePath:
-                          "assets/CustomerUIAssets/images/John.png", // 👉 Replace with John's image
+                      imagePath: "assets/CustomerUIAssets/images/John.png",
                     ),
                     _ActivityTile(
                       name: "Sarah Chen sold batch #BC-2024-001",
                       time: "4 hours ago · \$2,400 · Completed",
-                      imagePath:
-                          "assets/CustomerUIAssets/images/Sarah.png", // 👉 Replace with Sarah's image
+                      imagePath: "assets/CustomerUIAssets/images/Sarah.png",
                     ),
                     _ActivityTile(
                       name: "David Kim joined the cooperative",
                       time: "1 day ago · Verification pending",
-                      imagePath:
-                          "assets/CustomerUIAssets/images/David.png", // 👉 Replace with David's image
+                      imagePath: "assets/CustomerUIAssets/images/David.png",
                     ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 80), // space for bottom nav
+              const SizedBox(height: 80), // Space for bottom nav
             ],
           ),
         ),
@@ -436,7 +471,7 @@ class _QuickActionButton extends StatelessWidget {
 class _ActivityTile extends StatelessWidget {
   final String name;
   final String time;
-  final String imagePath; // 👉 now using image instead of icon
+  final String imagePath;
 
   const _ActivityTile({
     required this.name,
@@ -447,9 +482,7 @@ class _ActivityTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: AssetImage(imagePath), // 👉 load static image
-      ),
+      leading: CircleAvatar(backgroundImage: AssetImage(imagePath)),
       title: Text(name, style: const TextStyle(fontSize: 14)),
       subtitle: Text(
         time,
