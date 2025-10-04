@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../global.dart';
 import 'checkout_screen.dart';
-import 'models/product_model.dart'; // ✅ import product data
+import 'models/product_model.dart';
 
 class CartScreen extends StatefulWidget {
-  final int value; // same as HomeScreen's value
+  final int value;
 
   const CartScreen({super.key, this.value = 0});
 
@@ -25,8 +25,6 @@ class _CartScreenState extends State<CartScreen> {
     products = valuet == 0
         ? ProductData.getAllProducts()
         : ProductData.getAllServices();
-    
-    // Debug: Print cart contents and available products
     debugPrint('=== CART DEBUG INFO ===');
     debugPrint('Cart contents: $gcart');
     debugPrint('Available products: ${products.map((p) => '${p.id}: ${p.name}').toList()}');
@@ -36,56 +34,43 @@ class _CartScreenState extends State<CartScreen> {
     debugPrint('=====================');
   }
 
-  // Helper function to extract numeric ID from cart key (H1 -> 1, H2 -> 2, etc.)
-  int? _extractProductId(String cartKey) {
-    final regex = RegExp(r'^[A-Z](\d+)$');
-    final match = regex.firstMatch(cartKey);
-    if (match != null) {
-      return int.tryParse(match.group(1)!);
-    }
-    return null;
-  }
-
-  // Helper function to find product by cart key
-  Product? _findProductByCartKey(String cartKey) {
-    debugPrint('Looking for product with cart key: $cartKey');
-    
-    // Extract numeric ID from cart key (e.g., "H1" -> 1)
-    final numericId = _extractProductId(cartKey);
-    if (numericId != null) {
-      try {
-        final product = products.firstWhere((p) => p.id == numericId);
-        debugPrint('Found product: ${product.name} (ID: ${product.id})');
-        return product;
-      } catch (e) {
-        debugPrint('No product found with ID: $numericId');
-      }
-    }
-    
-    debugPrint('Could not find product for cart key: $cartKey');
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.close, color: Colors.black),
+          icon: const Icon(Icons.close, color: Colors.white),
         ),
         title: const Text(
           'Shopping Cart',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade600, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.green.withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Column(
         children: [
@@ -103,36 +88,33 @@ class _CartScreenState extends State<CartScreen> {
 
   List<Widget> _buildCartItems() {
     List<Widget> widgets = [];
+    final List<Product> allProducts = ProductData.getAllProducts();
 
     gcart.forEach((productId, batches) {
-      debugPrint('Processing cart item: $productId');
-      debugPrint('Batches: $batches');
-      
-      // Find the product by cart key
-      Product? foundProduct = _findProductByCartKey(productId.toString());
+      Product? foundProduct = allProducts.firstWhere(
+        (p) => p.id.toString() == productId.toString(),
+        orElse: () => Product.empty(),
+      );
+      batches?.forEach((batchId, values) {
+        if (values != null && values.length >= 4) {
+          int unitPrice = values[0] ?? 0;
+          int itemCount = values[1] ?? 0;
+          int logisticProvider = values[2] ?? 0;
+          int deliveryChargePerUnit = values[3] ?? 0;
 
-      if (batches != null) {
-        batches.forEach((batchId, values) {
-          if (values != null && values.length >= 4) {
-            int unitPrice = values[0] ?? 0;
-            int itemCount = values[1] ?? 0;
-            int logisticProvider = values[2] ?? 0;
-            int deliveryChargePerUnit = values[3] ?? 0;
-
-            widgets.add(
-              _buildCartItemCard(
-                foundProduct ?? Product.empty(),
-                batchId,
-                unitPrice,
-                itemCount,
-                logisticProvider,
-                deliveryChargePerUnit,
-                productId, // Pass the original productId for updates
-              ),
-            );
-          }
-        });
-      }
+          widgets.add(
+            _buildCartItemCard(
+              foundProduct,
+              batchId,
+              unitPrice,
+              itemCount,
+              logisticProvider,
+              deliveryChargePerUnit,
+              productId,
+            ),
+          );
+        }
+      });
     });
 
     if (widgets.isEmpty) {
@@ -159,11 +141,10 @@ class _CartScreenState extends State<CartScreen> {
     int itemCount,
     int logisticProvider,
     int deliveryChargePerUnit,
-    dynamic productId, // Add productId parameter for cart updates
+    dynamic productId,
   ) {
-    // Check if product was found
-    bool isProductFound = product.id != 0 && product.name.isNotEmpty;
-    
+    bool isProductFound = product.name != 'Unknown Product';
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -207,8 +188,8 @@ class _CartScreenState extends State<CartScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isProductFound && product.category.isNotEmpty 
-                      ? product.category 
+                  isProductFound && product.category.isNotEmpty
+                      ? product.category
                       : 'General',
                   style: const TextStyle(
                     color: Colors.green,
@@ -218,8 +199,8 @@ class _CartScreenState extends State<CartScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  isProductFound && product.name.isNotEmpty 
-                      ? product.name 
+                  isProductFound && product.name.isNotEmpty
+                      ? product.name
                       : 'Unknown Product ($productId)',
                   style: const TextStyle(
                     fontSize: 16,
@@ -261,7 +242,7 @@ class _CartScreenState extends State<CartScreen> {
                       _updateQuantity(productId, batchId, -1);
                     },
                     child: _circleBtn(
-                      Icons.remove, 
+                      Icons.remove,
                       itemCount > 1 ? Colors.grey[300]! : Colors.grey[200]!,
                       iconColor: itemCount > 1 ? Colors.black : Colors.grey,
                     ),
@@ -324,11 +305,10 @@ class _CartScreenState extends State<CartScreen> {
       if (gcart[productId] != null && gcart[productId]![batchId] != null) {
         int currentQuantity = gcart[productId]![batchId]![1] ?? 0;
         int newQuantity = currentQuantity + change;
-        
+
         if (newQuantity > 0) {
           gcart[productId]![batchId]![1] = newQuantity;
         } else if (newQuantity <= 0) {
-          // Remove the item if quantity becomes 0 or less
           _removeFromCart(productId, batchId);
         }
       }
@@ -339,8 +319,7 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
       if (gcart[productId] != null) {
         gcart[productId]!.remove(batchId);
-        
-        // If no more batches for this product, remove the product entirely
+
         if (gcart[productId]!.isEmpty) {
           gcart.remove(productId);
         }
@@ -522,12 +501,14 @@ class _CartScreenState extends State<CartScreen> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: hasItems ? () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const CheckoutScreen()),
-          );
-        } : null,
+        onPressed: hasItems
+            ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CheckoutScreen()),
+                );
+              }
+            : null,
         style: ElevatedButton.styleFrom(
           backgroundColor: hasItems ? Colors.green : Colors.grey,
           padding: const EdgeInsets.symmetric(vertical: 16),
