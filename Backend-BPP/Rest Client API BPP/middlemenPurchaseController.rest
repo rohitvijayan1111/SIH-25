@@ -1,0 +1,72 @@
+### Base URL
+@baseUrl = http://localhost:3000/api/middlemen
+
+### Constants for IDs
+@middlemanId = c66d30f4-3517-431f-ba4f-dcca7c85b22c
+@farmerId = dbd62bb4-618d-454a-9a90-523317ab3734
+@batchId = af7df286-383c-44d1-8132-5f523c3e1cbe
+@productId = 2dc41188-64b0-4b14-93de-f8121c774b88
+@purchaseId = uuid-of-purchase
+
+### 1️⃣ Create / Add Purchase
+POST {{baseUrl}}/purchases
+Content-Type: application/json
+
+{
+  "purchase_code": "PUR-2025-00067",
+  "middleman_id": "{{middlemanId}}",
+  "farmer_id": "{{farmerId}}",
+  "batch_id": "{{batchId}}",
+  "product_id": "{{productId}}",
+  "quantity_kg": 500,
+  "price_per_kg": 42.00,
+  "currency": "INR",
+  "payment_mode": "UPI"
+}
+
+###
+
+### 2️⃣ Get Purchase Details by ID
+GET {{baseUrl}}/purchases/{{purchaseId}}
+
+###
+
+### 3️⃣ List Purchases (with optional filters)
+GET {{baseUrl}}/purchases?middleman_id={{middlemanId}}&farmer_id={{farmerId}}&payment_status=PENDING&delivery_status=PENDING
+
+###
+
+### 4️⃣ Update Payment Status
+PATCH {{baseUrl}}/purchases/{{purchaseId}}/payment
+Content-Type: application/json
+
+{
+  "payment_status": "PAID",
+  "chain_tx": "0xabcdef1234...",
+  "proof_cid": "QmInvoiceProof..."
+}
+
+###
+
+### 5️⃣ Update Delivery Status
+PATCH {{baseUrl}}/purchases/{{purchaseId}}/delivery
+Content-Type: application/json
+
+{
+  "delivery_status": "DELIVERED"
+}
+
+###
+
+### 6️⃣ Get Blockchain & Proof Details
+GET {{baseUrl}}/purchases/{{purchaseId}}/proof
+
+###
+
+### 7️⃣ Delete / Cancel Purchase
+DELETE {{baseUrl}}/purchases/{{purchaseId}}
+
+###
+
+### 8️⃣ Analytics / Reports
+GET {{baseUrl}}/purchases/report?middleman_id={{middlemanId}}&from=2025-10-01&to=2025-10-06
