@@ -139,18 +139,6 @@ class WelcomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const BundleCreationScreen(),
-            ),
-          );
-        },
-        label: "Merge Products",
-        color: Colors.teal,
-      ),
-      _buildButton(
-        onPressed: () {
-          Navigator.push(
-            context,
             MaterialPageRoute(builder: (context) => const AgentsPage()),
           );
         },

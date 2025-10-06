@@ -21,11 +21,12 @@ class DashboardScreen extends StatelessWidget {
       final List<dynamic> inventory = data['inventory'];
       return inventory.map((json) => BatchModel.fromJson(json)).toList();
     } else {
+      print('Status: ${response.statusCode} Body: ${response.body}');
       throw Exception('Failed to load batches');
     }
   }
 
-  @override
+  @override        
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
