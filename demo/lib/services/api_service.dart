@@ -10,7 +10,7 @@ class ApiService {
 
   // Get available products for dropdown
 
-  static final String baseUrl = dotenv.env['BASE_URL'] ?? '';
+  static final String baseUrl = dotenv.env['API_BASE_URL'] ?? '';
   static Future<List<Product>> getProducts() async {
     // print(":" + baseUrl);
     try {
