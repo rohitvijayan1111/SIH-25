@@ -1,4 +1,5 @@
-const db = require("../config/db"); 
+const db = require("../config/db");
+
 // 1️⃣ Farmer Creates a New Batch (BatchCreated)
 const createBatch = async (req, res) => {
   try {
@@ -11,9 +12,12 @@ const createBatch = async (req, res) => {
       geo_lat,
       geo_lon,
       location_name,
-      meta_hash
+      meta_hash,
+      organic,
+      price_per_unit // NEW FIELD
     } = req.body;
 
+    // clean ids (if prefixed)
     farmer_id = farmer_id.replace(/^farmer-/, '');
     product_id = product_id.replace(/^product-/, '');
 
@@ -21,9 +25,9 @@ const createBatch = async (req, res) => {
 
     const query = `
       INSERT INTO batches 
-        (batch_code, product_id, farmer_id, initial_qty_kg, current_qty_kg, unit, harvest_date,
-         geo_lat, geo_lon, location_name, meta_hash, status)
-      VALUES ($1,$2,$3,$4,$4,$5,$6,$7,$8,$9,$10,'PENDING')
+        (batch_code, product_id, farmer_id, initial_qty_kg, current_qty_kg, unit, 
+         harvest_date, geo_lat, geo_lon, location_name, meta_hash, status, organic, price_per_unit)
+      VALUES ($1,$2,$3,$4,$4,$5,$6,$7,$8,$9,$10,'PENDING',$11,$12)
       RETURNING *;
     `;
 
@@ -37,7 +41,9 @@ const createBatch = async (req, res) => {
       geo_lat,
       geo_lon,
       location_name,
-      meta_hash
+      meta_hash,
+      organic || false,
+      price_per_unit || 0
     ];
 
     const result = await db.query(query, values);
@@ -47,7 +53,9 @@ const createBatch = async (req, res) => {
       batch_code,
       product_id,
       farmer_id,
-      qty: initial_qty_kg
+      qty: initial_qty_kg,
+      price_per_unit: result.rows[0].price_per_unit,
+      organic: result.rows[0].organic
     });
 
     res.status(201).json({
@@ -59,7 +67,6 @@ const createBatch = async (req, res) => {
     res.status(500).json({ error: "Failed to create batch" });
   }
 };
-
 
 // 2️⃣ Update Batch Status
 const updateStatus = async (req, res) => {
@@ -97,7 +104,7 @@ const updateStatus = async (req, res) => {
     const updatedBatch = result.rows[0];
 
     console.log("📢 Blockchain Event:", {
-      event: `Batch${status.charAt(0) + status.slice(1).toLowerCase()}`, // e.g., BatchVerified
+      event: `Batch${status.charAt(0) + status.slice(1).toLowerCase()}`,
       batch_id: id,
       status
     });
@@ -120,11 +127,8 @@ const splitBatch = async (req, res) => {
     const { split_qty, unit } = req.body;
 
     await client.query("BEGIN");
-    const parentResult = await client.query(
-      "SELECT * FROM batches WHERE id = $1",
-      [id]
-    );
 
+    const parentResult = await client.query("SELECT * FROM batches WHERE id = $1", [id]);
     if (parentResult.rows.length === 0) {
       return res.status(404).json({ error: "Parent batch not found" });
     }
@@ -146,10 +150,10 @@ const splitBatch = async (req, res) => {
       `
       INSERT INTO batches 
         (product_id, farmer_id, initial_qty_kg, current_qty_kg, unit, harvest_date,
-         geo_lat, geo_lon, location_name, meta_hash, status, parent_batch_id)
-      VALUES ($1,$2,$3,$3,$4,$5,$6,$7,$8,$9,'PENDING',$10)
+         geo_lat, geo_lon, location_name, meta_hash, status, parent_batch_id, organic, price_per_unit)
+      VALUES ($1,$2,$3,$3,$4,$5,$6,$7,$8,$9,'PENDING',$10,$11,$12)
       RETURNING *;
-    `,
+      `,
       [
         parent.product_id,
         parent.farmer_id,
@@ -160,12 +164,13 @@ const splitBatch = async (req, res) => {
         parent.geo_lon,
         parent.location_name,
         parent.meta_hash,
-        parent.id
+        parent.id,
+        parent.organic,
+        parent.price_per_unit // 🔥 carry parent price
       ]
     );
 
     const childBatch = childResult.rows[0];
-
     await client.query("COMMIT");
 
     console.log("📢 Blockchain Event: BatchSplit", {
@@ -193,10 +198,8 @@ const mergeBatches = async (req, res) => {
   const client = await db.connect();
   try {
     const { batch_ids, new_batch_code } = req.body;
-
-    if (!batch_ids || batch_ids.length < 2) {
+    if (!batch_ids || batch_ids.length < 2)
       return res.status(400).json({ error: "Provide at least two batches to merge" });
-    }
 
     await client.query("BEGIN");
 
@@ -205,13 +208,14 @@ const mergeBatches = async (req, res) => {
       [batch_ids]
     );
 
-    if (result.rows.length !== batch_ids.length) {
+    if (result.rows.length !== batch_ids.length)
       return res.status(404).json({ error: "One or more batches not found" });
-    }
 
     const parents = result.rows;
-
     const totalQty = parents.reduce((sum, b) => sum + Number(b.current_qty_kg), 0);
+    const mergedOrganic = parents.every(b => b.organic);
+    const avgPrice =
+      parents.reduce((sum, b) => sum + Number(b.price_per_unit), 0) / parents.length; // 🔥 average price
 
     await client.query(
       `UPDATE batches SET status = 'LOCKED', updated_at = CURRENT_TIMESTAMP WHERE id = ANY($1::uuid[])`,
@@ -222,33 +226,34 @@ const mergeBatches = async (req, res) => {
       `
       INSERT INTO batches
         (batch_code, product_id, farmer_id, initial_qty_kg, current_qty_kg, unit,
-         harvest_date, geo_lat, geo_lon, location_name, meta_hash, status)
-      VALUES ($1,$2,$3,$4,$4,$5,$6,$7,$8,$9,$10,'PENDING')
+         harvest_date, geo_lat, geo_lon, location_name, meta_hash, status, organic, price_per_unit)
+      VALUES ($1,$2,$3,$4,$4,$5,$6,$7,$8,$9,$10,'PENDING',$11,$12)
       RETURNING *;
       `,
       [
         new_batch_code || `BATCH-MERGED-${Date.now()}`,
-        parents[0].product_id, // assumes same product
-        parents[0].farmer_id,  // assumes same farmer/FPO
+        parents[0].product_id,
+        parents[0].farmer_id,
         totalQty,
         parents[0].unit,
         parents[0].harvest_date,
         parents[0].geo_lat,
         parents[0].geo_lon,
         parents[0].location_name,
-        parents[0].meta_hash
+        parents[0].meta_hash,
+        mergedOrganic,
+        avgPrice
       ]
     );
 
     const mergedBatch = mergedResult.rows[0];
-
     await client.query("COMMIT");
 
-    // ✅ Blockchain log
     console.log("📢 Blockchain Event: BatchMerged", {
       parent_batch_ids: batch_ids,
       merged_batch_id: mergedBatch.id,
-      totalQty
+      totalQty,
+      avgPrice
     });
 
     res.status(201).json({
@@ -266,11 +271,12 @@ const mergeBatches = async (req, res) => {
 };
 
 
+
 // 4️⃣ Update Harvest/Location/Meta Info
 const updateBatch = async (req, res) => {
   try {
     const { id } = req.params;   // batch_id
-    const { geo_lat, geo_lon, location_name, meta_hash } = req.body;
+    const { geo_lat, geo_lon, location_name, meta_hash,organic  } = req.body;
 
     const fields = [];
     const values = [];
@@ -296,6 +302,7 @@ const updateBatch = async (req, res) => {
     if (fields.length === 0) {
       return res.status(400).json({ error: "No valid fields provided for update" });
     }
+    if (organic !== undefined) { fields.push(`organic = $${idx++}`); values.push(organic); }
 
     fields.push(`updated_at = CURRENT_TIMESTAMP`);
 
@@ -373,7 +380,7 @@ const anchorMetadata = async (req, res) => {
 // GET /api/discovery
 const getInventory = async (req, res) => {
   try {
-    const { product_type, farmer_id, min_qty ,product_name } = req.query;
+    const { product_type, farmer_id, min_qty ,product_name ,product_id } = req.query;
 
     let query = `SELECT * FROM inventory_view WHERE 1=1`;
     const values = [];
@@ -397,7 +404,10 @@ const getInventory = async (req, res) => {
       query += ` AND LOWER(product_name) LIKE LOWER($${idx++})`;
       values.push(`%${product_name}%`); // partial case-insensitive match
     }
-
+    if (product_id) {
+      query += ` AND product_id = $${idx++}`;
+      values.push(product_id);
+    }
     query += ` ORDER BY available_qty DESC`;
 
     const result = await db.query(query, values);

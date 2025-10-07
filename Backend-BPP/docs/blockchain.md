@@ -1,27 +1,32 @@
 🔹 Blockchain / Traceability Tables
 -- 11. Batches
 CREATE TABLE batches (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    batch_code VARCHAR(100) UNIQUE,
-    product_id UUID NOT NULL,
-    farmer_id UUID NOT NULL,
-    initial_qty_kg NUMERIC NOT NULL,
-    current_qty_kg NUMERIC NOT NULL,
-    unit VARCHAR(10) DEFAULT 'KG',
-    harvest_date TIMESTAMP,
-    geo_lat DOUBLE PRECISION,
-    geo_lon DOUBLE PRECISION,
-    location_name TEXT,
-    meta_hash TEXT,
-    status VARCHAR(30) DEFAULT 'PENDING',
-    parent_batch_id UUID,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    chain_tx TEXT,
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    FOREIGN KEY (farmer_id) REFERENCES farmers(id),
-    FOREIGN KEY (parent_batch_id) REFERENCES batches(id) ON DELETE SET NULL
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),      -- Unique batch identifier (auto-generated)
+    batch_code VARCHAR(100) UNIQUE,                     -- Human-readable batch code (e.g., "BATCH-001")
+
+    product_id UUID NOT NULL,                           -- FK → products(id)
+    farmer_id UUID NOT NULL,                            -- FK → farmers(id)
+    parent_batch_id UUID REFERENCES batches(id) ON DELETE SET NULL,  -- Link to parent batch (for merges/splits)
+
+    initial_qty_kg NUMERIC NOT NULL,                    -- Original quantity of the batch (in kilograms)
+    current_qty_kg NUMERIC NOT NULL,                    -- Remaining quantity after sales/transfers
+    price_per_unit NUMERIC(10,2) DEFAULT 0,             -- Price per unit (e.g., ₹/kg or ₹/L)
+    unit VARCHAR(10) DEFAULT 'KG',                      -- Measurement unit (e.g., KG, L, TON)
+
+    harvest_date TIMESTAMP,                             -- Date when the crop was harvested
+    geo_lat DOUBLE PRECISION,                           -- Latitude of the farm location
+    geo_lon DOUBLE PRECISION,                           -- Longitude of the farm location
+    location_name TEXT,                                 -- Human-readable farm or location name
+
+    organic BOOLEAN DEFAULT FALSE,                      -- Whether the batch is organically certified
+    meta_hash TEXT,                                     -- IPFS or blockchain metadata hash for verification
+    chain_tx TEXT,                                      -- Blockchain transaction reference (if applicable)
+
+    status VARCHAR(30) DEFAULT 'PENDING',               -- Batch status (e.g., LISTED, LOCKED, VERIFIED)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- Creation timestamp
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP      -- Last update timestamp
 );
+
 
 -- 12. Batch certificates
 CREATE TABLE batch_certificates (
@@ -99,7 +104,7 @@ CREATE TABLE escrows (
 
 
 CREATE MATERIALIZED VIEW inventory_view AS
-SELECT 
+SELECT
   b.id AS batch_id,
   b.batch_code,
   p.id AS product_id,
@@ -109,6 +114,7 @@ SELECT
   f.name AS farmer_name,
   b.current_qty_kg AS available_qty,
   b.unit,
+  b.organic,  -- NEW COLUMN ADDED
   COALESCE(pb.price_per_unit, 0) AS price_per_unit,
   pb.quantity AS batch_quantity,
   pb.manufactured_on,
@@ -124,9 +130,101 @@ FROM batches b
 JOIN products p ON p.id = b.product_id
 JOIN farmers f ON f.id = b.farmer_id
 LEFT JOIN product_batches pb ON pb.product_id = p.id
-WHERE b.status = 'LISTED' 
+WHERE b.status = 'LISTED'
   AND b.current_qty_kg > 0
 WITH DATA;
+
+
+
+Ah — the error is clear 👇
+
+> `ERROR: relation "buyers" does not exist`
+
+This means PostgreSQL couldn’t find a table named **`buyers`** (or one of the other referenced tables).
+To fix this, you have **two options** depending on your setup.
+
+---
+
+### ✅ **Option 1: Create a simple `middlemen` table first**
+
+If your intention was to link this purchase to **middlemen**, not “buyers”,
+then replace the foreign key reference from `buyers` → `middlemen`.
+
+Here’s the corrected and **working** version 👇
+
+```sql
+CREATE TABLE middlemen (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    contact_number VARCHAR(20),
+    email VARCHAR(100),
+    location VARCHAR(150),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE middlemen_purchase (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    -- 🔸 Basic Details
+    purchase_code VARCHAR(100) UNIQUE NOT NULL,    -- Unique purchase reference
+    middleman_id UUID NOT NULL,                    -- Buyer (middleman)
+    farmer_id UUID NOT NULL,                       -- Seller (farmer)
+    batch_id UUID NOT NULL,                        -- Purchased batch
+    product_id UUID NOT NULL,                      -- Product linked to batch
+
+    -- 🔸 Transaction Details
+    quantity_kg NUMERIC NOT NULL CHECK (quantity_kg > 0),
+    price_per_kg DECIMAL(10,2) NOT NULL CHECK (price_per_kg >= 0),
+    total_price DECIMAL(12,2) GENERATED ALWAYS AS (quantity_kg * price_per_kg) STORED,
+    currency VARCHAR(10) DEFAULT 'INR',
+
+    -- 🔸 Status & Mode
+    payment_status VARCHAR(30) DEFAULT 'PENDING',  -- PENDING | PAID | FAILED
+    delivery_status VARCHAR(30) DEFAULT 'PENDING', -- PENDING | SHIPPED | DELIVERED
+    payment_mode VARCHAR(50),                      -- ESCROW | CASH | UPI | BANK
+
+    -- 🔸 Blockchain Linkage
+    chain_tx TEXT,                                 -- Blockchain transaction hash
+    proof_cid TEXT,                                -- IPFS proof (invoice, etc.)
+
+    -- 🔸 Timestamps
+    purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- 🔸 Foreign Keys
+    FOREIGN KEY (middleman_id) REFERENCES middlemen(id) ON DELETE CASCADE,
+    FOREIGN KEY (farmer_id) REFERENCES farmers(id) ON DELETE CASCADE,
+    FOREIGN KEY (batch_id) REFERENCES batches(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+```
+
+---
+
+### ✅ **Option 2: If you already have a `buyers` table**
+
+If your schema already uses a **`buyers`** table instead of `middlemen`,
+then **create the buyers table first** (before creating this one).
+
+Example:
+
+```sql
+CREATE TABLE buyers (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    contact_number VARCHAR(20),
+    email VARCHAR(100),
+    location VARCHAR(150),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+Then re-run your original `middlemen_purchase` query.
+
+---
+
+Would you like me to make a **simplified version of the `middlemen_purchase` table** (only essential columns for faster testing)?
+
 
 
 
