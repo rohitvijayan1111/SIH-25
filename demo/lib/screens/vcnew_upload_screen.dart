@@ -8,6 +8,8 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import '../services/api_service.dart';
 import 'batch_summary_screen.dart';
+import 'batch_detail_screen.dart';
+import 'certificate_upload_screen.dart';
 
 class UploadProduceScreen extends StatefulWidget {
   const UploadProduceScreen({super.key});
@@ -518,6 +520,8 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
                 ),
                 const SizedBox(height: 16),
 
+                const SizedBox(height: 16),
+
                 // Add second dropdown for specific product
                 _LabeledField(
                   label: "Select Specific Product",
@@ -713,6 +717,31 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
                 ),
 
                 const SizedBox(height: 16),
+
+                //BUTTON DEMO
+                ElevatedButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BatchDetailsScreen(),
+                      ),
+                    ),
+                  },
+                  child: Text("Click"),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AttachCertificatePage(),
+                      ),
+                    ),
+                  },
+                  child: const Text("Upload Cert"),
+                ),
 
                 /// Buttons
                 SizedBox(
