@@ -434,6 +434,26 @@ const getInventory = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch inventory' });
   }
 };
+const getProduceProducts = async (req, res) => {
+  try {
+    // Adjust this WHERE clause to fit how your db categorizes produce
+    // If you use category, change 'type' to 'category' below.
+    const query = `
+      SELECT id, name, type, unit, description
+      FROM products
+      WHERE type NOT IN ('grain', 'fruit', 'vegetable', 'pulse', 'cereal')
+      ORDER BY name;
+    `;
+    const result = await db.query(query);
+
+    res.status(200).json({
+      products: result.rows,
+    });
+  } catch (err) {
+    console.error('Error fetching produce products:', err.message);
+    res.status(500).json({ error: 'Failed to fetch produce products' });
+  }
+};
 
 module.exports = {
   createBatch,
@@ -443,4 +463,5 @@ module.exports = {
   updateBatch,
   anchorMetadata,
   getInventory,
+  getProduceProducts,
 };
