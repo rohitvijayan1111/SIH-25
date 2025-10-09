@@ -1,4 +1,4 @@
-const db = require("../config/db");
+const db = require('../config/db');
 
 // 1️⃣ Farmer Creates a New Batch (BatchCreated)
 const createBatch = async (req, res) => {
@@ -14,7 +14,7 @@ const createBatch = async (req, res) => {
       location_name,
       meta_hash,
       organic,
-      price_per_unit // NEW FIELD
+      price_per_unit, // NEW FIELD
     } = req.body;
 
     // clean ids (if prefixed)
@@ -43,7 +43,7 @@ const createBatch = async (req, res) => {
       location_name,
       meta_hash,
       organic || false,
-      price_per_unit || 0
+      price_per_unit || 0,
     ];
 
     const result = await db.query(query, values);
@@ -55,7 +55,7 @@ const createBatch = async (req, res) => {
       farmer_id,
       qty: initial_qty_kg,
       price_per_unit: result.rows[0].price_per_unit,
-      organic: result.rows[0].organic
+      organic: result.rows[0].organic,
     });
 
     res.status(201).json({
@@ -103,7 +103,7 @@ const updateStatus = async (req, res) => {
 
     const updatedBatch = result.rows[0];
 
-    console.log("📢 Blockchain Event:", {
+    console.log('📢 Blockchain Event:', {
       event: `Batch${status.charAt(0) + status.slice(1).toLowerCase()}`,
       batch_id: id,
       status,
@@ -126,9 +126,12 @@ const splitBatch = async (req, res) => {
     const { id } = req.params;
     const { split_qty, unit } = req.body;
 
-    await client.query("BEGIN");
+    await client.query('BEGIN');
 
-    const parentResult = await client.query("SELECT * FROM batches WHERE id = $1", [id]);
+    const parentResult = await client.query(
+      'SELECT * FROM batches WHERE id = $1',
+      [id]
+    );
     if (parentResult.rows.length === 0) {
       return res.status(404).json({ error: 'Parent batch not found' });
     }
@@ -166,12 +169,12 @@ const splitBatch = async (req, res) => {
         parent.meta_hash,
         parent.id,
         parent.organic,
-        parent.price_per_unit // 🔥 carry parent price
+        parent.price_per_unit, // 🔥 carry parent price
       ]
     );
 
     const childBatch = childResult.rows[0];
-    await client.query("COMMIT");
+    await client.query('COMMIT');
 
     console.log('📢 Blockchain Event: BatchSplit', {
       parent_batch_id: parent.id,
@@ -202,7 +205,9 @@ const mergeBatches = async (req, res) => {
   try {
     const { batch_ids, new_batch_code } = req.body;
     if (!batch_ids || batch_ids.length < 2)
-      return res.status(400).json({ error: "Provide at least two batches to merge" });
+      return res
+        .status(400)
+        .json({ error: 'Provide at least two batches to merge' });
 
     await client.query('BEGIN');
 
@@ -212,13 +217,17 @@ const mergeBatches = async (req, res) => {
     );
 
     if (result.rows.length !== batch_ids.length)
-      return res.status(404).json({ error: "One or more batches not found" });
+      return res.status(404).json({ error: 'One or more batches not found' });
 
     const parents = result.rows;
-    const totalQty = parents.reduce((sum, b) => sum + Number(b.current_qty_kg), 0);
-    const mergedOrganic = parents.every(b => b.organic);
+    const totalQty = parents.reduce(
+      (sum, b) => sum + Number(b.current_qty_kg),
+      0
+    );
+    const mergedOrganic = parents.every((b) => b.organic);
     const avgPrice =
-      parents.reduce((sum, b) => sum + Number(b.price_per_unit), 0) / parents.length; // 🔥 average price
+      parents.reduce((sum, b) => sum + Number(b.price_per_unit), 0) /
+      parents.length; // 🔥 average price
 
     await client.query(
       `UPDATE batches SET status = 'LOCKED', updated_at = CURRENT_TIMESTAMP WHERE id = ANY($1::uuid[])`,
@@ -245,19 +254,18 @@ const mergeBatches = async (req, res) => {
         parents[0].location_name,
         parents[0].meta_hash,
         mergedOrganic,
-        avgPrice
+        avgPrice,
       ]
     );
 
     const mergedBatch = mergedResult.rows[0];
+    await client.query('COMMIT');
 
-    await client.query("COMMIT");
-
-    // ✅ Blockchain log
-    console.log("📢 Blockchain Event: BatchMerged", {
+    console.log('📢 Blockchain Event: BatchMerged', {
       parent_batch_ids: batch_ids,
       merged_batch_id: mergedBatch.id,
-      totalQty
+      totalQty,
+      avgPrice,
     });
 
     res.status(201).json({
@@ -274,12 +282,11 @@ const mergeBatches = async (req, res) => {
   }
 };
 
-
 // 4️⃣ Update Harvest/Location/Meta Info
 const updateBatch = async (req, res) => {
   try {
-    const { id } = req.params;   // batch_id
-    const { geo_lat, geo_lon, location_name, meta_hash } = req.body;
+    const { id } = req.params; // batch_id
+    const { geo_lat, geo_lon, location_name, meta_hash, organic } = req.body;
 
     const fields = [];
     const values = [];
@@ -307,7 +314,10 @@ const updateBatch = async (req, res) => {
         .status(400)
         .json({ error: 'No valid fields provided for update' });
     }
-    if (organic !== undefined) { fields.push(`organic = $${idx++}`); values.push(organic); }
+    if (organic !== undefined) {
+      fields.push(`organic = $${idx++}`);
+      values.push(organic);
+    }
 
     fields.push(`updated_at = CURRENT_TIMESTAMP`);
 
@@ -385,7 +395,8 @@ const anchorMetadata = async (req, res) => {
 // GET /api/discovery
 const getInventory = async (req, res) => {
   try {
-    const { product_type, farmer_id, min_qty ,product_name } = req.query;
+    const { product_type, farmer_id, min_qty, product_name, product_id } =
+      req.query;
 
     let query = `SELECT * FROM inventory_view WHERE 1=1`;
     const values = [];
@@ -424,27 +435,6 @@ const getInventory = async (req, res) => {
   }
 };
 
-const getProduceProducts = async (req, res) => {
-  try {
-    // Adjust this WHERE clause to fit how your db categorizes produce
-    // If you use category, change 'type' to 'category' below.
-    const query = `
-      SELECT id, name, type, unit, description
-      FROM products
-      WHERE type NOT IN ('grain', 'fruit', 'vegetable', 'pulse', 'cereal')
-      ORDER BY name;
-    `;
-    const result = await db.query(query);
-
-    res.status(200).json({
-      products: result.rows,
-    });
-  } catch (err) {
-    console.error('Error fetching produce products:', err.message);
-    res.status(500).json({ error: 'Failed to fetch produce products' });
-  }
-};
-
 module.exports = {
   createBatch,
   updateStatus,
@@ -453,5 +443,4 @@ module.exports = {
   updateBatch,
   anchorMetadata,
   getInventory,
-  getProduceProducts,
 };
