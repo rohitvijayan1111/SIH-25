@@ -9,6 +9,10 @@ const transfersRoutes = require("./routes/transferRoute");
 const chain_events = require("./routes/chain_events");
 const paymentsRoutes = require("./routes/payments");
 const escrowRoutes = require("./routes/escrowsRoutes");
+const productsRoutes = require('./routes/products');
+
+const middlemenPurchaseRoutes = require('./routes/middlemenPurchaseController');
+
 
 const cors = require("cors");
 const app = express();
@@ -39,7 +43,8 @@ app.use("/api/transfers", transfersRoutes);
 app.use("/api/chain-events", chain_events);
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/escrows", escrowRoutes);
-
+app.use('/api/middlemen', middlemenPurchaseRoutes);
+app.use('/api/products', productsRoutes);
 const PORT = process.env.PORT;
 const HOST = "0.0.0.0"; // Allow external access via LAN IP
 
