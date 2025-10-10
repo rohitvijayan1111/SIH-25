@@ -8,6 +8,7 @@ const {
   anchorMetadata,
   getInventory,
   getProduceProducts,
+  getBatchesbyFarmers,
 } = require('../controllers/batchController'); // no .js extension needed in CommonJS
 
 const router = express.Router();
@@ -34,5 +35,7 @@ router.patch('/:batchId/anchor', anchorMetadata);
 router.get('/', getInventory);
 
 router.get('/product/categories', getProduceProducts);
+
+router.get('/:farmer_id', getBatchesbyFarmers);
 
 module.exports = router;

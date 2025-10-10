@@ -455,6 +455,23 @@ const getProduceProducts = async (req, res) => {
   }
 };
 
+const getBatchesbyFarmers = async (req, res) => {
+  try {
+    const { farmer_id } = req.params;
+    const query = `SELECT batches.*,farmers.name as farmer_name,products.name as product_name
+  from batches
+  JOIN farmers on batches.farmer_id=farmers.id
+  JOIN products ON batches.product_id=products.id
+  where batches.farmer_id=$1`;
+    const result = await db.query(query, [farmer_id]);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    // console.log()
+
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createBatch,
   updateStatus,
@@ -464,4 +481,5 @@ module.exports = {
   anchorMetadata,
   getInventory,
   getProduceProducts,
+  getBatchesbyFarmers,
 };
