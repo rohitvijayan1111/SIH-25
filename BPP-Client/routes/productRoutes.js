@@ -7,5 +7,3 @@ router.put('/:id', productController.updateProduct);
 router.delete('/:id', productController.deleteProduct);
 router.get('/all-products-byfarmer/:farmerId', productController.getProductsByFarmer);
 module.exports = router;
-
-

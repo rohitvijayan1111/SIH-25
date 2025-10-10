@@ -28,35 +28,52 @@ exports.addProduct = async (req, res) => {
   }
 };
 
+
 // 2. Get All Products
 exports.getAllProducts = async (req, res) => {
   try {
     const { type, name } = req.query;
 
-    let query = `SELECT * FROM products`;
     const params = [];
     const conditions = [];
 
+    // Dynamic filters
     if (type) {
       params.push(type);
-      conditions.push(`type = $${params.length}`);
+      conditions.push(`p.type = $${params.length}`);
     }
     if (name) {
       params.push(`%${name}%`);
-      conditions.push(`name ILIKE $${params.length}`);
+      conditions.push(`p.name ILIKE $${params.length}`);
     }
 
+    // Base query with LEFT JOIN and aggregation
+    let query = `
+      SELECT 
+        p.*, 
+        COALESCE(ROUND(AVG(b.price_per_unit), 2), 0) AS average_batch_price
+      FROM products p
+      LEFT JOIN batches b 
+        ON b.product_id = p.id AND b.status = 'LISTED'
+    `;
+
+    // Apply WHERE conditions if any
     if (conditions.length) {
       query += ' WHERE ' + conditions.join(' AND ');
     }
 
+    // GROUP BY and ORDER BY at the end
+    query += ' GROUP BY p.id ORDER BY p.created_at DESC';
+
     const result = await pool.query(query, params);
     res.json(result.rows);
+
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ error: 'Server error' });
   }
 };
+
 
 // 3. Get Product Details
 exports.getProductById = async (req, res) => {

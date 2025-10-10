@@ -3,6 +3,7 @@ import 'models/product_model.dart';
 import 'widgets/product_card.dart';
 import 'widgets/category_card.dart';
 import 'widgets/search_bar.dart';
+import '../config.dart';
 
 import './cart_screen.dart';
 import './product_details_screen.dart'; // NEW import
