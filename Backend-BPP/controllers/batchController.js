@@ -472,6 +472,25 @@ const getBatchesbyFarmers = async (req, res) => {
   }
 };
 
+// GET all batches (optionally filter by status)
+const getAllBatches = async (req, res) => {
+  try {
+    const { status } = req.query; // Optionally filter by status
+    let query = `SELECT * FROM batches`;
+    const values = [];
+    if (status) {
+      query += ` WHERE status = $1`;
+      values.push(status);
+    }
+    const result = await db.query(query, values);
+    res.status(200).json({ inventory: result.rows });
+  } catch (err) {
+    console.error('Error fetching batches:', err.message);
+    res.status(500).json({ error: 'Failed to fetch batches' });
+  }
+};
+
+
 module.exports = {
   createBatch,
   updateStatus,
@@ -482,4 +501,5 @@ module.exports = {
   getInventory,
   getProduceProducts,
   getBatchesbyFarmers,
+  getAllBatches,
 };

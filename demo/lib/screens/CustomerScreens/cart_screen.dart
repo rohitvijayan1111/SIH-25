@@ -57,13 +57,13 @@ class _CartScreenState extends State<CartScreen> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.green.shade600, Colors.green.shade400],
+              colors: [Color.fromARGB(255, 12, 131, 69)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.green.withOpacity(0.3),
+                color: Color.fromARGB(255, 12, 131, 69).withOpacity(0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),

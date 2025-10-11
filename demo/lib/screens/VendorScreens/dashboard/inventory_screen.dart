@@ -105,11 +105,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Add inventory functionality coming soon!'),
-              backgroundColor: AppConstants.primaryGreen,
+              backgroundColor: AppConstants.primaryBlue,
             ),
           );
         },
-        backgroundColor: AppConstants.primaryGreen,
+        backgroundColor: AppConstants.primaryBlue,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
@@ -146,7 +146,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             children: [
               const Icon(
                 Icons.dashboard,
-                color: AppConstants.primaryGreen,
+                color: AppConstants.primaryBlue,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -253,11 +253,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppConstants.primaryGreen : Colors.white,
+                  color: isSelected ? AppConstants.primaryBlue : Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: isSelected
-                        ? AppConstants.primaryGreen
+                        ? AppConstants.primaryBlue
                         : Colors.grey[300]!,
                   ),
                 ),
@@ -479,7 +479,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     icon: const Icon(Icons.sell, size: 16),
                     label: const Text('Sell'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppConstants.primaryGreen,
+                      backgroundColor: AppConstants.primaryBlue,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
@@ -703,7 +703,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${item.productName} moved successfully'),
-                  backgroundColor: AppConstants.primaryGreen,
+                  backgroundColor: AppConstants.primaryBlue,
                 ),
               );
             },
@@ -733,7 +733,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${item.productName} listed for sale'),
-                  backgroundColor: AppConstants.primaryGreen,
+                  backgroundColor: AppConstants.primaryBlue,
                 ),
               );
             },

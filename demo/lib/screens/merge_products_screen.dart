@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:demo/models/batch_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-const Color themeColor = Color.fromARGB(255, 76, 175, 80); // your green
+const Color themeColor  =Color.fromARGB(255, 12, 131, 69);// your green
 
 class MergeScreen extends StatefulWidget {
   final List<BatchModel> batches;
@@ -42,9 +42,7 @@ class _MergeScreenState extends State<MergeScreen> {
     try {
       final baseUrl = dotenv.env['API_BASE_URL']!;
       final response = await http.post(
-        Uri.parse(
-          '$baseUrl/api/batches/merge', // your actual merge endpoint
-        ),
+        Uri.parse('$baseUrl/api/batches/merge'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'batch_ids': selectedBatchIds.toList(),

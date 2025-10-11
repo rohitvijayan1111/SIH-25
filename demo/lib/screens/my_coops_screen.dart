@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'coop_dashboard.dart';
 import 'new_coops_screen.dart';
+import 'certificates_details.dart';
 
 const Color themeColor = Color.fromARGB(255, 76, 175, 80);
 
@@ -16,16 +16,16 @@ class MyCoopsScreen extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Roboto',
             fontSize: 22,
-            fontWeight: FontWeight.bold, // Bold text
-            color: Colors.white,         // White color
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-          textAlign: TextAlign.center,   // Center align inside its box
+          textAlign: TextAlign.center,
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: IconButton(
-              iconSize: 36, // Bigger size
+              iconSize: 36,
               icon: Icon(Icons.account_circle),
               onPressed: () {
                 // Navigate to profile screen if needed
@@ -34,7 +34,6 @@ class MyCoopsScreen extends StatelessWidget {
           ),
         ],
       ),
-
       body: ListView(
         children: [
           CoopTile(
@@ -54,7 +53,18 @@ class MyCoopsScreen extends StatelessWidget {
             description: 'Traditional agriculture with modern techniques',
             members: 89,
             icon: Icons.spa,
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CertificateDetailsScreen(
+                  batchId: 'af7df286-383c-44d1-8132-5f523c3e1cbe',
+                  certId: 'FSSAI-5678',
+                ),
+              ),
+            );
+
+            },
           ),
           CoopTile(
             title: 'FreshHarvest Co-op',
@@ -79,7 +89,6 @@ class MyCoopsScreen extends StatelessWidget {
           ),
         ],
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -90,7 +99,7 @@ class MyCoopsScreen extends StatelessWidget {
         backgroundColor: themeColor,
         child: Icon(Icons.add),
       ),
-    ); // Scaffold closing
+    );
   }
 }
 
@@ -100,7 +109,7 @@ class CoopTile extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  CoopTile({
+  const CoopTile({
     required this.title,
     required this.description,
     required this.members,

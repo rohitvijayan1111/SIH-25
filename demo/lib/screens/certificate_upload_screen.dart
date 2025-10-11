@@ -25,7 +25,7 @@ class _AttachCertificatePageState extends State<AttachCertificatePage> {
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Text("Attach Certificate"),
-        backgroundColor: Colors.green,
+        backgroundColor: Color.fromARGB(255, 12, 131, 69),
         foregroundColor: Colors.white,
       ),
 
@@ -46,10 +46,10 @@ class _AttachCertificatePageState extends State<AttachCertificatePage> {
                 children: [
                   CircleAvatar(
                     radius: 36,
-                    backgroundColor: Colors.green[100],
+                    backgroundColor: Colors.green[200],
                     child: Icon(
                       Icons.verified_rounded,
-                      color: Colors.green[600],
+                      color: Colors.green[800],
                       size: 42,
                     ),
                   ),
@@ -112,7 +112,7 @@ class _AttachCertificatePageState extends State<AttachCertificatePage> {
                       onPressed: () => {},
 
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: Color.fromARGB(255, 12, 131, 69),
                         iconColor: Colors.white,
 
                         padding: EdgeInsets.all(16),

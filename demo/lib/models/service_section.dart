@@ -63,7 +63,7 @@ class ServiceSections {
               activeIcon: Icons.upload,
             ),
             TabConfig(
-              label: 'Seller Requests',
+              label: 'History',
               icon: Icons.list_alt_outlined,
               activeIcon: Icons.list_alt,
             ),

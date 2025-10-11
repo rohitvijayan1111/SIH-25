@@ -6,7 +6,7 @@ import '../screens/CustomerScreens/home_screen.dart';
 import '../screens/CustomerScreens/orders_screen.dart';
 import '../screens/VendorScreens/dashboard/business_dashboard.dart';
 import '../screens/VendorScreens/dashboard/inventory_screen.dart';
-import '../screens/VendorScreens/farmer_side_request.dart';
+import 'package:demo/screens/batch_history.dart';
 import '../screens/VendorScreens/procurement/procurement_screen.dart';
 import '../screens/categories_screen.dart';
 import '../screens/farmer_profile.dart';
@@ -64,7 +64,7 @@ class AppController extends ChangeNotifier {
           case 1:
             return const UploadProduceScreen(); // Upload Product tab
           case 2:
-            return const MyApp();
+            return BatchHistoryScreen();
           case 3:
             return MyCoopsScreen(); // Cooperative tab
           case 4:
