@@ -271,16 +271,45 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Widget _buildCategories() {
+  //   // final categories = valuet == 0
+  //   //     ? _getApiCategories() // Get categories from loaded products
+  //   //     : ProductData.getServiceCategories();
+  //   final categories = ProductData.getServiceCategories();
+
+  //   return Container(
+  //     height: 40,
+  //     padding: const EdgeInsets.symmetric(horizontal: 16),
+  //     child: ListView.builder(
+  //       scrollDirection: Axis.horizontal,
+  //       itemCount: categories.length,
+  //       itemBuilder: (context, index) {
+  //         final category = categories[index];
+  //         return CategoryCard(
+  //           category: category,
+  //           isSelected: selectedCategory == category,
+  //           onTap: () {
+  //             setState(() {
+  //               selectedCategory = category;
+  //               _filterByCategory();
+  //             });
+  //           },
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
+
   Widget _buildCategories() {
     final categories = valuet == 0
-        ? _getApiCategories() // Get categories from loaded products
+        ? _getApiCategories()
         : ProductData.getServiceCategories();
-
     return Container(
-      height: 40,
+      height: 40, // fixed height ensures scrolling works!
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        physics: AlwaysScrollableScrollPhysics(), // <-- Add this line!
         itemCount: categories.length,
         itemBuilder: (context, index) {
           final category = categories[index];
