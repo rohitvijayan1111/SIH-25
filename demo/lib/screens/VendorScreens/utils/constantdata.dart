@@ -7,7 +7,9 @@ class AppConstants {
 
   // Colors - Based on the UI design
   static const Color primaryBlue = Color(0xFF1E40AF);
-  static const Color primaryGreen = Color(0xFF34A853);
+  // static const Color primaryGreen = Color(0xFF34A853);
+  static const Color primaryGreen = Color(0xFF0C8345);
+
   static const Color warningOrange = Color(0xFFFB8C00);
   static const Color errorRed = Color(0xFFEA4335);
   static const Color lightBlue = Color(0xFF87CEEB);

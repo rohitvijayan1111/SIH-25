@@ -2,7 +2,7 @@ import 'package:demo/screens/my_coops_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../models/service_section.dart';
-import '../screens/CustomerScreens/home_screen.dart';
+// import '../screens/CustomerScreens/home_screen.dart';
 import '../screens/CustomerScreens/orders_screen.dart';
 import '../screens/VendorScreens/dashboard/business_dashboard.dart';
 import '../screens/VendorScreens/dashboard/inventory_screen.dart';
@@ -13,6 +13,7 @@ import '../screens/farmer_profile.dart';
 // import '../screens/new_upload_produce_screen.dart';
 import '../screens/vcnew_upload_screen.dart';
 import '../screens/scan_qr_screen.dart';
+import '../screens/CustomerScreens/updated_home_screen.dart';
 
 class AppController extends ChangeNotifier {
   ServiceSection _currentSection = ServiceSection.categories;
