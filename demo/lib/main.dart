@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Dynamic Tab App',
+      title: 'Agri Bharat Connect',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: const Color(0xFF4285F4),

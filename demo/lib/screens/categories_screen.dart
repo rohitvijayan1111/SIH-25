@@ -10,7 +10,7 @@ class CategoriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -20,14 +20,15 @@ class CategoriesScreen extends StatelessWidget {
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF4CAF50), // Fresh green
-                      Color(0xFF2196F3), // Sky blue
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  // gradient: LinearGradient(
+                  //   colors: [
+                  //     Color(0xFF4CAF50), // Fresh green
+                  //     Color(0xFF2196F3), // Sky blue
+                  //   ],
+                  //   begin: Alignment.topLeft,
+                  //   end: Alignment.bottomRight,
+                  // ),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -43,17 +44,22 @@ class CategoriesScreen extends StatelessWidget {
                   children: [
                     // App logo/icon (you can add an icon here)
                     Container(
-                      width: 60,
-                      height: 60,
+                      width: 200,
+                      height: 200,
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Icon(
-                        Icons.agriculture,
-                        size: 32,
-                        color: Colors.white,
-                      ),
+                      child:
+                          // CircleAvatar(
+                          // child:
+                          Image.asset(
+                            'assets/logoABC.jpg',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                      // ),
                     ),
 
                     SizedBox(height: 8),
@@ -64,7 +70,7 @@ class CategoriesScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
                         letterSpacing: 2,
                       ),
                     ),
@@ -73,7 +79,7 @@ class CategoriesScreen extends StatelessWidget {
                       'ABC',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.black.withOpacity(0.9),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -102,15 +108,15 @@ class CategoriesScreen extends StatelessWidget {
                               Icon(
                                 Icons.verified_outlined,
                                 size: 16,
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.black.withOpacity(0.9),
                               ),
                               SizedBox(width: 6),
                               Text(
                                 'Powered by',
                                 style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white.withOpacity(0.8),
-                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
@@ -120,7 +126,7 @@ class CategoriesScreen extends StatelessWidget {
                             'ONDC • Beckn Protocol',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -131,14 +137,14 @@ class CategoriesScreen extends StatelessWidget {
                               Icon(
                                 Icons.security,
                                 size: 14,
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.black.withOpacity(0.9),
                               ),
                               SizedBox(width: 4),
                               Text(
                                 'Secured with Hyperledger Blockchain',
                                 style: TextStyle(
-                                  fontSize: 11,
-                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 14,
+                                  color: Colors.black.withOpacity(0.8),
                                   fontStyle: FontStyle.italic,
                                 ),
                               ),
