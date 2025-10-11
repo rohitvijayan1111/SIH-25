@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 // const logBlockchainEvent = require("../middlewares/blockchainLogger");
-const { SERVER_URL } = 'react-native-dotenv';
+
 exports.handleSearch = async (req, res) => {
   try {
     const {
@@ -79,11 +79,11 @@ exports.handleSearch = async (req, res) => {
     //   "CREATE",     // action
     //   payload       // full payload being hashed
     // );
-    console.log(bppResponse.data.message.catalog.items);
+
     res.json({
       message: '✅ BPP /on_search called successfully',
       transaction_id: txnId,
-      catalog: bppResponse.data.message.catalog,
+      catalog: bppResponse.data
     });
     console.log('runnig');
   } catch (error) {
