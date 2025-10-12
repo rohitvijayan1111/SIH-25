@@ -1,9 +1,11 @@
 import 'dart:math';
-
+import 'package:demo/models/batch_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../global.dart';
 import 'models/product_model.dart';
+import 'package:demo/models/batch_model.dart';         // New import for batch model
+import '../../services/api_service.dart'; // New import for API calls
 import 'product_history.dart';
 
 class LogisticProvider {
@@ -19,8 +21,7 @@ class LogisticProvider {
 
   double calculateCharge(int daysFromNow, int qty) {
     // service charge = baseValue + ratio * days + random factor
-    return (baseValue + (ratio * daysFromNow) + Random().nextDouble() * 10) *
-        qty;
+    return (baseValue + (ratio * daysFromNow) + Random().nextDouble() * 10) * qty;
   }
 }
 
@@ -40,52 +41,28 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final Random random = Random();
-  late List<Map<String, dynamic>> batches;
+
+  late Future<List<BatchModel>> futureBatches;
+
   Product? product;
   Map<int, int> cartQuantities = {}; // batchIndex -> quantity
   Map<int, int> selectedProviders = {}; // batchIndex -> providerIndex
   Map<int, DateTime> selectedDates = {}; // batchIndex -> date
   Map<int, double> selectedCharges = {}; // batchIndex -> charge
 
-  final List<LogisticProvider> logisticsProviders = List.generate(5, (i) {
-    double base = (40 + Random().nextInt(30)).toDouble(); // base 40–70
-    double ratio = (5 + Random().nextInt(10)).toDouble(); // ratio 5–15
-    List<dynamic> lp = [
-      "DTDC",
-      "LoadShare Networks",
-      "Shiprocket",
-      "Mahindra Logistics",
-      "iThink Logistics",
-    ];
-    return LogisticProvider(name: "${lp[i]}", baseValue: base, ratio: ratio);
-  });
+  final List<LogisticProvider> logisticsProviders = [
+    LogisticProvider(name: "DTDC", baseValue: 45, ratio: 8),
+    LogisticProvider(name: "LoadShare Networks", baseValue: 50, ratio: 10),
+    LogisticProvider(name: "Shiprocket", baseValue: 42, ratio: 9),
+    LogisticProvider(name: "Mahindra Logistics", baseValue: 60, ratio: 7),
+    LogisticProvider(name: "iThink Logistics", baseValue: 54, ratio: 8),
+  ];
 
   @override
   void initState() {
     super.initState();
-    double basePrice = double.tryParse(widget.product.price) ?? 0.0;
     product = widget.product;
-    DateTime today = DateTime.now();
-
-    // Generate dummy batches
-    batches = List.generate(3, (i) {
-      DateTime expiry = today.add(Duration(days: 10 + random.nextInt(40)));
-      DateTime arrival = today.add(Duration(days: 3 + random.nextInt(20)));
-
-      if (arrival.isAfter(expiry)) {
-        arrival = expiry.subtract(const Duration(days: 10));
-      }
-
-      return {
-        "seller": ["Farmer Nanda", "AgroMart", "Green Valley"][i],
-        "price": basePrice * (1 + (i - 1) * 0.2),
-        "stock": [100, 190, 50][i],
-        "unit": ["2kg per pack", "1kg per pack", "500g per pack"][i],
-        "expiry": expiry,
-        "arrival": arrival,
-        "stars": random.nextInt(5) + 1,
-      };
-    });
+    futureBatches = ApiService.getBatchesForProduct(product!.id);
   }
 
   Widget buildStars(int count) {
@@ -101,10 +78,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  double calculateTotal() {
+  double calculateTotal(List<BatchModel> batches) {
     double total = 0.0;
     cartQuantities.forEach((index, qty) {
-      total += batches[index]["price"] * qty;
+      if (index < batches.length) {
+        total += (batches[index].pricePerUnit) * qty;
+      }
     });
     return total;
   }
@@ -122,6 +101,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
+    futureBatches = ApiService.getBatchesForProduct(product!.id);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -194,268 +174,231 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
+                  FutureBuilder<List<BatchModel>>(
+                    future: futureBatches,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text("Failed to fetch batches: ${snapshot.error}");
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Text("No batches available for this product");
+                      } else {
+                        List<BatchModel> batches = snapshot.data!;
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: batches.length,
+                          itemBuilder: (context, index) {
+                            final batch = batches[index];
+                            int qty = cartQuantities[index] ?? 0;
+                            DateTime expiry = batch.expiryDate;
+                            int expiryDays = expiry.difference(DateTime.now()).inDays;
 
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: batches.length,
-                    itemBuilder: (context, index) {
-                      final batch = batches[index];
-                      int qty = cartQuantities[index] ?? 0;
+                            List<DateTime> dateOptions = List.generate(10, (i) {
+                              final d = DateTime.now().add(Duration(days: i + 1));
+                              return DateTime(d.year, d.month, d.day);
+                            });
 
-                      DateTime expiry = batch["expiry"];
-                      int expiryDays = expiry.difference(DateTime.now()).inDays;
-
-                      List<DateTime> dateOptions = List.generate(10, (i) {
-                        final d = DateTime.now().add(Duration(days: i + 1));
-                        return DateTime(d.year, d.month, d.day); // normalize
-                      });
-
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        elevation: qty > 0 ? 6 : 2,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Average Price: ₹${batch["price"].toStringAsFixed(2)}",
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF4CAF50),
-                                    ),
-                                  ),
-                                  buildStars(batch["stars"]),
-                                ],
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
                               ),
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.storefront,
-                                    size: 18,
-                                    color: Colors.grey,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    batch["seller"],
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 6),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.inventory,
-                                    size: 18,
-                                    color: Colors.grey,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    "${batch["stock"]} packs • ${batch["unit"]}",
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 6),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.event_busy,
-                                    size: 18,
-                                    color: Colors.redAccent,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    "Expiry: ${expiry.day}/${expiry.month}/${expiry.year} "
-                                    "(${expiryDays}d left)",
-                                    style: const TextStyle(
-                                      color: Colors.redAccent,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Divider(height: 20, thickness: 1),
-
-                              // Logistics Date Dropdown
-                              DropdownButton<DateTime>(
-                                value: selectedDates[index],
-                                hint: const Text(
-                                  "Select Expected Arrival Date",
-                                ),
-                                onChanged: (date) {
-                                  setState(() {
-                                    selectedDates[index] = DateTime(
-                                      date!.year,
-                                      date.month,
-                                      date.day,
-                                    );
-                                    int daysFromNow = selectedDates[index]!
-                                        .difference(DateTime.now())
-                                        .inDays;
-
-                                    List<double> charges = logisticsProviders
-                                        .map(
-                                          (p) => p.calculateCharge(
-                                            daysFromNow,
-                                            qty > 0 ? qty : 1,
+                              elevation: qty > 0 ? 6 : 2,
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Average Price: ₹${batch.pricePerUnit.toStringAsFixed(2)}",
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF4CAF50),
                                           ),
-                                        )
-                                        .toList();
-
-                                    int minIndex = charges.indexOf(
-                                      charges.reduce(min),
-                                    );
-                                    selectedProviders[index] = minIndex;
-                                    selectedCharges[index] = charges[minIndex];
-                                  });
-                                },
-                                items: dateOptions.map((d) {
-                                  return DropdownMenuItem(
-                                    value: d,
-                                    child: Text(
-                                      "${d.day}/${d.month}/${d.year}",
+                                        ),
+                                        buildStars(random.nextInt(5) + 1),
+                                      ],
                                     ),
-                                  );
-                                }).toList(),
-                              ),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.storefront, size: 18, color: Colors.grey),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          batch.farmerName,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.label, size: 18, color: Colors.blueGrey),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          "Batch ID: ${batch.id}",
+                                          style: const TextStyle(fontSize: 13, color: Colors.blueGrey),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.inventory, size: 18, color: Colors.grey),
+                                        const SizedBox(width: 6),
+                                        Text("${batch.quantityKg} packs • ${batch.unit}"),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.event_busy, size: 18, color: Colors.redAccent),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          "Expiry: ${expiry.day}/${expiry.month}/${expiry.year} (${expiryDays}d left)",
+                                          style: const TextStyle(color: Colors.redAccent),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(height: 20, thickness: 1),
 
-                              if (selectedDates.containsKey(index)) ...[
-                                DropdownButton<int>(
-                                  value: selectedProviders[index],
-                                  hint: const Text("Select Logistic Provider"),
-                                  onChanged: (providerIndex) {
-                                    setState(() {
-                                      selectedProviders[index] = providerIndex!;
-                                      int daysFromNow = selectedDates[index]!
-                                          .difference(DateTime.now())
-                                          .inDays;
-                                      selectedCharges[index] =
-                                          logisticsProviders[providerIndex]
-                                              .calculateCharge(
-                                                daysFromNow,
-                                                qty > 0 ? qty : 1,
-                                              );
-                                    });
-                                  },
-                                  items: List.generate(
-                                    logisticsProviders.length,
-                                    (i) {
-                                      int daysFromNow = selectedDates[index]!
-                                          .difference(DateTime.now())
-                                          .inDays;
-                                      double charge = logisticsProviders[i]
-                                          .calculateCharge(
+                                    DropdownButton<DateTime>(
+                                      value: selectedDates[index],
+                                      hint: const Text("Select Expected Arrival Date"),
+                                      onChanged: (date) {
+                                        setState(() {
+                                          selectedDates[index] = DateTime(date!.year, date.month, date.day);
+                                          int daysFromNow = selectedDates[index]!.difference(DateTime.now()).inDays;
+
+                                          List<double> charges = logisticsProviders.map((p) => p.calculateCharge(
+                                              daysFromNow,
+                                              qty > 0 ? qty : 1,
+                                            )).toList();
+
+                                          int minIndex = charges.indexOf(charges.reduce(min));
+                                          selectedProviders[index] = minIndex;
+                                          selectedCharges[index] = charges[minIndex];
+                                        });
+                                      },
+                                      items: dateOptions.map((d) {
+                                        return DropdownMenuItem(
+                                          value: d,
+                                          child: Text("${d.day}/${d.month}/${d.year}"),
+                                        );
+                                      }).toList(),
+                                    ),
+
+                                    if (selectedDates.containsKey(index)) ...[
+                                      DropdownButton<int>(
+                                        value: selectedProviders[index],
+                                        hint: const Text("Select Logistic Provider"),
+                                        onChanged: (providerIndex) {
+                                          setState(() {
+                                            selectedProviders[index] = providerIndex!;
+                                            int daysFromNow = selectedDates[index]!.difference(DateTime.now()).inDays;
+                                            selectedCharges[index] = logisticsProviders[providerIndex].calculateCharge(
+                                              daysFromNow,
+                                              qty > 0 ? qty : 1,
+                                            );
+                                          });
+                                        },
+                                        items: List.generate(logisticsProviders.length, (i) {
+                                          int daysFromNow = selectedDates[index]!.difference(DateTime.now()).inDays;
+                                          double charge = logisticsProviders[i].calculateCharge(
                                             daysFromNow,
                                             qty > 0 ? qty : 1,
                                           );
-                                      return DropdownMenuItem(
-                                        value: i,
-                                        child: Text(
-                                          "${logisticsProviders[i].name} - ₹${charge.toStringAsFixed(2)}",
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-
-                              if (selectedCharges.containsKey(index))
-                                Text(
-                                  "Selected Logistics Charge: ₹${selectedCharges[index]!.toStringAsFixed(2)}",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xFF4CAF50),
-                                  ),
-                                ),
-
-                              const Divider(height: 20, thickness: 1),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {
-                                          if (qty > 0) {
-                                            updateCart(index, qty - 1);
-                                          }
-                                        },
-                                        icon: const Icon(
-                                          Icons.remove_circle,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      Text(
-                                        "$qty",
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          if (qty < batch["stock"]) {
-                                            updateCart(index, qty + 1);
-                                          }
-                                        },
-                                        icon: const Icon(
-                                          Icons.add_circle,
-                                          color: Colors.green,
-                                        ),
+                                          return DropdownMenuItem(
+                                            value: i,
+                                            child: Text("${logisticsProviders[i].name} - ₹${charge.toStringAsFixed(2)}"),
+                                          );
+                                        }),
                                       ),
                                     ],
-                                  ),
-                                  OutlinedButton.icon(
-                                    style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(
-                                        color: Color(0xFF4CAF50),
+
+                                    if (selectedCharges.containsKey(index))
+                                      Text(
+                                        "Selected Logistics Charge: ₹${selectedCharges[index]!.toStringAsFixed(2)}",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xFF4CAF50),
+                                        ),
                                       ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => ProductHistoryPage(
-                                            product: product,
-                                            batchid: "batch#1673abhgi@bh",
+
+                                    const Divider(height: 20, thickness: 1),
+
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                if (qty > 0) {
+                                                  updateCart(index, qty - 1);
+                                                }
+                                              },
+                                              icon: const Icon(Icons.remove_circle, color: Colors.red),
+                                            ),
+                                            Text(
+                                              "$qty",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                if (qty < batch.quantityKg) { // Note updated from stock to batchQuantity
+                                                  updateCart(index, qty + 1);
+                                                }
+                                              },
+                                              icon: const Icon(Icons.add_circle, color: Colors.green),
+                                            ),
+                                          ],
+                                        ),
+                                        OutlinedButton.icon(
+                                          style: OutlinedButton.styleFrom(
+                                            side: const BorderSide(color: Color(0xFF4CAF50)),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => ProductHistoryPage(
+                                                  product: product,
+                                                  batchid: batch.id, // Pass actual batchId
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          icon: const Icon(Icons.history, color: Color(0xFF4CAF50)),
+                                          label: const Text(
+                                            "View History",
+                                            style: TextStyle(color: Color(0xFF4CAF50)),
                                           ),
                                         ),
-                                      );
-                                    },
-                                    icon: const Icon(
-                                      Icons.history,
-                                      color: Color(0xFF4CAF50),
+                                      ],
                                     ),
-                                    label: const Text(
-                                      "View History",
-                                      style: TextStyle(
-                                        color: Color(0xFF4CAF50),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                      );
+                            );
+                          },
+                        );
+                      }
                     },
                   ),
                 ],
@@ -464,87 +407,87 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
 
           // Bottom Cart Bar
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(top: BorderSide(color: Colors.grey.shade300)),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 4,
-                  offset: Offset(0, -2),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Total",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color.fromARGB(137, 22, 21, 21),
-                      ),
+          FutureBuilder<List<BatchModel>>(
+            future: futureBatches,
+            builder: (context, snapshot) {
+              List<BatchModel> batches = snapshot.data ?? [];
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(top: BorderSide(color: Colors.grey.shade300)),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: Offset(0, -2),
                     ),
-                    Text(
-                      "Average Price: ₹${calculateTotal().toStringAsFixed(2)}",
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Total",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color.fromARGB(137, 22, 21, 21),
+                          ),
+                        ),
+                        Text(
+                          "Average Price: ₹${calculateTotal(batches).toStringAsFixed(2)}",
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (!gcart.containsKey(product.id) || gcart[product.id] == null) {
+                          gcart[product.id] = <String, List<int>>{};
+                        }
+                        cartQuantities.forEach((batchIndex, qty) {
+                          if (batchIndex < batches.length) {
+                            double price = batches[batchIndex].pricePerUnit;
+                            int providerIndex = selectedProviders[batchIndex] ?? 0;
+                            double charge = selectedCharges[batchIndex] ?? 0;
+                            gcart[product.id]!['batch$batchIndex'] = [
+                              price.toInt(),
+                              qty,
+                              providerIndex,
+                              charge.toInt(),
+                            ];
+                          }
+                        });
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Added ${cartQuantities.length} batches to cart!'),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.shopping_cart),
+                      label: const Text("Add to Cart"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4CAF50),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                   ],
                 ),
-                ElevatedButton.icon(
-                  // When adding batch(es) to the cart:
-                  onPressed: () {
-                    if (!gcart.containsKey(product.id) ||
-                        gcart[product.id] == null) {
-                      gcart[product.id] = <String, List<int>>{};
-                    }
-                    cartQuantities.forEach((batchIndex, qty) {
-                      double price = batches[batchIndex]['price'];
-                      int providerIndex = selectedProviders[batchIndex] ?? 0;
-                      double charge = selectedCharges[batchIndex] ?? 0;
-                      gcart[product.id]!['batch$batchIndex'] = [
-                        price.toInt(),
-                        qty,
-                        providerIndex,
-                        charge.toInt(),
-                      ];
-                    });
-
-                    // Confirm with user
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Added ${cartQuantities.length} batches to cart!',
-                        ),
-                        duration: const Duration(seconds: 2),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.shopping_cart),
-                  label: const Text("Add to Cart"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4CAF50),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/product.dart';
+import 'package:demo/models/batch_model.dart';
 
 class ApiService {
   // static const String baseUrl = 'http://10.0.2.2:3000/api'; // Android emulator
@@ -65,6 +66,20 @@ class ApiService {
       }
     } catch (e) {
       return BatchSubmissionResult(success: false, error: 'Network error: $e');
+    }
+  }
+
+  static Future<List<BatchModel>> getBatchesForProduct(String productId) async {
+    final response = await http.get(Uri.parse('$baseUrl/api/batches'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final List batches = data['inventory'] ?? [];
+      return batches
+          .where((b) => b['product_id'] == productId)
+          .map<BatchModel>((json) => BatchModel.fromJson(json))
+          .toList();
+    } else {
+      throw Exception('Failed to load batches');
     }
   }
 }
