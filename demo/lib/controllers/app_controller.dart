@@ -14,6 +14,8 @@ import '../screens/farmer_profile.dart';
 import '../screens/vcnew_upload_screen.dart';
 import '../screens/scan_qr_screen.dart';
 import '../screens/CustomerScreens/updated_home_screen.dart';
+// import '../screens/VendorScreens/purchase_list_screen.dart';
+import '../screens/VendorScreens/dynamic_purchase_list_screen.dart';
 
 class AppController extends ChangeNotifier {
   ServiceSection _currentSection = ServiceSection.categories;
@@ -99,7 +101,7 @@ class AppController extends ChangeNotifier {
           case 2:
             return const ProcurementScreen(); // Procurement tab
           case 3:
-            return const InventoryScreen(); // Inventory tab
+            return PurchaseListScreen(); // Inventory tab
           case 4:
             return const ProfilePlaceholderScreen(); // Profile tab
           default:

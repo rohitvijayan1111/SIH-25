@@ -44,12 +44,22 @@ class Product {
         return 'Tools';
       case 'seed':
         return 'Seeds';
-      case 'Herbicides':
-        return 'herbicide';
-      case 'Pesticides':
-        return 'pesticide';
+      case 'herbicide': // Fixed: was 'Herbicides'
+        return 'Herbicides';
+      case 'pesticide': // Fixed: was 'Pesticides'
+        return 'Pesticides';
+      case 'fungicide':
+        return 'Fungicides';
+      case 'growth_regulator':
+        return 'Growth Regulators';
+      case 'growth_promoter':
+        return 'Growth Promoters';
+      case 'micro_nutrient':
+        return 'Micro Nutrients';
+      case 'fruit':
+        return 'Fruits';
       default:
-        return 'Unknown';
+        return 'Others'; // Changed from 'Unknown' to 'Others'
     }
   }
 
@@ -552,13 +562,14 @@ class ProductData {
 
   static List<String> getServiceCategories() {
     return [
-      'Herbicide',
+      'Herbicides',
       'Growth Regulators',
-      'Fungicide',
-      'Growth Promoter',
+      'Fungicides',
+      'Growth Promoters',
       'Fertilizer',
-      'Micro Nutrient',
+      'Micro Nutrients',
       'Seeds',
+      'Pesticides',
       'Land Lease & Sale',
     ];
   }

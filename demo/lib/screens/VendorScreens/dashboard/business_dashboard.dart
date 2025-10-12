@@ -21,14 +21,14 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
         elevation: 0,
         title: const Row(
           children: [
-            Icon(Icons.analytics, color: AppConstants.white, size: 24),
+            // Icon(Icons.analytics, color: AppConstants.white, size: 24),
             SizedBox(width: 8),
             Text(
               'Dashboard',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: AppConstants.titleFontSize,
-                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -75,24 +75,23 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        padding: const EdgeInsets.all(AppConstants.smallPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Main Metrics
             _buildMainMetrics(),
 
-            const SizedBox(height: AppConstants.largePadding),
+            // const SizedBox(height: AppConstants.largePadding),
 
             // Market Trends Chart
-            _buildMarketTrends(),
-
-            const SizedBox(height: AppConstants.largePadding),
+            // _buildMarketTrends(),
+            const SizedBox(height: AppConstants.smallPadding),
 
             // Active Alerts
             _buildActiveAlerts(),
 
-            const SizedBox(height: AppConstants.largePadding),
+            const SizedBox(height: AppConstants.smallPadding),
 
             // Quick Actions
             _buildQuickActions(),
@@ -114,7 +113,7 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
             color: Colors.black87,
           ),
         ),
-        const SizedBox(height: AppConstants.defaultPadding),
+        const SizedBox(height: AppConstants.smallPadding),
         Row(
           children: [
             Expanded(
@@ -126,7 +125,7 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
                 subtitle: '+15% from last month',
               ),
             ),
-            const SizedBox(width: AppConstants.defaultPadding),
+            const SizedBox(width: AppConstants.smallPadding),
             Expanded(
               child: MetricCard(
                 title: 'Current Inventory',
@@ -138,7 +137,7 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
             ),
           ],
         ),
-        const SizedBox(height: AppConstants.defaultPadding),
+        const SizedBox(height: AppConstants.smallPadding),
         Row(
           children: [
             Expanded(
@@ -303,7 +302,14 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
 
   Widget _buildActiveAlerts() {
     return Container(
-      padding: const EdgeInsets.all(AppConstants.defaultPadding),
+      // padding: const EdgeInsets.all(AppConstants.smallPadding),
+      padding: const EdgeInsets.only(
+        left: AppConstants.defaultPadding,
+        right: AppConstants.defaultPadding,
+        top: AppConstants.smallPadding,
+        bottom: AppConstants.smallPadding,
+      ),
+
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.cardBorderRadius),
@@ -336,7 +342,7 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
               ),
             ],
           ),
-          const SizedBox(height: AppConstants.defaultPadding),
+          const SizedBox(height: AppConstants.smallPadding),
           AlertCard(
             title: 'Tomato prices rising',
             subtitle: 'Good time to sell',

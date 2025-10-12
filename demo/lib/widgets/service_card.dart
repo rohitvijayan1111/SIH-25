@@ -21,9 +21,9 @@ class ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
+      height: 90,
       width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 4),
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: BorderRadius.circular(16),
@@ -56,6 +56,16 @@ class ServiceCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    Row(
+                      children: icons
+                          .map(
+                            (icon) => Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Icon(icon, color: Colors.white, size: 26),
+                            ),
+                          )
+                          .toList(),
+                    ),
                     const Icon(
                       Icons.arrow_forward,
                       color: Colors.white,
@@ -67,30 +77,6 @@ class ServiceCard extends StatelessWidget {
                 Text(
                   subtitle,
                   style: const TextStyle(color: Colors.white70, fontSize: 14),
-                ),
-                const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: icons
-                          .map(
-                            (icon) => Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: Icon(icon, color: Colors.white, size: 26),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    Text(
-                      rightText,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),

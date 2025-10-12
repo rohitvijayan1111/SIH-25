@@ -2,7 +2,7 @@
 # REST Client for Products API
 # ===============================
 
-@productId =ca5b5d02c9e3485ebcd053e5842da496
+@productId =2528a332-ca88-4c07-bec9-4f62696295c6
 
 ### 1️⃣ Add Product
 POST http://localhost:3000/api/products
