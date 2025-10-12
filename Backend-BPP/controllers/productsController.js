@@ -1,5 +1,5 @@
 // controllers/productsController.js
-const pool =  require("../config/db");
+const pool = require('../config/db');
 
 // 1. Add Product
 exports.addProduct = async (req, res) => {
@@ -10,7 +10,14 @@ exports.addProduct = async (req, res) => {
       return res.status(400).json({ error: 'Name and type are required' });
     }
 
-    const validTypes = ['crop','dairy','livestock','tool','fertilizer','seed'];
+    const validTypes = [
+      'crop',
+      'dairy',
+      'livestock',
+      'tool',
+      'fertilizer',
+      'seed',
+    ];
     if (!validTypes.includes(type)) {
       return res.status(400).json({ error: 'Invalid product type' });
     }
@@ -27,7 +34,6 @@ exports.addProduct = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
-
 
 // 2. Get All Products
 exports.getAllProducts = async (req, res) => {
@@ -51,10 +57,12 @@ exports.getAllProducts = async (req, res) => {
     let query = `
       SELECT 
         p.*, 
-        COALESCE(ROUND(AVG(b.price_per_unit), 2), 0) AS average_batch_price
+        COALESCE(ROUND(AVG(b.price_per_unit), 2), 0) AS average_batch_price,
+        COUNT(b.id) AS total_batches
       FROM products p
       LEFT JOIN batches b 
-        ON b.product_id = p.id AND b.status = 'LISTED'
+        ON b.product_id = p.id 
+        -- AND b.status = 'LISTED'
     `;
 
     // Apply WHERE conditions if any
@@ -67,19 +75,19 @@ exports.getAllProducts = async (req, res) => {
 
     const result = await pool.query(query, params);
     res.json(result.rows);
-
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ error: 'Server error' });
   }
 };
 
-
 // 3. Get Product Details
 exports.getProductById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query('SELECT * FROM products WHERE id = $1', [id]);
+    const result = await pool.query('SELECT * FROM products WHERE id = $1', [
+      id,
+    ]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Product not found' });
@@ -103,22 +111,45 @@ exports.updateProduct = async (req, res) => {
     const values = [];
     let idx = 1;
 
-    if (name) { fields.push(`name = $${idx++}`); values.push(name); }
-    if (type) {
-      const validTypes = ['crop','dairy','livestock','tool','fertilizer','seed'];
-      if (!validTypes.includes(type)) return res.status(400).json({ error: 'Invalid type' });
-      fields.push(`type = $${idx++}`); values.push(type);
+    if (name) {
+      fields.push(`name = $${idx++}`);
+      values.push(name);
     }
-    if (unit) { fields.push(`unit = $${idx++}`); values.push(unit); }
-    if (description) { fields.push(`description = $${idx++}`); values.push(description); }
-    if (image_url) { fields.push(`image_url = $${idx++}`); values.push(image_url); }
+    if (type) {
+      const validTypes = [
+        'crop',
+        'dairy',
+        'livestock',
+        'tool',
+        'fertilizer',
+        'seed',
+      ];
+      if (!validTypes.includes(type))
+        return res.status(400).json({ error: 'Invalid type' });
+      fields.push(`type = $${idx++}`);
+      values.push(type);
+    }
+    if (unit) {
+      fields.push(`unit = $${idx++}`);
+      values.push(unit);
+    }
+    if (description) {
+      fields.push(`description = $${idx++}`);
+      values.push(description);
+    }
+    if (image_url) {
+      fields.push(`image_url = $${idx++}`);
+      values.push(image_url);
+    }
 
     if (fields.length === 0) {
       return res.status(400).json({ error: 'No fields to update' });
     }
 
     values.push(id); // for WHERE clause
-    const query = `UPDATE products SET ${fields.join(', ')} WHERE id = $${idx} RETURNING *`;
+    const query = `UPDATE products SET ${fields.join(
+      ', '
+    )} WHERE id = $${idx} RETURNING *`;
 
     const result = await pool.query(query, values);
 
@@ -137,7 +168,10 @@ exports.updateProduct = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query('DELETE FROM products WHERE id = $1 RETURNING *', [id]);
+    const result = await pool.query(
+      'DELETE FROM products WHERE id = $1 RETURNING *',
+      [id]
+    );
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Product not found' });
