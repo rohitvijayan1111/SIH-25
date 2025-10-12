@@ -43,45 +43,18 @@ class _ProcurementScreenState extends State<ProcurementScreen>
       appBar: AppBar(
         backgroundColor: AppConstants.primaryBlue,
         elevation: 0,
-        title: const Text(
-          'Procurement',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: AppConstants.titleFontSize,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: Container(
-            color: Colors.white,
-            child: TabBar(
-              controller: _tabController,
-              labelColor: AppConstants.primaryBlue,
-              unselectedLabelColor: AppConstants.darkGrey,
-              indicatorColor: AppConstants.primaryBlue,
-              indicatorWeight: 3,
-              labelStyle: const TextStyle(
-                fontSize: AppConstants.bodyFontSize - 1,
+        title: const Row(
+          children: [
+            SizedBox(width: 8),
+            const Text(
+              'Procurement',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: AppConstants.bodyFontSize - 1,
-                fontWeight: FontWeight.normal,
-              ),
-              tabs: const [
-                Tab(
-                  text: 'Available Supplies',
-                  icon: Icon(Icons.inventory_2_outlined, size: 20),
-                ),
-                Tab(
-                  text: 'Create Procurement',
-                  icon: Icon(Icons.add_circle, size: 20),
-                ),
-                // Tab(text: 'Bidding', icon: Icon(Icons.gavel, size: 20)),
-              ],
             ),
-          ),
+          ],
         ),
       ),
       body: TabBarView(

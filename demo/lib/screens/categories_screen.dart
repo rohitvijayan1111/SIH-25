@@ -10,152 +10,125 @@ class CategoriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              // const SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  // gradient: LinearGradient(
-                  //   colors: [
-                  //     Color(0xFF4CAF50), // Fresh green
-                  //     Color(0xFF2196F3), // Sky blue
-                  //   ],
-                  //   begin: Alignment.topLeft,
-                  //   end: Alignment.bottomRight,
-                  // ),
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
+              Column(
+                children: [
+                  // App logo/icon (you can add an icon here)
+                  Container(
+                    width: 200,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                  ],
-                ),
-                padding: EdgeInsets.all(20),
-                margin: EdgeInsets.only(bottom: 14),
-                child: Column(
-                  children: [
-                    // App logo/icon (you can add an icon here)
-                    Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child:
-                          // CircleAvatar(
-                          // child:
-                          Image.asset(
-                            'assets/logoABC.jpg',
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          ),
-                      // ),
-                    ),
-
-                    SizedBox(height: 8),
-
-                    // App Name with enhanced styling
-                    Text(
-                      'Agri Bharat Connect',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        letterSpacing: 2,
-                      ),
-                    ),
-
-                    Text(
-                      'ABC',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black.withOpacity(0.9),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-
-                    SizedBox(height: 4),
-
-                    // Powered by section with enhanced design
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.3),
-                          width: 1,
+                    child:
+                        // CircleAvatar(
+                        // child:
+                        Image.asset(
+                          'assets/logoABC.jpg',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
                         ),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.verified_outlined,
-                                size: 16,
-                                color: Colors.black.withOpacity(0.9),
-                              ),
-                              SizedBox(width: 6),
-                              Text(
-                                'Powered by',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            'ONDC • Beckn Protocol',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 2),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.security,
-                                size: 14,
-                                color: Colors.black.withOpacity(0.9),
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                'Secured with Hyperledger Blockchain',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black.withOpacity(0.8),
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                    // ),
+                  ),
+
+                  SizedBox(height: 8),
+
+                  // App Name with enhanced styling
+                  Text(
+                    'Agri Bharat Connect',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      letterSpacing: 2,
+                    ),
+                  ),
+
+                  Text(
+                    'ABC',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black.withOpacity(0.9),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+
+                  SizedBox(height: 4),
+
+                  // Powered by section with enhanced design
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.3),
+                        width: 1,
                       ),
                     ),
-                  ],
-                ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.verified_outlined,
+                              size: 16,
+                              color: Colors.black.withOpacity(0.9),
+                            ),
+                            SizedBox(width: 6),
+                            Text(
+                              'Powered by',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'ONDC • Beckn Protocol',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.security,
+                              size: 14,
+                              color: Colors.black.withOpacity(0.9),
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              'Secured with Hyperledger Blockchain',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black.withOpacity(0.8),
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
+              SizedBox(height: 10),
               ServiceCard(
                 title: 'Upload Produce',
                 subtitle: 'Everyday Essentials',

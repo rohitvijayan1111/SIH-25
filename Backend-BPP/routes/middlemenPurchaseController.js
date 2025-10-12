@@ -7,24 +7,44 @@ const middlemenPurchaseController = require('../controllers/middlemenPurchaseCon
 router.post('/purchases', middlemenPurchaseController.createPurchase);
 
 // 2️⃣ Get Purchase Details by ID
-router.get('/purchases/:purchase_id', middlemenPurchaseController.getPurchaseById);
+router.get(
+  '/purchases/:purchase_id',
+  middlemenPurchaseController.getPurchaseById
+);
 
 // 3️⃣ List Purchases with optional filters
 router.get('/purchases', middlemenPurchaseController.listPurchases);
 
 // 4️⃣ Update Payment Status
-router.patch('/purchases/:purchase_id/payment', middlemenPurchaseController.updatePaymentStatus);
+router.patch(
+  '/purchases/:purchase_id/payment',
+  middlemenPurchaseController.updatePaymentStatus
+);
 
 // 5️⃣ Update Delivery Status
-router.patch('/purchases/:purchase_id/delivery', middlemenPurchaseController.updateDeliveryStatus);
+router.patch(
+  '/purchases/:purchase_id/delivery',
+  middlemenPurchaseController.updateDeliveryStatus
+);
 
 // 6️⃣ Get Blockchain & Proof Details
-router.get('/purchases/:purchase_id/proof', middlemenPurchaseController.getProof);
+router.get(
+  '/purchases/:purchase_id/proof',
+  middlemenPurchaseController.getProof
+);
 
 // 7️⃣ Delete / Cancel Purchase
-router.delete('/purchases/:purchase_id', middlemenPurchaseController.deletePurchase);
+router.delete(
+  '/purchases/:purchase_id',
+  middlemenPurchaseController.deletePurchase
+);
 
 // 8️⃣ Analytics / Reports
 router.get('/purchases/report', middlemenPurchaseController.getReport);
+// In your routes file (e.g., middlemenPurchaseRoutes.js)
+router.patch(
+  '/purchases/:purchase_id',
+  middlemenPurchaseController.updatePurchase
+);
 
 module.exports = router;

@@ -111,7 +111,7 @@ class AlertCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
+        margin: const EdgeInsets.only(bottom: 6),
         padding: const EdgeInsets.all(AppConstants.defaultPadding),
         decoration: BoxDecoration(
           color: color.withOpacity(0.05),
@@ -154,10 +154,7 @@ class AlertCard extends StatelessWidget {
             ),
             Text(
               timeAgo,
-              style: TextStyle(
-                fontSize: AppConstants.captionFontSize - 1,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
           ],
         ),
