@@ -24,7 +24,8 @@ class _AttachCertificatePageState extends State<AttachCertificatePage> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: Text("Attach Certificate"),
+        title: const Text("Attach Certificate",
+        style: TextStyle(fontWeight: FontWeight.bold),),
         backgroundColor: Color.fromARGB(255, 12, 131, 69),
         foregroundColor: Colors.white,
       ),
