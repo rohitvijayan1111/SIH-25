@@ -10,6 +10,7 @@ const {
   getProduceProducts,
   getBatchesbyFarmers,
   getAllBatches,
+  getBatchesByProductName,
 } = require('../controllers/batchController'); // no .js extension needed in CommonJS
 
 const router = express.Router();
@@ -41,6 +42,6 @@ router.get('/:farmer_id', getBatchesbyFarmers);
 
 // GET /all_batches
 router.get('/batches', getAllBatches);
-
+router.get('/product/:product_name', getBatchesByProductName);
 
 module.exports = router;

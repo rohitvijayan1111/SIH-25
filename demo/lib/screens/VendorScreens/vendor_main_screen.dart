@@ -53,7 +53,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   final List<Widget> _screens = [
     const MiddlemanHomeScreen(), // Dashboard tab - YOUR EXISTING home_screen.dart
-    const ProcurementScreen(), // Procurement tab - YOUR EXISTING SCREEN
+    ProcurementScreen(), // Procurement tab - YOUR EXISTING SCREEN
     const InventoryScreen(), // Inventory tab - YOUR EXISTING SCREEN
     const BusinessDashboard(), // Market tab - YOUR EXISTING business_dashboard.dart
     const ProfileScreen(), // Profile tab - Placeholder

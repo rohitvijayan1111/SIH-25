@@ -152,19 +152,15 @@ class _PurchaseListScreenState extends State<PurchaseListScreen> {
         elevation: 0,
         backgroundColor: AppConstants.primaryBlue,
         foregroundColor: Colors.white,
+        centerTitle: true,
         // leading: Icon(Icons.arrow_back),
-        title: const Row(
-          children: [
-            SizedBox(width: 8),
-            const Text(
-              'Purchases',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
+        title: const Text(
+          'Purchases',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         actions: [
           IconButton(

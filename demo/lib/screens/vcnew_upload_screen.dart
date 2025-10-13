@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:demo/screens/VendorScreens/utils/constantdata.dart';
+
 import '../models/product.dart';
 import 'package:demo/screens/CustomerScreens/agent.dart'; // make sure the path is correct
 import 'package:flutter/material.dart';
@@ -322,72 +324,104 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.green.shade600, Colors.green.shade400],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.green.withOpacity(0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      "Upload Produce",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ),
-                  // Mic button with enhanced styling
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.3),
-                        width: 1,
-                      ),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.mic,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AgentsPage(),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+      // appBar: AppBar(
+      //   title: Container(
+      //     decoration: BoxDecoration(
+      //       color: AppConstants.primaryGreen,
+      //       boxShadow: [
+      //         BoxShadow(
+      //           color: Colors.green.withOpacity(0.3),
+      //           blurRadius: 8,
+      //           offset: const Offset(0, 2),
+      //         ),
+      //       ],
+      //     ),
+      //     child: SafeArea(
+      //       child: Padding(
+      //         padding: const EdgeInsets.symmetric(vertical: 8),
+      //         child: Row(
+      //           children: [
+      //             const Expanded(
+      //               child: Text(
+      //                 "Upload Produce",
+      //                 textAlign: TextAlign.center,
+      //                 style: TextStyle(
+      //                   fontSize: 20,
+      //                   fontWeight: FontWeight.bold,
+      //                   color: Colors.white,
+      //                   letterSpacing: 0.5,
+      //                 ),
+      //               ),
+      //             ),
+      //             // Mic button with enhanced styling
+      //             Container(
+      //               decoration: BoxDecoration(
+      //                 color: Colors.white.withOpacity(0.2),
+      //                 shape: BoxShape.circle,
+      //                 border: Border.all(
+      //                   color: Colors.white.withOpacity(0.3),
+      //                   width: 1,
+      //                 ),
+      //               ),
+      //               child: IconButton(
+      //                 icon: const Icon(
+      //                   Icons.mic,
+      //                   color: Colors.white,
+      //                   size: 24,
+      //                 ),
+      //                 onPressed: () {
+      //                   Navigator.push(
+      //                     context,
+      //                     MaterialPageRoute(
+      //                       builder: (context) => const AgentsPage(),
+      //                     ),
+      //                   );
+      //                 },
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      appBar: AppBar(
+        backgroundColor: AppConstants.primaryGreen,
+        elevation: 4,
+        title: Text(
+          "Upload Produce",
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            letterSpacing: 0.5,
           ),
         ),
+        centerTitle: true,
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white.withOpacity(0.3),
+                width: 1,
+              ),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.mic, color: Colors.white, size: 24),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AgentsPage()),
+                );
+              },
+            ),
+          ),
+        ],
       ),
+
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),

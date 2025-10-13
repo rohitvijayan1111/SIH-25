@@ -19,3 +19,102 @@ class BatchModel {
     );
   }
 }
+
+// models/batch_model.dart
+class Batch {
+  final String id;
+  final String? batchCode;
+  final String productId;
+  final String farmerId;
+  final int availableQty; // current_qty_kg
+  final String? unit;
+  final double pricePerUnit;
+  final int batchQuantity; // initial_qty_kg
+  final DateTime? harvestDate;
+  final String? locationName;
+  final double? geoLat;
+  final double? geoLon;
+  final String? status;
+  final String? metaHash;
+  final String? chainTx;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  // Product details
+  final String? productName;
+  final String? productType;
+  final String? productDescription;
+
+  // Farmer details
+  final String? farmerName;
+  final String? farmerPhone;
+  final String? farmerLocation;
+  final bool? organicCertified;
+  final String? certifications; // kyc_id
+
+  Batch({
+    required this.id,
+    this.batchCode,
+    required this.productId,
+    required this.farmerId,
+    required this.availableQty,
+    this.unit,
+    required this.pricePerUnit,
+    required this.batchQuantity,
+    this.harvestDate,
+    this.locationName,
+    this.geoLat,
+    this.geoLon,
+    this.status,
+    this.metaHash,
+    this.chainTx,
+    this.createdAt,
+    this.updatedAt,
+    this.productName,
+    this.productType,
+    this.productDescription,
+    this.farmerName,
+    this.farmerPhone,
+    this.farmerLocation,
+    this.organicCertified,
+    this.certifications,
+  });
+
+  factory Batch.fromJson(Map<String, dynamic> json) {
+    return Batch(
+      id: json['id'] ?? '',
+      batchCode: json['batch_code'],
+      productId: json['product_id'] ?? '',
+      farmerId: json['farmer_id'] ?? '',
+      availableQty: int.tryParse(json['available_qty']?.toString() ?? '0') ?? 0,
+      unit: json['unit'],
+      pricePerUnit:
+          double.tryParse(json['price_per_unit']?.toString() ?? '0') ?? 0.0,
+      batchQuantity:
+          int.tryParse(json['batch_quantity']?.toString() ?? '0') ?? 0,
+      harvestDate: json['harvest_date'] != null
+          ? DateTime.tryParse(json['harvest_date'])
+          : null,
+      locationName: json['location_name'],
+      geoLat: double.tryParse(json['geo_lat']?.toString() ?? ''),
+      geoLon: double.tryParse(json['geo_lon']?.toString() ?? ''),
+      status: json['status'],
+      metaHash: json['meta_hash'],
+      chainTx: json['chain_tx'],
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
+      productName: json['product_name'],
+      productType: json['product_type'],
+      productDescription: json['product_description'],
+      farmerName: json['farmer_name'],
+      farmerPhone: json['farmer_phone'],
+      farmerLocation: json['farm_location'],
+      organicCertified: json['organic_certified'],
+      certifications: json['certifications'],
+    );
+  }
+}

@@ -1,0 +1,989 @@
+// import 'package:flutter/material.dart';
+// import '../../models/batch_model.dart';
+
+// class PurchaseScreen extends StatefulWidget {
+//   final Batch batch;
+
+//   const PurchaseScreen({Key? key, required this.batch}) : super(key: key);
+
+//   @override
+//   _PurchaseScreenState createState() => _PurchaseScreenState();
+// }
+
+// class _PurchaseScreenState extends State<PurchaseScreen> {
+//   int selectedQuantity = 1;
+//   late int maxQuantity;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     maxQuantity = widget.batch.availableQty;
+//     selectedQuantity = maxQuantity > 100
+//         ? 100
+//         : maxQuantity; // Default to 100 or max available
+//   }
+
+//   double get totalPrice => selectedQuantity * widget.batch.pricePerUnit;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       appBar: AppBar(
+//         backgroundColor: Color(0xFF1E40AF),
+//         elevation: 0,
+//         leading: IconButton(
+//           icon: Icon(Icons.arrow_back, color: Colors.white),
+//           onPressed: () => Navigator.pop(context),
+//         ),
+//         title: Text(
+//           'Purchase: ${widget.batch.productName}',
+//           style: TextStyle(
+//             color: Colors.white,
+//             fontSize: 18,
+//             fontWeight: FontWeight.w600,
+//           ),
+//         ),
+//         actions: [
+//           IconButton(
+//             icon: Icon(Icons.bookmark_border, color: Colors.white),
+//             onPressed: () {
+//               ScaffoldMessenger.of(context).showSnackBar(
+//                 SnackBar(content: Text('Bookmark feature coming soon')),
+//               );
+//             },
+//           ),
+//           IconButton(
+//             icon: Icon(Icons.close, color: Colors.white),
+//             onPressed: () => Navigator.pop(context),
+//           ),
+//         ],
+//       ),
+//       body: SingleChildScrollView(
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             // Product Header
+//             Container(
+//               width: double.infinity,
+//               padding: EdgeInsets.all(20),
+//               color: Color(0xFF1E40AF).withOpacity(0.05),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     widget.batch.productName ?? 'Unknown Product',
+//                     style: TextStyle(
+//                       fontSize: 24,
+//                       fontWeight: FontWeight.bold,
+//                       color: Colors.black,
+//                     ),
+//                   ),
+//                   SizedBox(height: 4),
+//                   Text(
+//                     '₹${widget.batch.pricePerUnit.toStringAsFixed(0)}/${widget.batch.unit} max',
+//                     style: TextStyle(
+//                       fontSize: 16,
+//                       color: Colors.red,
+//                       fontWeight: FontWeight.w500,
+//                     ),
+//                   ),
+//                   SizedBox(height: 8),
+//                   Row(
+//                     children: [
+//                       Container(
+//                         padding: EdgeInsets.symmetric(
+//                           horizontal: 8,
+//                           vertical: 4,
+//                         ),
+//                         decoration: BoxDecoration(
+//                           color: Colors.orange.withOpacity(0.1),
+//                           borderRadius: BorderRadius.circular(4),
+//                         ),
+//                         child: Text(
+//                           'Available Now',
+//                           style: TextStyle(
+//                             fontSize: 12,
+//                             color: Colors.orange,
+//                             fontWeight: FontWeight.w500,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(width: 12),
+//                       // Text(
+//                       //   '${_getDaysLeft()} days left',
+//                       //   style: TextStyle(
+//                       //     fontSize: 14,
+//                       //     color: Colors.green,
+//                       //     fontWeight: FontWeight.w500,
+//                       //   ),
+//                       // ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+
+//             // Farmer Info Section
+//             Container(
+//               margin: EdgeInsets.all(16),
+//               padding: EdgeInsets.all(16),
+//               decoration: BoxDecoration(
+//                 color: Colors.white,
+//                 borderRadius: BorderRadius.circular(12),
+//                 border: Border.all(color: Colors.grey.shade200),
+//                 boxShadow: [
+//                   BoxShadow(
+//                     color: Colors.grey.shade100,
+//                     blurRadius: 4,
+//                     offset: Offset(0, 2),
+//                   ),
+//                 ],
+//               ),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     'Farmer Details',
+//                     style: TextStyle(
+//                       fontSize: 18,
+//                       fontWeight: FontWeight.bold,
+//                       color: Colors.black,
+//                     ),
+//                   ),
+//                   SizedBox(height: 16),
+//                   Row(
+//                     children: [
+//                       Container(
+//                         width: 56,
+//                         height: 56,
+//                         decoration: BoxDecoration(
+//                           color: Colors.green.withOpacity(0.1),
+//                           shape: BoxShape.circle,
+//                         ),
+//                         child: Center(
+//                           child: Text(
+//                             (widget.batch.farmerName?.isNotEmpty == true)
+//                                 ? widget.batch.farmerName![0].toUpperCase()
+//                                 : 'F',
+//                             style: TextStyle(
+//                               color: Colors.green,
+//                               fontSize: 20,
+//                               fontWeight: FontWeight.bold,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(width: 16),
+//                       Expanded(
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Row(
+//                               children: [
+//                                 Text(
+//                                   widget.batch.farmerName ?? 'Unknown Farmer',
+//                                   style: TextStyle(
+//                                     fontSize: 16,
+//                                     fontWeight: FontWeight.w600,
+//                                   ),
+//                                 ),
+//                                 SizedBox(width: 8),
+//                                 Icon(Icons.star, color: Colors.amber, size: 16),
+//                                 Text(
+//                                   '4.8',
+//                                   style: TextStyle(
+//                                     fontSize: 12,
+//                                     color: Colors.grey.shade600,
+//                                   ),
+//                                 ),
+//                                 Text(
+//                                   ' (67 reviews)',
+//                                   style: TextStyle(
+//                                     fontSize: 12,
+//                                     color: Colors.grey.shade600,
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                             if (widget.batch.farmerLocation != null)
+//                               Text(
+//                                 widget.batch.farmerLocation!,
+//                                 style: TextStyle(
+//                                   fontSize: 12,
+//                                   color: Colors.grey.shade600,
+//                                 ),
+//                               ),
+//                           ],
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+
+//                   if (widget.batch.certifications != null &&
+//                       widget.batch.certifications!.isNotEmpty) ...[
+//                     SizedBox(height: 16),
+//                     Wrap(
+//                       spacing: 8,
+//                       children: widget.batch.certifications!
+//                           .split(',')
+//                           .map(
+//                             (cert) => Container(
+//                               padding: EdgeInsets.symmetric(
+//                                 horizontal: 8,
+//                                 vertical: 4,
+//                               ),
+//                               decoration: BoxDecoration(
+//                                 color: Colors.green.withOpacity(0.1),
+//                                 borderRadius: BorderRadius.circular(4),
+//                               ),
+//                               child: Text(
+//                                 cert.trim(),
+//                                 style: TextStyle(
+//                                   fontSize: 10,
+//                                   color: Colors.green,
+//                                   fontWeight: FontWeight.w500,
+//                                 ),
+//                               ),
+//                             ),
+//                           )
+//                           .toList(),
+//                     ),
+//                   ],
+
+//                   SizedBox(height: 16),
+
+//                   // Product Details
+//                   Text(
+//                     'Available: ${widget.batch.availableQty}${widget.batch.unit} at ₹${widget.batch.pricePerUnit.toStringAsFixed(0)}/${widget.batch.unit}',
+//                     style: TextStyle(
+//                       fontSize: 14,
+//                       fontWeight: FontWeight.w600,
+//                       color: Colors.black,
+//                     ),
+//                   ),
+
+//                   if (widget.batch.harvestDate != null) ...[
+//                     SizedBox(height: 8),
+//                     Text(
+//                       'Harvested: ${_formatDate(widget.batch.harvestDate!)}',
+//                       style: TextStyle(
+//                         fontSize: 12,
+//                         color: Colors.grey.shade600,
+//                       ),
+//                     ),
+//                   ],
+
+//                   // if (widget.batch.expiryDate != null) ...[
+//                   //   SizedBox(height: 4),
+//                   //   Text(
+//                   //     'Expires: ${_formatDate(widget.batch.expiryDate!)}',
+//                   //     style: TextStyle(
+//                   //       fontSize: 12,
+//                   //       color: Colors.grey.shade600,
+//                   //     ),
+//                   //   ),
+//                   // ],
+//                 ],
+//               ),
+//             ),
+
+//             // Quantity Selection
+//             Container(
+//               margin: EdgeInsets.symmetric(horizontal: 16),
+//               padding: EdgeInsets.all(16),
+//               decoration: BoxDecoration(
+//                 color: Colors.white,
+//                 borderRadius: BorderRadius.circular(12),
+//                 border: Border.all(color: Colors.grey.shade200),
+//               ),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     'Select Quantity',
+//                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+//                   ),
+//                   SizedBox(height: 16),
+//                   Row(
+//                     children: [
+//                       IconButton(
+//                         onPressed: selectedQuantity > 1
+//                             ? () {
+//                                 setState(() {
+//                                   selectedQuantity--;
+//                                 });
+//                               }
+//                             : null,
+//                         icon: Icon(Icons.remove),
+//                         style: IconButton.styleFrom(
+//                           backgroundColor: Colors.grey.shade100,
+//                         ),
+//                       ),
+//                       SizedBox(width: 16),
+//                       Expanded(
+//                         child: TextFormField(
+//                           controller: TextEditingController(
+//                             text: selectedQuantity.toString(),
+//                           ),
+//                           keyboardType: TextInputType.number,
+//                           textAlign: TextAlign.center,
+//                           decoration: InputDecoration(
+//                             border: OutlineInputBorder(),
+//                             contentPadding: EdgeInsets.symmetric(vertical: 12),
+//                           ),
+//                           onChanged: (value) {
+//                             int? newValue = int.tryParse(value);
+//                             if (newValue != null &&
+//                                 newValue > 0 &&
+//                                 newValue <= maxQuantity) {
+//                               setState(() {
+//                                 selectedQuantity = newValue;
+//                               });
+//                             }
+//                           },
+//                         ),
+//                       ),
+//                       SizedBox(width: 16),
+//                       IconButton(
+//                         onPressed: selectedQuantity < maxQuantity
+//                             ? () {
+//                                 setState(() {
+//                                   selectedQuantity++;
+//                                 });
+//                               }
+//                             : null,
+//                         icon: Icon(Icons.add),
+//                         style: IconButton.styleFrom(
+//                           backgroundColor: Colors.grey.shade100,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   SizedBox(width: 8),
+//                   Center(
+//                     child: Text(
+//                       '${widget.batch.unit} (Max: ${maxQuantity}${widget.batch.unit})',
+//                       style: TextStyle(
+//                         fontSize: 12,
+//                         color: Colors.grey.shade600,
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+
+//             SizedBox(height: 80), // Space for bottom bar
+//           ],
+//         ),
+//       ),
+
+//       // Bottom Action Bar
+//       bottomNavigationBar: Container(
+//         padding: EdgeInsets.all(16),
+//         decoration: BoxDecoration(
+//           color: Colors.white,
+//           border: Border(top: BorderSide(color: Colors.grey.shade200)),
+//           boxShadow: [
+//             BoxShadow(
+//               color: Colors.grey.shade100,
+//               blurRadius: 4,
+//               offset: Offset(0, -2),
+//             ),
+//           ],
+//         ),
+//         child: Row(
+//           children: [
+//             Expanded(
+//               child: Column(
+//                 mainAxisSize: MainAxisSize.min,
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     'Total Cost',
+//                     style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+//                   ),
+//                   Text(
+//                     '₹${totalPrice.toStringAsFixed(2)}',
+//                     style: TextStyle(
+//                       fontSize: 20,
+//                       fontWeight: FontWeight.bold,
+//                       color: Colors.black,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             SizedBox(width: 16),
+//             Expanded(
+//               child: ElevatedButton(
+//                 onPressed: () {
+//                   _showPurchaseConfirmation();
+//                 },
+//                 style: ElevatedButton.styleFrom(
+//                   backgroundColor: Colors.green,
+//                   padding: EdgeInsets.symmetric(vertical: 16),
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(8),
+//                   ),
+//                 ),
+//                 child: Text(
+//                   'Purchase',
+//                   style: TextStyle(
+//                     color: Colors.white,
+//                     fontSize: 16,
+//                     fontWeight: FontWeight.w600,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   void _showPurchaseConfirmation() {
+//     showDialog(
+//       context: context,
+//       builder: (context) => AlertDialog(
+//         title: Text('Confirm Purchase'),
+//         content: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text('Product: ${widget.batch.productName}'),
+//             Text('Farmer: ${widget.batch.farmerName}'),
+//             Text('Quantity: ${selectedQuantity}${widget.batch.unit}'),
+//             Text('Total: ₹${totalPrice.toStringAsFixed(2)}'),
+//           ],
+//         ),
+//         actions: [
+//           TextButton(
+//             onPressed: () => Navigator.pop(context),
+//             child: Text('Cancel'),
+//           ),
+//           ElevatedButton(
+//             onPressed: () {
+//               Navigator.pop(context);
+//               ScaffoldMessenger.of(context).showSnackBar(
+//                 SnackBar(
+//                   content: Text('Purchase order placed successfully!'),
+//                   backgroundColor: Colors.green,
+//                 ),
+//               );
+//               Navigator.pop(context); // Go back to batch list
+//             },
+//             style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+//             child: Text('Confirm', style: TextStyle(color: Colors.white)),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   // int _getDaysLeft() {
+//   //   if (widget.batch.expiryDate != null) {
+//   //     return widget.batch.expiryDate!.difference(DateTime.now()).inDays;
+//   //   }
+//   //   return 30; // Default
+//   // }
+
+//   String _formatDate(DateTime date) {
+//     List<String> months = [
+//       'Jan',
+//       'Feb',
+//       'Mar',
+//       'Apr',
+//       'May',
+//       'Jun',
+//       'Jul',
+//       'Aug',
+//       'Sep',
+//       'Oct',
+//       'Nov',
+//       'Dec',
+//     ];
+//     return '${months[date.month - 1]} ${date.day}, ${date.year}';
+//   }
+// }
+
+//NEW
+// screens/purchase_screen.dart
+import 'package:flutter/material.dart';
+import '../../models/batch_model.dart';
+import '../../services/purchase_service.dart';
+
+class PurchaseScreen extends StatefulWidget {
+  final Batch batch;
+
+  const PurchaseScreen({Key? key, required this.batch}) : super(key: key);
+
+  @override
+  _PurchaseScreenState createState() => _PurchaseScreenState();
+}
+
+class _PurchaseScreenState extends State<PurchaseScreen> {
+  int selectedQuantity = 1;
+  late int maxQuantity;
+  bool isCreatingPurchase = false;
+
+  @override
+  void initState() {
+    super.initState();
+    maxQuantity = widget.batch.availableQty;
+    selectedQuantity = maxQuantity > 100 ? 100 : maxQuantity;
+  }
+
+  double get totalPrice => selectedQuantity * widget.batch.pricePerUnit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Color(0xFF1E40AF),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Purchase: ${widget.batch.productName}',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Product Header
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              color: Color(0xFF1E40AF).withOpacity(0.05),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.batch.productName ?? 'Unknown Product',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    '₹${widget.batch.pricePerUnit.toStringAsFixed(0)}/${widget.batch.unit ?? 'kg'}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      'Available Now',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.green,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Farmer Info Section
+            Container(
+              margin: EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade200),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade100,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Farmer Details',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: Colors.green.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            (widget.batch.farmerName?.isNotEmpty == true)
+                                ? widget.batch.farmerName![0].toUpperCase()
+                                : 'F',
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.batch.farmerName ?? 'Unknown Farmer',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            if (widget.batch.farmerLocation != null)
+                              Text(
+                                widget.batch.farmerLocation!,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 16),
+
+                  // Product Details
+                  Text(
+                    'Available: ${widget.batch.availableQty}${widget.batch.unit ?? 'kg'} at ₹${widget.batch.pricePerUnit.toStringAsFixed(0)}/${widget.batch.unit ?? 'kg'}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+
+                  if (widget.batch.harvestDate != null) ...[
+                    SizedBox(height: 8),
+                    Text(
+                      'Harvested: ${_formatDate(widget.batch.harvestDate!)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+
+            // Quantity Selection
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade200),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Select Quantity',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: selectedQuantity > 1
+                            ? () {
+                                setState(() {
+                                  selectedQuantity--;
+                                });
+                              }
+                            : null,
+                        icon: Icon(Icons.remove),
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.grey.shade100,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: TextFormField(
+                          controller: TextEditingController(
+                            text: selectedQuantity.toString(),
+                          ),
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          onChanged: (value) {
+                            int? newValue = int.tryParse(value);
+                            if (newValue != null &&
+                                newValue > 0 &&
+                                newValue <= maxQuantity) {
+                              setState(() {
+                                selectedQuantity = newValue;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      IconButton(
+                        onPressed: selectedQuantity < maxQuantity
+                            ? () {
+                                setState(() {
+                                  selectedQuantity++;
+                                });
+                              }
+                            : null,
+                        icon: Icon(Icons.add),
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.grey.shade100,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Center(
+                    child: Text(
+                      '${widget.batch.unit ?? 'kg'} (Max: ${maxQuantity}${widget.batch.unit ?? 'kg'})',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 80), // Space for bottom bar
+          ],
+        ),
+      ),
+
+      // Bottom Action Bar
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Colors.grey.shade200)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade100,
+              blurRadius: 4,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Total Cost',
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    '₹${totalPrice.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: isCreatingPurchase
+                    ? null
+                    : () {
+                        _showPurchaseConfirmation();
+                      },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: isCreatingPurchase
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        'Purchase',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showPurchaseConfirmation() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Confirm Purchase'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Product: ${widget.batch.productName}'),
+            Text('Farmer: ${widget.batch.farmerName}'),
+            Text('Quantity: ${selectedQuantity}${widget.batch.unit ?? 'kg'}'),
+            Text('Total: ₹${totalPrice.toStringAsFixed(2)}'),
+            SizedBox(height: 16),
+            Text(
+              'This will create a purchase order in the system.',
+              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(context); // Close dialog
+              await _createPurchase();
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            child: Text(
+              'Confirm Purchase',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _createPurchase() async {
+    setState(() {
+      isCreatingPurchase = true;
+    });
+
+    try {
+      // You'll need to get the actual middleman_id from your auth/session
+      // For now, using a placeholder - replace with actual implementation
+      String middlemanId =
+          'c66d30f4-3517-431f-ba4f-dcca7c85b22c'; // Replace with actual middleman ID
+
+      bool success = await PurchaseService.createPurchase(
+        middlemanId: middlemanId,
+        farmerId: widget.batch.farmerId,
+        batchId: widget.batch.id,
+        productId: widget.batch.productId,
+        quantityKg: selectedQuantity,
+        pricePerKg: widget.batch.pricePerUnit,
+        paymentMode: 'UPI',
+      );
+
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Purchase order created successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        // Navigate back to batch list or previous screen
+        Navigator.of(
+          context,
+        ).popUntil((route) => route.settings.name != '/purchase');
+      } else {
+        throw Exception('Purchase creation failed');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to create purchase: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isCreatingPurchase = false;
+        });
+      }
+    }
+  }
+
+  String _formatDate(DateTime date) {
+    List<String> months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[date.month - 1]} ${date.day}, ${date.year}';
+  }
+}

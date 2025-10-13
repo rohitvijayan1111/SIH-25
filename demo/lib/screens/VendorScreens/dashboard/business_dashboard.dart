@@ -18,20 +18,15 @@ class _BusinessDashboardState extends State<BusinessDashboard> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         backgroundColor: AppConstants.primaryBlue,
+        centerTitle: true,
         elevation: 0,
-        title: const Row(
-          children: [
-            // Icon(Icons.analytics, color: AppConstants.white, size: 24),
-            SizedBox(width: 8),
-            Text(
-              'Dashboard',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
+        title: Text(
+          'Dashboard',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         actions: [
           PopupMenuButton<String>(

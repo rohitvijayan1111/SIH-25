@@ -490,6 +490,77 @@ const getAllBatches = async (req, res) => {
   }
 };
 
+// controllers/batchController.js
+
+// Get batches by product name with farmer and product details
+const getBatchesByProductName = async (req, res) => {
+  try {
+    const { product_name } = req.params;
+
+    const query = `
+      SELECT 
+        b.id,
+        b.batch_code,
+        b.product_id,
+        b.farmer_id,
+        b.current_qty_kg as available_qty,
+        b.unit,
+        b.price_per_unit,
+        b.initial_qty_kg as batch_quantity,
+        b.harvest_date,
+        b.location_name,
+        b.geo_lat,
+        b.geo_lon,
+        b.status,
+        b.meta_hash,
+        b.chain_tx,
+        b.created_at,
+        b.updated_at,
+        
+        -- Product details
+        p.name as product_name,
+        p.type as product_type,
+        p.description as product_description,
+        
+        -- Farmer details
+        f.name as farmer_name,
+        f.phone as farmer_phone,
+        f.farm_location as farmer_location,
+        f.organic_certified,
+        f.kyc_id as certifications
+
+      FROM batches b
+      LEFT JOIN products p ON b.product_id = p.id
+      LEFT JOIN farmers f ON b.farmer_id = f.id
+      WHERE LOWER(p.name) = LOWER($1)
+        AND b.current_qty_kg > 0
+      ORDER BY b.price_per_unit ASC, b.harvest_date DESC
+    `;
+
+    const { rows } = await db.query(query, [product_name]);
+
+    if (!rows.length) {
+      return res.status(404).json({
+        success: false,
+        message: 'No available batches found for this product',
+      });
+    }
+
+    res.json({
+      success: true,
+      data: rows,
+      total_batches: rows.length,
+      message: `Found ${rows.length} available batches`,
+    });
+  } catch (err) {
+    console.error('Error fetching batches by product name:', err);
+    res.status(500).json({
+      success: false,
+      error: 'Server error',
+      message: err.message,
+    });
+  }
+};
 
 module.exports = {
   createBatch,
@@ -502,4 +573,5 @@ module.exports = {
   getProduceProducts,
   getBatchesbyFarmers,
   getAllBatches,
+  getBatchesByProductName,
 };

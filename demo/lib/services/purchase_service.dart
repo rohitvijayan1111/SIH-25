@@ -5,6 +5,53 @@ import '../models/purchase.dart';
 class PurchaseService {
   static const String baseUrl = 'http://localhost:3000/api/middlemen';
 
+  static Future<bool> createPurchase({
+    required String middlemanId,
+    required String farmerId,
+    required String batchId,
+    required String productId,
+    required int quantityKg,
+    required double pricePerKg,
+    String currency = 'INR',
+    String paymentMode = 'UPI',
+  }) async {
+    try {
+      // Generate purchase code
+      String purchaseCode =
+          'PUR-${DateTime.now().year}-${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}';
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/purchases'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'purchase_code': purchaseCode,
+          'middleman_id': middlemanId,
+          'farmer_id': farmerId,
+          'batch_id': batchId,
+          'product_id': productId,
+          'quantity_kg': quantityKg,
+          'price_per_kg': pricePerKg,
+          'currency': currency,
+          'payment_mode': paymentMode,
+        }),
+      );
+
+      print('Purchase API Response: ${response.statusCode}');
+      print('Purchase API Body: ${response.body}');
+
+      if (response.statusCode == 201) {
+        final data = json.decode(response.body);
+        return data['status'] == 'success';
+      } else {
+        final data = json.decode(response.body);
+        throw Exception(data['message'] ?? 'Failed to create purchase');
+      }
+    } catch (e) {
+      print('Error creating purchase: $e');
+      throw Exception('Couldn\'t create purchase');
+    }
+  }
+
   // Get all purchases with optional filters
   static Future<List<Purchase>> getPurchases({
     String? middlemanId,
@@ -69,34 +116,6 @@ class PurchaseService {
       throw Exception('Couldn\'t fetch');
     }
   }
-
-  // Get single purchase details
-  // static Future<Purchase> getPurchaseById(String purchaseId) async {
-  //   try {
-  //     print('🔍 Fetching purchase: $purchaseId');
-  //     final response = await http.get(
-  //       Uri.parse('$baseUrl/purchases/$purchaseId'),
-  //       headers: {'Content-Type': 'application/json'},
-  //     );
-  //     print('📡 Response status: ${response.statusCode}'); // ✅ DEBUG LOG
-  //     print('📡 Response body: ${response.body}');
-
-  //     if (response.statusCode == 200) {
-  //       final data = json.decode(response.body);
-  //       if (data['status'] == 'success') {
-  //         print('✅ Data parsed successfully');
-  //         return Purchase.fromJson(data['data']);
-  //       } else {
-  //         throw Exception('API Error: ${data['message']}');
-  //       }
-  //     } else {
-  //       throw Exception('HTTP Error: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('❌ Error in getPurchaseById: $e');
-  //     throw Exception('Failed to load purchase details: $e');
-  //   }
-  // }
 
   static Future<Purchase> getPurchaseById(String purchaseId) async {
     try {
