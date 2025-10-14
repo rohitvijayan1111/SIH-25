@@ -1,0 +1,55 @@
+@baseUrl = http://localhost:5000/api/order
+@order_id = 2a8f7d6b-c4b1-4c81-8c23-f94f9c11d011
+@user_id = 0b62e453-ff3a-4c3f-bb3a-929df18a1e23
+@farmer_id = dbd62bb4-618d-454a-9a90-523317ab3734
+
+### ✅ Get all orders
+GET {{baseUrl}}/orders
+Content-Type: application/json
+
+###
+
+### ✅ Get order by ID
+GET {{baseUrl}}/orders/{{order_id}}
+Content-Type: application/json
+
+###
+
+### ✅ Get all orders by a specific customer
+GET {{baseUrl}}/orders/customer/{{user_id}}
+Content-Type: application/json
+
+###
+
+### ✅ Get items for a specific order
+GET {{baseUrl}}/orders/{{order_id}}/items
+Content-Type: application/json
+
+###
+
+### ✅ Create a new order (with items)
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+  "user_id": "{{user_id}}",
+  "farmer_id": "{{farmer_id}}",
+  "total_amount": 12800.00,
+  "delivery_address": "Flat No. 203, RMK Nagar, Chennai, Tamil Nadu, India",
+  "items": [
+    {
+      "bpp_product_id": "2528a332-ca88-4c07-bec9-4f62696295c6",
+      "item_name": "Apple - Premium Batch",
+      "quantity": 30,
+      "unit_price": 85.50,
+      "batch_id": "a4eb0d2d-a3e1-4126-999f-a34f2119bb52"
+    },
+    {
+      "bpp_product_id": "2528a332-ca88-4c07-bec9-4f62696295c6",
+      "item_name": "Apple - Regular Batch",
+      "quantity": 20,
+      "unit_price": 65.50,
+      "batch_id": "3f7856aa-a7b3-4bda-b276-cbb5aeda1023"
+    }
+  ]
+}
