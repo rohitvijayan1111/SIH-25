@@ -4,13 +4,13 @@
 @farmer_id = dbd62bb4-618d-454a-9a90-523317ab3734
 
 ### ✅ Get all orders
-GET {{baseUrl}}/orders
+GET {{baseUrl}}
 Content-Type: application/json
 
 ###
 
 ### ✅ Get order by ID
-GET {{baseUrl}}/orders/{{order_id}}
+GET {{baseUrl}}/{{order_id}}
 Content-Type: application/json
 
 ###
@@ -28,7 +28,7 @@ Content-Type: application/json
 ###
 
 ### ✅ Create a new order (with items)
-POST {{baseUrl}}/orders
+POST {{baseUrl}}
 Content-Type: application/json
 
 {

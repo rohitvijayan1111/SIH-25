@@ -1,4 +1,6 @@
 const pool = require('../config/db');
+const { v4: uuidv4 } = require('uuid');
+
 
 // ✅ Fetch all orders
 exports.getAllOrders = async (req, res) => {
