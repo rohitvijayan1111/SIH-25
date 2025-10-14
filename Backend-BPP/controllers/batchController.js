@@ -441,7 +441,7 @@ const getProduceProducts = async (req, res) => {
     const query = `
       SELECT id, name, type, unit, description
       FROM products
-      WHERE type NOT IN ('grain', 'fruit', 'vegetable', 'pulse', 'cereal')
+      WHERE type IN ( 'fruits', 'vegetables', 'Cereal')
       ORDER BY name;
     `;
     const result = await db.query(query);

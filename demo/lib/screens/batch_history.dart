@@ -4,9 +4,7 @@ import 'package:demo/screens/view_certificates.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-const kGreenColor =Color.fromARGB(255, 12, 131, 69);
-
-
+const kGreenColor = Color.fromARGB(255, 12, 131, 69);
 
 class BatchHistoryScreen extends StatefulWidget {
   @override
@@ -43,10 +41,11 @@ class _BatchHistoryScreenState extends State<BatchHistoryScreen> {
           "History",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,color:Colors.white,),
-          onPressed: () => Navigator.of(context).maybePop(),
-        ),
+        centerTitle: true,
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back,color:Colors.white,),
+        //   onPressed: () => Navigator.of(context).maybePop(),
+        // ),
       ),
       body: FutureBuilder<List<BatchItem>>(
         future: batchesFuture,
@@ -256,7 +255,7 @@ class BatchHistoryCard extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => ViewCertificates(
                           batchId: 'af7df286-383c-44d1-8132-5f523c3e1cbe',
-                        ), 
+                        ),
                       ),
                     );
                   }, // Add certificate logic
@@ -273,10 +272,11 @@ class BatchHistoryCard extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.add_circle, color: kGreenColor),
                   onPressed: () {
-                     Navigator.push(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>AttachCertificatePage(), // Replace with your screen widget
+                        builder: (context) =>
+                            AttachCertificatePage(), // Replace with your screen widget
                       ),
                     );
                   }, // Add button logic

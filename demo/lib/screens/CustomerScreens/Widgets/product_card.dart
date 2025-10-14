@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/product_model.dart';
+import '../favorites_screen.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -48,10 +49,10 @@ class ProductCard extends StatelessWidget {
                       ),
                       image: DecorationImage(
                         image: product.imageUrl.startsWith('http')
-                              ? NetworkImage(product.imageUrl) as ImageProvider
-                              : AssetImage(product.imageUrl),
-                          fit: BoxFit.contain, // ✅ prevents cropping & keeps proportions
-
+                            ? NetworkImage(product.imageUrl) as ImageProvider
+                            : AssetImage(product.imageUrl),
+                        fit: BoxFit
+                            .contain, // ✅ prevents cropping & keeps proportions
                       ),
                     ),
                   ),
@@ -109,14 +110,14 @@ class ProductCard extends StatelessWidget {
                     // Product Price
                     // Product Price
                     Text(
-                      product.displayPrice,   // ✅ use formatted price
+                      "Avg Batch Price: ₹${product.averageBatchPrice}",
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF4CAF50),
+                        // color: Color(0xFF4CAF50),
+                        color: Colors.grey,
                       ),
                     ),
-
                   ],
                 ),
               ),

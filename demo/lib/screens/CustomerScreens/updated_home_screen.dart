@@ -88,11 +88,13 @@ class _HomeScreenState extends State<HomeScreen> {
         preferredSize: const Size.fromHeight(76),
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.green.shade600, Colors.green.shade400],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            // gradient: LinearGradient(
+            //   colors: [Colors.green.shade600, Colors.green.shade400],
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            // ),
+            // color: Color(0xFFCA6B27),
+            color: Colors.orange,
             boxShadow: [
               BoxShadow(
                 color: Colors.green.withOpacity(0.3),
