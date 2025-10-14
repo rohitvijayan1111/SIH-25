@@ -1,3 +1,4 @@
+import 'package:demo/screens/VendorScreens/vendor_profile.dart';
 import 'package:demo/screens/my_coops_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,12 @@ import '../screens/scan_qr_screen.dart';
 import '../screens/CustomerScreens/updated_home_screen.dart';
 // import '../screens/VendorScreens/purchase_list_screen.dart';
 import '../screens/VendorScreens/dynamic_purchase_list_screen.dart';
+
+//profile screens
+import 'package:demo/screens/main_profile_screen.dart';
+import 'package:demo/screens/CustomerScreens/customer_profile.dart';
+import 'package:demo/screens/VendorScreens/vendor_profile.dart';
+import 'package:demo/screens/ConsumerPage/services_profile.dart';
 
 class AppController extends ChangeNotifier {
   ServiceSection _currentSection = ServiceSection.categories;
@@ -58,7 +65,7 @@ class AppController extends ChangeNotifier {
       case ServiceSection.categories:
         return _currentTabIndex == 0
             ? const CategoriesScreen() // Home tab
-            : const ProfilePlaceholderScreen(); // Profile tab
+            : ProfileScreen(); // Profile tab
 
       case ServiceSection.uploadProduce:
         switch (_currentTabIndex) {
@@ -87,7 +94,7 @@ class AppController extends ChangeNotifier {
           case 3:
             return const OrdersScreen(); // Orders tab
           case 4:
-            return const ProfilePlaceholderScreen(); // Profile tab
+            return CustomerProfile(); // Profile tab
           default:
             return const CategoriesScreen();
         }
@@ -103,7 +110,7 @@ class AppController extends ChangeNotifier {
           case 3:
             return PurchaseListScreen(); // Inventory tab
           case 4:
-            return const ProfilePlaceholderScreen(); // Profile tab
+            return MiddlemanProfile(); // Profile tab
           default:
             return const CategoriesScreen();
         }
@@ -117,7 +124,7 @@ class AppController extends ChangeNotifier {
           case 2:
             return const BusinessDashboard(); // Farmer Shop tab
           case 3:
-            return const ProfilePlaceholderScreen(); // Profile tab
+            return FarmerProfile(); // Profile tab
           default:
             return const CategoriesScreen();
         }
@@ -125,28 +132,28 @@ class AppController extends ChangeNotifier {
   }
 }
 
-class ProfilePlaceholderScreen extends StatelessWidget {
-  const ProfilePlaceholderScreen({Key? key}) : super(key: key);
+// class ProfilePlaceholderScreen extends StatelessWidget {
+//   const ProfilePlaceholderScreen({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.person, size: 80, color: Colors.grey),
-            SizedBox(height: 16),
-            Text('Profile Screen', style: TextStyle(fontSize: 20)),
-            Text('Coming Soon!'),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Profile'),
+//         backgroundColor: Colors.white,
+//         foregroundColor: Colors.black87,
+//       ),
+//       body: const Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Icon(Icons.person, size: 80, color: Colors.grey),
+//             SizedBox(height: 16),
+//             Text('Profile Screen', style: TextStyle(fontSize: 20)),
+//             Text('Coming Soon!'),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

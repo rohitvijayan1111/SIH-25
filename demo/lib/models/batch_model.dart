@@ -44,6 +44,7 @@ class Batch {
   final String? unit;
   final double pricePerUnit;
   final int batchQuantity; // initial_qty_kg
+  final double quantityKg;
   final DateTime? harvestDate;
   final String? locationName;
   final double? geoLat;
@@ -53,6 +54,7 @@ class Batch {
   final String? chainTx;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final DateTime expiryDate;
 
   // Product details
   final String? productName;
@@ -75,6 +77,7 @@ class Batch {
     this.unit,
     required this.pricePerUnit,
     required this.batchQuantity,
+    required this.quantityKg,
     this.harvestDate,
     this.locationName,
     this.geoLat,
@@ -92,11 +95,12 @@ class Batch {
     this.farmerLocation,
     this.organicCertified,
     this.certifications,
+    required this.expiryDate,
   });
 
   factory Batch.fromJson(Map<String, dynamic> json) {
     return Batch(
-      id: json['id'] ?? '',
+      id: json['id'] ?? json['product_id'] ?? '',
       batchCode: json['batch_code'],
       productId: json['product_id'] ?? '',
       farmerId: json['farmer_id'] ?? '',
@@ -109,6 +113,9 @@ class Batch {
       harvestDate: json['harvest_date'] != null
           ? DateTime.tryParse(json['harvest_date'])
           : null,
+      quantityKg: (json['available_qty'] is String)
+          ? double.tryParse(json['available_qty']) ?? 0
+          : (json['available_qty'] as num).toDouble(),
       locationName: json['location_name'],
       geoLat: double.tryParse(json['geo_lat']?.toString() ?? ''),
       geoLon: double.tryParse(json['geo_lon']?.toString() ?? ''),
@@ -129,6 +136,9 @@ class Batch {
       farmerLocation: json['farm_location'],
       organicCertified: json['organic_certified'],
       certifications: json['certifications'],
+      expiryDate:
+          DateTime.tryParse(json['expiry_date']?.toString() ?? '') ??
+          DateTime.now(),
     );
   }
 }
