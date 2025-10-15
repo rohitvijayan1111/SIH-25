@@ -533,7 +533,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
   void initState() {
     super.initState();
     maxQuantity = widget.batch.availableQty;
-    selectedQuantity = maxQuantity > 100 ? 100 : maxQuantity;
+    // selectedQuantity = maxQuantity > 100 ? 100 : maxQuantity;
+    selectedQuantity = 1;
   }
 
   double get totalPrice => selectedQuantity * widget.batch.pricePerUnit;
@@ -710,6 +711,90 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
             ),
 
             // Quantity Selection
+            // Container(
+            //   margin: EdgeInsets.symmetric(horizontal: 16),
+            //   padding: EdgeInsets.all(16),
+            //   decoration: BoxDecoration(
+            //     color: Colors.white,
+            //     borderRadius: BorderRadius.circular(12),
+            //     border: Border.all(color: Colors.grey.shade200),
+            //   ),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Text(
+            //         'Select Quantity',
+            //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            //       ),
+            //       SizedBox(height: 16),
+            //       Row(
+            //         children: [
+            //           IconButton(
+            //             onPressed: selectedQuantity > 1
+            //                 ? () {
+            //                     setState(() {
+            //                       selectedQuantity--;
+            //                     });
+            //                   }
+            //                 : null,
+            //             icon: Icon(Icons.remove),
+            //             style: IconButton.styleFrom(
+            //               backgroundColor: Colors.grey.shade100,
+            //             ),
+            //           ),
+            //           SizedBox(width: 16),
+            //           Expanded(
+            //             child: TextFormField(
+            //               controller: TextEditingController(
+            //                 text: selectedQuantity.toString(),
+            //               ),
+            //               keyboardType: TextInputType.number,
+            //               textAlign: TextAlign.center,
+            //               decoration: InputDecoration(
+            //                 border: OutlineInputBorder(),
+            //                 contentPadding: EdgeInsets.symmetric(vertical: 12),
+            //               ),
+            //               onChanged: (value) {
+            //                 int? newValue = int.tryParse(value);
+            //                 if (newValue != null &&
+            //                     newValue > 0 &&
+            //                     newValue <= maxQuantity) {
+            //                   setState(() {
+            //                     selectedQuantity = newValue;
+            //                   });
+            //                 }
+            //               },
+            //             ),
+            //           ),
+            //           SizedBox(width: 16),
+            //           IconButton(
+            //             onPressed: selectedQuantity < maxQuantity
+            //                 ? () {
+            //                     setState(() {
+            //                       selectedQuantity++;
+            //                     });
+            //                   }
+            //                 : null,
+            //             icon: Icon(Icons.add),
+            //             style: IconButton.styleFrom(
+            //               backgroundColor: Colors.grey.shade100,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //       SizedBox(height: 8),
+            //       Center(
+            //         child: Text(
+            //           '${widget.batch.unit ?? 'kg'} (Max: ${maxQuantity}${widget.batch.unit ?? 'kg'})',
+            //           style: TextStyle(
+            //             fontSize: 12,
+            //             color: Colors.grey.shade600,
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 16),
               padding: EdgeInsets.all(16),
@@ -726,6 +811,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(height: 16),
+
+                  // Single unit increment/decrement row
                   Row(
                     children: [
                       IconButton(
@@ -781,6 +868,80 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                       ),
                     ],
                   ),
+
+                  SizedBox(height: 16),
+
+                  // Ten unit increment/decrement row
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: selectedQuantity >= 10
+                              ? () {
+                                  setState(() {
+                                    selectedQuantity -= 10;
+                                    // Ensure we don't go below 1
+                                    if (selectedQuantity < 1) {
+                                      selectedQuantity = 1;
+                                    }
+                                  });
+                                }
+                              : null, // Disabled when less than 10
+                          icon: Icon(Icons.remove_circle_outline),
+                          label: Text('-10'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: selectedQuantity >= 10
+                                ? Colors.red.shade50
+                                : Colors.grey.shade100,
+                            foregroundColor: selectedQuantity >= 10
+                                ? Colors.red.shade700
+                                : Colors.grey.shade500,
+                            side: BorderSide(
+                              color: selectedQuantity >= 10
+                                  ? Colors.red.shade200
+                                  : Colors.grey.shade300,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: (selectedQuantity + 10) <= maxQuantity
+                              ? () {
+                                  setState(() {
+                                    selectedQuantity += 10;
+                                  });
+                                }
+                              : null, // Disabled when adding 10 would exceed max
+                          icon: Icon(Icons.add_circle_outline),
+                          label: Text('+10'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                (selectedQuantity + 10) <= maxQuantity
+                                ? Colors.green.shade50
+                                : Colors.grey.shade100,
+                            foregroundColor:
+                                (selectedQuantity + 10) <= maxQuantity
+                                ? Colors.green.shade700
+                                : Colors.grey.shade500,
+                            side: BorderSide(
+                              color: (selectedQuantity + 10) <= maxQuantity
+                                  ? Colors.green.shade200
+                                  : Colors.grey.shade300,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
                   SizedBox(height: 8),
                   Center(
                     child: Text(
@@ -794,7 +955,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                 ],
               ),
             ),
-
             SizedBox(height: 80), // Space for bottom bar
           ],
         ),
