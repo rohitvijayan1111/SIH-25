@@ -38,18 +38,26 @@ Content-Type: application/json
   "delivery_address": "Flat No. 203, RMK Nagar, Chennai, Tamil Nadu, India",
   "items": [
     {
-      "bpp_product_id": "2528a332-ca88-4c07-bec9-4f62696295c6",
+      "bpp_id": "2528a332-ca88-4c07-bec9-4f62696295c6",
       "item_name": "Apple - Premium Batch",
       "quantity": 30,
       "unit_price": 85.50,
       "batch_id": "a4eb0d2d-a3e1-4126-999f-a34f2119bb52"
     },
     {
-      "bpp_product_id": "2528a332-ca88-4c07-bec9-4f62696295c6",
+      "bpp_id": "2528a332-ca88-4c07-bec9-4f62696295c6",
       "item_name": "Apple - Regular Batch",
       "quantity": 20,
       "unit_price": 65.50,
       "batch_id": "3f7856aa-a7b3-4bda-b276-cbb5aeda1023"
+    },
+    {
+      "bpp_id": "ece664d0-adb0-4d49-a222-d0ea2b82e884",
+      "item_name": "Ash Gourd",
+      "quantity": 20,
+      "unit_price": 28.00,
+      "batch_id": "87881554-5ef1-45a7-b7c6-6ad83b19d17e"
     }
+
   ]
 }

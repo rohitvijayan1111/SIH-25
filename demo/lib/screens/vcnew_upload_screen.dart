@@ -760,29 +760,29 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
                 const SizedBox(height: 16),
 
                 //BUTTON DEMO
-                ElevatedButton(
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BatchDetailsScreen(),
-                      ),
-                    ),
-                  },
-                  child: Text("Click"),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AttachCertificatePage(),
-                      ),
-                    ),
-                  },
-                  child: const Text("Upload Cert"),
-                ),
+                // ElevatedButton(
+                //   onPressed: () => {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => BatchDetailsScreen(),
+                //       ),
+                //     ),
+                //   },
+                //   child: Text("Click"),
+                // ),
+                // const SizedBox(height: 16),
+                // ElevatedButton(
+                //   onPressed: () => {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => AttachCertificatePage(),
+                //       ),
+                //     ),
+                //   },
+                //   child: const Text("Upload Cert"),
+                // ),
 
                 /// Buttons
                 SizedBox(
@@ -804,25 +804,25 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
                 ),
 
                 const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      side: const BorderSide(color: Colors.grey),
-                    ),
-                    onPressed: () {
-                      // TODO: Save draft functionality
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Draft saved successfully!'),
-                          backgroundColor: Colors.blue,
-                        ),
-                      );
-                    },
-                    child: const Text("Save as Draft"),
-                  ),
-                ),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: OutlinedButton(
+                //     style: OutlinedButton.styleFrom(
+                //       padding: const EdgeInsets.symmetric(vertical: 14),
+                //       side: const BorderSide(color: Colors.grey),
+                //     ),
+                //     onPressed: () {
+                //       // TODO: Save draft functionality
+                //       ScaffoldMessenger.of(context).showSnackBar(
+                //         const SnackBar(
+                //           content: Text('Draft saved successfully!'),
+                //           backgroundColor: Colors.blue,
+                //         ),
+                //       );
+                //     },
+                //     child: const Text("Save as Draft"),
+                //   ),
+                // ),
                 const SizedBox(height: 40),
               ],
             ),

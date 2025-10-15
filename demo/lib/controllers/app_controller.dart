@@ -15,6 +15,7 @@ import '../screens/vcnew_upload_screen.dart';
 import '../screens/scan_qr_screen.dart';
 import '../screens/CustomerScreens/updated_home_screen.dart';
 // import '../screens/VendorScreens/purchase_list_screen.dart';
+import '../screens/CustomerScreens/order_history_screen.dart';
 import '../screens/VendorScreens/dynamic_purchase_list_screen.dart';
 
 class AppController extends ChangeNotifier {
@@ -85,7 +86,7 @@ class AppController extends ChangeNotifier {
           case 2:
             return const CameraQRScreen(); // Scan QR tab
           case 3:
-            return const OrdersScreen(); // Orders tab
+            return const OrderHistoryScreen(); // Orders tab
           case 4:
             return const ProfilePlaceholderScreen(); // Profile tab
           default:

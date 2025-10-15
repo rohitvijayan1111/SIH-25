@@ -3,8 +3,6 @@ import 'package:http/http.dart' as http;
 import '../screens/CustomerScreens/models/product_model.dart';
 
 class ProductService {
-
-  
   static const String baseUrl = 'http://localhost:3000/api/products';
 
   // For Android emulator, use: http://10.0.2.2:3000/api/products
@@ -15,7 +13,7 @@ class ProductService {
   static Future<List<Product>> getAllProducts() async {
     try {
       final response = await http.get(
-        Uri.parse(baseUrl),
+        Uri.parse('$baseUrl?show=true'),
         headers: {'Content-Type': 'application/json'},
       );
 

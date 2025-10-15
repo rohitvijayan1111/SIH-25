@@ -409,6 +409,8 @@
 //   }
 // }
 
+//---------------------------------
+//SECOND
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -670,9 +672,12 @@ class CategoriesScreen extends StatelessWidget {
                           children: [
                             CategoryButtonCard(
                               title: 'Upload Produce',
-                              subtitle: 'Latest news highlights',
+                              subtitle: 'Sell your Produce',
                               icon: Icons.newspaper_rounded,
                               backgroundColor: Colors.green,
+                              imageUrl:
+                                  'https://media.istockphoto.com/id/1251268131/photo/senior-man-with-bunch-of-freshly-harvested-carrots.jpg?s=612x612&w=0&k=20&c=N-xOciVFINYbPDf0FzV1tjwtfnc7gYEMW2TpW8h3bCg=',
+
                               onTap: () {
                                 _handleCategoryTap(
                                   context,
@@ -681,9 +686,12 @@ class CategoriesScreen extends StatelessWidget {
                               },
                             ),
                             CategoryButtonCard(
-                              title: 'Browser Products',
-                              subtitle: 'Latest political news',
+                              title: 'Browse Products',
+                              subtitle: 'Supported by ONDC',
                               icon: Icons.account_balance_rounded,
+                              imageUrl:
+                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5anEmiRKOgN_8siGAdu5-y3Ae8DSvqAp19g&s',
+
                               backgroundColor: Colors.orange,
                               onTap: () {
                                 _handleCategoryTap(
@@ -694,8 +702,10 @@ class CategoriesScreen extends StatelessWidget {
                             ),
                             CategoryButtonCard(
                               title: 'Source & Sell',
-                              subtitle: 'Innovations and trends',
+                              subtitle: 'Resell',
                               icon: Icons.settings_rounded,
+                              imageUrl:
+                                  'https://www.retailgazette.co.uk/wp-content/uploads/2020/08/Shop-price_Generic_ST-2.jpg',
                               backgroundColor: Colors.blue,
                               onTap: () {
                                 _handleCategoryTap(
@@ -706,9 +716,11 @@ class CategoriesScreen extends StatelessWidget {
                             ),
                             CategoryButtonCard(
                               title: 'Farmer Services',
-                              subtitle: 'Latest sports news',
+                              subtitle: 'Tools and equipments',
+                              imageUrl:
+                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrDlGvNocaFSuI82MKzmIcZeQzhN2WypI6euAMpO9cX6Syjvx-KOfMxXupXAddcH8rJAc&usqp=CAU',
                               icon: Icons.sports_soccer_rounded,
-                              backgroundColor: const Color(0xFF3B82F6),
+                              backgroundColor: Colors.blueGrey,
                               onTap: () {
                                 _handleCategoryTap(
                                   context,
@@ -740,3 +752,232 @@ class CategoriesScreen extends StatelessWidget {
     context.read<AppController>().navigateToSection(section);
   }
 }
+
+//THIRD
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:provider/provider.dart';
+// import '../controllers/app_controller.dart';
+// import '../models/service_section.dart';
+// import '../widgets/category_button_card.dart';
+
+// class CategoriesScreen extends StatelessWidget {
+//   const CategoriesScreen({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final mediaQuery = MediaQuery.of(context);
+//     final screenSize = mediaQuery.size;
+//     final screenWidth = screenSize.width;
+//     final isLandscape = mediaQuery.orientation == Orientation.landscape;
+//     final isTablet = screenWidth > 600;
+//     final isSmallScreen = screenWidth < 380;
+
+//     // Responsive values
+//     final horizontalPadding = isSmallScreen ? 12.0 : (isTablet ? 24.0 : 16.0);
+//     final verticalPadding = isSmallScreen ? 12.0 : (isTablet ? 24.0 : 20.0);
+//     final crossAxisSpacing = isSmallScreen ? 12.0 : (isTablet ? 20.0 : 16.0);
+//     final mainAxisSpacing = isSmallScreen ? 12.0 : (isTablet ? 20.0 : 16.0);
+//     final gridAspectRatio = isLandscape ? 1.2 : (isTablet ? 1.0 : 0.85);
+//     final crossAxisCount = isLandscape && !isTablet ? 4 : 2;
+
+//     // Header responsive sizing
+//     final headerTitleSize = isSmallScreen ? 16.0 : (isTablet ? 20.0 : 18.0);
+//     final mainTitleSize = isSmallScreen ? 20.0 : (isTablet ? 28.0 : 24.0);
+//     final subtitleSize = isSmallScreen ? 12.0 : (isTablet ? 16.0 : 14.0);
+
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       body: SafeArea(
+//         child: LayoutBuilder(
+//           builder: (context, constraints) {
+//             return Column(
+//               children: [
+//                 // Responsive Header
+//                 Container(
+//                   padding: EdgeInsets.symmetric(
+//                     vertical: verticalPadding,
+//                     horizontal: horizontalPadding,
+//                   ),
+//                   child: Column(
+//                     children: [
+//                       // Top navigation bar
+//                       Row(
+//                         children: [
+//                           GestureDetector(
+//                             onTap: () => Navigator.pop(context),
+//                             child: Container(
+//                               padding: EdgeInsets.all(isSmallScreen ? 6 : 8),
+//                               decoration: BoxDecoration(
+//                                 color: Colors.grey.shade200,
+//                                 shape: BoxShape.circle,
+//                                 boxShadow: [
+//                                   BoxShadow(
+//                                     color: Colors.black.withOpacity(0.1),
+//                                     blurRadius: 4,
+//                                     offset: const Offset(0, 2),
+//                                   ),
+//                                 ],
+//                               ),
+//                               child: Icon(
+//                                 Icons.arrow_back,
+//                                 size: isSmallScreen ? 18 : 20,
+//                                 color: Colors.black87,
+//                               ),
+//                             ),
+//                           ),
+//                           Expanded(
+//                             child: Center(
+//                               child: Text(
+//                                 'The News',
+//                                 style: TextStyle(
+//                                   fontSize: headerTitleSize,
+//                                   fontWeight: FontWeight.w600,
+//                                   color: Colors.black87,
+//                                   letterSpacing: 0.5,
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                           SizedBox(width: isSmallScreen ? 30 : 36),
+//                         ],
+//                       ),
+
+//                       SizedBox(height: isLandscape ? 16 : 24),
+
+//                       // Main title
+//                       Text(
+//                         'Choose Categories',
+//                         style: TextStyle(
+//                           fontSize: mainTitleSize,
+//                           fontWeight: FontWeight.bold,
+//                           color: Colors.black87,
+//                           letterSpacing: 0.5,
+//                         ),
+//                         textAlign: TextAlign.center,
+//                       ),
+
+//                       SizedBox(height: isLandscape ? 6 : 8),
+
+//                       // Subtitle
+//                       Padding(
+//                         padding: EdgeInsets.symmetric(
+//                           horizontal: isTablet ? 40 : 20,
+//                         ),
+//                         child: Text(
+//                           'Choose your favorite topics and personalize your news feed',
+//                           style: TextStyle(
+//                             fontSize: subtitleSize,
+//                             color: Colors.grey.shade600,
+//                             height: 1.4,
+//                             letterSpacing: 0.3,
+//                           ),
+//                           textAlign: TextAlign.center,
+//                           maxLines: 2,
+//                           overflow: TextOverflow.ellipsis,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+
+//                 // Responsive Grid with Images
+//                 Expanded(
+//                   child: Container(
+//                     padding: EdgeInsets.symmetric(
+//                       horizontal: horizontalPadding,
+//                     ),
+//                     child: Center(
+//                       child: ConstrainedBox(
+//                         constraints: BoxConstraints(
+//                           maxWidth: isTablet ? 800 : double.infinity,
+//                         ),
+//                         child: GridView.count(
+//                           shrinkWrap: true,
+//                           physics: const BouncingScrollPhysics(),
+//                           crossAxisCount: crossAxisCount,
+//                           crossAxisSpacing: crossAxisSpacing,
+//                           mainAxisSpacing: mainAxisSpacing,
+//                           childAspectRatio: gridAspectRatio,
+//                           padding: EdgeInsets.symmetric(
+//                             vertical: isLandscape ? 8 : 16,
+//                           ),
+//                           children: [
+//                             CategoryButtonCard(
+//                               title: 'Updated',
+//                               subtitle: 'Latest news highlights',
+//                               imagePath: 'assets/logoABC.jpg', // Asset image
+//                               icon: Icons.newspaper_rounded, // Fallback icon
+//                               backgroundColor: const Color(0xFF6366F1),
+//                               onTap: () {
+//                                 _handleCategoryTap(
+//                                   context,
+//                                   ServiceSection.uploadProduce,
+//                                 );
+//                               },
+//                             ),
+//                             CategoryButtonCard(
+//                               title: 'Politics',
+//                               subtitle: 'Latest political news',
+//                               imagePath: 'assets/logoABC.jpg', // Asset image
+//                               icon: Icons
+//                                   .account_balance_rounded, // Fallback icon
+//                               backgroundColor: const Color(0xFFEC4899),
+//                               onTap: () {
+//                                 _handleCategoryTap(
+//                                   context,
+//                                   ServiceSection.browseProducts,
+//                                 );
+//                               },
+//                             ),
+//                             CategoryButtonCard(
+//                               title: 'Technology',
+//                               subtitle: 'Innovations and trends',
+//                               imagePath: 'assets/logoABC.jpg', // Asset image
+//                               icon: Icons.settings_rounded, // Fallback icon
+//                               backgroundColor: const Color(0xFF10B981),
+//                               onTap: () {
+//                                 _handleCategoryTap(
+//                                   context,
+//                                   ServiceSection.sourceAndSell,
+//                                 );
+//                               },
+//                             ),
+//                             CategoryButtonCard(
+//                               title: 'Sports',
+//                               subtitle: 'Latest sports news',
+//                               // Example with network image
+//                               imageUrl:
+//                                   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrDlGvNocaFSuI82MKzmIcZeQzhN2WypI6euAMpO9cX6Syjvx-KOfMxXupXAddcH8rJAc&usqp=CAU',
+//                               icon:
+//                                   Icons.sports_soccer_rounded, // Fallback icon
+//                               backgroundColor: const Color(0xFF3B82F6),
+//                               onTap: () {
+//                                 _handleCategoryTap(
+//                                   context,
+//                                   ServiceSection.farmerEssentials,
+//                                 );
+//                               },
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+
+//                 // Bottom safe area padding
+//                 SizedBox(height: mediaQuery.padding.bottom > 0 ? 8 : 16),
+//               ],
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+
+//   void _handleCategoryTap(BuildContext context, ServiceSection section) {
+//     HapticFeedback.lightImpact();
+//     context.read<AppController>().navigateToSection(section);
+//   }
+// }

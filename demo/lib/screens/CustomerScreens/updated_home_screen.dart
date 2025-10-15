@@ -57,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       filteredProducts = List.from(products);
+      print(filteredProducts);
       setState(() {
         isLoading = false;
       });
@@ -97,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.orange,
             boxShadow: [
               BoxShadow(
-                color: Colors.green.withOpacity(0.3),
+                color: Colors.orange.withOpacity(0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -250,9 +251,11 @@ class _HomeScreenState extends State<HomeScreen> {
             if (errorMessage.isNotEmpty) const SizedBox(height: 8),
             // Categories
             _buildCategories(),
+
             // Featured Section
-            _buildFeaturedSection(),
+            // _buildFeaturedSection(),
             // Products Grid
+            SizedBox(height: 18),
             Expanded(
               child: isLoading
                   ? const Center(
@@ -332,12 +335,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Get categories from loaded API products
   List<String> _getApiCategories() {
+    print("getApiCategories");
     Set<String> categories = {'All'};
+    // Set<String> categories = {};
     for (var product in products) {
       if (product.category.isNotEmpty) {
         categories.add(product.category);
       }
     }
+    print(categories.toList());
     return categories.toList();
   }
 
@@ -348,10 +354,11 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 100,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [Color(0xFF4CAF50), Color(0xFF66BB6A)],
+            colors: [Color(0xFFFFB75E), Color(0xFFED8F03)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
+
           borderRadius: BorderRadius.circular(12),
         ),
         child: Stack(
