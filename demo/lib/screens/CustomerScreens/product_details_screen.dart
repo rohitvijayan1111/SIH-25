@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../global.dart';
 import 'models/product_model.dart';
-import 'package:demo/models/batch_model.dart';         // New import for batch model
+import 'package:demo/models/batch_model.dart'; // New import for batch model
 import '../../services/api_service.dart'; // New import for API calls
 import 'product_history.dart';
 
@@ -21,7 +21,8 @@ class LogisticProvider {
 
   double calculateCharge(int daysFromNow, int qty) {
     // service charge = baseValue + ratio * days + random factor
-    return (baseValue + (ratio * daysFromNow) + Random().nextDouble() * 10) * qty;
+    return (baseValue + (ratio * daysFromNow) + Random().nextDouble() * 10) *
+        qty;
   }
 }
 
@@ -42,7 +43,7 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final Random random = Random();
 
-  late Future<List<BatchModel>> futureBatches;
+  late Future<List<Batch>> futureBatches;
 
   Product? product;
   Map<int, int> cartQuantities = {}; // batchIndex -> quantity
@@ -62,7 +63,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   void initState() {
     super.initState();
     product = widget.product;
-    futureBatches = ApiService.getBatchesForProduct(product!.id);
+    final String productId = product?.id ?? '';
+    if (product != null && product!.id.isNotEmpty) {
+      futureBatches = ApiService.getBatchesForProduct(productId);
+    } else {
+      futureBatches = Future.value([]);
+    }
+    print("ProductDetailsScreen: product.id = '${product?.id}'");
   }
 
   Widget buildStars(int count) {
@@ -78,7 +85,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  double calculateTotal(List<BatchModel> batches) {
+  double calculateTotal(List<Batch> batches) {
     double total = 0.0;
     cartQuantities.forEach((index, qty) {
       if (index < batches.length) {
@@ -101,7 +108,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
-    futureBatches = ApiService.getBatchesForProduct(product!.id);
+    final String productId = product.id ?? '';
+    futureBatches = ApiService.getBatchesForProduct(productId);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -174,17 +182,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  FutureBuilder<List<BatchModel>>(
+                  FutureBuilder<List<Batch>>(
                     future: futureBatches,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
-                        return Text("Failed to fetch batches: ${snapshot.error}");
+                        return Text(
+                          "Failed to fetch batches: ${snapshot.error}",
+                        );
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Text("No batches available for this product");
+                        return const Text(
+                          "No batches available for this product",
+                        );
                       } else {
-                        List<BatchModel> batches = snapshot.data!;
+                        List<Batch> batches = snapshot.data!;
                         return ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -193,10 +205,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             final batch = batches[index];
                             int qty = cartQuantities[index] ?? 0;
                             DateTime expiry = batch.expiryDate;
-                            int expiryDays = expiry.difference(DateTime.now()).inDays;
+                            int expiryDays = expiry
+                                .difference(DateTime.now())
+                                .inDays;
 
                             List<DateTime> dateOptions = List.generate(10, (i) {
-                              final d = DateTime.now().add(Duration(days: i + 1));
+                              final d = DateTime.now().add(
+                                Duration(days: i + 1),
+                              );
                               return DateTime(d.year, d.month, d.day);
                             });
 
@@ -212,7 +228,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           "Average Price: ₹${batch.pricePerUnit.toStringAsFixed(2)}",
@@ -228,10 +245,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     const SizedBox(height: 12),
                                     Row(
                                       children: [
-                                        const Icon(Icons.storefront, size: 18, color: Colors.grey),
+                                        const Icon(
+                                          Icons.storefront,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
                                         const SizedBox(width: 6),
                                         Text(
-                                          batch.farmerName,
+                                          batch.farmerName!,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 14,
@@ -242,30 +263,49 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     const SizedBox(height: 4),
                                     Row(
                                       children: [
-                                        const Icon(Icons.label, size: 18, color: Colors.blueGrey),
+                                        const Icon(
+                                          Icons.label,
+                                          size: 18,
+                                          color: Colors.blueGrey,
+                                        ),
                                         const SizedBox(width: 6),
                                         Text(
                                           "Batch ID: ${batch.id}",
-                                          style: const TextStyle(fontSize: 13, color: Colors.blueGrey),
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.blueGrey,
+                                          ),
                                         ),
                                       ],
                                     ),
                                     const SizedBox(height: 6),
                                     Row(
                                       children: [
-                                        const Icon(Icons.inventory, size: 18, color: Colors.grey),
+                                        const Icon(
+                                          Icons.inventory,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
                                         const SizedBox(width: 6),
-                                        Text("${batch.quantityKg} packs • ${batch.unit}"),
+                                        Text(
+                                          "${batch.quantityKg} packs • ${batch.unit}",
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(height: 6),
                                     Row(
                                       children: [
-                                        const Icon(Icons.event_busy, size: 18, color: Colors.redAccent),
+                                        const Icon(
+                                          Icons.event_busy,
+                                          size: 18,
+                                          color: Colors.redAccent,
+                                        ),
                                         const SizedBox(width: 6),
                                         Text(
                                           "Expiry: ${expiry.day}/${expiry.month}/${expiry.year} (${expiryDays}d left)",
-                                          style: const TextStyle(color: Colors.redAccent),
+                                          style: const TextStyle(
+                                            color: Colors.redAccent,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -273,26 +313,45 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                                     DropdownButton<DateTime>(
                                       value: selectedDates[index],
-                                      hint: const Text("Select Expected Arrival Date"),
+                                      hint: const Text(
+                                        "Select Expected Arrival Date",
+                                      ),
                                       onChanged: (date) {
                                         setState(() {
-                                          selectedDates[index] = DateTime(date!.year, date.month, date.day);
-                                          int daysFromNow = selectedDates[index]!.difference(DateTime.now()).inDays;
+                                          selectedDates[index] = DateTime(
+                                            date!.year,
+                                            date.month,
+                                            date.day,
+                                          );
+                                          int daysFromNow =
+                                              selectedDates[index]!
+                                                  .difference(DateTime.now())
+                                                  .inDays;
 
-                                          List<double> charges = logisticsProviders.map((p) => p.calculateCharge(
-                                              daysFromNow,
-                                              qty > 0 ? qty : 1,
-                                            )).toList();
+                                          List<double> charges =
+                                              logisticsProviders
+                                                  .map(
+                                                    (p) => p.calculateCharge(
+                                                      daysFromNow,
+                                                      qty > 0 ? qty : 1,
+                                                    ),
+                                                  )
+                                                  .toList();
 
-                                          int minIndex = charges.indexOf(charges.reduce(min));
+                                          int minIndex = charges.indexOf(
+                                            charges.reduce(min),
+                                          );
                                           selectedProviders[index] = minIndex;
-                                          selectedCharges[index] = charges[minIndex];
+                                          selectedCharges[index] =
+                                              charges[minIndex];
                                         });
                                       },
                                       items: dateOptions.map((d) {
                                         return DropdownMenuItem(
                                           value: d,
-                                          child: Text("${d.day}/${d.month}/${d.year}"),
+                                          child: Text(
+                                            "${d.day}/${d.month}/${d.year}",
+                                          ),
                                         );
                                       }).toList(),
                                     ),
@@ -300,28 +359,46 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     if (selectedDates.containsKey(index)) ...[
                                       DropdownButton<int>(
                                         value: selectedProviders[index],
-                                        hint: const Text("Select Logistic Provider"),
+                                        hint: const Text(
+                                          "Select Logistic Provider",
+                                        ),
                                         onChanged: (providerIndex) {
                                           setState(() {
-                                            selectedProviders[index] = providerIndex!;
-                                            int daysFromNow = selectedDates[index]!.difference(DateTime.now()).inDays;
-                                            selectedCharges[index] = logisticsProviders[providerIndex].calculateCharge(
-                                              daysFromNow,
-                                              qty > 0 ? qty : 1,
-                                            );
+                                            selectedProviders[index] =
+                                                providerIndex!;
+                                            int daysFromNow =
+                                                selectedDates[index]!
+                                                    .difference(DateTime.now())
+                                                    .inDays;
+                                            selectedCharges[index] =
+                                                logisticsProviders[providerIndex]
+                                                    .calculateCharge(
+                                                      daysFromNow,
+                                                      qty > 0 ? qty : 1,
+                                                    );
                                           });
                                         },
-                                        items: List.generate(logisticsProviders.length, (i) {
-                                          int daysFromNow = selectedDates[index]!.difference(DateTime.now()).inDays;
-                                          double charge = logisticsProviders[i].calculateCharge(
-                                            daysFromNow,
-                                            qty > 0 ? qty : 1,
-                                          );
-                                          return DropdownMenuItem(
-                                            value: i,
-                                            child: Text("${logisticsProviders[i].name} - ₹${charge.toStringAsFixed(2)}"),
-                                          );
-                                        }),
+                                        items: List.generate(
+                                          logisticsProviders.length,
+                                          (i) {
+                                            int daysFromNow =
+                                                selectedDates[index]!
+                                                    .difference(DateTime.now())
+                                                    .inDays;
+                                            double charge =
+                                                logisticsProviders[i]
+                                                    .calculateCharge(
+                                                      daysFromNow,
+                                                      qty > 0 ? qty : 1,
+                                                    );
+                                            return DropdownMenuItem(
+                                              value: i,
+                                              child: Text(
+                                                "${logisticsProviders[i].name} - ₹${charge.toStringAsFixed(2)}",
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ],
 
@@ -337,7 +414,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     const Divider(height: 20, thickness: 1),
 
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
@@ -347,7 +425,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   updateCart(index, qty - 1);
                                                 }
                                               },
-                                              icon: const Icon(Icons.remove_circle, color: Colors.red),
+                                              icon: const Icon(
+                                                Icons.remove_circle,
+                                                color: Colors.red,
+                                              ),
                                             ),
                                             Text(
                                               "$qty",
@@ -358,19 +439,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             ),
                                             IconButton(
                                               onPressed: () {
-                                                if (qty < batch.quantityKg) { // Note updated from stock to batchQuantity
+                                                if (qty < batch.quantityKg) {
+                                                  // Note updated from stock to batchQuantity
                                                   updateCart(index, qty + 1);
                                                 }
                                               },
-                                              icon: const Icon(Icons.add_circle, color: Colors.green),
+                                              icon: const Icon(
+                                                Icons.add_circle,
+                                                color: Colors.green,
+                                              ),
                                             ),
                                           ],
                                         ),
                                         OutlinedButton.icon(
                                           style: OutlinedButton.styleFrom(
-                                            side: const BorderSide(color: Color(0xFF4CAF50)),
+                                            side: const BorderSide(
+                                              color: Color(0xFF4CAF50),
+                                            ),
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(12),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
                                             ),
                                           ),
                                           onPressed: () {
@@ -379,15 +467,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                               MaterialPageRoute(
                                                 builder: (_) => ProductHistoryPage(
                                                   product: product,
-                                                  batchid: batch.id, // Pass actual batchId
+                                                  batchid: batch
+                                                      .id, // Pass actual batchId
                                                 ),
                                               ),
                                             );
                                           },
-                                          icon: const Icon(Icons.history, color: Color(0xFF4CAF50)),
+                                          icon: const Icon(
+                                            Icons.history,
+                                            color: Color(0xFF4CAF50),
+                                          ),
                                           label: const Text(
                                             "View History",
-                                            style: TextStyle(color: Color(0xFF4CAF50)),
+                                            style: TextStyle(
+                                              color: Color(0xFF4CAF50),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -407,12 +501,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
 
           // Bottom Cart Bar
-          FutureBuilder<List<BatchModel>>(
+          FutureBuilder<List<Batch>>(
             future: futureBatches,
             builder: (context, snapshot) {
-              List<BatchModel> batches = snapshot.data ?? [];
+              List<Batch> batches = snapshot.data ?? [];
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border(top: BorderSide(color: Colors.grey.shade300)),
@@ -449,13 +546,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                     ElevatedButton.icon(
                       onPressed: () {
-                        if (!gcart.containsKey(product.id) || gcart[product.id] == null) {
+                        if (!gcart.containsKey(product.id) ||
+                            gcart[product.id] == null) {
                           gcart[product.id] = <String, List<int>>{};
                         }
                         cartQuantities.forEach((batchIndex, qty) {
                           if (batchIndex < batches.length) {
                             double price = batches[batchIndex].pricePerUnit;
-                            int providerIndex = selectedProviders[batchIndex] ?? 0;
+                            int providerIndex =
+                                selectedProviders[batchIndex] ?? 0;
                             double charge = selectedCharges[batchIndex] ?? 0;
                             gcart[product.id]!['batch$batchIndex'] = [
                               price.toInt(),
@@ -468,7 +567,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Added ${cartQuantities.length} batches to cart!'),
+                            content: Text(
+                              'Added ${cartQuantities.length} batches to cart!',
+                            ),
                             duration: const Duration(seconds: 2),
                           ),
                         );
@@ -478,7 +579,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4CAF50),
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

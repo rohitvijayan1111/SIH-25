@@ -4,19 +4,43 @@ import '../../global.dart';
 import 'checkout_screen.dart';
 import 'models/product_model.dart';
 
+import 'package:demo/services/cart_service.dart';
+import 'models/cart_model.dart';
+
 class CartScreen extends StatefulWidget {
   final int value;
 
-  const CartScreen({super.key, this.value = 0});
+  const CartScreen({super.key, this.value = 0, required String userId});
 
   @override
   State<CartScreen> createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final Map<String, String> backendToStaticIdMap = {
+    "34799eb9-d699-4433-875b-a8bd4bc0a12a": "1",
+    "cb8c866e-943b-4db5-8cec-99c720ad10e6": "2",
+    "7b9de6e2-9993-4011-b2a7-be51837a2f8c": "3",
+    "ffb25be8-34cb-4d27-8947-6e09325ebe2c": "4",
+    "a26448ae-21ec-484f-a4ca-39c34ec31509": "6",
+    "9352287f-8885-4d5e-8e9d-d7615841db79": "8",
+    "fba521cd-15db-42fe-b3da-8deb336576ed": "9",
+    "ee26fc7a-580f-4c6e-bc65-b8566054f9f5": "10",
+    "55a0ccbf-45fa-4965-a05e-b80590297fd7": "11",
+    "1a51ceef-95f3-4817-a239-213f315cf04e": "12",
+    "260c5087-88a2-41bd-a892-ccc0db199b78": "13",
+    "fe3d48d4-099a-49e3-86d6-140f2e37d515": "14",
+    "f94489e7-2454-42fd-98a6-2e561a72d62e": "15",
+    "7c327257-38c1-4595-adbb-8360fd244b40": "16",
+    "9aec7171-c03a-4329-98e9-59bd2c8986c2": "17",
+  };
+
   late int valuet;
   List<Product> products = [];
+  List<CartItem> cartItems = [];
   bool isDeliverySelected = true;
+
+  Map<String, Map<String, List<dynamic>>> gcart = {};
 
   @override
   void initState() {
@@ -25,13 +49,89 @@ class _CartScreenState extends State<CartScreen> {
     products = valuet == 0
         ? ProductData.getAllProducts()
         : ProductData.getAllServices();
+
+    fetchCartFromBackend();
+
     debugPrint('=== CART DEBUG INFO ===');
-    debugPrint('Cart contents: $gcart');
-    debugPrint('Available products: ${products.map((p) => '${p.id}: ${p.name}').toList()}');
+    debugPrint(
+      'Available products: ${products.map((p) => '${p.id}: ${p.name}').toList()}',
+    );
     debugPrint('Cart keys: ${gcart.keys.toList()}');
-    debugPrint('Cart key types: ${gcart.keys.map((k) => k.runtimeType).toList()}');
-    debugPrint('Product ID types: ${products.map((p) => p.id.runtimeType).toList()}');
+    debugPrint(
+      'Cart key types: ${gcart.keys.map((k) => k.runtimeType).toList()}',
+    );
+    debugPrint(
+      'Product ID types: ${products.map((p) => p.id.runtimeType).toList()}',
+    );
     debugPrint('=====================');
+  }
+
+  Future<void> fetchCartFromBackend() async {
+    try {
+      final userId = 'a985baac-9028-4dc1-bbd9-a6f3aae49ef5';
+      final Map<String, dynamic> responseData =
+          await CartService.viewCart(userId: userId);
+      List<CartItem> loadedItems = [];
+
+      if (responseData.containsKey('cart') && responseData['cart'] is List) {
+        final staticProducts = products;
+
+        for (var provider in responseData['cart']) {
+          String providerName = provider['provider_name'] ?? '';
+          String providerAddress = provider['provider_address'] ?? '';
+          String providerId = provider['provider_id'] ?? '';
+
+          if (provider.containsKey('items') && provider['items'] is List) {
+            for (var item in provider['items']) {
+              String batchId = item['bpp_product_id'] ?? '';
+              String backendProductName = item['item_name'] ?? '';
+              String backendCategory = item['category'] ?? '';
+              String backendImageUrl = item['image_url'] ?? '';
+
+              Product staticProduct = Product.empty();
+              if (batchId.isNotEmpty) {
+                String? staticId = backendToStaticIdMap[batchId];
+                if (staticId != null) {
+                  staticProduct = staticProducts.firstWhere(
+                    (p) => p.id == staticId,
+                    orElse: () => Product.empty(),
+                  );
+                }
+              }
+
+              loadedItems.add(CartItem(
+                id: "",
+                userId: userId,
+                batchId: batchId,
+                productId: providerId,
+                productName: staticProduct.name.isNotEmpty
+                    ? staticProduct.name
+                    : backendProductName,
+                quantity: (item['quantity'] as num?)?.toInt() ?? 0,
+                unitPrice: (item['unit_price'] as num?)?.toDouble() ?? 0.0,
+                imageUrl: staticProduct.imageUrl.isNotEmpty
+                    ? staticProduct.imageUrl
+                    : backendImageUrl,
+                batchCode: batchId,
+                farmerName: providerName,
+                location: providerAddress,
+                category: staticProduct.category.isNotEmpty
+                    ? staticProduct.category
+                    : backendCategory,
+              ));
+            }
+          }
+        }
+      }
+
+      setState(() {
+        cartItems = loadedItems;
+      });
+
+      debugPrint('Loaded cart with merged product data: $cartItems');
+    } catch (e) {
+      debugPrint('Failed to load cart: $e');
+    }
   }
 
   @override
@@ -39,7 +139,7 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.orange, // solid orange, no gradient/blur
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -54,23 +154,6 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ),
         centerTitle: true,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color.fromARGB(255, 12, 131, 69)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(255, 12, 131, 69).withOpacity(0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Column(
         children: [
@@ -87,38 +170,8 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   List<Widget> _buildCartItems() {
-    List<Widget> widgets = [];
-    final List<Product> allProducts = ProductData.getAllProducts();
-
-    gcart.forEach((productId, batches) {
-      Product? foundProduct = allProducts.firstWhere(
-        (p) => p.id.toString() == productId.toString(),
-        orElse: () => Product.empty(),
-      );
-      batches?.forEach((batchId, values) {
-        if (values != null && values.length >= 4) {
-          int unitPrice = values[0] ?? 0;
-          int itemCount = values[1] ?? 0;
-          int logisticProvider = values[2] ?? 0;
-          int deliveryChargePerUnit = values[3] ?? 0;
-
-          widgets.add(
-            _buildCartItemCard(
-              foundProduct,
-              batchId,
-              unitPrice,
-              itemCount,
-              logisticProvider,
-              deliveryChargePerUnit,
-              productId,
-            ),
-          );
-        }
-      });
-    });
-
-    if (widgets.isEmpty) {
-      widgets.add(
+    if (cartItems.isEmpty) {
+      return [
         const Center(
           child: Padding(
             padding: EdgeInsets.all(32.0),
@@ -128,23 +181,13 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ),
         ),
-      );
+      ];
     }
 
-    return widgets;
+    return cartItems.map((item) => _buildCartItemCard(item)).toList();
   }
 
-  Widget _buildCartItemCard(
-    Product product,
-    String batchId,
-    int unitPrice,
-    int itemCount,
-    int logisticProvider,
-    int deliveryChargePerUnit,
-    dynamic productId,
-  ) {
-    bool isProductFound = product.name != 'Unknown Product';
-
+  Widget _buildCartItemCard(CartItem item) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -168,9 +211,9 @@ class _CartScreenState extends State<CartScreen> {
             decoration: BoxDecoration(
               color: Colors.grey[200],
               borderRadius: BorderRadius.circular(8),
-              image: isProductFound && product.imageUrl.isNotEmpty
+              image: item.imageUrl.isNotEmpty
                   ? DecorationImage(
-                      image: NetworkImage(product.imageUrl),
+                      image: NetworkImage(item.imageUrl),
                       fit: BoxFit.cover,
                       onError: (exception, stackTrace) {
                         debugPrint('Error loading image: $exception');
@@ -178,7 +221,7 @@ class _CartScreenState extends State<CartScreen> {
                     )
                   : null,
             ),
-            child: (!isProductFound || product.imageUrl.isEmpty)
+            child: item.imageUrl.isEmpty
                 ? const Icon(Icons.shopping_bag, size: 30, color: Colors.grey)
                 : null,
           ),
@@ -188,20 +231,18 @@ class _CartScreenState extends State<CartScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isProductFound && product.category.isNotEmpty
-                      ? product.category
-                      : 'General',
+                  item.category.isNotEmpty ? item.category : 'General',
                   style: const TextStyle(
-                    color: Colors.green,
+                    color: Colors.orange,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  isProductFound && product.name.isNotEmpty
-                      ? product.name
-                      : 'Unknown Product ($productId)',
+                  item.productName.isNotEmpty
+                      ? item.productName
+                      : 'Unknown Product (${item.productId})',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -212,14 +253,14 @@ class _CartScreenState extends State<CartScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Batch: $batchId | Qty: $itemCount",
+                  "Batch: ${item.batchId} | Qty: ${item.quantity}",
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
-                if (!isProductFound)
-                  Text(
-                    "Product ID: $productId",
-                    style: const TextStyle(fontSize: 10, color: Colors.red),
-                  ),
+                Text(
+                  "Farmer: ${item.farmerName} | Location: ${item.location}",
+                  style:
+                      const TextStyle(fontSize: 10, color: Colors.blueGrey),
+                ),
               ],
             ),
           ),
@@ -227,7 +268,7 @@ class _CartScreenState extends State<CartScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                "₹${(unitPrice * itemCount).toStringAsFixed(0)}",
+                "₹${(item.unitPrice * item.quantity).toStringAsFixed(0)}",
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -238,20 +279,21 @@ class _CartScreenState extends State<CartScreen> {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      _updateQuantity(productId, batchId, -1);
-                    },
+                    onTap: () => _updateQuantity(item, -1),
                     child: _circleBtn(
                       Icons.remove,
-                      itemCount > 1 ? Colors.grey[300]! : Colors.grey[200]!,
-                      iconColor: itemCount > 1 ? Colors.black : Colors.grey,
+                      item.quantity > 1
+                          ? Colors.grey[300]!
+                          : Colors.grey[200]!,
+                      iconColor:
+                          item.quantity > 1 ? Colors.black : Colors.grey,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Container(
                     constraints: const BoxConstraints(minWidth: 30),
                     child: Text(
-                      '$itemCount',
+                      '${item.quantity}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 16,
@@ -261,12 +303,10 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   const SizedBox(width: 12),
                   GestureDetector(
-                    onTap: () {
-                      _updateQuantity(productId, batchId, 1);
-                    },
+                    onTap: () => _updateQuantity(item, 1),
                     child: _circleBtn(
                       Icons.add,
-                      Colors.green,
+                      Colors.orange,
                       iconColor: Colors.white,
                     ),
                   ),
@@ -274,11 +314,10 @@ class _CartScreenState extends State<CartScreen> {
               ),
               const SizedBox(height: 8),
               GestureDetector(
-                onTap: () {
-                  _removeFromCart(productId, batchId);
-                },
+                onTap: () => _removeFromCart(item),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.red[50],
                     borderRadius: BorderRadius.circular(4),
@@ -300,31 +339,36 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  void _updateQuantity(dynamic productId, String batchId, int change) {
-    setState(() {
-      if (gcart[productId] != null && gcart[productId]![batchId] != null) {
-        int currentQuantity = gcart[productId]![batchId]![1] ?? 0;
-        int newQuantity = currentQuantity + change;
-
-        if (newQuantity > 0) {
-          gcart[productId]![batchId]![1] = newQuantity;
-        } else if (newQuantity <= 0) {
-          _removeFromCart(productId, batchId);
-        }
+  void _updateQuantity(CartItem item, int change) async {
+    int newQuantity = item.quantity + change;
+    if (newQuantity > 0) {
+      try {
+        await CartService.addToCart(
+          userId: item.userId,
+          batchId: item.batchId,
+          itemName: item.productName,
+          quantity: newQuantity,
+          unitPrice: item.unitPrice,
+          imageUrl: item.imageUrl,
+          productId: item.productId,
+        );
+        await fetchCartFromBackend();
+      } catch (e) {
+        debugPrint('Failed to update quantity: $e');
       }
-    });
+    } else {
+      _removeFromCart(item);
+    }
   }
 
-  void _removeFromCart(dynamic productId, String batchId) {
-    setState(() {
-      if (gcart[productId] != null) {
-        gcart[productId]!.remove(batchId);
-
-        if (gcart[productId]!.isEmpty) {
-          gcart.remove(productId);
-        }
-      }
-    });
+  void _removeFromCart(CartItem item) async {
+    try {
+      await CartService.deleteFromCart(
+          userId: item.userId, batchId: item.batchId);
+      await fetchCartFromBackend();
+    } catch (e) {
+      debugPrint('Failed to remove from cart: $e');
+    }
   }
 
   Widget _circleBtn(
@@ -349,21 +393,10 @@ class _CartScreenState extends State<CartScreen> {
     double deliveryFee = 0;
     int totalItems = 0;
 
-    gcart.forEach((productId, batches) {
-      batches?.forEach((batchId, values) {
-        if (values != null && values.length >= 4) {
-          int unitPrice = values[0] ?? 0;
-          int itemCount = values[1] ?? 0;
-          int deliveryChargePerUnit = values[3] ?? 0;
-
-          subtotal += unitPrice * itemCount;
-          if (isDeliverySelected) {
-            deliveryFee += deliveryChargePerUnit * itemCount;
-          }
-          totalItems += itemCount;
-        }
-      });
-    });
+    for (final item in cartItems) {
+      subtotal += item.unitPrice * item.quantity;
+      totalItems += item.quantity;
+    }
 
     double total = subtotal + deliveryFee;
 
@@ -458,7 +491,7 @@ class _CartScreenState extends State<CartScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: !isDeliverySelected ? Colors.green : Colors.grey[300],
+                color: !isDeliverySelected ? Colors.orange : Colors.grey[300],
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -479,7 +512,7 @@ class _CartScreenState extends State<CartScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: isDeliverySelected ? Colors.green : Colors.grey[300],
+                color: isDeliverySelected ? Colors.orange : Colors.grey[300],
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -510,9 +543,10 @@ class _CartScreenState extends State<CartScreen> {
               }
             : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: hasItems ? Colors.green : Colors.grey,
+          backgroundColor: hasItems ? Colors.orange : Colors.grey,
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: Text(
           hasItems ? 'Checkout' : 'Cart is Empty',

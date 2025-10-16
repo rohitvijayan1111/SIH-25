@@ -4,7 +4,7 @@ GET http://localhost:5000/cart/getcategories
 Content-Type: application/json
 
 {
-  "user_id": "9ce67171-03a3-4329-9f69-5b9d2c898c95"
+  "user_id": "a985baac-9028-4dc1-bbd9-a6f3aae49ef5"
 }
 
 ### View Cart
@@ -16,25 +16,27 @@ POST http://localhost:5000/cart/add
 Content-Type: application/json
 
 {
+  {
   "user_id": "a985baac-9028-4dc1-bbd9-a6f3aae49ef5",
-  "bpp_id": "bpp-sample-6",
-  "bpp_product_id": "9aec7171-c03a-4329-98e9-59bd2c8986c2",
-  "provider_id": "2b67a3cf-0ae5-4d77-a9b0-03ec81a646a3",
-  "provider_name": "Provider A",
-  "provider_address": "Provider Address A",
-  "fulfillment_id": null,
-  "item_name": "Copper Sulphate",
+  "bpp_id": "agri.bpp",
+  "bpp_product_id": "34799eb9-d699-4433-875b-a8bd4bc0a12a",
+  "provider_id": "910d34a9-b9c0-489a-b7e1-73657d0e4503",
+  "provider_name": "Arjun Reddy",
+  "provider_address": "Banjara Hills, Hyderabad",
+  "fulfillment_id": "FUL003",
+  "item_name": "Glyphosate 41% SL",
   "quantity": 5,
-  "unit_price": 120.0,
-  "category": "micro_nutrient",
-  "image_url": null
+  "unit_price": 20.00,
+  "category": "herbicide",
+  "image_url": "https://agribegri.com/productimage/7354035311733221089.webp"
+}
 }
 ### delete Item from Cart
 DELETE http://localhost:5000/cart/clear
 Content-Type:application/json
 
 {
-  "user_id": "6696ef79-85e0-4a26-b16d-fc187ae4c629"
+  "user_id": "a985baac-9028-4dc1-bbd9-a6f3aae49ef5"
 }
 
 ### Update Item in Cart
@@ -42,8 +44,8 @@ PUT http://localhost:5000/cart/update
 Content-Type: application/json
 
 {
-  "user_id": "9ce67171-03a3-4329-9f69-5b9d2c898c95",
-  "bpp_product_id": "9aec7171-c03a-4329-98e9-59bd2c8986c2",
-  "provider_id": "2b67a3cf-0ae5-4d77-a9b0-03ec81a646a3",
+  "user_id": "a985baac-9028-4dc1-bbd9-a6f3aae49ef5",
+  "bpp_product_id": "34799eb9-d699-4433-875b-a8bd4bc0a12a",
+  "provider_id": "910d34a9-b9c0-489a-b7e1-73657d0e4503",
   "quantity": 10
 }

@@ -32,3 +32,4 @@ Future<void> clearGlobalCart() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.remove('cart');
 }
+
