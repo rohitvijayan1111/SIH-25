@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ### View Cart
-Get http://localhost:5000/cart/view/9ce67171-03a3-4329-9f69-5b9d2c898c95
+Get http://localhost:5000/cart/view/a985baac-9028-4dc1-bbd9-a6f3aae49ef5
 Content-Type: application/json'
 
 ### Add Item to Cart

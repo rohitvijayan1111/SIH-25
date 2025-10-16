@@ -31,7 +31,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Orders"),
+        title: Text("My Orders", style: TextStyle(fontWeight: FontWeight.w600)),
         centerTitle: true,
         backgroundColor: Colors.orange,
         foregroundColor: Colors.white,

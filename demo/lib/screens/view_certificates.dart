@@ -49,7 +49,11 @@ class _ViewCertificatesState extends State<ViewCertificates> {
           children: [
             Text(
               'Certificates',
-              style: TextStyle(color: Colors.white, fontSize: 20,fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Text(
               'Batch #${widget.batchId.substring(0, 8)}',
@@ -164,6 +168,7 @@ class _ViewCertificatesState extends State<ViewCertificates> {
                     ),
                     onPressed: () {
                       // Implement export logic here
+                      
                     },
                     icon: Icon(Icons.download),
                     label: Text('Export All Certificates'),

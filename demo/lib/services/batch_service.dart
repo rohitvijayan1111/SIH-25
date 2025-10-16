@@ -5,6 +5,73 @@ import '../models/batch_model.dart';
 class BatchService {
   static const String baseUrl = 'http://localhost:3000/api';
 
+  static Future<List<BatchHistoryItem>> getAllBatches() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/batches'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      print(
+        'Get All Batches Response: ${response.statusCode} - ${response.body}',
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['inventory'] != null) {
+          List<BatchHistoryItem> batches = (data['inventory'] as List)
+              .map((item) => BatchHistoryItem.fromJson(item))
+              .toList();
+          return batches;
+        } else {
+          return [];
+        }
+      } else {
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching all batches: $e');
+      throw Exception('Could not fetch batches: $e');
+    }
+  }
+
+  // NEW METHOD: Get certificate count for a batch
+  static Future<int> getCertificateCount(String batchId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/certificate/$batchId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final certificates = data['certificates'] ?? [];
+        return certificates.length;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      print('Error fetching certificate count: $e');
+      return 0;
+    }
+  }
+
+  // NEW METHOD: Update batch status
+  static Future<bool> updateBatchStatus(String batchId, String status) async {
+    try {
+      final response = await http.patch(
+        Uri.parse('$baseUrl/batches/$batchId/status'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'status': status}),
+      );
+
+      return response.statusCode == 200;
+    } catch (e) {
+      print("Error updating batch status: $e");
+      return false;
+    }
+  }
+
   static Future<List<Batch>> getBatchesByProductName(String productName) async {
     try {
       print(
