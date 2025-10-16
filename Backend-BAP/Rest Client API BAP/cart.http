@@ -16,7 +16,7 @@ POST http://localhost:5000/cart/add
 Content-Type: application/json
 
 {
-  "user_id": "9ce67171-03a3-4329-9f69-5b9d2c898c95",
+  "user_id": "a985baac-9028-4dc1-bbd9-a6f3aae49ef5",
   "bpp_id": "bpp-sample-6",
   "bpp_product_id": "9aec7171-c03a-4329-98e9-59bd2c8986c2",
   "provider_id": "2b67a3cf-0ae5-4d77-a9b0-03ec81a646a3",

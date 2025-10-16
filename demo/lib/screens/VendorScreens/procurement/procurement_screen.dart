@@ -43,7 +43,7 @@ class Product {
       name: json['name'] ?? '',
       type: json['type'] ?? '',
       unit: json['unit'] ?? '',
-      stock: int.tryParse(json['stock']?.toString() ?? '0') ?? 0,
+      stock: int.tryParse(json['tstock']?.toString() ?? '0') ?? 0,
       organic: json['organic'] ?? false,
       description: json['description'] ?? '',
       imageUrl: json['image_url'],
@@ -419,13 +419,13 @@ class _ProcurementScreenState extends State<ProcurementScreen>
             // Product details from API
             Row(
               children: [
-                Icon(Icons.scale, size: 16, color: Colors.grey.shade600),
-                SizedBox(width: 4),
-                Text(
-                  '${product.weight}${product.unit}',
-                  style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
-                ),
-                SizedBox(width: 16),
+                // Icon(Icons.scale, size: 16, color: Colors.grey.shade600),
+                // SizedBox(width: 4),
+                // Text(
+                //   '${product.weight}${product.unit}',
+                //   style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
+                // ),
+                // SizedBox(width: 16),
                 Icon(
                   Icons.currency_rupee,
                   size: 16,
@@ -434,7 +434,7 @@ class _ProcurementScreenState extends State<ProcurementScreen>
                 SizedBox(width: 4),
                 Text(
                   product.averageBatchPrice > 0
-                      ? 'Max ₹${product.averageBatchPrice.toStringAsFixed(0)}/${product.unit}'
+                      ? 'Average Price: ₹${product.averageBatchPrice.toStringAsFixed(0)}/${product.unit}'
                       : 'Price: TBD',
                   style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                 ),
@@ -451,24 +451,24 @@ class _ProcurementScreenState extends State<ProcurementScreen>
                   style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                 ),
                 Spacer(),
-                if (daysLeft > 0)
-                  Text(
-                    '$daysLeft days left',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.green,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  )
-                else if (hasDeadlinePassed && status != 'Completed')
-                  Text(
-                    'Deadline passed',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                // if (daysLeft > 0)
+                //   Text(
+                //     '$daysLeft days left',
+                //     style: TextStyle(
+                //       fontSize: 12,
+                //       color: Colors.green,
+                //       fontWeight: FontWeight.w500,
+                //     ),
+                //   )
+                // else if (hasDeadlinePassed && status != 'Completed')
+                //   Text(
+                //     'Deadline passed',
+                //     style: TextStyle(
+                //       fontSize: 12,
+                //       color: Colors.red,
+                //       fontWeight: FontWeight.w500,
+                //     ),
+                //   ),
               ],
             ),
 

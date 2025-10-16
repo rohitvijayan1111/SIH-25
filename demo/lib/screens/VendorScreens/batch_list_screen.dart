@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import '../../services/batch_service.dart';
 import './purchase_screen.dart';
 import '../../models/batch_model.dart';
+
 class BatchListScreen extends StatefulWidget {
   final String productName;
-  
-  const BatchListScreen({Key? key, required this.productName}) : super(key: key);
+
+  const BatchListScreen({Key? key, required this.productName})
+    : super(key: key);
 
   @override
   _BatchListScreenState createState() => _BatchListScreenState();
@@ -30,7 +32,9 @@ class _BatchListScreenState extends State<BatchListScreen> {
     });
 
     try {
-      final fetchedBatches = await BatchService.getBatchesByProductName(widget.productName);
+      final fetchedBatches = await BatchService.getBatchesByProductName(
+        widget.productName,
+      );
       setState(() {
         batches = fetchedBatches;
         isLoading = false;
@@ -90,62 +94,64 @@ class _BatchListScreenState extends State<BatchListScreen> {
                 if (!isLoading && batches.isNotEmpty)
                   Text(
                     '${batches.length} farmer${batches.length != 1 ? 's' : ''} available',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade700,
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                   ),
               ],
             ),
           ),
-          
+
           // Content
           Expanded(
             child: isLoading
-                ? Center(child: CircularProgressIndicator(color: Color(0xFF1E40AF)))
+                ? Center(
+                    child: CircularProgressIndicator(color: Color(0xFF1E40AF)),
+                  )
                 : error != null
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.error, size: 64, color: Colors.red),
-                            SizedBox(height: 16),
-                            Text("Couldn't fetch"),
-                            SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: loadBatches,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFF1E40AF),
-                              ),
-                              child: Text('Retry', style: TextStyle(color: Colors.white)),
-                            ),
-                          ],
-                        ),
-                      )
-                    : batches.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.inventory_2, size: 64, color: Colors.grey),
-                                SizedBox(height: 16),
-                                Text('No supplies available'),
-                                Text('for ${widget.productName}'),
-                              ],
-                            ),
-                          )
-                        : RefreshIndicator(
-                            onRefresh: loadBatches,
-                            color: Color(0xFF1E40AF),
-                            child: ListView.builder(
-                              padding: EdgeInsets.all(16),
-                              itemCount: batches.length,
-                              itemBuilder: (context, index) {
-                                final batch = batches[index];
-                                return _buildBatchCard(batch);
-                              },
-                            ),
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error, size: 64, color: Colors.red),
+                        SizedBox(height: 16),
+                        Text("Couldn't fetch"),
+                        SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: loadBatches,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF1E40AF),
                           ),
+                          child: Text(
+                            'Retry',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : batches.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.inventory_2, size: 64, color: Colors.grey),
+                        SizedBox(height: 16),
+                        Text('No supplies available'),
+                        Text('for ${widget.productName}'),
+                      ],
+                    ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: loadBatches,
+                    color: Color(0xFF1E40AF),
+                    child: ListView.builder(
+                      padding: EdgeInsets.all(16),
+                      itemCount: batches.length,
+                      itemBuilder: (context, index) {
+                        final batch = batches[index];
+                        return _buildBatchCard(batch);
+                      },
+                    ),
+                  ),
           ),
         ],
       ),
@@ -184,8 +190,8 @@ class _BatchListScreenState extends State<BatchListScreen> {
                   ),
                   child: Center(
                     child: Text(
-                      (batch.farmerName?.isNotEmpty == true) 
-                          ? batch.farmerName![0].toUpperCase() 
+                      (batch.farmerName?.isNotEmpty == true)
+                          ? batch.farmerName![0].toUpperCase()
                           : 'F',
                       style: TextStyle(
                         color: Color(0xFF1E40AF),
@@ -235,32 +241,41 @@ class _BatchListScreenState extends State<BatchListScreen> {
                 ),
               ],
             ),
-            
+
             SizedBox(height: 12),
-            
+
             // Certifications
-            if (batch.certifications != null && batch.certifications!.isNotEmpty)
+            if (batch.certifications != null &&
+                batch.certifications!.isNotEmpty)
               Wrap(
                 spacing: 8,
-                children: batch.certifications!.split(',').map((cert) => Container(
-                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    cert.trim(),
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.green,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                )).toList(),
+                children: batch.certifications!
+                    .split(',')
+                    .map(
+                      (cert) => Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.green.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          cert.trim(),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.green,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
-            
+
             SizedBox(height: 12),
-            
+
             // Availability info
             Text(
               'Available: ${batch.availableQty}${batch.unit} at ₹${batch.pricePerUnit.toStringAsFixed(0)}/${batch.unit}',
@@ -270,20 +285,17 @@ class _BatchListScreenState extends State<BatchListScreen> {
                 color: Colors.black,
               ),
             ),
-            
+
             if (batch.harvestDate != null) ...[
               SizedBox(height: 8),
               Text(
                 'Harvested: ${_formatDate(batch.harvestDate!)}',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
             ],
-            
+
             SizedBox(height: 16),
-            
+
             // Action Buttons
             Row(
               children: [
@@ -314,51 +326,48 @@ class _BatchListScreenState extends State<BatchListScreen> {
                   ),
                 ),
                 SizedBox(width: 12),
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Counter-offer feature coming soon')),
-                      );
-                    },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF1E40AF)),
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      'Counter-offer',
-                      style: TextStyle(
-                        color: Color(0xFF1E40AF),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
+                // Expanded(
+                //   child: OutlinedButton(
+                //     onPressed: () {
+                //       ScaffoldMessenger.of(context).showSnackBar(
+                //         SnackBar(content: Text('Counter-offer feature coming soon')),
+                //       );
+                //     },
+                //     style: OutlinedButton.styleFrom(
+                //       side: BorderSide(color: Color(0xFF1E40AF)),
+                //       padding: EdgeInsets.symmetric(vertical: 12),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(8),
+                //       ),
+                //     ),
+                //     child: Text(
+                //       'Counter-offer',
+                //       style: TextStyle(
+                //         color: Color(0xFF1E40AF),
+                //         fontWeight: FontWeight.w500,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
-            
+
             SizedBox(height: 8),
-            
+
             // Negotiation Chat
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Chat feature coming soon')),
-                  );
-                },
-                child: Text(
-                  'Open negotiation chat',
-                  style: TextStyle(
-                    color: Color(0xFF1E40AF),
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ),
+            // Center(
+            //   child: TextButton(
+            //     onPressed: () {
+            //       ScaffoldMessenger.of(context).showSnackBar(
+            //         SnackBar(content: Text('Chat feature coming soon')),
+            //       );
+            //     },
+            //     child: Text(
+            //       'Open negotiation chat',
+            //       style: TextStyle(color: Color(0xFF1E40AF), fontSize: 12),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -366,8 +375,20 @@ class _BatchListScreenState extends State<BatchListScreen> {
   }
 
   String _formatDate(DateTime date) {
-    List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    List<String> months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
 }

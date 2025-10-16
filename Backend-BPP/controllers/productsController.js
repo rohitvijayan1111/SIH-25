@@ -106,15 +106,30 @@ exports.getAllProducts = async (req, res) => {
     }
 
     // Base query with LEFT JOIN and aggregation
+    // let query = `
+    //   SELECT
+    //     p.*,
+    //     COALESCE(ROUND(AVG(b.price_per_unit), 2), 0) AS average_batch_price,
+    //     COUNT(b.id) AS total_batches
+    //   FROM products p
+    //   LEFT JOIN batches b
+    //     ON b.product_id = p.id
+    //     -- AND b.status = 'LISTED'
+    // `;
     let query = `
-      SELECT 
-        p.*, 
+        SELECT 
+        p.*,
         COALESCE(ROUND(AVG(b.price_per_unit), 2), 0) AS average_batch_price,
-        COUNT(b.id) AS total_batches
+        COUNT(b.id) AS total_batches,
+        COALESCE(SUM(
+          CASE 
+            WHEN b.status IN ('PENDING', 'LISTED', 'APPROVED') 
+            THEN b.current_qty_kg 
+            ELSE 0 
+          END
+        ), 0) AS tstock
       FROM products p
-      LEFT JOIN batches b 
-        ON b.product_id = p.id 
-        -- AND b.status = 'LISTED'
+      LEFT JOIN batches b ON b.product_id = p.id
     `;
 
     // Apply WHERE conditions if any exist
