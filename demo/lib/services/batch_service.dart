@@ -36,4 +36,25 @@ class BatchService {
       throw Exception('Couldn\'t fetch');
     }
   }
+
+  static Future<bool> splitBatchBeforePurchase({
+    required String batchId,
+    required int splitQty,
+    required String unit,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/batches/$batchId/split'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'split_qty': splitQty, 'unit': unit}),
+      );
+
+      print("Split Batch Response: ${response.statusCode} - ${response.body}");
+
+      return response.statusCode == 201;
+    } catch (e) {
+      print("Error splitting batch: $e");
+      return false;
+    }
+  }
 }

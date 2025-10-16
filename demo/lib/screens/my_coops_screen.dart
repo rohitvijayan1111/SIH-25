@@ -1,3 +1,4 @@
+import 'package:demo/screens/VendorScreens/utils/constantdata.dart';
 import 'package:flutter/material.dart';
 import 'coop_dashboard.dart';
 import 'new_coops_screen.dart';
@@ -10,17 +11,18 @@ class MyCoopsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: themeColor,
+        backgroundColor: AppConstants.primaryGreen,
+        foregroundColor: Colors.white,
         title: Text(
           'My Co-ops',
           style: TextStyle(
             fontFamily: 'Roboto',
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
           textAlign: TextAlign.center,
         ),
+        centerTitle: true,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
@@ -55,15 +57,14 @@ class MyCoopsScreen extends StatelessWidget {
             icon: Icons.spa,
             onTap: () {
               Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => CertificateDetailsScreen(
-                  batchId: 'af7df286-383c-44d1-8132-5f523c3e1cbe',
-                  certId: 'FSSAI-5678',
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CertificateDetailsScreen(
+                    batchId: 'af7df286-383c-44d1-8132-5f523c3e1cbe',
+                    certId: 'FSSAI-5678',
+                  ),
                 ),
-              ),
-            );
-
+              );
             },
           ),
           CoopTile(

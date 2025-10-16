@@ -202,11 +202,18 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: ColorScheme.dark(
               primary: Colors.green.shade600,
               onPrimary: Colors.white,
               surface: Colors.white,
               onSurface: Colors.black,
+            ),
+            datePickerTheme: DatePickerThemeData(
+              todayBackgroundColor: MaterialStateProperty.all(
+                Colors.green.shade600,
+              ), // Today circle color
+              headerBackgroundColor:
+                  Colors.green.shade600, // Header background color
             ),
           ),
           child: child!,
@@ -431,72 +438,72 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// Upload Box with Image Preview
-                GestureDetector(
-                  onTap: _showImageSourceActionSheet,
-                  child: Container(
-                    width: double.infinity,
-                    height: 180,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.green[50],
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.green.shade100),
-                    ),
-                    child: _selectedImage == null
-                        ? const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.camera_alt,
-                                color: Colors.green,
-                                size: 36,
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                "Tap to capture or pick photo\nYour crop photo is required",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.green),
-                              ),
-                            ],
-                          )
-                        : Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  _selectedImage!,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Positioned(
-                                top: 8,
-                                right: 8,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedImage = null;
-                                    });
-                                  },
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    padding: const EdgeInsets.all(4),
-                                    child: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                      size: 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: _showImageSourceActionSheet,
+                //   child: Container(
+                //     width: double.infinity,
+                //     height: 180,
+                //     padding: const EdgeInsets.all(16),
+                //     decoration: BoxDecoration(
+                //       color: Colors.green[50],
+                //       borderRadius: BorderRadius.circular(12),
+                //       border: Border.all(color: Colors.green.shade100),
+                //     ),
+                //     child: _selectedImage == null
+                //         ? const Column(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             children: [
+                //               Icon(
+                //                 Icons.camera_alt,
+                //                 color: Colors.green,
+                //                 size: 36,
+                //               ),
+                //               SizedBox(height: 8),
+                //               Text(
+                //                 "Tap to capture or pick photo\nYour crop photo is required",
+                //                 textAlign: TextAlign.center,
+                //                 style: TextStyle(color: Colors.green),
+                //               ),
+                //             ],
+                //           )
+                //         : Stack(
+                //             children: [
+                //               ClipRRect(
+                //                 borderRadius: BorderRadius.circular(8),
+                //                 child: Image.file(
+                //                   _selectedImage!,
+                //                   width: double.infinity,
+                //                   height: double.infinity,
+                //                   fit: BoxFit.cover,
+                //                 ),
+                //               ),
+                //               Positioned(
+                //                 top: 8,
+                //                 right: 8,
+                //                 child: GestureDetector(
+                //                   onTap: () {
+                //                     setState(() {
+                //                       _selectedImage = null;
+                //                     });
+                //                   },
+                //                   child: Container(
+                //                     decoration: const BoxDecoration(
+                //                       color: Colors.red,
+                //                       shape: BoxShape.circle,
+                //                     ),
+                //                     padding: const EdgeInsets.all(4),
+                //                     child: const Icon(
+                //                       Icons.close,
+                //                       color: Colors.white,
+                //                       size: 16,
+                //                     ),
+                //                   ),
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //   ),
+                // ),
                 const SizedBox(height: 16),
                 _LabeledField(
                   label: "Select Product Type",
@@ -552,8 +559,6 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
                           },
                         ),
                 ),
-                const SizedBox(height: 16),
-
                 const SizedBox(height: 16),
 
                 // Add second dropdown for specific product
@@ -615,6 +620,8 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
                         ),
                 ),
 
+                const SizedBox(height: 16),
+
                 /// Quantity
                 _LabeledField(
                   label: "Quantity",
@@ -643,40 +650,40 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
                   ),
                 ),
 
-                _LabeledField(
-                  label: "Quality Grade",
-                  child: Row(
-                    children: [
-                      Row(
-                        children: List.generate(5, (index) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _qualityRating = index + 1;
-                                _formData.qualityRating = _qualityRating;
-                              });
-                            },
-                            child: Icon(
-                              index < _qualityRating
-                                  ? Icons.star
-                                  : Icons.star_border,
-                              color: Colors.amber,
-                              size: 28,
-                            ),
-                          );
-                        }),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        "$_qualityRating/5",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // _LabeledField(
+                //   label: "Quality Grade",
+                //   child: Row(
+                //     children: [
+                //       Row(
+                //         children: List.generate(5, (index) {
+                //           return GestureDetector(
+                //             onTap: () {
+                //               setState(() {
+                //                 _qualityRating = index + 1;
+                //                 _formData.qualityRating = _qualityRating;
+                //               });
+                //             },
+                //             child: Icon(
+                //               index < _qualityRating
+                //                   ? Icons.star
+                //                   : Icons.star_border,
+                //               color: Colors.amber,
+                //               size: 28,
+                //             ),
+                //           );
+                //         }),
+                //       ),
+                //       const SizedBox(width: 12),
+                //       Text(
+                //         "$_qualityRating/5",
+                //         style: const TextStyle(
+                //           fontSize: 16,
+                //           fontWeight: FontWeight.w500,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 const SizedBox(height: 16),
 
                 _LabeledField(
@@ -753,36 +760,36 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
                 const SizedBox(height: 16),
 
                 //BUTTON DEMO
-                ElevatedButton(
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BatchDetailsScreen(),
-                      ),
-                    ),
-                  },
-                  child: Text("Click"),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AttachCertificatePage(),
-                      ),
-                    ),
-                  },
-                  child: const Text("Upload Cert"),
-                ),
+                // ElevatedButton(
+                //   onPressed: () => {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => BatchDetailsScreen(),
+                //       ),
+                //     ),
+                //   },
+                //   child: Text("Click"),
+                // ),
+                // const SizedBox(height: 16),
+                // ElevatedButton(
+                //   onPressed: () => {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => AttachCertificatePage(),
+                //       ),
+                //     ),
+                //   },
+                //   child: const Text("Upload Cert"),
+                // ),
 
                 /// Buttons
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: AppConstants.primaryGreen,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -797,25 +804,25 @@ class _UploadProduceScreenState extends State<UploadProduceScreen> {
                 ),
 
                 const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      side: const BorderSide(color: Colors.grey),
-                    ),
-                    onPressed: () {
-                      // TODO: Save draft functionality
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Draft saved successfully!'),
-                          backgroundColor: Colors.blue,
-                        ),
-                      );
-                    },
-                    child: const Text("Save as Draft"),
-                  ),
-                ),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: OutlinedButton(
+                //     style: OutlinedButton.styleFrom(
+                //       padding: const EdgeInsets.symmetric(vertical: 14),
+                //       side: const BorderSide(color: Colors.grey),
+                //     ),
+                //     onPressed: () {
+                //       // TODO: Save draft functionality
+                //       ScaffoldMessenger.of(context).showSnackBar(
+                //         const SnackBar(
+                //           content: Text('Draft saved successfully!'),
+                //           backgroundColor: Colors.blue,
+                //         ),
+                //       );
+                //     },
+                //     child: const Text("Save as Draft"),
+                //   ),
+                // ),
                 const SizedBox(height: 40),
               ],
             ),

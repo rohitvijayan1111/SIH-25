@@ -14,15 +14,15 @@ import '../../services/product_service.dart';
 import 'widgets/category_card.dart';
 import 'widgets/product_card.dart';
 
-class HomeScreen extends StatefulWidget {
+class FarmerHomeScreen extends StatefulWidget {
   final int value;
-  const HomeScreen({super.key, this.value = 0});
+  const FarmerHomeScreen({super.key, this.value = 0});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<FarmerHomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<FarmerHomeScreen> {
   late int valuet;
   String selectedCategory = 'All';
   List<Product> products = [];
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       if (valuet == 0) {
         // Load all products (crops, dairy, etc.)
-        products = await ProductService.getAllProducts();
+        products = await ProductService.getAllFarmerProducts();
       } else {
         // Load filtered products by type for services
         products = await ProductService.getProductsByType('fertilizer');
@@ -179,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const CartScreen(userId: 'a985baac-9028-4dc1-bbd9-a6f3aae49ef5',),
+                          builder: (context) => const CartScreen(),
                         ),
                       );
                     },

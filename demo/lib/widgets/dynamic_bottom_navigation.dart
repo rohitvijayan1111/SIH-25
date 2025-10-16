@@ -39,7 +39,7 @@ class DynamicBottomNav extends StatelessWidget {
   // Alternative vibrant color scheme
   Map<ServiceSection, Color> getSectionColors() {
     return {
-      ServiceSection.categories: const Color(0xFF6C63FF), // Purple - Default
+      ServiceSection.categories: Colors.blueGrey, // Purple - Default
       ServiceSection.uploadProduce: Color(0xFF0C8345), // Bright Green - Farmer
       ServiceSection.browseProducts: const Color(
         0xFFFF6900,

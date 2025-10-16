@@ -1,3 +1,4 @@
+import 'package:demo/screens/VendorScreens/utils/constantdata.dart';
 import 'package:flutter/material.dart';
 
 class FarmerProfileScreen extends StatelessWidget {
@@ -21,37 +22,29 @@ class FarmerProfileScreen extends StatelessWidget {
         elevation: 2,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromARGB(255, 76, 175, 80),
-                Color(0xFF66BB6A),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(0),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(64, 76, 175, 80),
-                blurRadius: 0,
-                offset: Offset(0, 3),
-              ),
-            ],
+            color: AppConstants.primaryGreen,
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(0)),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Color.fromARGB(64, 76, 175, 80),
+            //     blurRadius: 0,
+            //     offset: Offset(0, 3),
+            //   ),
+            // ],
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert, color: Colors.white),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {},
+        //     icon: const Icon(Icons.more_vert, color: Colors.white),
+        //   ),
+        // ],
         backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(height: 8),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 15),
               padding: const EdgeInsets.all(20),
@@ -66,6 +59,7 @@ class FarmerProfileScreen extends StatelessWidget {
                   ),
                 ],
               ),
+
               child: Column(
                 children: [
                   Row(
@@ -171,7 +165,10 @@ class FarmerProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const _SectionHeader(title: "Recent Contributions", action: "View All"),
+            const _SectionHeader(
+              title: "Recent Contributions",
+              action: "View All",
+            ),
             const SizedBox(height: 12),
             const _ContributionTile(
               image: "assets/CustomerUIAssets/images/Wheat.png",

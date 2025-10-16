@@ -85,16 +85,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Agri Bharat Connect',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        primaryColor: const Color(0xFF4285F4),
-        scaffoldBackgroundColor: Colors.grey[50],
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black87,
-          elevation: 0,
-        ),
-      ),
+      // theme: ThemeData(
+      //   primarySwatch: Colors.blue,
+      //   primaryColor: const Color(0xFF4285F4),
+      //   scaffoldBackgroundColor: Colors.grey[50],
+      //   appBarTheme: const AppBarTheme(
+      //     backgroundColor: Colors.white,
+      //     foregroundColor: Colors.black87,
+      //     elevation: 0,
+      //   ),
+      // ),
       debugShowCheckedModeBanner: false,
       routes: {
         // '/signin': (context) => const SignInPage(),

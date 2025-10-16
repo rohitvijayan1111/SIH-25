@@ -36,9 +36,54 @@ exports.addProduct = async (req, res) => {
 };
 
 // 2. Get All Products
+// exports.getAllProducts = async (req, res) => {
+//   try {
+//     const { type, name } = req.query;
+
+//     const params = [];
+//     const conditions = [];
+
+//     // Dynamic filters
+//     if (type) {
+//       params.push(type);
+//       conditions.push(`p.type = $${params.length}`);
+//     }
+//     if (name) {
+//       params.push(`%${name}%`);
+//       conditions.push(`p.name ILIKE $${params.length}`);
+//     }
+
+//     // Base query with LEFT JOIN and aggregation
+//     let query = `
+//       SELECT
+//         p.*,
+//         COALESCE(ROUND(AVG(b.price_per_unit), 2), 0) AS average_batch_price,
+//         COUNT(b.id) AS total_batches
+//       FROM products p
+//       LEFT JOIN batches b
+//         ON b.product_id = p.id
+//         -- AND b.status = 'LISTED'
+//     `;
+
+//     // Apply WHERE conditions if any
+//     if (conditions.length) {
+//       query += ' WHERE ' + conditions.join(' AND ');
+//     }
+
+//     // GROUP BY and ORDER BY at the end
+//     query += ' GROUP BY p.id ORDER BY p.created_at DESC';
+
+//     const result = await pool.query(query, params);
+//     res.json(result.rows);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).json({ error: 'Server error' });
+//   }
+// };
 exports.getAllProducts = async (req, res) => {
   try {
-    const { type, name } = req.query;
+    // Get query parameters
+    const { type, name, show } = req.query;
 
     const params = [];
     const conditions = [];
@@ -48,24 +93,46 @@ exports.getAllProducts = async (req, res) => {
       params.push(type);
       conditions.push(`p.type = $${params.length}`);
     }
+
     if (name) {
       params.push(`%${name}%`);
       conditions.push(`p.name ILIKE $${params.length}`);
     }
 
+    // Boolean filter for special/customer products
+    if (show !== undefined) {
+      params.push(show === 'true'); // convert string to boolean
+      conditions.push(`p.is_customer_product = $${params.length}`);
+    }
+
     // Base query with LEFT JOIN and aggregation
+    // let query = `
+    //   SELECT
+    //     p.*,
+    //     COALESCE(ROUND(AVG(b.price_per_unit), 2), 0) AS average_batch_price,
+    //     COUNT(b.id) AS total_batches
+    //   FROM products p
+    //   LEFT JOIN batches b
+    //     ON b.product_id = p.id
+    //     -- AND b.status = 'LISTED'
+    // `;
     let query = `
-      SELECT 
-        p.*, 
+        SELECT 
+        p.*,
         COALESCE(ROUND(AVG(b.price_per_unit), 2), 0) AS average_batch_price,
-        COUNT(b.id) AS total_batches
+        COUNT(b.id) AS total_batches,
+        COALESCE(SUM(
+          CASE 
+            WHEN b.status IN ('PENDING', 'LISTED', 'APPROVED') 
+            THEN b.current_qty_kg 
+            ELSE 0 
+          END
+        ), 0) AS tstock
       FROM products p
-      LEFT JOIN batches b 
-        ON b.product_id = p.id 
-        -- AND b.status = 'LISTED'
+      LEFT JOIN batches b ON b.product_id = p.id
     `;
 
-    // Apply WHERE conditions if any
+    // Apply WHERE conditions if any exist
     if (conditions.length) {
       query += ' WHERE ' + conditions.join(' AND ');
     }

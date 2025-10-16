@@ -16,7 +16,9 @@ import '../screens/vcnew_upload_screen.dart';
 import '../screens/scan_qr_screen.dart';
 import '../screens/CustomerScreens/updated_home_screen.dart';
 // import '../screens/VendorScreens/purchase_list_screen.dart';
+import '../screens/CustomerScreens/order_history_screen.dart';
 import '../screens/VendorScreens/dynamic_purchase_list_screen.dart';
+import '../screens/CustomerScreens/farmer_browse_screen.dart';
 
 //profile screens
 import 'package:demo/screens/main_profile_screen.dart';
@@ -92,7 +94,7 @@ class AppController extends ChangeNotifier {
           case 2:
             return const CameraQRScreen(); // Scan QR tab
           case 3:
-            return const OrdersScreen(); // Orders tab
+            return const OrderHistoryScreen(); // Orders tab
           case 4:
             return CustomerProfile(); // Profile tab
           default:
@@ -120,7 +122,7 @@ class AppController extends ChangeNotifier {
           case 0:
             return const CategoriesScreen(); // Home tab
           case 1:
-            return const HomeScreen(value: 1); // Tool Renting tab
+            return const FarmerHomeScreen(); // Tool Renting tab
           case 2:
             return const BusinessDashboard(); // Farmer Shop tab
           case 3:
