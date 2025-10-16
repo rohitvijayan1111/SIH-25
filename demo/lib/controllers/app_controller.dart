@@ -17,6 +17,7 @@ import '../screens/CustomerScreens/updated_home_screen.dart';
 // import '../screens/VendorScreens/purchase_list_screen.dart';
 import '../screens/CustomerScreens/order_history_screen.dart';
 import '../screens/VendorScreens/dynamic_purchase_list_screen.dart';
+import '../screens/CustomerScreens/farmer_browse_screen.dart';
 
 class AppController extends ChangeNotifier {
   ServiceSection _currentSection = ServiceSection.categories;
@@ -114,7 +115,7 @@ class AppController extends ChangeNotifier {
           case 0:
             return const CategoriesScreen(); // Home tab
           case 1:
-            return const HomeScreen(value: 1); // Tool Renting tab
+            return const FarmerHomeScreen(); // Tool Renting tab
           case 2:
             return const BusinessDashboard(); // Farmer Shop tab
           case 3:

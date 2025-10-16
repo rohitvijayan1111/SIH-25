@@ -29,6 +29,25 @@ class ProductService {
     }
   }
 
+  static Future<List<Product>> getAllFarmerProducts() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl?show=false'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        return jsonData.map((json) => Product.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to load products: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching products: $e');
+      throw Exception('Failed to connect to server: $e');
+    }
+  }
+
   /// Get products filtered by type
   static Future<List<Product>> getProductsByType(String type) async {
     try {
