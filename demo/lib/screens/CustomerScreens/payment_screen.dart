@@ -43,7 +43,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
-            ],
+            ], 
           ),
           child: SafeArea(
             child: Padding(

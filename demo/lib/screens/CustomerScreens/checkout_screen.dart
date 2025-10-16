@@ -129,7 +129,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
 
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 10), 
 
                           Expanded(
                             child: Text(

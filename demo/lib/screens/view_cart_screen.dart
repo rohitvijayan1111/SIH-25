@@ -251,7 +251,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
   int getTotalAmount() {
     return getTotalMRP() + 10; // Adding shipping cost
   }
-
+ 
   void _placeOrder() {
     // Implement place order functionality
     showDialog(

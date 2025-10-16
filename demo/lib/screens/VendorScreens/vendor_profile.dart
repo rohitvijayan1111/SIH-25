@@ -47,7 +47,7 @@ class MiddlemanProfile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Marcus Rodriguez',
+                          'Marcus Rodriguez', 
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
