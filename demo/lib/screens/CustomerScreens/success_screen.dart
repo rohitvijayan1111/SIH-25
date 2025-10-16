@@ -28,12 +28,12 @@ class SuccessScreen extends StatelessWidget {
                   height: 120,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Color(0xFF77C043), width: 3),
+                    border: Border.all(color: Colors.orange, width: 3),
                   ),
                   child: const Icon(
                     Icons.check,
                     size: 60,
-                    color: Color(0xFF77C043),
+                    color: Colors.orange,
                   ),
                 ),
                 const SizedBox(height: 25),
@@ -45,7 +45,7 @@ class SuccessScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF77C043),
+                    backgroundColor: Colors.orange,
                     padding: const EdgeInsets.symmetric(
                       vertical: 14,
                       horizontal: 50,
@@ -69,7 +69,7 @@ class SuccessScreen extends StatelessWidget {
                 const SizedBox(height: 15),
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFF77C043)),
+                    side: const BorderSide(color: Colors.orange),
                     padding: const EdgeInsets.symmetric(
                       vertical: 12,
                       horizontal: 50,

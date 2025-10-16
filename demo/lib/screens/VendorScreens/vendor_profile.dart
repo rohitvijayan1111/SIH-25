@@ -25,10 +25,6 @@ class MiddlemanProfile extends StatelessWidget {
             onPressed: () {},
           ),
         ],
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {},
-        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

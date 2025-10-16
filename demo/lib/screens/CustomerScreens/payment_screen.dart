@@ -33,13 +33,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.green.shade600, Colors.green.shade400],
+              colors: [Colors.orange, Colors.orange],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.green.withOpacity(0.3),
+                color: Colors.orange.withOpacity(0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -122,7 +122,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             _buildPaymentOption(
               title: "Net Banking",
               icon: Icons.account_balance,
-              iconColor: Colors.green,
+              iconColor: Colors.orange,
               isSelected: selectedPaymentType == "Net Banking",
               isExpanded: isBankingExpanded,
               onTap: () {
@@ -164,7 +164,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   // backgroundColor: const Color(0xFF77C043),
-                  backgroundColor: Colors.green.shade600,
+                  backgroundColor: Colors.orange.shade600,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -209,7 +209,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isSelected ? Colors.green.shade300 : Colors.grey.shade200,
+          color: isSelected ? Colors.orange.shade300 : Colors.orange.shade200,
           width: isSelected ? 2 : 1,
         ),
         boxShadow: [
@@ -245,7 +245,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: isSelected
-                            ? Colors.green.shade700
+                            ? Colors.orange.shade700
                             : Colors.black87,
                       ),
                     ),
@@ -281,7 +281,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           hintText: "Enter card number",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.green, width: 1),
+            borderSide: BorderSide(color: Colors.orange, width: 1),
           ),
           prefixIcon: const Icon(Icons.credit_card, color: Colors.grey),
         ),
@@ -339,7 +339,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         width: double.infinity,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green.shade600,
+            backgroundColor: Colors.orange.shade600,
             padding: const EdgeInsets.symmetric(vertical: 12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -364,7 +364,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 saveDetailsForFuture = value ?? false;
               });
             },
-            activeColor: Colors.green,
+            activeColor: Colors.orange,
           ),
           const Text("Save details for future"),
         ],
@@ -401,7 +401,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: selectedBank != null
-                ? Colors.green.shade600
+                ? Colors.orange.shade600
                 : Colors.grey.shade400,
             padding: const EdgeInsets.symmetric(vertical: 12),
             shape: RoundedRectangleBorder(
@@ -528,7 +528,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: (upiController.text.contains('@'))
-                  ? Colors.green
+                  ? Colors.orange
                   : Colors.grey,
             ),
             child: const Text("Verify"),
@@ -549,9 +549,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.green.shade50 : Colors.white,
+          color: isSelected ? Colors.orange.shade50 : Colors.white,
           border: Border.all(
-            color: isSelected ? Colors.green : Colors.grey.shade300,
+            color: isSelected ? Colors.orange : Colors.grey.shade300,
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -570,7 +570,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.green : Colors.black87,
+                color: isSelected ? Colors.orange : Colors.black87,
               ),
             ),
           ],

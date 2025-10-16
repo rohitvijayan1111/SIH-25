@@ -99,15 +99,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               width: 40,
                               height: 25,
                               decoration: BoxDecoration(
-                                color: Colors.green.shade50,
+                                color: Colors.orange.shade50,
                                 borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
-                                  color: Colors.green.shade200,
+                                  color: Colors.orange.shade200,
                                 ),
                               ),
                               child: Icon(
                                 _getPaymentIcon(selectedPaymentIcon!),
-                                color: Colors.green.shade600,
+                                color: Colors.orange.shade600,
                                 size: 16,
                               ),
                             )
@@ -116,15 +116,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               width: 30,
                               height: 30,
                               decoration: BoxDecoration(
-                                color: Colors.green.shade100,
+                                color: Colors.orange.shade100,
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.green.shade300,
+                                  color: Colors.orange.shade300,
                                 ),
                               ),
                               child: Icon(
                                 Icons.add,
-                                color: Colors.green.shade600,
+                                color: Colors.orange.shade600,
                                 size: 16,
                               ),
                             ),
@@ -185,7 +185,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   //     fontWeight: FontWeight.bold,
                   //   ),
                   // ),
-                  // orderRow("Mustard Greens x 1", "₹59"),
+                  // orderRow("Mustard oranges x 1", "₹59"),
                   // orderRow("Organic Carrots x 1", "₹60"),
                   // orderRow("Organic Apple x 1", "₹120"),
                   // orderRow("Delivery Fee", "₹25"),
@@ -239,7 +239,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               const SizedBox(height: 25),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF77C043),
+                  backgroundColor: Colors.orange,
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -463,7 +463,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 //           children: [
 //             const Icon(
 //               Icons.check_circle_outline,
-//               color: Colors.green,
+//               color: Colors.orange,
 //               size: 100,
 //             ),
 //             const SizedBox(height: 20),
@@ -472,7 +472,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 //               style: TextStyle(
 //                 fontSize: 24,
 //                 fontWeight: FontWeight.bold,
-//                 color: Colors.green,
+//                 color: Colors.orange,
 //               ),
 //               textAlign: TextAlign.center,
 //             ),
@@ -607,15 +607,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 //                               width: 40,
 //                               height: 25,
 //                               decoration: BoxDecoration(
-//                                 color: Colors.green.shade50,
+//                                 color: Colors.orange.shade50,
 //                                 borderRadius: BorderRadius.circular(6),
 //                                 border: Border.all(
-//                                   color: Colors.green.shade200,
+//                                   color: Colors.orange.shade200,
 //                                 ),
 //                               ),
 //                               child: Icon(
 //                                 _getPaymentIcon(selectedPaymentIcon!),
-//                                 color: Colors.green.shade600,
+//                                 color: Colors.orange.shade600,
 //                                 size: 16,
 //                               ),
 //                             )
@@ -624,15 +624,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 //                               width: 30,
 //                               height: 30,
 //                               decoration: BoxDecoration(
-//                                 color: Colors.green.shade100,
+//                                 color: Colors.orange.shade100,
 //                                 shape: BoxShape.circle,
 //                                 border: Border.all(
-//                                   color: Colors.green.shade300,
+//                                   color: Colors.orange.shade300,
 //                                 ),
 //                               ),
 //                               child: Icon(
 //                                 Icons.add,
-//                                 color: Colors.green.shade600,
+//                                 color: Colors.orange.shade600,
 //                                 size: 16,
 //                               ),
 //                             ),
@@ -819,13 +819,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 //                 value: null,
 //                 child: Row(
 //                   children: [
-//                     Icon(Icons.add_circle, color: Colors.green),
+//                     Icon(Icons.add_circle, color: Colors.orange),
 //                     SizedBox(width: 8),
 //                     Text(
 //                       "Add New Address",
 //                       style: TextStyle(
 //                         fontSize: 16,
-//                         color: Colors.green,
+//                         color: Colors.orange,
 //                         fontWeight: FontWeight.bold,
 //                       ),
 //                     ),
