@@ -706,7 +706,7 @@ class CategoriesScreen extends StatelessWidget {
                               icon: Icons.settings_rounded,
                               imageUrl:
                                   'https://www.retailgazette.co.uk/wp-content/uploads/2020/08/Shop-price_Generic_ST-2.jpg',
-                              backgroundColor: Colors.blue,
+                              backgroundColor: const Color(0xFF1A447F),
                               onTap: () {
                                 _handleCategoryTap(
                                   context,
