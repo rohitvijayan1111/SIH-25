@@ -25,10 +25,6 @@ class MiddlemanProfile extends StatelessWidget {
             onPressed: () {},
           ),
         ],
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {},
-        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -51,7 +47,7 @@ class MiddlemanProfile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Marcus Rodriguez',
+                          'Marcus Rodriguez', 
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,

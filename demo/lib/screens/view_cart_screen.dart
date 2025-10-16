@@ -49,7 +49,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF90EE90), // Light green color
+        backgroundColor: const Color(0xFF90EE90), // Light orange color
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -162,7 +162,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                     ),
                     Text(
                       '₹ 0',
-                      style: TextStyle(fontSize: 14, color: Colors.green),
+                      style: TextStyle(fontSize: 14, color: Colors.orange),
                     ),
                   ],
                 ),
@@ -222,7 +222,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                 _placeOrder();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4CAF50), // Green color
+                backgroundColor: const Color(0xFF4CAF50), // orange color
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -251,7 +251,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
   int getTotalAmount() {
     return getTotalMRP() + 10; // Adding shipping cost
   }
-
+ 
   void _placeOrder() {
     // Implement place order functionality
     showDialog(
