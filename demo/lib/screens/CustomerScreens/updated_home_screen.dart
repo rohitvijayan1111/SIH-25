@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const CartScreen(),
+                          builder: (context) => const CartScreen(userId: 'a985baac-9028-4dc1-bbd9-a6f3aae49ef5',),
                         ),
                       );
                     },

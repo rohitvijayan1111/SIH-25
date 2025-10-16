@@ -70,16 +70,14 @@ class ApiService {
   }
 
   static Future<List<Batch>> getBatchesForProduct(String productId) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/api/batches'),
-    );
+    final response = await http.get(Uri.parse('$baseUrl/api/batches'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final List batches = data['inventory'] ?? [];
       // Debug print to check product_id values
-    for (var batch in batches) {
-      print("Batch product_id: ${batch['product_id']}");
-    }
+      for (var batch in batches) {
+        print("Batch product_id: ${batch['product_id']}");
+      }
       return batches
           .where((b) => b['product_id'] != null && b['product_id'] == productId)
           .map<Batch>((json) => Batch.fromJson(json))
