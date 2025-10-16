@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/api_service.dart';
+import './VendorScreens/utils/constantdata.dart';
 
 class BatchSummaryScreen extends StatelessWidget {
   final BatchFormData formData;
@@ -16,7 +17,7 @@ class BatchSummaryScreen extends StatelessWidget {
           "Review Batch Details",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: AppConstants.primaryGreen,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SafeArea(
@@ -32,18 +33,18 @@ class BatchSummaryScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.green,
+                        color: AppConstants.primaryGreen,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.green.shade100),
                       ),
                       child: const Row(
                         children: [
-                          Icon(Icons.info_outline, color: Colors.green),
+                          Icon(Icons.info_outline, color: Colors.white),
                           SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              "Please review all details before submitting to the blockchain",
-                              style: TextStyle(color: Colors.green),
+                              "Please review all details before submitting",
+                              style: TextStyle(color: Colors.white),
                             ),
                           ),
                         ],
@@ -113,7 +114,10 @@ class BatchSummaryScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         side: const BorderSide(color: Colors.grey),
                       ),
-                      child: const Text("Edit Details"),
+                      child: const Text(
+                        "Edit Details",
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -121,11 +125,11 @@ class BatchSummaryScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () => _submitBatch(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: AppConstants.primaryGreen,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: const Text(
-                        "Submit to Blockchain",
+                        "Submit",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -162,7 +166,7 @@ class BatchSummaryScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: Colors.green),
+              Icon(icon, color: AppConstants.primaryGreen),
               const SizedBox(width: 8),
               Text(
                 title,
@@ -238,7 +242,11 @@ class BatchSummaryScreen extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            icon: const Icon(Icons.check_circle, color: Colors.green, size: 64),
+            icon: const Icon(
+              Icons.check_circle,
+              color: AppConstants.primaryGreen,
+              size: 64,
+            ),
             title: const Text("Success!"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -270,7 +278,9 @@ class BatchSummaryScreen extends StatelessWidget {
                   Navigator.of(context).pop(); // Back to summary
                   // Navigator.of(context).pop(); // Back to upload screen
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppConstants.primaryGreen,
+                ),
                 child: const Text(
                   "Done",
                   style: TextStyle(color: Colors.white),

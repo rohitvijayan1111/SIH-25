@@ -278,9 +278,10 @@ class CategoryButtonCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Image/Icon at the top
-                _buildTopImage(imageSize, borderRadius),
+                Center(child: _buildTopImage(imageSize, borderRadius)),
 
-                const Spacer(),
+                // const Spacer(),
+                SizedBox(height: 10),
 
                 // Title with responsive font size
                 FittedBox(
@@ -327,8 +328,8 @@ class CategoryButtonCard extends StatelessWidget {
 
   Widget _buildTopImage(double size, double borderRadius) {
     return Container(
-      width: size,
-      height: size,
+      width: size * 1.25,
+      height: size * 1.25,
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(borderRadius * 0.6),
