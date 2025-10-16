@@ -142,3 +142,80 @@ class Batch {
     );
   }
 }
+
+class BatchHistoryItem {
+  final String batchId;
+  final String batchCode;
+  final String productName;
+  final String productType;
+  final String farmerName;
+  final String locationName;
+  final int initialQuantity;
+  final int currentQuantity;
+  final String unit;
+  final String harvestDate;
+  final String status;
+  final double pricePerUnit;
+  final bool organic;
+  final String? metaHash;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  BatchHistoryItem({
+    required this.batchId,
+    required this.batchCode,
+    required this.productName,
+    required this.productType,
+    required this.farmerName,
+    required this.locationName,
+    required this.initialQuantity,
+    required this.currentQuantity,
+    required this.unit,
+    required this.harvestDate,
+    required this.status,
+    required this.pricePerUnit,
+    required this.organic,
+    this.metaHash,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory BatchHistoryItem.fromJson(Map<String, dynamic> json) {
+    return BatchHistoryItem(
+      batchId: json['id'] ?? json['batch_id'] ?? '',
+      batchCode: json['batch_code'] ?? '',
+      productName: json['product_name'] ?? '',
+      productType: json['product_type'] ?? '',
+      farmerName: json['farmer_name'] ?? '',
+      locationName: json['location_name'] ?? '',
+      initialQuantity: _parseInt(json['initial_qty_kg']),
+      currentQuantity: _parseInt(json['current_qty_kg']),
+      unit: json['unit'] ?? 'KG',
+      harvestDate: json['harvest_date'] ?? '',
+      status: json['status'] ?? 'PENDING',
+      pricePerUnit: _parseDouble(json['price_per_unit']),
+      organic: json['organic'] == true || json['organic'] == 'true',
+      metaHash: json['meta_hash'],
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
+    );
+  }
+
+  static int _parseInt(dynamic value) {
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    if (value is double) return value.toInt();
+    return 0;
+  }
+
+  static double _parseDouble(dynamic value) {
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
+  }
+}

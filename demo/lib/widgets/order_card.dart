@@ -59,10 +59,10 @@ class OrderCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Icon(
-                      Icons.chevron_right,
-                      color: Colors.grey,
-                    ), // ← Fixed color
+                    // Icon(
+                    //   Icons.chevron_right,
+                    //   color: Colors.grey,
+                    // ), // ← Fixed color
                   ],
                 ),
 
@@ -86,16 +86,16 @@ class OrderCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Items: ${order.itemCount}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ), // ← Fixed color
-                        ),
+                        // Text(
+                        //   'Items: ${order.itemCount}',
+                        //   style: TextStyle(
+                        //     fontSize: 14,
+                        //     color: Colors.grey,
+                        //   ), // ← Fixed color
+                        // ),
                         const SizedBox(height: 4),
                         Text(
-                          '\$${order.totalAmount.toStringAsFixed(2)}',
+                          '\₹${order.totalAmount.toStringAsFixed(2)}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -148,7 +148,7 @@ class OrderCard extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: onReorder,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.amber, // ← Fixed color
+                          backgroundColor: Colors.orange, // ← Fixed color
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
