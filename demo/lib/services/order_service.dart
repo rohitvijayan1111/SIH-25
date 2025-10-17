@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/order_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class OrderService {
-  static const String baseUrl =
-      'http://localhost:5000/api'; // Replace with your API URL
+  // static const String baseUrl =
+  //     'http://localhost:5000/api'; // Replace with your API URL
+  static final String baseUrl = dotenv.env['BAP_BASE_URL'] ?? '';
 
   // Fetch all orders for a user
   Future<List<Order>> fetchOrders({String? userId}) async {

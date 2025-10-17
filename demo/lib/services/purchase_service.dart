@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/purchase.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PurchaseService {
-  static const String baseUrl = 'http://localhost:3000/api/middlemen';
-
+  // static const String baseUrl = 'http://localhost:3000/api/middlemen';
+  static final String baseUrl =
+      '${dotenv.env['API_BASE_URL'] ?? ''}/api/middlemen';
   static Future<bool> createPurchase({
     required String middlemanId,
     required String farmerId,

@@ -1,13 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../screens/CustomerScreens/models/product_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductService {
-  static const String baseUrl = 'http://localhost:3000/api/products';
+  // static const String baseUrl = 'http://localhost:3000/api/products';
 
   // For Android emulator, use: http://10.0.2.2:3000/api/products
   // For iOS simulator, use: http://localhost:3000/api/products
   // For real device, use your computer's IP: http://192.168.x.x:3000/api/products
+
+  static final String baseUrl =
+      '${dotenv.env['API_BASE_URL'] ?? ''}/api/products';
+  // print(baseUrl);
 
   /// Get all products from the API
   static Future<List<Product>> getAllProducts() async {

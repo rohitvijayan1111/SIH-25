@@ -3,6 +3,7 @@ import '../batch_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Product Model matching your API response
 class Product {
@@ -59,7 +60,8 @@ class Product {
 
 // API Service for products
 class ProductService {
-  static const String baseUrl = 'http://localhost:3000/api';
+  static final String baseUrl = '${dotenv.env['API_BASE_URL'] ?? ''}/api';
+  // static const String baseUrl = 'http://localhost:3000/api';
 
   static Future<List<Product>> getProducts({String? type, String? name}) async {
     try {
