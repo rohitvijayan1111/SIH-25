@@ -335,14 +335,14 @@ class Batch {
     this.organicCertified,
     this.certifications,
     required this.expiryDate,
-  });
+  }); 
 
   factory Batch.fromJson(Map<String, dynamic> json) {
     return Batch(
-      id: json['id']?.toString() ?? json['product_id']?.toString() ?? '',
-      batchCode: json['batch_code']?.toString(),
-      productId: json['product_id']?.toString() ?? '',
-      farmerId: json['farmer_id']?.toString() ?? '',
+      id: json['batch_id'] ?? '',
+      batchCode: json['batch_code'],
+      productId: json['product_id'] ?? '',
+      farmerId: json['farmer_id'] ?? '',
       availableQty: int.tryParse(json['available_qty']?.toString() ?? '0') ?? 0,
       unit: json['unit']?.toString(),
       pricePerUnit:
