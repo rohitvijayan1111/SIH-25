@@ -100,7 +100,7 @@ class Batch {
 
   factory Batch.fromJson(Map<String, dynamic> json) {
     return Batch(
-      id: json['id'] ?? json['product_id'] ?? '',
+      id: json['batch_id'] ?? '',
       batchCode: json['batch_code'],
       productId: json['product_id'] ?? '',
       farmerId: json['farmer_id'] ?? '',

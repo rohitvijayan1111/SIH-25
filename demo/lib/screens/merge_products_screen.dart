@@ -7,7 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 const Color themeColor  =Color.fromARGB(255, 12, 131, 69);// your green
 
 class MergeScreen extends StatefulWidget {
-  final List<BatchModel> batches;
+  final List<Batch> batches;
   const MergeScreen({Key? key, required this.batches}) : super(key: key);
   @override
   _MergeScreenState createState() => _MergeScreenState();
@@ -18,15 +18,18 @@ class _MergeScreenState extends State<MergeScreen> {
   bool isLoading = false;
   String? errorMessage;
 
-  void toggleSelection(String batchId) {
+  void toggleSelection(String id) {
     setState(() {
-      if (selectedBatchIds.contains(batchId)) {
-        selectedBatchIds.remove(batchId);
+      if (selectedBatchIds.contains(id)) {
+        selectedBatchIds.remove(id);
       } else {
-        selectedBatchIds.add(batchId);
+        selectedBatchIds.add(id);
       }
     });
+    print('Selected Batch IDs: $selectedBatchIds');
   }
+
+
 
   Future<void> mergeSelectedBatches() async {
     if (selectedBatchIds.length < 2) {
@@ -123,6 +126,7 @@ class _MergeScreenState extends State<MergeScreen> {
                 separatorBuilder: (context, i) => SizedBox(height: 14),
                 itemBuilder: (context, index) {
                   var batch = widget.batches[index];
+                  print("Batch #$index: id='${batch.id}', code='${batch.batchCode}'");
                   bool selected = selectedBatchIds.contains(batch.id);
                   return Material(
                     color: Colors.white,
@@ -161,7 +165,7 @@ class _MergeScreenState extends State<MergeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    batch.batchCode,
+                                    batch.batchCode!,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 15,

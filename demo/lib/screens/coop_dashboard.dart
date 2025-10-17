@@ -9,24 +9,25 @@ import 'package:demo/models/batch_model.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
-  Future<List<BatchModel>> fetchBatches() async {
-    final baseUrl = dotenv.env['API_BASE_URL']!;
+  Future<List<Batch>> fetchBatches() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/api/batches'), // Replace with your backend endpoint
+      Uri.parse(
+        'http://localhost:3000/api/batches',
+      ), // Replace with your backend endpoint
       headers: {'Content-Type': 'application/json'},
     );
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final List<dynamic> inventory = data['inventory'];
-      return inventory.map((json) => BatchModel.fromJson(json)).toList();
+      return inventory.map((json) => Batch.fromJson(json)).toList();
     } else {
       print('Status: ${response.statusCode} Body: ${response.body}');
       throw Exception('Failed to load batches');
     }
   }
 
-  @override        
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -206,7 +207,7 @@ class DashboardScreen extends StatelessWidget {
                           ),
                         ),
                         // Merge button with FutureBuilder to fetch batches
-                        FutureBuilder<List<BatchModel>>(
+                        FutureBuilder<List<Batch>>(
                           future: fetchBatches(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
