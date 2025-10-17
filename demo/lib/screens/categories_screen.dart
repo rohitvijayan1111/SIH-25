@@ -541,8 +541,8 @@ class CategoriesScreen extends StatelessWidget {
                 //   ),
                 // ),
                 Container(
-                  width: 200,
-                  height: 200,
+                  width: 150,
+                  height: 150,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(30),
@@ -565,7 +565,7 @@ class CategoriesScreen extends StatelessWidget {
                 Text(
                   'Agri Bharat Connect',
                   style: TextStyle(
-                    fontSize: 32,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                     letterSpacing: 2,
@@ -702,7 +702,7 @@ class CategoriesScreen extends StatelessWidget {
                             ),
                             CategoryButtonCard(
                               title: 'Source & Sell',
-                              subtitle: 'Resell',
+                              subtitle: '',
                               icon: Icons.settings_rounded,
                               imageUrl:
                                   'https://www.retailgazette.co.uk/wp-content/uploads/2020/08/Shop-price_Generic_ST-2.jpg',

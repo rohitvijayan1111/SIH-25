@@ -328,8 +328,8 @@ class CategoryButtonCard extends StatelessWidget {
 
   Widget _buildTopImage(double size, double borderRadius) {
     return Container(
-      width: size * 1.25,
-      height: size * 1.25,
+      width: size * 1.15,
+      height: size * 1.15,
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(borderRadius * 0.6),
