@@ -96,7 +96,7 @@ class Batch {
     this.organicCertified,
     this.certifications,
     required this.expiryDate,
-  });
+  }); 
 
   factory Batch.fromJson(Map<String, dynamic> json) {
     return Batch(

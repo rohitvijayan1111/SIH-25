@@ -331,7 +331,7 @@ class DashboardScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
+              ), 
 
               const SizedBox(height: 80), // Space for bottom nav
             ],

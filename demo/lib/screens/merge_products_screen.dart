@@ -178,7 +178,7 @@ class _MergeScreenState extends State<MergeScreen> {
                                       fontSize: 13,
                                       color: Colors.black54,
                                     ),
-                                  ),
+                                  ), 
                                 ],
                               ),
                             ),
